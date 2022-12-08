@@ -1,0 +1,339 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass amsart
+\use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.54cm
+\topmargin 2.54cm
+\bottommargin 2.54cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Notes on Multiple Blood Feeding in Mosquito-borne Disease Transmission Models
+\end_layout
+
+\begin_layout Standard
+Throughout, I will use the terms abundance and density interchangeably.
+ These are of course two different quantities but the distinction is not
+ meaningful until we use actual parameter estimates.
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $M$
+\end_inset
+
+ represent the total adult female mosquito population size and 
+\begin_inset Formula $H$
+\end_inset
+
+ the total host population size.
+ For now, we assume a simple general model for the demographic dynamics
+ of the host, namely 
+\begin_inset Formula $\frac{d}{dt}H=g\left(H\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $g\left(0\right)=0$
+\end_inset
+
+, 
+\begin_inset Formula $g'\left(0\right)>0$
+\end_inset
+
+, 
+\begin_inset Formula $g''\left(H\right)<0$
+\end_inset
+
+ and there exists 
+\begin_inset Formula $K>0$
+\end_inset
+
+ such that 
+\begin_inset Formula $g\left(K\right)=0$
+\end_inset
+
+.
+ This ensures the existence of an unstable extinction equilibrium as well
+ as an additional positive equilibrium.
+ Notably, the familiar logistic population model satisfies these assumptions.
+\end_layout
+
+\begin_layout Standard
+The mosquito population is separated into aquatic stages (eggs, larvae and
+ pupae) and adults.
+ Let 
+\begin_inset Formula $L$
+\end_inset
+
+ represent the total female aquatic stage population.
+ We use the following system of equations as the overall model of mosquito
+ demography
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}L & =\lambda_{M}\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}M & =\rho_{L}L-\mu_{M}M
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\lambda_{M}$
+\end_inset
+
+ is the recruitment rate of eggs, 
+\begin_inset Formula $K_{L}$
+\end_inset
+
+ is the carrying capacity for aquatic stage mosquitoes, 
+\begin_inset Formula $\rho_{L}$
+\end_inset
+
+ is the development rate, 
+\begin_inset Formula $\mu_{L}$
+\end_inset
+
+ is the density-independent aquatic stage mortality rate, and 
+\begin_inset Formula $\mu_{M}$
+\end_inset
+
+ is the density-independent adult mortality rate.
+ The rate 
+\begin_inset Formula $\lambda_{M}$
+\end_inset
+
+ should depend on the reproductive capacity of the adult population, namely
+ the total abundance and biting rate of adults.
+ We will come back to the biting rate later, but for now let 
+\begin_inset Formula $b_{M}$
+\end_inset
+
+ represent the biting rate for mosquitoes.
+\begin_inset Formula 
+\[
+\lambda_{M}\left(M\right)=bfM
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $f$
+\end_inset
+
+ is the fecundity of a female mosquito (eggs per female per day).
+\end_layout
+
+\begin_layout Standard
+Henceforth, I will refer to the total adult female mosquito population as
+ just the mosquito population, 
+\begin_inset Formula $M$
+\end_inset
+
+.
+ We divide 
+\begin_inset Formula $M$
+\end_inset
+
+ into several compartments representing the varying (generalized) stages
+ of the mosquito gonotrophic (reproductive) cycle.
+ The first stage, 
+\begin_inset Formula $S$
+\end_inset
+
+, includes mosquitoes seeking a blood meal.
+ After feeding to repletion, mosquitoes proceed to the oviposition stage,
+ 
+\begin_inset Formula $V$
+\end_inset
+
+.
+ After egg-laying, these individuals begin seeking another blood meal and
+ return to 
+\begin_inset Formula $S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Following Hurtado and Kirosingh (2019), let 
+\begin_inset Formula $\mathcal{S}_{X}$
+\end_inset
+
+ be the survival function for the dwell time distribution for an individual
+ entering compartment 
+\begin_inset Formula $X$
+\end_inset
+
+ at time 
+\begin_inset Formula $\tau$
+\end_inset
+
+, 
+\begin_inset Formula $h\left(t,\tau\right)$
+\end_inset
+
+the density function for that distribution, and 
+\begin_inset Formula $\mathcal{I}_{X}$
+\end_inset
+
+ the inflow rate to compartment 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ Then a general model for the dynamics of oviposition and blood meal seeking
+ can be given by the integral equations:
+\begin_inset Formula 
+\begin{align*}
+S\left(t\right) & =s_{0}\mathcal{S}_{S}\left(t,0\right)+\int_{0}^{t}\left[\mathcal{I}_{S}\left(\tau\right)+v_{0}h_{V}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{V}\left(s\right)h_{V}\left(\tau,s\right)ds\right]\mathcal{S}_{S}\left(t,\tau\right)d\tau\\
+V\left(t\right) & =v_{0}\mathcal{S}_{V}\left(t,0\right)+\int_{0}^{t}\left[\mathcal{I}_{V}\left(\tau\right)+s_{0}h_{S}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{S}\left(s\right)h_{S}\left(\tau,s\right)ds\right]\mathcal{S}_{V}\left(t,\tau\right)d\tau
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathcal{I}_{S}\left(t\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathcal{I}_{V}\left(t\right)$
+\end_inset
+
+ are the additional inflow rates into states 
+\begin_inset Formula $S$
+\end_inset
+
+ and 
+\begin_inset Formula $V$
+\end_inset
+
+, respectively.
+ We make the further assumptions that i) all newly recruited adults start
+ in stage 
+\begin_inset Formula $S$
+\end_inset
+
+ and ii) the only way to enter 
+\begin_inset Formula $V$
+\end_inset
+
+ is after exiting stage 
+\begin_inset Formula $S$
+\end_inset
+
+, and iii) the waiting period in compartment 
+\begin_inset Formula $V$
+\end_inset
+
+ is exponentially distributed with mean 
+\begin_inset Formula $\gamma$
+\end_inset
+
+.
+ This translates to the equations
+\begin_inset Formula 
+\begin{align*}
+v_{0} & =0,\\
+\mathcal{I}_{S}\left(t\right) & =\rho_{L}L\left(t\right)+\gamma V\left(t\right),\\
+\mathcal{I}_{V}\left(t\right) & =0.
+\end{align*}
+
+\end_inset
+
+Hence we arrive at the following system of equations
+\begin_inset Formula 
+\begin{align*}
+S\left(t\right) & =s_{0}\mathcal{S}_{S}\left(t,0\right)+\int_{0}^{t}\left[\rho_{L}L\left(t\right)+\gamma V\left(t\right)\right]\mathcal{S}_{S}\left(t,\tau\right)d\tau\\
+V\left(t\right) & =\int_{0}^{t}\left[s_{0}h_{S}\left(\tau,0\right)+\int_{0}^{\tau}\left[\rho_{L}L\left(t\right)+\gamma V\left(t\right)\right]h_{S}\left(\tau,s\right)ds\right]e^{-t/\gamma}d\tau
+\end{align*}
+
+\end_inset
+
+It remains to describe the distribution of the waiting time to leave the
+ host seeking class, 
+\begin_inset Formula $S$
+\end_inset
+
+, which is in fact the main point of this project.
+\end_layout
+
+\end_body
+\end_document
