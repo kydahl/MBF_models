@@ -787,6 +787,884 @@ Note that the total equilibrium mosquito population size should be independent
 
 .
  
+\begin_inset Formula 
+\begin{align*}
+M & =S_{W}+S_{B,1}+\sum_{j=2}^{k}S_{B,j}\\
+ & =n_{G}\Lambda_{M}\left\{ \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}+\frac{1}{b}\sum_{j=1}^{k}\left(\frac{b}{b+\mu_{M}}\right)^{j}\right\} \\
+ & =n_{G}\Lambda_{M}\left\{ \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}+\frac{1}{b}\left[\frac{\left(\frac{b}{b+\mu_{M}}\right)^{k}-1}{\left(\frac{b}{b+\mu_{M}}\right)-1}\right]\right\} \\
+ & =n_{G}\Lambda_{M}\left\{ -\frac{1}{n_{G}}+1+\frac{b+\mu_{M}}{b}\frac{1}{\mu_{M}}\left[1-\left(\frac{b}{b+\mu_{M}}\right)^{k}\right]\right\} 
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $n_{G}=\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}\right]^{-1}$
+\end_inset
+
+ !!! This isn't working any more?h
+\end_layout
+
+\begin_layout Subsection
+Endemic equilibria
+\end_layout
+
+\begin_layout Standard
+Now assume that at least one of 
+\begin_inset Formula $I_{H},I_{B,j},I_{W}\ne0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Basic reproduction number
+\end_layout
+
+\begin_layout Standard
+The infected compartments are 
+\begin_inset Formula $I_{H}$
+\end_inset
+
+, 
+\begin_inset Formula $I_{W}$
+\end_inset
+
+, and 
+\begin_inset Formula $I_{B,j}$
+\end_inset
+
+, 
+\begin_inset Formula $j=1,\ldots,k$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $x=\left(I_{H},I_{W},I_{B,1},\ldots,I_{B,k}\right)$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $J$
+\end_inset
+
+ be the Jacobian of the system above written with the state variables in
+ the order: 
+\begin_inset Formula $I_{H},I_{B,1},\ldots,I_{B,k},I_{W},S_{H},S_{B,1},\ldots,S_{B,k},S_{W}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+J=\begin{pmatrix} & S_{H} & I_{H} & R_{H} & S_{B,1} & \cdots & S_{B,j-1} & S_{B,j} & \cdots & S_{B,k-1} & S_{B,k} & I_{B,1} & \cdots & I_{B,j-1} & I_{B,j} & \cdots & I_{B,k-1} & I_{B,k} & S_{W} & I_{W}\\
+\mu_{H}K_{H}-\beta_{MH}bI_{B}\frac{S_{H}}{K_{H}}-\mu_{H}S_{H} & -\beta_{MH}bI_{B}\frac{1}{K_{H}}-\mu_{H} & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0 & -\beta_{MH}b\frac{S_{H}}{K_{H}} & \cdots & -\beta_{MH}b\frac{S_{H}}{K_{H}} & -\beta_{MH}b\frac{S_{H}}{K_{H}} & \cdots & -\beta_{MH}b\frac{S_{H}}{K_{H}} & -\beta_{MH}b\frac{S_{H}}{K_{H}} & 0 & 0\\
+\beta_{MH}bI_{B}\frac{S_{H}}{K_{H}}-\mu_{H}I_{H}-\gamma_{H}I_{H} & \beta_{MH}bI_{B}\frac{1}{K_{H}} & -\mu_{H}-\gamma_{H} & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0 & \beta_{MH}b\frac{S_{H}}{K_{H}} & \cdots & \beta_{MH}b\frac{S_{H}}{K_{H}} & \beta_{MH}b\frac{S_{H}}{K_{H}} & \cdots & \beta_{MH}b\frac{S_{H}}{K_{H}} & \beta_{MH}b\frac{S_{H}}{K_{H}} & 0 & 0\\
+\gamma_{H}I_{H}-\mu_{H}R_{H} & 0 & \gamma_{H} & -\mu_{H} & 0 & \cdots & 0 & 0 & \cdots & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0 & 0 & 0\\
+\Lambda_{M}+\gamma_{W}S_{W}-bS_{B,1}-\mu_{M}S_{B,1} & 0 & 0 & 0 & -b-\mu_{M} & \cdots & 0 & 0 & \cdots & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0 & \gamma_{W} & 0\\
+\vdots & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \vdots\\
+bS_{B,j-1}\left(1-\beta_{HM}\frac{I_{H}}{K_{H}}\right)-bS_{B,j}-\mu_{M}S_{B,j} & 0 & bS_{B,j-1}\left(-\frac{1}{K_{h}}\right) & 0 & 0 & \cdots & b\left(1-\frac{I_{H}}{K_{H}}\right) & -b-\mu_{M} & \cdots & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0 & 0 & 0\\
+\vdots & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \vdots\\
+bS_{B,k-1}\left(1-\beta_{HM}\frac{I_{H}}{K_{H}}\right)-bS_{B,k}-\mu_{M}S_{B,k} & 0 & bS_{B,k-1}\left(-\frac{1}{K_{h}}\right) & 0 & 0 & \cdots & 0 & 0 & \cdots & b\left(1-\frac{I_{H}}{K_{H}}\right) & -b-\mu_{M} & 0 & \cdots & 0 & 0 & \cdots & 0 & 0 & 0 & 0\\
+\gamma_{W}I_{W}-bI_{B,1}-\mu_{M}I_{B,1} & 0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0 & -b-\mu_{M} & \cdots & 0 & 0 & \cdots & 0 & 0 & 0 & \gamma_{W}I_{W}\\
+\vdots & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \vdots\\
+\beta_{HM}bS_{B,j-1}\left(\frac{I_{H}}{K_{H}}\right)+bI_{B,j-1}-bI_{B,j}-\mu_{M}I_{B,j} & 0 & bS_{B,j-1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & \cdots & b\left(\frac{I_{H}}{K_{H}}\right) & 0 & \cdots & 0 & 0 & 0 & \cdots & b & -b-\mu_{M} & \cdots & 0 & 0 & 0 & 0\\
+\vdots & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \vdots\\
+\beta_{HM}bS_{B,k-1}\left(\frac{I_{H}}{K_{H}}\right)+bI_{B,k-1}-bI_{B,k}-\mu_{M}I_{B,k} & 0 & bS_{B,k-1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & \cdots & 0 & 0 & \cdots & b\left(\frac{I_{H}}{K_{H}}\right) & 0 & 0 & \cdots & 0 & 0 & \cdots & b & -b-\mu_{M} & 0 & 0\\
+bS_{B,k}\left(1-\frac{I_{H}}{K_{h}}\right)-\gamma_{W}S_{W}-\mu_{M}S_{W} & 0 & bS_{B,k}\left(-\frac{1}{K_{h}}\right) & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & b\left(1-\frac{I_{H}}{K_{h}}\right) & 0 & \cdots & 0 & 0 & \cdots & 0 & 0 & -\gamma_{W}-\mu_{M} & 0\\
+bS_{B,k}\left(\frac{I_{H}}{K_{H}}\right)+bI_{B,k}-\gamma_{W}I_{W}-\mu_{M}I_{W} & 0 & bS_{B,k}\left(\frac{1}{K_{H}}\right) & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & b & 0 & -\gamma_{W}-\mu_{M}
+\end{pmatrix}
+\]
+
+\end_inset
+
+Re-ordering this and only including the infected state variables, gives
+ us
+\begin_inset Formula 
+\[
+\hat{J}\left(x\right)=\begin{pmatrix}-\mu_{H}-\gamma_{H} & \beta_{MH}b\frac{S_{H}}{K_{H}} & \cdots & \beta_{MH}b\frac{S_{H}}{K_{H}} & \beta_{MH}b\frac{S_{H}}{K_{H}} & \cdots & \beta_{MH}b\frac{S_{H}}{K_{H}} & \beta_{MH}b\frac{S_{H}}{K_{H}} & 0\\
+0 & -b-\mu_{M} & \cdots & 0 & 0 & \cdots & 0 & 0 & \gamma_{W}I_{W}\\
+\vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+bS_{B,j-1}\left(\frac{1}{K_{H}}\right) & 0 & \cdots & b & -b-\mu_{M} & \cdots & 0 & 0 & 0\\
+\vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+bS_{B,k-1}\left(\frac{1}{K_{H}}\right) & 0 & \cdots & 0 & 0 & \cdots & b & -b-\mu_{M} & 0\\
+bS_{B,k}\left(\frac{1}{K_{H}}\right) & 0 & \cdots & 0 & 0 & \cdots & 0 & b & -\gamma_{W}-\mu_{M}
+\end{pmatrix}
+\]
+
+\end_inset
+
+Finally, evaluating at the disease-free equilibrium defined above, we obtain
+\begin_inset Formula 
+\[
+\hat{J}\left(\boldsymbol{0}\right)=\begin{pmatrix}-\mu_{H}-\gamma_{H} & \beta_{MH}b & \cdots & \beta_{MH}b & \beta_{MH}b & \cdots & \beta_{MH}b & \beta_{MH}b & 0\\
+0 & -b-\mu_{M} & \cdots & 0 & 0 & \cdots & 0 & 0 & \gamma_{W}I_{W}\\
+\vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+bS_{B,j-1}\left(\frac{1}{K_{H}}\right) & 0 & \cdots & b & -b-\mu_{M} & \cdots & 0 & 0 & 0\\
+\vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+bS_{B,k-1}\left(\frac{1}{K_{H}}\right) & 0 & \cdots & 0 & 0 & \cdots & b & -b-\mu_{M} & 0\\
+bS_{B,k}\left(\frac{1}{K_{H}}\right) & 0 & \cdots & 0 & 0 & \cdots & 0 & b & -\gamma_{W}-\mu_{M}
+\end{pmatrix}
+\]
+
+\end_inset
+
+The new infections operator 
+\begin_inset Formula $\mathscr{F}\left(x\right)$
+\end_inset
+
+ is given by
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}I_{H} & =\beta_{MH}bI_{B}\frac{S_{H}}{K_{H}}-\mu_{H}I_{H}-\gamma_{H}I_{H}\\
+\frac{d}{dt}I_{W} & =\beta_{HM}bS_{B,k}\left(\frac{I_{H}}{K_{H}}\right)+bI_{B,k}-\gamma_{W}I_{W}-\mu_{M}I_{W}\\
+\frac{d}{dt}I_{B,1} & =\gamma_{W}I_{W}-\left(b+\mu_{M}\right)I_{B,1}\\
+\frac{d}{dt}I_{B,j} & =\left(\beta_{HM}\frac{I_{H}}{K_{H}}\right)bS_{B,j-1}+bI_{B,j-1}-\left(b+\mu_{M}\right)I_{B,j}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\mathscr{F}\left(x\right)=\begin{pmatrix}\beta_{MH}bI_{B}\frac{S_{H}}{K_{H}}\\
+\beta_{HM}bS_{B,k}\left(\frac{I_{H}}{K_{H}}\right)\\
+0\\
+\beta_{HM}bS_{B,1}\left(\frac{I_{H}}{K_{H}}\right)\\
+\vdots\\
+\beta_{HM}bS_{B,j-2}\left(\frac{I_{H}}{K_{H}}\right)\\
+\beta_{HM}bS_{B,j-1}\left(\frac{I_{H}}{K_{H}}\right)\\
+\vdots\\
+\beta_{HM}bS_{B,k-2}\left(\frac{I_{H}}{K_{H}}\right)\\
+\beta_{HM}bS_{B,k-1}\left(\frac{I_{H}}{K_{H}}\right)
+\end{pmatrix}
+\]
+
+\end_inset
+
+and the net rate out of all other transitions operator, 
+\begin_inset Formula $\mathscr{V}\left(x\right)$
+\end_inset
+
+ is given by
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}I_{H} & =\beta_{MH}bI_{B}\frac{S_{H}}{K_{H}}-\mu_{H}I_{H}-\gamma_{H}I_{H}\\
+\frac{d}{dt}I_{W} & =\beta_{HM}bS_{B,k}\left(\frac{I_{H}}{K_{H}}\right)+bI_{B,k}-\gamma_{W}I_{W}-\mu_{M}I_{W}\\
+\frac{d}{dt}I_{B,1} & =\gamma_{W}I_{W}-\left(b+\mu_{M}\right)I_{B,1}\\
+\frac{d}{dt}I_{B,j} & =\left(\beta_{HM}\frac{I_{H}}{K_{H}}\right)bS_{B,j-1}+bI_{B,j-1}-\left(b+\mu_{M}\right)I_{B,j}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\mathscr{V}\left(x\right)=\begin{pmatrix}\left(\mu_{H}+\gamma_{H}\right)I_{H}\\
+\left(\gamma_{W}+\mu_{M}\right)I_{W}-bI_{B,k}\\
+\left(b+\mu_{M}\right)I_{B,1}-\gamma_{W}I_{W}\\
+\left(b+\mu_{M}\right)I_{B,2}-bI_{B,1}\\
+\vdots\\
+\left(b+\mu_{M}\right)I_{B,j-1}-bI_{B,j-2}\\
+\left(b+\mu_{M}\right)I_{B,j}-bI_{B,j-1}\\
+\vdots\\
+\left(b+\mu_{M}\right)I_{B,k-1}-bI_{B,k-2}\\
+\left(b+\mu_{M}I_{B,k}\right)-bI_{B,k-1}
+\end{pmatrix}
+\]
+
+\end_inset
+
+Linearize these operators by computing their Jacobians and then evaluating
+ at the disease-free equilibrium, 
+\begin_inset Formula $x_{0}=\left(0,0,\ldots0,0\right)$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+F\left(x\right)=\begin{pmatrix}0 & 0 & \beta_{MH}b\frac{S_{H}}{K_{H}} & \beta_{MH}b\frac{S_{H}}{K_{H}} & \cdots & \beta_{MH}b\frac{S_{H}}{K_{H}} & \beta_{MH}b\frac{S_{H}}{K_{H}} & \cdots & \beta_{MH}b\frac{S_{H}}{K_{H}} & \beta_{MH}b\frac{S_{H}}{K_{H}}\\
+\beta_{HM}bS_{B,k}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}bS_{B,1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+\beta_{HM}bS_{B,j-2}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}bS_{B,j-1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+\beta_{HM}bS_{B,k-2}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}bS_{B,k-1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+F & =\begin{bmatrix}0 & 0 & \beta_{MH}b & \beta_{MH}b & \cdots & \beta_{MH}b & \beta_{MH}b & \cdots & \beta_{MH}b & \beta_{MH}b\\
+\beta_{HM}\rho_{b}^{k}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+\beta_{HM}\rho_{b}^{j-2}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}^{j-1}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+\beta_{HM}\rho_{b}^{k-2}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}^{k-1}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\rho_{W}=\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\rho_{b}=\frac{b}{b+\mu_{M}}$
+\end_inset
+
+.
+ Similarly for the linearized net-rate-out operator:
+\begin_inset Formula 
+\[
+\mathscr{V}\left(x\right)=\begin{pmatrix}\left(\mu_{H}+\gamma_{H}\right)I_{H}\\
+\left(\gamma_{W}+\mu_{M}\right)I_{W}-bI_{B}\\
+\left(b+\mu_{M}\right)I_{B}-\gamma_{W}I_{W}
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+V & =\begin{bmatrix}\left(\gamma_{H}+\mu_{H}\right) & 0 & 0\\
+0 & \left(\gamma_{W}+\mu_{M}\right) & -b\\
+0 & -\gamma_{W} & \left(b+\mu_{M}\right)
+\end{bmatrix}\\
+V^{-1} & =\begin{bmatrix}1/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0\\
+0 & \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)\right]^{-1} & \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)\right]^{-1}\\
+0 & \left(\frac{1}{b+\mu_{M}}\right)\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)\right]^{-1} & \left(\frac{1}{b+\mu_{M}}\right)\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)\right]
+\end{bmatrix}\\
+ & =\begin{bmatrix}1/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0\\
+0 & \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left[1-\rho_{W}\rho_{B}\right]^{-1} & \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\rho_{B}\left[1-\rho_{W}\rho_{B}\right]^{-1}\\
+0 & \left(\frac{1}{b+\mu_{M}}\right)\rho_{W}\left[1-\rho_{W}\rho_{B}\right]^{-1} & \left(\frac{1}{b+\mu_{M}}\right)\left[1-\rho_{W}\rho_{B}\right]
+\end{bmatrix}\\
+F & =\begin{bmatrix}0 & 0 & \beta_{MH}b\\
+\beta_{HM}\rho_{b}^{k}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0\\
+0 & 0 & 0
+\end{bmatrix}\\
+K & =FV^{-1}\\
+ & =\begin{bmatrix}0 & 0 & \beta_{MH}b\\
+\beta_{HM}\rho_{b}^{k}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0\\
+0 & 0 & 0
+\end{bmatrix}\begin{bmatrix}1/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0\\
+0 & \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left[1-\rho_{W}\rho_{B}\right]^{-1} & \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\rho_{B}\left[1-\rho_{W}\rho_{B}\right]^{-1}\\
+0 & \left(\frac{1}{b+\mu_{M}}\right)\rho_{W}\left[1-\rho_{W}\rho_{B}\right]^{-1} & \left(\frac{1}{b+\mu_{M}}\right)\left[1-\rho_{W}\rho_{B}\right]
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+V=\begin{bmatrix}\left(\gamma_{H}+\mu_{H}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+0 & \left(\gamma_{W}+\mu_{M}\right) & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & -b\\
+0 & -\gamma_{W} & \left(b+\mu_{M}\right) & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+0 & 0 & -b & \left(b+\mu_{M}\right) & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+0 & 0 & 0 & 0 & \cdots & \left(b+\mu_{M}\right) & 0 & \cdots & 0 & 0\\
+0 & 0 & 0 & 0 & \cdots & -b & \left(b+\mu_{M}\right) & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & \left(b+\mu_{M}\right) & 0\\
+0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & -b & \left(b+\mu_{M}\right)
+\end{bmatrix}
+\]
+
+\end_inset
+
+Note that the lower-right 
+\begin_inset Formula $k+1$
+\end_inset
+
+ by 
+\begin_inset Formula $k+1$
+\end_inset
+
+ matrix is near circulant.
+\end_layout
+
+\begin_layout Standard
+If we assume that 
+\begin_inset Formula $\gamma_{W}=b$
+\end_inset
+
+, then the lower-right 
+\begin_inset Formula $k+1$
+\end_inset
+
+ by 
+\begin_inset Formula $k+1$
+\end_inset
+
+ block matrix of 
+\begin_inset Formula $V\left(x_{0}\right)$
+\end_inset
+
+ is circulant and we can invert 
+\begin_inset Formula $V$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $G_{k}$
+\end_inset
+
+ denote this lower block.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+G_{k} & =\begin{bmatrix}\left(b+\mu_{M}\right) & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & -b\\
+-b & \left(b+\mu_{M}\right) & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+0 & -b & \left(b+\mu_{M}\right) & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+0 & 0 & 0 & \cdots & \left(b+\mu_{M}\right) & 0 & \cdots & 0 & 0\\
+0 & 0 & 0 & \cdots & -b & \left(b+\mu_{M}\right) & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+0 & 0 & 0 & \cdots & 0 & 0 & \cdots & \left(b+\mu_{M}\right) & 0\\
+0 & 0 & 0 & \cdots & 0 & 0 & \cdots & -b & \left(b+\mu_{M}\right)
+\end{bmatrix}\\
+G_{4} & =\begin{bmatrix}\left(b+\mu_{M}\right) & 0 & 0 & -b\\
+-b & \left(b+\mu_{M}\right) & 0 & 0\\
+0 & -b & \left(b+\mu_{M}\right) & 0\\
+0 & 0 & -b & \left(b+\mu_{M}\right)
+\end{bmatrix}\\
+G_{5} & =\begin{bmatrix}\left(b+\mu_{M}\right) & 0 & 0 & 0 & -b\\
+-b & \left(b+\mu_{M}\right) & 0 & 0 & 0\\
+0 & -b & \left(b+\mu_{M}\right) & 0 & 0\\
+0 & 0 & -b & \left(b+\mu_{M}\right) & 0\\
+0 & 0 & 0 & -b & \left(b+\mu_{M}\right)
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+G_{4}^{-1} & =\frac{1}{\left(b+d\right)^{4}-b^{4}}\begin{bmatrix}\left(b+d\right)^{4-1} & b^{4-1} & b^{4-2}\left(b+d\right)^{4-3} & b^{4-3}\left(b+d\right)^{4-2}\\
+b^{4-3}\left(b+d\right)^{4-2} & \left(b+d\right)^{4-1} & b^{4-1} & b^{4-2}\left(b+d\right)^{4-3}\\
+b^{4-2}\left(b+d\right)^{4-3} & b^{4-3}\left(b+d\right)^{4-2} & \left(b+d\right)^{4-1} & b^{4-1}\\
+b^{4-1} & b^{4-2}\left(b+d\right)^{4-3} & b^{4-3}\left(b+d\right)^{4-2} & \left(b+d\right)^{4-1}
+\end{bmatrix}\\
+G_{k}^{-1} & =\frac{1}{\left(b+d\right)^{k}-b^{k}}\begin{bmatrix}\left(b+d\right)^{k-1} & b^{k-1} & b^{k-2}\left(b+d\right)^{1} & \cdots & b^{k-j+1}\left(b+d\right)^{j-2} & b^{k-j}\left(b+d\right)^{j-1} & \cdots & b^{k-\left(k-2\right)}\left(b+d\right)^{\left(k-2\right)-1} & b^{k-\left(k-1\right)}\left(b+d\right)^{\left(k-1\right)-1}\\
+b^{k-\left(k-1\right)}\left(b+d\right)^{\left(k-1\right)-1} & \left(b+d\right)^{k-1} & b^{k-1} & \cdots & b^{k-j+2}\left(b+d\right)^{j-3} & b^{k-j+1}\left(b+d\right)^{j-2} & \cdots & b^{k-\left(k-3\right)}\left(b+d\right)^{\left(k-3\right)-1} & b^{k-\left(k-2\right)}\left(b+d\right)^{\left(k-2\right)-1}\\
+b^{k-\left(k-2\right)}\left(b+d\right)^{\left(k-2\right)-1} & b^{k-\left(k-1\right)}\left(b+d\right)^{\left(k-1\right)-1} & \left(b+d\right)^{k-1} & \cdots &  &  & \cdots\\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+ &  &  & \cdots &  &  & \cdots\\
+ &  &  & \cdots &  &  & \cdots\\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+b^{k-2}\left(b+d\right)^{1} &  &  & \cdots &  &  & \cdots\\
+b^{k-1} &  &  & \cdots &  &  & \cdots &  & \left(b+d\right)^{k-1}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+In any case, 
+\begin_inset Formula $G_{k}^{-1}$
+\end_inset
+
+ is also circulant.
+ For now, just let 
+\begin_inset Formula $G_{k}^{-1}=\left[\varphi_{i,k}\right]_{i=1,\ldots k+1}$
+\end_inset
+
+.
+ Then
+\begin_inset Formula 
+\begin{align*}
+FV^{-1} & =\begin{bmatrix}0 & 0 & \beta_{MH}b & \beta_{MH}b & \cdots & \beta_{MH}b & \beta_{MH}b & \cdots & \beta_{MH}b & \beta_{MH}b\\
+\beta_{HM}\rho_{b}^{k}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+\beta_{HM}\rho_{b}^{j-2}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}^{j-1}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+\beta_{HM}\rho_{b}^{k-2}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}^{k-1}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0
+\end{bmatrix}\begin{bmatrix}1/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+0 & \varphi_{1,k} & \varphi_{2,k} & \varphi_{3,k} & \cdots & \varphi_{j-1,k} & \varphi_{j,k} & \cdots & \varphi_{k-1,k} & \varphi_{k,k}\\
+0 & \varphi_{k,k} & \varphi_{1,k} & \varphi_{2,k} & \cdots & \varphi_{j-2,k} & \varphi_{j-1,k} & \cdots & \varphi_{k-2,k} & \varphi_{k-1,k}\\
+0 & \varphi_{k-1,k} & \varphi_{k,k} & \varphi_{1,k} & \cdots & \varphi_{j-3,k} & \varphi_{j-2,k} & \cdots & \varphi_{k-3,k} & \varphi_{k-2,k}\\
+\vdots & \vdots & \vdots & \vdots & \cdots & \vdots & \vdots & \cdots & \vdots & \vdots\\
+0 & \varphi_{j-1,k} & \varphi_{j,k} & \varphi_{j+1,k} & \cdots &  &  & \cdots\\
+0 & \varphi_{j-2,k} & \varphi_{j-1,k} & \varphi_{j,k} & \cdots &  &  & \cdots\\
+\vdots & \vdots & \vdots &  & \cdots & \vdots & \vdots & \cdots & \vdots & \vdots\\
+0 & \varphi_{3,k} &  &  & \cdots &  &  & \cdots\\
+0 & \varphi_{2,k} &  &  & \cdots &  &  & \cdots
+\end{bmatrix}\\
+ & =\begin{bmatrix}0 & \beta_{MH}b\sum_{i\ne1}\varphi_{i,k} & \beta_{MH}b\sum_{i\ne2}\varphi_{i,k} & \beta_{MH}b\sum_{i\ne3}\varphi_{i,k} & \beta_{MH}b\sum_{i\ne4}\varphi_{i,k} & \cdots & \beta_{MH}b\sum_{i\ne j-1}\varphi_{i,k} & \beta_{MH}b\sum_{i\ne j}\varphi_{i,k} & \cdots & \beta_{MH}b\sum_{i\ne k-1}\varphi_{i,k} & \beta_{MH}b\sum_{i\ne k}\varphi_{i,k}\\
+\beta_{HM}\rho_{b}^{k}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right)/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0 & 0 &  & \cdots & 0 & 0 & \cdots & 0 & 0\\
+0 & 0 & 0 & 0 &  & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right)/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0 & 0 &  & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}^{2}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right)/\left(\gamma_{H}+\mu_{H}\right)\\
+\vdots & \vdots & \vdots & \vdots &  & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+\beta_{HM}\rho_{b}^{j-2}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right)/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0 & 0 &  & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}^{j-1}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right)/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0 & 0 &  & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \vdots &  & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+\beta_{HM}\rho_{b}^{k-2}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right)/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0 & 0 &  & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}^{k-1}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right)/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0 & 0 &  & \cdots & 0 & 0 & \cdots & 0 & 0
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+The eigenvalues of this simplified version are given by zero (multiplicity
+ 
+\begin_inset Formula $k$
+\end_inset
+
+) and
+\begin_inset Formula 
+\begin{align*}
+\lambda_{\pm} & =\pm\sqrt{\beta_{HM}\beta_{MH}b\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\left(\frac{\Lambda_{M}}{K_{H}}\right)\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)}\sqrt{\rho_{b}^{k}\sum_{i\ne1}\varphi_{i,k}+0+\rho_{b}\sum_{i\ne3}\varphi_{i,k}+\cdots+\rho_{b}^{j-2}b\sum_{i\ne j-1}\varphi_{i,k}+\rho_{b}^{j-1}\sum_{i\ne j}\varphi_{i,k}+\cdots\rho_{b}^{k-2}\sum_{i\ne k-1}\varphi_{i,k}+\rho_{b}^{k-1}\sum_{i\ne k}\varphi_{i,k}}\\
+\frac{\lambda_{\pm}}{\sqrt{\beta_{HM}\beta_{MH}b\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\left(\frac{\Lambda_{M}}{K_{H}}\right)\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)}} & =\pm\sqrt{\rho_{b}^{k}\sum_{i\ne1}\varphi_{i,k}+0+\rho_{b}^{1}\sum_{i\ne3}\varphi_{i,k}+\rho_{b}^{2}\sum_{i\ne4}\varphi_{i,k}+\cdots+\rho_{b}^{j-3}b\sum_{i\ne j-1}\varphi_{i,k}+\rho_{b}^{j-2}\sum_{i\ne j}\varphi_{i,k}+\cdots\rho_{b}^{k-3}\sum_{i\ne k-1}\varphi_{i,k}+\rho_{b}^{k-2}\sum_{i\ne k}\varphi_{i,k}}\\
+ & =\pm\sqrt{\rho_{b}^{k}\sum_{i\ne1}\varphi_{i,k}+\sum_{j=3}^{k}\rho_{b}^{j-2}\sum_{i\ne j}\varphi_{i,k}}
+\end{align*}
+
+\end_inset
+
+Thus, since there is exactly one positive eigenvalue, it must be the basic
+ reproduction number:
+\begin_inset Formula 
+\[
+\mathcal{R}_{0}=\sqrt{\beta_{HM}\beta_{MH}b\left(1-\rho_{W}\rho_{b}^{k}\right)^{-1}\left(\frac{\Lambda_{M}}{K_{H}}\right)\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)}\sqrt{\rho_{b}^{k}\sum_{i\ne1}\varphi_{i,k}+\sum_{j=3}^{k+1}\rho_{b}^{j-2}\sum_{i\ne j}\varphi_{i,k}}
+\]
+
+\end_inset
+
+There's probably some little trick I can do using the fact that
+\begin_inset Formula 
+\begin{align*}
+\rho_{b}^{k}\sum_{i\ne1}\varphi_{i,k}+\sum_{j=3}^{k+1}\rho_{b}^{j-2}\sum_{i\ne j}\varphi_{i,k} & =\left(\rho_{b}^{k}\sum_{i\ne1}\varphi_{i,k}+\sum_{i\ne2}\varphi_{i,k}+\sum_{j=3}^{k+1}\rho_{b}^{j-2}\sum_{i\ne j}\varphi_{i,k}\right)-\sum_{i\ne2}\varphi_{i,k}\\
+ & =\left(\sum_{j=1}^{k}\rho_{b}^{j-1}\sum_{i\ne j+1}\varphi_{i,k}+\rho_{b}^{k}\sum_{i\ne1}\varphi_{i,k}\right)-\sum_{i\ne2}\varphi_{i,k}
+\end{align*}
+
+\end_inset
+
+Note that 
+\begin_inset Formula 
+\[
+\sum_{i=1}^{k}\varphi_{i,k}=\frac{1}{\mu_{M}}
+\]
+
+\end_inset
+
+hence
+\begin_inset Formula 
+\[
+\sum_{i\ne j}\varphi_{i,k}=\frac{1}{\mu_{M}}-\varphi_{j,k}
+\]
+
+\end_inset
+
+So
+\begin_inset Formula 
+\begin{align*}
+\rho_{b}^{k}\sum_{i\ne1}\varphi_{i,k}+\sum_{j=3}^{k+1}\rho_{b}^{j-2}\sum_{i\ne j}\varphi_{i,k} & =\left(\sum_{j=1}^{k}\rho_{b}^{j-1}\sum_{i\ne j+1}\varphi_{i,k}+\rho_{b}^{k}\sum_{i\ne1}\varphi_{i,k}\right)-\sum_{i\ne2}\varphi_{i,k}\\
+ & =\left(\sum_{j=1}^{k}\rho_{b}^{j-1}\left(\frac{1}{\mu_{M}}-\varphi_{j+1,k}\right)+\rho_{b}^{k}\left(\frac{1}{\mu_{M}}-\varphi_{1,k}\right)\right)-\left(\frac{1}{\mu_{M}}-\varphi_{2,k}\right)\\
+ & =\frac{1}{\mu_{M}}\left(\sum_{j=0}^{k}\rho_{b}^{j}-1\right)-\left(\rho_{b}^{k}\varphi_{1,k}+\sum_{j=1}^{k}\rho_{b}^{j-1}\varphi_{j+1,k}\right)\\
+ & =\frac{1}{\mu_{M}}\left(\frac{\rho_{b}\left(\rho_{b}^{k}-1\right)}{\rho_{b}-1}-1\right)-\left(\rho_{b}^{k}\varphi_{1,k}+\sum_{j=1}^{k}\rho_{b}^{j-1}\varphi_{j+1,k}\right)\\
+ & =\frac{1}{\mu_{M}}\left(\frac{\rho_{b}^{k+1}+1}{\rho_{b}-1}\right)-\left(\rho_{b}^{k}\varphi_{1,k}+\sum_{j=1}^{k-1}\rho_{b}^{j-1}\varphi_{j+1,k}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+!!! Move on to simulations for now
+\end_layout
+
+\begin_layout Part*
+Model with biting number dependent variables
+\end_layout
+
+\begin_layout Section
+Model Set-up
+\end_layout
+
+\begin_layout Standard
+The basic demographic model is given by:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt} & H=\left(\lambda_{H}-\mu_{H}\right)H\left(1-\frac{H}{K_{H}}\right)\\
+\frac{d}{dt}M & =\Lambda_{M}-\mu_{M}M
+\end{align*}
+
+\end_inset
+
+Assume that the time-between-egg-laying distribution is 
+\begin_inset Formula $\textrm{Erlang}\left(b,k\right)$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $B$
+\end_inset
+
+ be the compartment of biting mosquitoes and 
+\begin_inset Formula $W$
+\end_inset
+
+ the compartment of egg-laying mosquitoes.
+ Then we can decompose 
+\begin_inset Formula $B$
+\end_inset
+
+ as 
+\begin_inset Formula $B=\sum_{i=1}^{k}B_{k}$
+\end_inset
+
+ where
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}B_{1} & =\Lambda_{M,k}+\gamma_{W}W-bB_{1}-\mu_{M,1}B_{1}\\
+\frac{d}{dt}B_{j} & =b\left(B_{j-1}-B_{j}\right)-\mu_{M,j}B_{j}\\
+\frac{d}{dt}B & =\Lambda_{M,k}+\gamma_{W}W-bB_{k}-\sum_{j=1}^{k}\mu_{M,j}B_{j}\\
+\frac{d}{dt}W & =bB_{k}-\gamma_{W}W-\mu_{M}W\\
+\frac{d}{dt}M & =\frac{d}{dt}B+\frac{d}{dt}W\\
+ & =\Lambda_{M,k}-\left(\sum_{j=1}^{k}\mu_{M,j}B_{j}+\mu_{M}W\right)
+\end{align*}
+
+\end_inset
+
+Finally, putting this together into a simple transmission model.
+ 
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}S_{H} & =\left[\lambda_{H}H-\left(\frac{\lambda_{H}-\mu_{H}}{K_{H}}\right)H^{2}\right]-b\left(\sum_{j=1}^{k}\beta_{MH,j}I_{B,j}\right)\frac{S_{H}}{N_{H}}-\mu_{H}S_{H}\\
+\frac{d}{dt}I_{H} & =b\left(\sum_{j=1}^{k}\beta_{MH,j}I_{B,j}\right)\frac{S_{H}}{N_{H}}-\mu_{H}I_{H}-\gamma_{H}I_{H}\\
+\frac{d}{dt}R_{H} & =\gamma_{H}I_{H}-\mu_{H}R_{H}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}S_{B,1} & =\Lambda_{M}+\gamma_{W}S_{W}-bS_{B,1}-\mu_{M,1}S_{B,1}\\
+\frac{d}{dt}S_{B,j} & =\left(1-\beta_{HM,j-1}\frac{I_{H}}{N_{H}}\right)bS_{B,j-1}-bS_{B,j}-\mu_{M,j}S_{B,j}\\
+\frac{d}{dt}S_{B} & =\frac{d}{dt}\sum_{j=1}^{k}S_{B,j}\\
+ & =\Lambda_{M}+\gamma_{W}S_{W}-bS_{B,1}-\mu_{M,1}S_{B,1}+\sum_{j=2}^{k}\left[\left(1-\beta_{HM,j-1}\frac{I_{H}}{N_{H}}\right)bS_{B,j-1}-bS_{B,j}-\mu_{M,j}S_{B,j}\right]\\
+ & =\Lambda_{M}+\gamma_{W}S_{W}-bS_{B,k}-\sum_{j=1}^{k}\mu_{M,j}S_{B,j}-b\sum_{j=1}^{k-1}\left(\beta_{HM,j}S_{B,j}\right)\frac{I_{H}}{N_{H}}\\
+\\
+\frac{d}{dt}I_{B,1} & =\gamma_{W}I_{W}-bI_{B,1}-\mu_{M,1}I_{B,1}\\
+\frac{d}{dt}I_{B,j} & =\left(\beta_{HM,j-1}\frac{I_{H}}{N_{H}}\right)bS_{B,j-1}+bI_{B,j-1}-bI_{B,j}-\mu_{M,j}I_{B,j}\\
+\frac{d}{dt}I_{B} & =\frac{d}{dt}\sum_{j=1}^{k}I_{B,j}\\
+ & =\gamma_{W}I_{W}-bI_{B,1}-\mu_{M,1}I_{B,1}+\sum_{j=2}^{k}\left[\left(\beta_{HM,j-1}\frac{I_{H}}{N_{H}}\right)bS_{B,j-1}+bI_{B,j-1}-bI_{B,j}-\mu_{M,j}I_{B,j}\right]\\
+ & =\gamma_{W}I_{W}-bI_{B,k}+b\sum_{j=1}^{k-1}\left(\beta_{HM,j}S_{B,j}\right)\frac{I_{H}}{N_{H}}-\sum_{j=1}^{k}\mu_{M,j}I_{B,j}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}S_{W} & =\left(1-\beta_{HM,k}\frac{I_{H}}{N_{H}}\right)bS_{B,k}-\gamma_{W}S_{W}-\mu_{M}S_{W}\\
+\frac{d}{dt}I_{W} & =\beta_{HM,k}\frac{I_{H}}{N_{H}}bS_{B,k}+bI_{B,k}-\gamma_{W}I_{W}-\mu_{M}I_{W}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $S_{B}=\sum_{j=1}^{k}S_{B,j}$
+\end_inset
+
+ and 
+\begin_inset Formula $I_{B}=\sum_{j=1}^{k}I_{B,j}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For simplicity, we assume that i) there is no disease-induced mortality
+ in either the host of vector and ii) the host is at carrying capacity:
+ 
+\begin_inset Formula $H=K_{H}$
+\end_inset
+
+.
+ Then the equations simplify to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}S_{H} & =\mu_{H}K_{H}-\left(\sum_{j=1}^{k}\beta_{MH,j}I_{B,j}\right)b\frac{S_{H}}{K_{H}}-\mu_{H}S_{H}\\
+\frac{d}{dt}I_{H} & =\left(\sum_{j=1}^{k}\beta_{MH,j}I_{B,j}\right)b\frac{S_{H}}{K_{H}}-\mu_{H}I_{H}-\gamma_{H}I_{H}\\
+\frac{d}{dt}R_{H} & =\gamma_{H}I_{H}-\mu_{H}R_{H}\\
+\frac{d}{dt}S_{B,1} & =\Lambda_{M}+\gamma_{W}S_{W}-bS_{B,1}-\mu_{M,1}S_{B,1}\\
+\frac{d}{dt}S_{B,j} & =\left(1-\beta_{HM,j-1}\frac{I_{H}}{K_{H}}\right)bS_{B,j-1}-\left(b+\mu_{M,j}\right)S_{B,j}\\
+\frac{d}{dt}S_{B} & =\frac{d}{dt}\sum_{j=1}^{k}S_{B,j}\\
+ & =\Lambda_{M}+\gamma_{W}S_{W}-bS_{B,k}-\sum_{j=1}^{k}\mu_{M,j}S_{B,j}-b\sum_{j=1}^{k-1}\left(\beta_{HM,j}S_{B,j}\right)\frac{I_{H}}{K_{H}}\\
+\frac{d}{dt}I_{B,1} & =\gamma_{W}I_{W}-\left(b+\mu_{M,1}\right)I_{B,1}\\
+\frac{d}{dt}I_{B,j} & =\left(\beta_{HM,j-1}\frac{I_{H}}{K_{H}}\right)bS_{B,j-1}+bI_{B,j-1}-\left(b+\mu_{M,j}\right)I_{B,j}\\
+\frac{d}{dt}I_{B} & =\frac{d}{dt}\sum_{j=1}^{k}I_{B,j}\\
+ & =\gamma_{W}I_{W}-bI_{B,k}+b\sum_{j=1}^{k-1}\left(\beta_{HM,j}S_{B,j}\right)\frac{I_{H}}{K_{H}}-\sum_{j=1}^{k}\mu_{M,j}I_{B,j}\\
+\frac{d}{dt}S_{W} & =\left(1-\beta_{HM,k}\frac{I_{H}}{K_{H}}\right)bS_{B,k}-\gamma_{W}S_{W}-\mu_{M}S_{W}\\
+\frac{d}{dt}I_{W} & =\beta_{HM,k}bS_{B,k}\left(\frac{I_{H}}{K_{H}}\right)+bI_{B,k}-\gamma_{W}I_{W}-\mu_{M}I_{W}
+\end{align*}
+
+\end_inset
+
+Note that 
+\begin_inset Formula 
+\[
+\left(1-\beta_{HM,j-1}\frac{I_{H}}{K_{H}}\right)bS_{B,j-1}=bS_{B,j-1}\left[\left(1-\frac{I_{H}}{K_{H}}\right)+\left(1-\beta_{HM,j-1}\right)\left(\frac{I_{H}}{K_{H}}\right)\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Equilibria
+\end_layout
+
+\begin_layout Subsection
+Disease-free equilibria
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\mu_{M,j} & =\left[1+\left(j-1\right)\alpha\right]\mu_{M}\\
+\sum_{j=1}^{k}\mu_{M,j}B_{j} & =\sum_{j=1}^{k}\left[1+\left(j-1\right)\alpha\right]\mu_{M}B_{j}\\
+ & =\mu_{M}B+\alpha\mu_{M}\sum_{j=2}^{k}\left(j-1\right)B_{j}\\
+ & =\mu_{M}B+\alpha\mu_{M}\sum_{i=1}^{k-1}jB_{j+1}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\frac{d}{dt}M=\Lambda_{M,k}-\mu_{M}M-\alpha\mu_{M}\sum_{i=1}^{k-1}jB_{j+1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Suppose that 
+\begin_inset Formula $I_{H}=I_{B,j}=I_{W}=0$
+\end_inset
+
+.
+ Then we solve for any equilibria:
+\begin_inset Formula 
+\begin{align*}
+S_{H} & =K_{H}\\
+R_{H} & =0\\
+S_{B,1} & =\left(\frac{1}{b+\mu_{M,1}}\right)\Lambda_{M}+\left(\frac{1}{b+\mu_{M,1}}\right)\gamma_{W}S_{W}\\
+S_{B,j} & =\left(\frac{b}{b+\mu_{M,j}}\right)S_{B,j-1},j>1\\
+\Lambda_{M}+\gamma_{W}S_{W} & =bS_{B,k}+\sum_{j=1}^{k}\mu_{M,j}S_{B,j}\\
+S_{W} & =\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)bS_{B,k}
+\end{align*}
+
+\end_inset
+
+Let 
+\begin_inset Formula $\rho_{B,j}=\prod_{i=1}^{j}\left(\frac{b}{b+\mu_{M,i}}\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $\rho_{W}=\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $S_{B,j}=S_{B,1}\left(\frac{b+\mu_{M}}{b}\right)\rho_{B,j}$
+\end_inset
+
+ for 
+\begin_inset Formula $j>1$
+\end_inset
+
+, where 
+\begin_inset Formula $\mu_{M,1}=\mu_{M}$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\begin{align*}
+S_{B,j} & =\rho_{B,j}S_{B,1}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+S_{W}=\left(\frac{b+\mu_{M}}{\gamma_{W}+\mu_{M}}\right)\rho_{B,k}S_{B,1}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+S_{B,1} & =\left(\frac{1}{b+\mu_{M,1}}\right)\Lambda_{M}+\left(\frac{1}{b+\mu_{M,1}}\right)\gamma_{W}S_{W}\\
+S_{B,1} & =\left(\frac{1}{b+\mu_{M,1}}\right)\Lambda_{M}+\rho_{W}\rho_{B,k}S_{B,1}\\
+S_{B,1} & =\Lambda_{M}\left(\frac{1}{b+\mu_{M,1}}\right)\left(1-\rho_{W}\rho_{B,k}\right)^{-1}
+\end{align*}
+
+\end_inset
+
+Note that 
+\begin_inset Formula $\left(1-\rho_{W}\rho_{B,k}\right)^{-1}$
+\end_inset
+
+ represents the average number of gonotrophic cycles a mosquito will complete
+ before succumbing to mortality since
+\begin_inset Formula 
+\[
+\sum_{i=1}^{\infty}\left(\rho_{W}\rho_{B,k}\right)^{i}=\frac{1}{1-\rho_{W}\rho_{B,k}}.
+\]
+
+\end_inset
+
+Setting 
+\begin_inset Formula $n_{G}=\left(1-\rho_{W}\rho_{B,k}\right)^{-1}$
+\end_inset
+
+, this will be used as an independent parameter used to help decide the
+ dependence of 
+\begin_inset Formula $\mu_{M,k}$
+\end_inset
+
+ on 
+\begin_inset Formula $k$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+S_{W} & =\Lambda_{M}\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\rho_{B,k}n_{k}\\
+S_{B,1} & =\Lambda_{M}\left(\frac{1}{b+\mu_{M,1}}\right)n_{k}\\
+S_{B,j} & =\Lambda_{M}\left(\frac{1}{b}\right)\rho_{B,j}n_{k},j>1
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+M & =S_{W}+S_{B,1}+\sum_{j=2}^{k}S_{B,j}\\
+ & =\Lambda_{M,k}\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\rho_{B,k}n_{G}+\Lambda_{M}\left(\frac{1}{b+\mu_{M,1}}\right)n_{G}+\sum_{j=2}^{k}\Lambda_{M}\left(\frac{1}{b}\right)\rho_{B,j}n_{G}\\
+ & =\Lambda_{M,k}n_{G}\left[\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\rho_{B,k}+\left(\frac{1}{b+\mu_{M,1}}\right)+\left(\frac{1}{b}\right)\sum_{j=2}^{k}\rho_{B,j}\right]\\
+ & =\Lambda_{M,k}n_{G}\left[\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\rho_{B,k}+\sum_{j=1}^{k}b^{j-1}\prod_{i=1}^{j}\left(\frac{1}{b+\mu_{M,i}}\right)\right]
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that the total equilibrium mosquito population size should be independent
+ of 
+\begin_inset Formula $k$
+\end_inset
+
+, but ensuring this is the case may be very difficult.
+\end_layout
+
+\begin_layout Standard
+Suppose that 
+\begin_inset Formula $\mu_{M,j}=\alpha^{j-1}\left(\mu_{M}+b\right)-b$
+\end_inset
+
+ where 
+\begin_inset Formula $\alpha>1$
+\end_inset
+
+ is given.
+ Note that by this definition, 
+\begin_inset Formula $\mu_{M,j}>0$
+\end_inset
+
+ as long as 
+\begin_inset Formula $\alpha>1$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+n_{G} & =\left(1-\rho_{W}\rho_{B,k}\right)^{-1}\\
+\rho_{B,k} & =\frac{1}{\rho_{W}}\left(1-\frac{1}{n_{G}}\right)\\
+\prod_{i=1}^{k}\left(\frac{b}{b+\mu_{M,i}}\right) & =\frac{1}{\rho_{W}}\left(1-\frac{1}{n_{G}}\right)\\
+b^{k}\prod_{i=1}^{k}\left(\frac{1}{b+\mu_{M,i}}\right) & =\frac{1}{\rho_{W}}\left(1-\frac{1}{n_{G}}\right)\\
+\prod_{i=1}^{k}\left(b+\mu_{M,i}\right) & =b^{k}\left[\frac{1}{\rho_{W}}\left(1-\frac{1}{n_{G}}\right)\right]^{-1}\\
+\prod_{i=1}^{k}\left(b+\alpha^{i-1}\left(\mu_{M}+b\right)-b\right) & =b^{k}\left[\frac{1}{\rho_{W}}\left(1-\frac{1}{n_{G}}\right)\right]^{-1}\\
+\prod_{j=0}^{k-1}\alpha^{j} & =\left(\frac{b}{b+\mu_{M}}\right)^{k}\left[\frac{1}{\rho_{W}}\left(1-\frac{1}{n_{G}}\right)\right]^{-1}\\
+\alpha^{\sum_{j=1}^{k-1}j} & =\left(\frac{b}{b+\mu_{M}}\right)^{k}\left[\frac{1}{\rho_{W}}\left(1-\frac{1}{n_{G}}\right)\right]^{-1}\\
+\alpha^{\left(\frac{k\left(k-1\right)}{2}\right)} & =\left(\frac{b}{b+\mu_{M}}\right)^{k}\left[\frac{1}{\rho_{W}}\left(1-\frac{1}{n_{G}}\right)\right]^{-1}\\
+\alpha & =\left\{ \left(\frac{b}{b+\mu_{M}}\right)^{k}\left[\frac{1}{\rho_{W}}\left(1-\frac{1}{n_{G}}\right)\right]^{-1}\right\} ^{\frac{2}{k\left(k-1\right)}}\\
+\alpha & =\left\{ \left(\frac{b}{b+\mu_{M}}\right)\left[\frac{1}{\rho_{W}}\left(1-\frac{1}{n_{G}}\right)\right]^{-\frac{1}{k}}\right\} ^{\frac{2}{k-1}},k>1
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left\{ \left(\frac{b}{b+\mu_{M}}\right)\left[\frac{1}{\rho_{W}}\left(1-\frac{1}{n_{G}}\right)\right]^{-\frac{1}{k}}\right\} ^{\frac{2}{k-1}} & >1\\
+\left(\frac{b}{b+\mu_{M}}\right)\left[\frac{1}{\rho_{W}}\left(1-\frac{1}{n_{G}}\right)\right]^{-\frac{1}{k}} & >1\\
+\left(\frac{b}{b+\mu_{M}}\right)\rho_{W}^{1/k}\left(1-\frac{1}{n_{G}}\right)^{-1/k} & >1\\
+\rho_{W}^{1/k}\left(1-\frac{1}{n_{G}}\right)^{-1/k} & >\left(\frac{b}{b+\mu_{M}}\right)^{-1}\\
+\rho_{W}^{1/k}\left(1-\frac{1}{n_{G}}\right)^{-1/k} & >\frac{1}{\rho_{B}}
+\end{align*}
+
+\end_inset
+
+If 
+\begin_inset Formula $k=1$
+\end_inset
+
+, then 
+\begin_inset Formula $\alpha=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+To ensure that the total equilibrium population size of mosquitoes remains
+ constant, we require
+\begin_inset Formula 
+\[
+\Lambda_{M,k}n_{G}\left[\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\rho_{B,k}+\sum_{j=1}^{k}b^{j-1}\prod_{i=1}^{j}\left(\frac{1}{b+\mu_{M,i}}\right)\right]=\Lambda_{M}n_{G}\left[\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)+\left(\frac{1}{b+\mu_{M}}\right)\right]
+\]
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection

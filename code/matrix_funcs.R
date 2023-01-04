@@ -20,16 +20,21 @@ tridiag <- function(upper, lower, main){
 # Equilibria calculators ----
 DFE_func <- function(params, k) {
   with(as.list(params), {
+    
     S_H <- K_H
     I_H <- 0
     R_H <- 0
     S_B <- vector(mode = "numeric", length = k)
     I_B <- S_B
-    for (j in 1:k) {
-      S_B[j] <- Lambda_M * (1/b) * (rho_b^j) * ( 1 - (rho_W)*(rho_b)^k)^-1
+    S_B[1] <- Lambda_M * n_G / (b + mu_M[1])
+    
+    for (j in 2:k) {
+      rho_B[j] <- prod(b/(b+mu_M[1:j]))
+      S_B[j] <- rho_B[j] * S_B[1]
+      # S_B[j] <- Lambda_M * (1/b) * (rho_b^j) * ( 1 - (rho_W)*(rho_b)^k)^-1
       I_B[j] <- 0
     }
-    S_W <- Lambda_M * (rho_b^k) * ( 1 - (rho_W)*(rho_b)^k)^-1 / (gamma_W + mu_M)
+    S_W <- ((b + mu_M[1]) / (gamma_W + mu_M[1])) * rho_B[k] * S_B[1]
     I_W <- 0
     return(tibble(
       S_H = S_H,
@@ -59,7 +64,7 @@ F_func <- function(params, k) {
     
     # Build k+2 by k+2 matrix 
     for (j in 1:k+2) {
-      row_1[j] <- ifelse(j>2, beta_MH*b*S_H / K_H, 0)
+      row_1[j] <- ifelse(j>2, beta_MH*b, 0)
       column_1[j] <- ifelse(j>3, beta_HM * b * S_B[j -3] / K_H, 0)
     }
     column_1[2] <- beta_HM * b * S_B[k] / K_H
