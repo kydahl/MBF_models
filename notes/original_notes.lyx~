@@ -2004,34 +2004,16 @@ Linearize these operators by computing their Jacobians and then evaluating
 
 \begin_inset Formula 
 \[
-\mathscr{F}\left(x\right)=\begin{pmatrix}\left(\sum_{j=1}^{k}\beta_{MH,j}I_{B,j}\right)\frac{b}{k}\frac{S_{H}}{K_{H}}\\
-\beta_{HM,k}\frac{b}{k}S_{B,k}\left(\frac{I_{H}}{K_{H}}\right)\\
-0\\
-\beta_{HM,1}\frac{b}{k}S_{B,1}\left(\frac{I_{H}}{K_{H}}\right)\\
-\vdots\\
-\beta_{HM,j-2}\frac{b}{k}S_{B,j-2}\left(\frac{I_{H}}{K_{H}}\right)\\
-\beta_{HM,j-1}\frac{b}{k}S_{B,j-1}\left(\frac{I_{H}}{K_{H}}\right)\\
-\vdots\\
-\beta_{HM,k-2}\frac{b}{k}S_{B,k-2}\left(\frac{I_{H}}{K_{H}}\right)\\
-\beta_{HM,k-1}\frac{b}{k}S_{B,k-1}\left(\frac{I_{H}}{K_{H}}\right)
-\end{pmatrix}
-\]
-
-\end_inset
-
-
-\begin_inset Formula 
-\[
-F\left(x\right)=\begin{pmatrix}0 & 0 & \beta_{MH,1}\frac{b}{k}\frac{S_{H}}{K_{H}} & \beta_{MH,2}\frac{b}{k}\frac{S_{H}}{K_{H}} & \cdots & \beta_{MH,j-2}\frac{b}{k}\frac{S_{H}}{K_{H}} & \beta_{MH,j-1}\frac{b}{k}\frac{S_{H}}{K_{H}} & \cdots & \beta_{MH,k-1}\frac{b}{k}\frac{S_{H}}{K_{H}} & \beta_{MH,k}\frac{b}{k}\frac{S_{H}}{K_{H}}\\
-\beta_{HM,k}\frac{b}{k}S_{B,k}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+F\left(x\right)=\begin{pmatrix}0 & 0 & \beta_{MH}b\frac{S_{H}}{K_{H}} & \beta_{MH}b\frac{S_{H}}{K_{H}} & \cdots & \beta_{MH}b\frac{S_{H}}{K_{H}} & \beta_{MH}b\frac{S_{H}}{K_{H}} & \cdots & \beta_{MH}b\frac{S_{H}}{K_{H}} & \beta_{MH}b\frac{S_{H}}{K_{H}}\\
+\beta_{HM}bS_{B,k}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
 0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
-\beta_{HM,1}\frac{b}{k}S_{B,1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}bS_{B,1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-\beta_{HM,j-2}\frac{b}{k}S_{B,j-2}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
-\beta_{HM,j-1}\frac{b}{k}S_{B,j-1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}bS_{B,j-2}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}bS_{B,j-1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-\beta_{HM,k-2}\frac{b}{k}S_{B,k-2}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
-\beta_{HM,k-1}\frac{b}{k}S_{B,k-1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0
+\beta_{HM}bS_{B,k-2}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}bS_{B,k-1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0
 \end{pmatrix}
 \]
 
@@ -2040,16 +2022,16 @@ F\left(x\right)=\begin{pmatrix}0 & 0 & \beta_{MH,1}\frac{b}{k}\frac{S_{H}}{K_{H}
 
 \begin_inset Formula 
 \begin{align*}
-F & =\begin{bmatrix}0 & 0 & \beta_{MH,1}\frac{b}{k} & \beta_{MH,2}\frac{b}{k} & \cdots & \beta_{MH,j-2}\frac{b}{k} & \beta_{MH,j-1}\frac{b}{k} & \cdots & \beta_{MH,k-1}\frac{b}{k} & \beta_{MH,k}\frac{b}{k}\\
-\beta_{HM,k}\frac{b}{k}S_{B,k}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+F & =\begin{bmatrix}0 & 0 & \beta_{MH}b & \beta_{MH}b & \cdots & \beta_{MH}b & \beta_{MH}b & \cdots & \beta_{MH}b & \beta_{MH}b\\
+\beta_{HM}\rho_{b}^{k}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
 0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
-\beta_{HM,1}\frac{b}{k}S_{B,1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-\beta_{HM,j-2}\frac{b}{k}S_{B,j-2}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
-\beta_{HM,j-1}\frac{b}{k}S_{B,j-1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}^{j-2}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}^{j-1}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-\beta_{HM,k-2}\frac{b}{k}S_{B,k-2}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
-\beta_{HM,k-1}\frac{b}{k}S_{B,k-1}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0
+\beta_{HM}\rho_{b}^{k-2}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+\beta_{HM}\rho_{b}^{k-1}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0
 \end{bmatrix}
 \end{align*}
 
@@ -2068,15 +2050,8 @@ where
 \begin_inset Formula 
 \[
 \mathscr{V}\left(x\right)=\begin{pmatrix}\left(\mu_{H}+\gamma_{H}\right)I_{H}\\
-\left(\gamma_{W}+\mu\right)I_{W}-\frac{b}{k}I_{B,k}\\
-\left(\frac{b}{k}+\mu+\mu_{k}\right)I_{B,1}-\gamma_{W}I_{W}\\
-\left(\frac{b}{k}+\mu+\mu_{k}\right)I_{B,2}-\frac{b}{k}I_{B,1}\\
-\vdots\\
-\left(\frac{b}{k}+\mu+\mu_{k}\right)I_{B,j-1}-\frac{b}{k}I_{B,j-2}\\
-\left(\frac{b}{k}+\mu+\mu_{k}\right)I_{B,j}-\frac{b}{k}I_{B,j-1}\\
-\vdots\\
-\left(\frac{b}{k}+\mu+\mu_{k}\right)I_{B,k-1}-\frac{b}{k}I_{B,k-2}\\
-\left(\frac{b}{k}+\mu+\mu_{k}\right)I_{B,k}-\frac{b}{k}I_{B,k-1}
+\left(\gamma_{W}+\mu_{M}\right)I_{W}-bI_{B}\\
+\left(b+\mu_{M}\right)I_{B}-\gamma_{W}I_{W}
 \end{pmatrix}
 \]
 
@@ -2084,17 +2059,48 @@ where
 
 
 \begin_inset Formula 
+\begin{align*}
+V & =\begin{bmatrix}\left(\gamma_{H}+\mu_{H}\right) & 0 & 0\\
+0 & \left(\gamma_{W}+\mu_{M}\right) & -b\\
+0 & -\gamma_{W} & \left(b+\mu_{M}\right)
+\end{bmatrix}\\
+V^{-1} & =\begin{bmatrix}1/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0\\
+0 & \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)\right]^{-1} & \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)\right]^{-1}\\
+0 & \left(\frac{1}{b+\mu_{M}}\right)\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)\right]^{-1} & \left(\frac{1}{b+\mu_{M}}\right)\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)\right]
+\end{bmatrix}\\
+ & =\begin{bmatrix}1/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0\\
+0 & \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left[1-\rho_{W}\rho_{B}\right]^{-1} & \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\rho_{B}\left[1-\rho_{W}\rho_{B}\right]^{-1}\\
+0 & \left(\frac{1}{b+\mu_{M}}\right)\rho_{W}\left[1-\rho_{W}\rho_{B}\right]^{-1} & \left(\frac{1}{b+\mu_{M}}\right)\left[1-\rho_{W}\rho_{B}\right]
+\end{bmatrix}\\
+F & =\begin{bmatrix}0 & 0 & \beta_{MH}b\\
+\beta_{HM}\rho_{b}^{k}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0\\
+0 & 0 & 0
+\end{bmatrix}\\
+K & =FV^{-1}\\
+ & =\begin{bmatrix}0 & 0 & \beta_{MH}b\\
+\beta_{HM}\rho_{b}^{k}\left[1-\rho_{W}\rho_{b}^{k}\right]^{-1}\Lambda_{M}\left(\frac{1}{K_{H}}\right) & 0 & 0\\
+0 & 0 & 0
+\end{bmatrix}\begin{bmatrix}1/\left(\gamma_{H}+\mu_{H}\right) & 0 & 0\\
+0 & \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left[1-\rho_{W}\rho_{B}\right]^{-1} & \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\rho_{B}\left[1-\rho_{W}\rho_{B}\right]^{-1}\\
+0 & \left(\frac{1}{b+\mu_{M}}\right)\rho_{W}\left[1-\rho_{W}\rho_{B}\right]^{-1} & \left(\frac{1}{b+\mu_{M}}\right)\left[1-\rho_{W}\rho_{B}\right]
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
 \[
 V=\begin{bmatrix}\left(\gamma_{H}+\mu_{H}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
-0 & \left(\gamma_{W}+\mu\right) & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & -\frac{b}{k}\\
-0 & -\gamma_{W} & \left(\frac{b}{k}+\mu+\mu_{k}\right) & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
-0 & 0 & -\frac{b}{k} & \left(\frac{b}{k}+\mu+\mu_{k}\right) & \cdots & 0 & 0 & \cdots & 0 & 0\\
+0 & \left(\gamma_{W}+\mu_{M}\right) & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & -b\\
+0 & -\gamma_{W} & \left(b+\mu_{M}\right) & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
+0 & 0 & -b & \left(b+\mu_{M}\right) & \cdots & 0 & 0 & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & 0 & \cdots & \left(\frac{b}{k}+\mu+\mu_{k}\right) & 0 & \cdots & 0 & 0\\
-0 & 0 & 0 & 0 & \cdots & -\frac{b}{k} & \left(\frac{b}{k}+\mu+\mu_{k}\right) & \cdots & 0 & 0\\
+0 & 0 & 0 & 0 & \cdots & \left(b+\mu_{M}\right) & 0 & \cdots & 0 & 0\\
+0 & 0 & 0 & 0 & \cdots & -b & \left(b+\mu_{M}\right) & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & \left(\frac{b}{k}+\mu+\mu_{k}\right) & 0\\
-0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & -\frac{b}{k} & \left(\frac{b}{k}+\mu+\mu_{k}\right)
+0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & \left(b+\mu_{M}\right) & 0\\
+0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & -b & \left(b+\mu_{M}\right)
 \end{bmatrix}
 \]
 

@@ -2088,10 +2088,10 @@ where
 V=\begin{bmatrix}\left(\gamma_{H}+\mu_{H}\right) & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
 0 & \left(\gamma_{W}+\mu\right) & 0 & 0 & \cdots & 0 & 0 & \cdots & 0 & -\frac{b}{k}\\
 0 & -\gamma_{W} & \left(\frac{b}{k}+\mu+\mu_{k}\right) & 0 & \cdots & 0 & 0 & \cdots & 0 & 0\\
-0 & 0 & -\frac{b}{k} & \left(\frac{b}{k}+\mu+\mu_{k}\right) & \cdots & 0 & 0 & \cdots & 0 & 0\\
+0 & 0 & -b & \left(\frac{b}{k}+\mu+\mu_{k}\right) & \cdots & 0 & 0 & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
 0 & 0 & 0 & 0 & \cdots & \left(\frac{b}{k}+\mu+\mu_{k}\right) & 0 & \cdots & 0 & 0\\
-0 & 0 & 0 & 0 & \cdots & -\frac{b}{k} & \left(\frac{b}{k}+\mu+\mu_{k}\right) & \cdots & 0 & 0\\
+0 & 0 & 0 & 0 & \cdots & -b & \left(\frac{b}{k}+\mu+\mu_{k}\right) & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots & \vdots\\
 0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & \left(\frac{b}{k}+\mu+\mu_{k}\right) & 0\\
 0 & 0 & 0 & 0 & \cdots & 0 & 0 & \cdots & -\frac{b}{k} & \left(\frac{b}{k}+\mu+\mu_{k}\right)

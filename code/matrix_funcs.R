@@ -20,21 +20,23 @@ tridiag <- function(upper, lower, main){
 # Equilibria calculators ----
 DFE_func <- function(params, k) {
   with(as.list(params), {
-    
+
     S_H <- K_H
     I_H <- 0
     R_H <- 0
     S_B <- vector(mode = "numeric", length = k)
     I_B <- S_B
-    S_B[1] <- Lambda_M * n_G / (b + mu_M[1])
+    # S_B[1] <- Lambda_k * n_G / ((b / k) + mu_k + mu)
     
-    for (j in 2:k) {
-      rho_B[j] <- prod(b/(b+mu_M[1:j]))
-      S_B[j] <- rho_B[j] * S_B[1]
-      # S_B[j] <- Lambda_M * (1/b) * (rho_b^j) * ( 1 - (rho_W)*(rho_b)^k)^-1
+    
+    rho_B_k <- (b / k) / ((b / k) + mu + mu_k)
+    rho_W <- gamma_W / (mu + gamma_W)
+    
+    for (j in 1:k) {
+      S_B[j] <- (Lambda_k * n_G * rho_B_k^(j-1)) / ((b / k) + mu + mu_k)
       I_B[j] <- 0
     }
-    S_W <- ((b + mu_M[1]) / (gamma_W + mu_M[1])) * rho_B[k] * S_B[1]
+    S_W <- (Lambda_k * n_G * rho_B_k^k) / (mu + gamma_W)
     I_W <- 0
     return(tibble(
       S_H = S_H,
@@ -51,10 +53,11 @@ DFE_func <- function(params, k) {
 # Matrix builders ----
 
 ## F, the new infections matrix
-F_func <- function(params, k) {
-  with(as.list(c(params)), {
+F_func <- function(params, k_in) {
+  param_set <- filter(params, k == k_in)
+  with(as.list(c(param_set)), {
     # Get necessary DFE values
-    DFE <- DFE_func(params,k)
+    DFE <- DFE_func(param_set, k_in)
     S_H <- DFE$S_H[1]
     S_B <- DFE$S_B
     
@@ -64,10 +67,10 @@ F_func <- function(params, k) {
     
     # Build k+2 by k+2 matrix 
     for (j in 1:k+2) {
-      row_1[j] <- ifelse(j>2, beta_MH*b, 0)
-      column_1[j] <- ifelse(j>3, beta_HM * b * S_B[j -3] / K_H, 0)
+      row_1[j] <- ifelse(j>2, beta_MH * b / k, 0)
+      column_1[j] <- ifelse(j>3, beta_HM * (b / k) * S_B[j-3] / K_H, 0)
     }
-    column_1[2] <- beta_HM * b * S_B[k] / K_H
+    column_1[2] <- beta_HM * (b / k) * S_B[k] / K_H
     F_mat[1,] <- row_1
     F_mat[,1] <- column_1
     return(F_mat)
@@ -75,19 +78,20 @@ F_func <- function(params, k) {
 }
 
 ## V, the net-rate out matrix
-V_func <- function(params, k) {
-  with(as.list(c(params)), {
+V_func <- function(params, k_in) {
+  param_set <- filter(params, k == k_in)
+  with(as.list(c(param_set)), {
     V_mat <- matrix(0, nrow = k+2, ncol = k+2)
     
     V_mat[1,1] <- gamma_H + mu_H
-    V_mat[2,2] <- gamma_W + mu_M
-    V_mat[2,k+2] <- -b
+    V_mat[2,2] <- gamma_W + mu
+    V_mat[2,k+2] <- -b / k
     V_mat[3,2] <- -gamma_W
-    V_mat[3,3] <- b + mu_M
+    V_mat[3,3] <- (b / k) + mu + mu_k
     
     if (k>1) {
-    main <- as.vector(rep(b + mu_M, k))
-    lower <- as.vector(rep(-b, k-1))
+    main <- as.vector(rep((b / k) + mu + mu_k, k))
+    lower <- as.vector(rep(-(b / k), k-1))
     upper <- as.vector(rep(0, k-1))
     lower_block <- tridiag(upper, lower, main)
     V_mat[3:(k+2), 3:(k+2)] <- lower_block
@@ -96,13 +100,11 @@ V_func <- function(params, k) {
   })
 }
 
-## V^-1
-Vinv_func <- function(params, k) {inv(V)}
 
 ## K, the next-generation matrix
-K_func <- function(params, k) {
-  F_mat <- F_func(params,k)
-  V_mat <- V_func(params,k)
+K_func <- function(params, k_in) {
+  F_mat <- F_func(params, k_in)
+  V_mat <- V_func(params, k_in)
   inv_V <- inv(V_mat)
   
   K <- F_mat %*% inv_V
@@ -112,8 +114,8 @@ K_func <- function(params, k) {
 # Calculators ----
 
 ## R0, the spectral radius of K
-R0_func <- function(params, k) {
-  K_mat <- K_func(params, k)
+R0_func <- function(params, k_in) {
+  K_mat <- K_func(params, k_in)
   K_eigen <- eigen(K_mat, only.values = TRUE)
   R0 <- max(Re(K_eigen$values))
 }
