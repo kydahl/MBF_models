@@ -19,9 +19,9 @@ gamma_H <- 1/30
 mu_H <- 1/(365 * 50)
 
 #### Mosquito
+k_max <- 20 # Maximum number of bites in a single gonotrophic cycle
 b <- 1/5 # Biting rate (inverse of gonotrophic cycle length)
 K_M <- 200 # mosquito carrying capacity
-k_max <- 10 # Maximum number of bites in a single gonotrophic cycle
 mu_base <- 1/21 # Mortality rate (inverse of lifespan) [update to depend on k]
 gamma_W <- 1/2 # Return to biting rate (inverse of resting period length) 
 n_G <- 3 # average number of gonotrophic cycles within the lifespan of a mosquito

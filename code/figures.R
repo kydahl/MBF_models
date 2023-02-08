@@ -47,19 +47,19 @@ SB_dist_plot <- DFE_table %>%
        value.name = "SB_vals") %>%
   mutate(variable = as.integer(substr(variable, 4,5))) %>% 
   group_by(variable) %>%
-  ggplot(aes(x = variable-1, y = SB_vals, color = as.factor(k))) +
+  ggplot(aes(x = variable-1, y = log(SB_vals), color = as.factor(k))) +
   geom_point() +
   geom_line(lwd = 1) +
-  # color:
-  scale_color_manual(
-    name = "# bites necessary\nfor repletion (k)",
-    values = met.brewer("Nizami", 10, direction = -1)
-  ) +
+  # # color:
+  # scale_color_manual(
+  #   name = "# bites necessary\nfor repletion (k)",
+  #   values = met.brewer("Nizami", 10, direction = -1)
+  # ) +
   theme_minimal_grid(16) +
-  scale_x_continuous(limits = c(0,9),
-                   breaks = seq(0,9),
+  scale_x_continuous(limits = c(0,20),
+                   breaks = seq(0,20),
                    name = "# of previous feeding attempts") +
-  scale_y_continuous(name = "Population size")
+  scale_y_continuous(name = "log(Population size)")
   
 return(SB_dist_plot)
 }
@@ -126,8 +126,8 @@ R0_plot <- R0_table %>%
     labels = function(x){
       case_when(
         x == "case1" ~ "independent",
-        x == "case2" ~ "only mortality & fecundity",
-        x == "case3" ~ "only transmission",
+        x == "case2" ~ "mortality & fecundity only",
+        x == "case3" ~ "transmission only",
         x == "case4" ~ "full"
         )
     }
@@ -160,8 +160,8 @@ R0_case12_plot <- R0_table %>%
     labels = function(x){
       case_when(
         x == "case1" ~ "independent",
-        x == "case2" ~ "only mortality & fecundity",
-        x == "case3" ~ "only transmission",
+        x == "case2" ~ "mortality & fecundity only",
+        x == "case3" ~ "transmission only",
         x == "case4" ~ "full"
       )
     }
@@ -193,8 +193,8 @@ R0_case34_plot <- R0_table %>%
     labels = function(x){
       case_when(
         x == "case1" ~ "independent",
-        x == "case2" ~ "only mortality & fecundity",
-        x == "case3" ~ "only transmission",
+        x == "case2" ~ "mortality & fecundity only",
+        x == "case3" ~ "transmission only",
         x == "case4" ~ "full"
       )
     }
@@ -224,3 +224,6 @@ ggsave("R0_case34_plot.png",
 
 #* Case 4: R0 as function of k ----
 #         mortality & fecundity & transmisison depend on k
+
+# Observations: ----
+# - R0 is bounded as a function of k if and only if transmission is dependent on k

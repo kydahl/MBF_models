@@ -2,7 +2,7 @@
 # Multiple blood feeding: matrix calculations
 ################################################################################
 
-# Load packages ---
+# Load packages ----
 require(tidyverse)
 require(matlib)
 
@@ -18,25 +18,25 @@ tridiag <- function(upper, lower, main){
 }
 
 # Equilibria calculators ----
-DFE_func <- function(params, k) {
+DFE_func <- function(params, k_in) {
   with(as.list(params), {
 
     S_H <- K_H
     I_H <- 0
     R_H <- 0
-    S_B <- vector(mode = "numeric", length = k)
+    S_B <- vector(mode = "numeric", length = k_in)
     I_B <- S_B
-    # S_B[1] <- Lambda_k * n_G / ((b * k) + mu_k + mu)
+    # S_B[1] <- Lambda_k * n_G / ((b * k_in) + mu_k + mu)
+    Lambda_k <- Lambda_func(params, k_in)
     
-    
-    rho_B_k <- (b * k) / ((b * k) + mu + mu_k)
+    rho_B_k <- (b * k_in) / ((b * k_in) + mu + mu_k)
     rho_W <- gamma_W / (mu + gamma_W)
     
-    for (j in 1:k) {
-      S_B[j] <- (Lambda_k * n_G * rho_B_k^(j-1)) / ((b * k) + mu + mu_k)
+    for (j in 1:k_in) {
+      S_B[j] <- (Lambda_k * n_G * rho_B_k^(j-1)) / ((b * k_in) + mu + mu_k)
       I_B[j] <- 0
     }
-    S_W <- (Lambda_k * n_G * rho_B_k^k) / (mu + gamma_W)
+    S_W <- (Lambda_k * n_G * rho_B_k^k_in) / (mu + gamma_W)
     I_W <- 0
     return(tibble(
       S_H = S_H,
@@ -76,16 +76,16 @@ F_func <- function(params, k_in) {
     S_H <- DFE$S_H[1]
     S_B <- DFE$S_B
     
-    row_1 <- vector(mode = "numeric", length = k+2)
-    column_1 <- vector(mode = "numeric", length = k+2)
-    F_mat <- matrix(0, nrow = k+2, ncol = k+2)
+    row_1 <- vector(mode = "numeric", length = k_in+2)
+    column_1 <- vector(mode = "numeric", length = k_in+2)
+    F_mat <- matrix(0, nrow = k_in+2, ncol = k_in+2)
     
     # Build k+2 by k+2 matrix 
-    for (j in 1:k+2) {
-      row_1[j] <- ifelse(j>2, beta_MH * b * k, 0)
-      column_1[j] <- ifelse(j>3, beta_HM * (b * k) * S_B[j-3] / K_H, 0)
+    for (j in 1:k_in+2) {
+      row_1[j] <- ifelse(j>2, beta_MH * b * k_in, 0)
+      column_1[j] <- ifelse(j>3, beta_HM * (b * k_in) * S_B[j-3] / K_H, 0)
     }
-    column_1[2] <- beta_HM * (b * k) * S_B[k] / K_H
+    column_1[2] <- beta_HM * (b * k_in) * S_B[k_in] / K_H
     F_mat[1,] <- row_1
     F_mat[,1] <- column_1
     return(F_mat)
@@ -96,20 +96,20 @@ F_func <- function(params, k_in) {
 V_func <- function(params, k_in) {
   param_set <- filter(params, k == k_in)
   with(as.list(c(param_set)), {
-    V_mat <- matrix(0, nrow = k+2, ncol = k+2)
+    V_mat <- matrix(0, nrow = k_in+2, ncol = k_in+2)
     
     V_mat[1,1] <- gamma_H + mu_H
     V_mat[2,2] <- gamma_W + mu
-    V_mat[2,k+2] <- -b * k
+    V_mat[2,k_in+2] <- -b * k_in
     V_mat[3,2] <- -gamma_W
-    V_mat[3,3] <- (b * k) + mu + mu_k
+    V_mat[3,3] <- (b * k_in) + mu + mu_k
     
-    if (k>1) {
-    main <- as.vector(rep((b * k) + mu + mu_k, k))
-    lower <- as.vector(rep(-(b * k), k-1))
-    upper <- as.vector(rep(0, k-1))
+    if (k_in>1) {
+    main <- as.vector(rep((b * k_in) + mu + mu_k, k_in))
+    lower <- as.vector(rep(-(b * k_in), k_in-1))
+    upper <- as.vector(rep(0, k_in-1))
     lower_block <- tridiag(upper, lower, main)
-    V_mat[3:(k+2), 3:(k+2)] <- lower_block
+    V_mat[3:(k_in+2), 3:(k_in+2)] <- lower_block
     }
     return(V_mat)
   })
