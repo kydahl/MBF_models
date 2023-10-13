@@ -90,12 +90,6 @@ Notes on Multiple Blood Feeding in Mosquito-borne Disease Transmission Models
 \end_layout
 
 \begin_layout Standard
-Throughout, I will use the terms abundance and density interchangeably.
- These are of course two different quantities but the distinction is not
- meaningful until we use actual parameter estimates.
-\end_layout
-
-\begin_layout Standard
 Let 
 \begin_inset Formula $M$
 \end_inset
@@ -153,7 +147,7 @@ The mosquito population is separated into aquatic stages (eggs, larvae and
 
  represent the total female aquatic stage population.
  We use the following system of equations as the overall model of mosquito
- demography
+ life history
 \begin_inset Formula 
 \begin{align*}
 \frac{d}{dt}L & =\lambda_{M}\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
@@ -196,7 +190,7 @@ where
  represent the biting rate for mosquitoes.
 \begin_inset Formula 
 \[
-\lambda_{M}\left(M\right)=bfM
+\lambda_{M}\left(M\right)=b_{M}fM
 \]
 
 \end_inset
@@ -229,15 +223,15 @@ Henceforth, I will refer to the total adult female mosquito population as
 \begin_inset Formula $S$
 \end_inset
 
-, includes mosquitoes seeking a blood meal.
+, includes mosquitoes actively seeking a blood meal.
  After feeding to repletion, mosquitoes proceed to the oviposition stage,
  
 \begin_inset Formula $V$
 \end_inset
 
 .
- After egg-laying, these individuals begin seeking another blood meal and
- return to 
+ After egg-laying, these individuals then begin seeking another blood meal
+ and return to 
 \begin_inset Formula $S$
 \end_inset
 
@@ -298,12 +292,19 @@ where
 \end_inset
 
 , respectively.
- We make the further assumptions that i) all newly recruited adults start
- in stage 
+ We make the following additional assumptions:
+\end_layout
+
+\begin_layout Enumerate
+all newly recruited adults start in stage 
 \begin_inset Formula $S$
 \end_inset
 
- and ii) the only way to enter 
+,
+\end_layout
+
+\begin_layout Enumerate
+the only way to enter 
 \begin_inset Formula $V$
 \end_inset
 
@@ -311,7 +312,11 @@ where
 \begin_inset Formula $S$
 \end_inset
 
-, and iii) the waiting period in compartment 
+, and
+\end_layout
+
+\begin_layout Enumerate
+the waiting period in compartment 
 \begin_inset Formula $V$
 \end_inset
 
@@ -320,7 +325,11 @@ where
 \end_inset
 
 .
- This translates to the equations
+ 
+\end_layout
+
+\begin_layout Standard
+This translates to the equations
 \begin_inset Formula 
 \begin{align*}
 v_{0} & =0,\\
@@ -385,7 +394,7 @@ g^{j}\left(t\right) & =r\frac{\left(rt\right)^{j-1}}{\left(j-1\right)!}e^{-rt}
 \end_inset
 
 Note that this distribution has mean 
-\begin_inset Formula $\mu=\frac{k}{r}$
+\begin_inset Formula $\mu=\frac{k}{r}=b$
 \end_inset
 
 .
@@ -415,7 +424,8 @@ with
  Then
 \begin_inset Formula 
 \begin{align*}
-\frac{d}{dt}S_{1}\left(t\right) & =\frac{d}{dt}\left[s_{0}\frac{1}{r}re^{-rt}+\int_{0}^{t}\mathcal{\mathcal{I}_{S}}\left(\tau\right)\frac{1}{r}re^{-r\left(t-\tau\right)}d\tau\right]\\
+\frac{d}{dt}S_{1}\left(t\right) & =\frac{d}{dt}\left[s_{0}\frac{1}{r}g^{1}\left(t\right)+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\frac{1}{r}g^{1}\left(t-\tau\right)d\tau\right]\\
+ & =\frac{d}{dt}\left[s_{0}\frac{1}{r}re^{-rt}+\int_{0}^{t}\mathcal{\mathcal{I}_{S}}\left(\tau\right)\frac{1}{r}re^{-r\left(t-\tau\right)}d\tau\right]\\
  & =\frac{d}{dt}\left[s_{0}e^{-rt}+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)e^{-r\left(t-\tau\right)}d\tau\right]\\
  & =s_{0}\frac{d}{dt}e^{-rt}+\mathcal{\mathcal{I}_{S}}\left(t\right)e^{-r\left(t-t\right)}+\int_{0}^{t}\frac{d}{dt}\mathcal{I}_{S}\left(\tau\right)e^{-r\left(t-\tau\right)}d\tau\\
  & =-s_{0}re^{-rt}+\mathcal{\mathcal{I}_{S}}\left(t\right)-r\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)e^{-r\left(t-\tau\right)}d\tau\\
@@ -527,7 +537,8 @@ So far we have assumed that the time between biting events (equivalently,
 \begin_inset Formula $\sigma_{M}$
 \end_inset
 
-, and a theoretical maximum rate at which an animal can be bitten, 
+, and a theoretical maximum rate at which an animal will tolerate being
+ bitten, 
 \begin_inset Formula $\sigma_{H}$
 \end_inset
 
@@ -687,7 +698,7 @@ where
 
 \begin_layout Standard
 For simplicity, we assume that i) there is no disease-induced mortality
- in either the host of vector and ii) the host is at carrying capacity:
+ in either the host or vector and ii) the host is at carrying capacity:
  
 \begin_inset Formula $H=K_{H}$
 \end_inset
@@ -758,7 +769,6 @@ The last three equations require a little work.
 \begin_inset Formula 
 \begin{align*}
 S_{W} & =\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)b\left(\frac{b}{b+\mu_{M}}\right)^{k-1}S_{B,1}\\
-\left(b+\mu_{M}\right)S_{B,1} & =\Lambda_{M}+b\left(\frac{b}{b+\mu_{M}}\right)^{k-1}S_{B,1}-\left(\frac{\mu_{M}}{\gamma_{W}+\mu_{M}}\right)b\left(\frac{b}{b+\mu_{M}}\right)^{k-1}S_{B,1}\\
 S_{B,1} & =\left(\frac{1}{b+\mu_{M}}\right)\Lambda_{M}+\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}S_{B,1}\\
 \left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}\right]S_{B,1} & =\left(\frac{1}{b+\mu_{M}}\right)\Lambda_{M}\\
 S_{B,1} & =\left(\frac{1}{b+\mu_{M}}\right)\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}\right]^{-1}\Lambda_{M}
@@ -769,30 +779,9 @@ S_{B,1} & =\left(\frac{1}{b+\mu_{M}}\right)\left[1-\left(\frac{\gamma_{W}}{\gamm
 
 \begin_inset Formula 
 \begin{align*}
-S_{B,1} & =\left(\frac{1}{b+\mu_{M}}\right)\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}\right]^{-1}\Lambda_{M}\\
-S_{B,j} & =\frac{1}{b}\left(\frac{b}{b+\mu_{M}}\right)^{j}\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}\right]^{-1}\Lambda_{M}\\
-S_{W} & =\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}\right]^{-1}\Lambda_{M}
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Note that the total equilibrium mosquito population size should be independent
- of 
-\begin_inset Formula $k$
-\end_inset
-
-.
- 
-\begin_inset Formula 
-\begin{align*}
-M & =S_{W}+S_{B,1}+\sum_{j=2}^{k}S_{B,j}\\
- & =n_{G}\Lambda_{M}\left\{ \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}+\frac{1}{b}\sum_{j=1}^{k}\left(\frac{b}{b+\mu_{M}}\right)^{j}\right\} \\
- & =n_{G}\Lambda_{M}\left\{ \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}+\frac{1}{b}\left[\frac{\left(\frac{b}{b+\mu_{M}}\right)^{k}-1}{\left(\frac{b}{b+\mu_{M}}\right)-1}\right]\right\} \\
- & =n_{G}\Lambda_{M}\left\{ -\frac{1}{n_{G}}+1+\frac{b+\mu_{M}}{b}\frac{1}{\mu_{M}}\left[1-\left(\frac{b}{b+\mu_{M}}\right)^{k}\right]\right\} 
+S_{B,1} & =\left(\frac{1}{b+\mu_{M}}\right)n_{G}\Lambda_{M}\\
+S_{B,j} & =\left(\frac{b}{b+\mu_{M}}\right)^{j-1}\left(\frac{1}{b+\mu_{M}}\right)n_{G}\Lambda_{M}\\
+S_{W} & =\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)b\left(\frac{b}{b+\mu_{M}}\right)^{k-1}\left(\frac{1}{b+\mu_{M}}\right)n_{G}\Lambda_{M}
 \end{align*}
 
 \end_inset
@@ -801,7 +790,34 @@ where
 \begin_inset Formula $n_{G}=\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}\right]^{-1}$
 \end_inset
 
- !!! This isn't working any more?h
+ 
+\end_layout
+
+\begin_layout Standard
+Note that the total equilibrium mosquito population size 
+\shape italic
+should
+\shape default
+ be independent of 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\begin{align*}
+M & =S_{W}+\sum_{j=1}^{k}S_{B,j}\\
+ & =\left(\frac{1}{b+\mu_{M}}\right)n_{G}\Lambda_{M}\left[\left(\frac{b+\mu_{M}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}+\frac{\left(\frac{b}{b+\mu_{M}}\right)}{\left(\frac{b}{b+\mu_{M}}\right)-1}\left(\left(\frac{b}{b+\mu_{M}}\right)^{k}-1\right)\right]\\
+ & =n_{G}\Lambda_{M}\left[\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}+\left(\frac{1}{b+\mu_{M}}\right)\frac{\left(\frac{b}{b+\mu_{M}}\right)}{\left(\frac{b}{b+\mu_{M}}\right)-1}\left(\left(\frac{b}{b+\mu_{M}}\right)^{k}-1\right)\right]\\
+ & =n_{G}\Lambda_{M}\left\{ \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}+\frac{1}{b}\sum_{j=1}^{k}\left(\frac{b}{b+\mu_{M}}\right)^{j}\right\} \\
+ & =n_{G}\Lambda_{M}\left\{ \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}+\frac{1}{b}\left[\frac{\left(\frac{b}{b+\mu_{M}}\right)^{k}-1}{\left(\frac{b}{b+\mu_{M}}\right)-1}\right]\right\} \\
+ & =n_{G}\Lambda_{M}\left\{ \left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}\right]^{-1}+\frac{1}{b}\left[\frac{\left(\frac{b}{b+\mu_{M}}\right)^{k}-1}{\left(\frac{b}{b+\mu_{M}}\right)-1}\right]\left[1-\left(\frac{\gamma_{W}}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}\right]^{-1}\right\} \\
+ & =n_{G}\Lambda_{M}\left\{ -\frac{1}{n_{G}}+1+\frac{b+\mu_{M}}{b}\frac{1}{\mu_{M}}\left[1-\left(\frac{b}{b+\mu_{M}}\right)^{k}\right]\right\} 
+\end{align*}
+
+\end_inset
+
+!!! This isn't working any more?h
 \end_layout
 
 \begin_layout Subsection
@@ -1681,7 +1697,7 @@ where
 
 \begin_layout Standard
 To ensure that 
-\begin_inset Formula $\mu_{k}+bk+\mu>0$
+\begin_inset Formula $\mu_{k}>0$
 \end_inset
 
 , we require that
@@ -1690,6 +1706,7 @@ To ensure that
 \alpha^{k-1}\left(b+\mu+\mu_{1}\right)-bk-\mu & >0\\
 \left[\rho_{B}^{k}\rho_{W}k^{k}\left(1-\frac{1}{n_{G}}\right)^{-1}\right]^{\frac{k-1}{k\left(k-1\right)}}\left(b+\mu+\mu_{1}\right) & >bk+\mu\\
 \left[\rho_{B}\rho_{W}^{\frac{1}{k}}k\left(1-\frac{1}{n_{G}}\right)^{-\frac{1}{k}}\right]\left(b+\mu+\mu_{1}\right) & >bk+\mu\\
+\left[\frac{b}{b+\mu+\mu_{1}}\rho_{W}^{\frac{1}{k}}k\left(1-\frac{1}{n_{G}}\right)^{-\frac{1}{k}}\right]\left(b+\mu+\mu_{1}\right) & >bk+\mu\\
 \left(\frac{bk}{bk+\mu}\right)\rho_{W}^{\frac{1}{k}}\left(1-\frac{1}{n_{G}}\right)^{-\frac{1}{k}} & >1\\
 \left(\frac{bk}{bk+\mu}\right)^{k}\rho_{W} & >1-\frac{1}{n_{G}}\\
 \\
@@ -1746,44 +1763,6 @@ Assuming that, all things being equal, the fitness effect of additional
 \[
 0=\frac{d}{dt}M=\frac{d}{dt}M_{k}
 \]
-
-\end_inset
-
-We further will require that the equilibrium population density, 
-\begin_inset Formula $M_{k}^{*}$
-\end_inset
-
-, is independent of 
-\begin_inset Formula $k$
-\end_inset
-
-.
- Let 
-\begin_inset Formula $M^{*}=M_{1}^{*}$
-\end_inset
-
-=
-\begin_inset Formula $\frac{\Lambda_{M}}{\mu_{M}}$
-\end_inset
-
-.
- Then the condition becomes:
-\begin_inset Formula 
-\begin{align*}
-S_{W} & =\Lambda_{M}n_{G}\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\rho_{B,k}\\
-S_{B,1} & =\Lambda_{M}n_{G}\left(\frac{1}{\frac{b}{k}+\mu_{M,1}}\right)\\
-S_{B,j} & =\Lambda_{M}n_{G}\left(\frac{k}{b}\right)\rho_{B,j},j>1
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\frac{\Lambda_{M,k}}{\left(\mu+\mu_{k}\right)} & =\frac{\Lambda_{M,1}}{\left(\mu+\mu_{1}\right)}\\
-\Lambda_{M,k} & =\left(\frac{\mu+\mu_{k}}{\mu+\mu_{1}}\right)\Lambda_{M,1}\\
-\Lambda_{M,k} & =\left(\frac{\mu+\mu_{k}}{\mu+\mu_{1}}\right)\Lambda_{M,1}
-\end{align*}
 
 \end_inset
 
