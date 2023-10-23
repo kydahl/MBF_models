@@ -5,10 +5,10 @@
 
 # Load packages and functions ---------------------------------------------
 library(tidyverse)
-
+library(MASS)
 
 # Read in raw data --------------------------------------------------------
-filenames <- list.files("./data/raw/", pattern = "*.csv", 
+filenames <- list.files("./data/raw/biting_rates/", pattern = "*.csv", 
                         full.names = TRUE, recursive = TRUE)
 
 
@@ -51,10 +51,41 @@ for (i in 1:length(ldf)) {
   data <- rbind(data, temp_frame)
 }
 
-res <- lapply(ldf, summary)
-names(res) <- substr(filenames, 6, 30)
-
-
 # Visualize variation -----------------------------------------------------
 
+bad_plot <- data %>% 
+  arrange(T) %>% 
+  # filter(biting_rate > 1/1000) %>% 
+  ggplot(aes(x = T, y = biting_rate, color = mosquito_species)) +
+  geom_point() +
+  geom_line()
+
+
+
+# Scott et al 2000 data ---------------------------------------------------
+mbm_freqs <- read.csv("./data/raw/Scott_2000.csv") %>% 
+  group_by(Site) %>% 
+  mutate(props = Count / sum(Count)) %>% 
+  ungroup()
+
+fit_mbm_freqs <- mbm_freqs %>% 
+  filter(Site == "Thailand") %>% 
+  rename(x = "N_bloodmeals", y = "Count") %>% 
+  dplyr::select(-Site)
+  
+x = c(rep(1,fit_mbm_freqs$y[1]),
+      rep(2,fit_mbm_freqs$y[2]),
+      rep(3,fit_mbm_freqs$y[3])
+      )
+exp_fit_Thailand <- fitdistr(x, densfun = "exponential")
+
+exp_curve <- tibble(x = seq(0.0, 4.0, length.out = 100)) %>% 
+  mutate(y = exp_fit_Thailand$estimate*exp(-exp_fit_Thailand$estimate * x),
+         Site = "Thailand")
+
+mbm_plot <- mbm_freqs %>% 
+  ggplot(aes(x = N_bloodmeals, y = Count, fill = Site)) +
+  geom_col(position = "dodge") +
+  geom_line(data = exp_curve, aes(x = x, y = y*1300, lty = Site))
+mbm_plot
 
