@@ -580,6 +580,62 @@ Notice this is now dependent on time through the state variables
  will remain autonomous, so equilibrium analyses will be straightforward.
 \end_layout
 
+\begin_layout Section
+Key quantities of mosquito blood-feeding
+\end_layout
+
+\begin_layout Standard
+We consider three key components to modeling mosquito blood-feeding: the
+ number of feedings in a single gonotrophic cycle, the waiting time between
+ feedings, and the number of gonotrophic cycles in a single lifespan.
+ Each of these quantities can be considered random variables, representing
+ individual variation among individuals in the population.
+ 
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $K$
+\end_inset
+
+ be the number of feedings in a single gonotrophic cycle, 
+\begin_inset Formula $\Gamma_{i}$
+\end_inset
+
+ the waiting time between feeding number 
+\begin_inset Formula $i-1$
+\end_inset
+
+ and 
+\begin_inset Formula $i$
+\end_inset
+
+, 
+\begin_inset Formula $G$
+\end_inset
+
+ the number of gonotrophic cycles in one lifespan, 
+\begin_inset Formula $R$
+\end_inset
+
+ the waiting time between oviposition and returning to host-seeking and
+ blood feeding, and 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+ the lifespan of a mosquito.
+ Then the waiting time between oviposition events is given by 
+\begin_inset Formula $H=\sum_{i=1}^{K}\Gamma_{i}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
 \begin_layout Standard
 \begin_inset Separator plain
 \end_inset
@@ -781,7 +837,7 @@ S_{B,1} & =\left(\frac{1}{b+\mu_{M}}\right)\left[1-\left(\frac{\gamma_{W}}{\gamm
 \begin{align*}
 S_{B,1} & =\left(\frac{1}{b+\mu_{M}}\right)n_{G}\Lambda_{M}\\
 S_{B,j} & =\left(\frac{b}{b+\mu_{M}}\right)^{j-1}\left(\frac{1}{b+\mu_{M}}\right)n_{G}\Lambda_{M}\\
-S_{W} & =\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)b\left(\frac{b}{b+\mu_{M}}\right)^{k-1}\left(\frac{1}{b+\mu_{M}}\right)n_{G}\Lambda_{M}
+S_{W} & =\left(\frac{1}{\gamma_{W}+\mu_{M}}\right)\left(\frac{b}{b+\mu_{M}}\right)^{k}n_{G}\Lambda_{M}
 \end{align*}
 
 \end_inset

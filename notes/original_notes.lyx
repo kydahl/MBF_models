@@ -580,6 +580,80 @@ Notice this is now dependent on time through the state variables
  will remain autonomous, so equilibrium analyses will be straightforward.
 \end_layout
 
+\begin_layout Section
+Key quantities of mosquito blood-feeding
+\end_layout
+
+\begin_layout Standard
+We consider three key components to modeling mosquito blood-feeding: the
+ number of feedings in a single gonotrophic cycle, the waiting time between
+ feedings, and the number of gonotrophic cycles in a single lifespan.
+ Each of these quantities can be considered random variables, representing
+ individual variation among individuals in the population.
+ 
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $K$
+\end_inset
+
+ be the number of feedings in a single gonotrophic cycle, 
+\begin_inset Formula $\Gamma_{i}$
+\end_inset
+
+ the waiting time between feeding number 
+\begin_inset Formula $i-1$
+\end_inset
+
+ and 
+\begin_inset Formula $i$
+\end_inset
+
+, 
+\begin_inset Formula $G$
+\end_inset
+
+ the number of gonotrophic cycles in one lifespan, 
+\begin_inset Formula $R$
+\end_inset
+
+ the waiting time between oviposition and returning to host-seeking and
+ blood feeding, and 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+ the lifespan of a mosquito.
+ 
+\end_layout
+
+\begin_layout Standard
+Then the waiting time between oviposition events is given by 
+\begin_inset Formula $H=\sum_{i=1}^{K}\Gamma_{i}$
+\end_inset
+
+.
+ Suppose that 
+\begin_inset Formula $E\left[K\right]=k$
+\end_inset
+
+ and 
+\begin_inset Formula $E\left[\Gamma_{i}\right]=\gamma_{i}$
+\end_inset
+
+.
+ If all 
+\begin_inset Formula $\gamma_{i}=\gamma$
+\end_inset
+
+, then 
+\begin_inset Formula $E\left[H\right]=k\gamma$
+\end_inset
+
+ but in general we cannot say much about the mean of this distribution.
+ 
+\end_layout
+
 \begin_layout Standard
 \begin_inset Separator plain
 \end_inset

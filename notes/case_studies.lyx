@@ -1,0 +1,1867 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass amsart
+\use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.54cm
+\topmargin 2.54cm
+\bottommargin 2.54cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Notes on Multiple Blood Feeding in Mosquito-borne Disease Transmission Models
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $M$
+\end_inset
+
+ represent the total adult female mosquito population size and 
+\begin_inset Formula $H$
+\end_inset
+
+ the total host population size.
+ For now, in order to focus on mosquito population dynamics, we assume a
+ simple general model for the demographic dynamics of the host, namely 
+\begin_inset Formula $\frac{d}{dt}H=g\left(H\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $g\left(0\right)=0$
+\end_inset
+
+, 
+\begin_inset Formula $g'\left(0\right)>0$
+\end_inset
+
+, 
+\begin_inset Formula $g''\left(H\right)<0$
+\end_inset
+
+ and there exists 
+\begin_inset Formula $K>0$
+\end_inset
+
+ such that 
+\begin_inset Formula $g\left(K\right)=0$
+\end_inset
+
+.
+ This ensures the existence of an unstable extinction equilibrium and a
+ stable positive equilibrium (
+\begin_inset Quotes eld
+\end_inset
+
+carrying capacity
+\begin_inset Quotes erd
+\end_inset
+
+) for the host population.
+ Notably, the familiar logistic population model satisfies these assumptions:
+ 
+\begin_inset Formula $g\left(H\right)=rH\left(K-H\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The mosquito population is separated into aquatic stages (eggs, larvae and
+ pupae) and adults.
+ Let 
+\begin_inset Formula $A$
+\end_inset
+
+ represent the total population of female mosquitoes in the aquatic stage.
+ We use the following system of equations as the overall model of mosquito
+ life history
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}L & =\lambda_{M}\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}M & =\rho_{L}L-\mu_{M}M
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\lambda_{M}$
+\end_inset
+
+ is the recruitment rate of eggs, 
+\begin_inset Formula $K_{L}$
+\end_inset
+
+ is the carrying capacity for aquatic stage mosquitoes, 
+\begin_inset Formula $\rho_{L}$
+\end_inset
+
+ is the development rate, 
+\begin_inset Formula $\mu_{L}$
+\end_inset
+
+ is the density-independent aquatic stage mortality rate, and 
+\begin_inset Formula $\mu_{M}$
+\end_inset
+
+ is the density-independent adult mortality rate.
+ The rate 
+\begin_inset Formula $\lambda_{M}$
+\end_inset
+
+ should depend on the reproductive capacity of the adult population, namely
+ the total abundance and biting rate of adults.
+ We will come back to the biting rate later, but for now let 
+\begin_inset Formula $\sigma_{M}$
+\end_inset
+
+ represent the oviposition rate for mosquitoes.
+\begin_inset Formula 
+\[
+\lambda_{M}\left(M\right)=\sigma_{M}fM
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $f$
+\end_inset
+
+ is the fecundity of a female mosquito (eggs per female per oviposition
+ cycle).
+\end_layout
+
+\begin_layout Part*
+Case Studies: Multiple blood feeding
+\end_layout
+
+\begin_layout Standard
+We develop two simple models of multiple blood feeding.
+ These models differ in the presumed processes driving heterogeneity in
+ the number of blood meals per gonotrophic cycle.
+ In the first model, the number of blood meals per gonotrophic cycle is
+ determined upon emergence from the aquatic stage, representing a developmental
+ determination for multiple blood feeding behavior.
+ Let 
+\begin_inset Formula $B$
+\end_inset
+
+ represent the population of female mosquitoes in the blood feeding phase
+ and 
+\begin_inset Formula $V$
+\end_inset
+
+ the population of female mosquitoes in the oviposition phase.
+\end_layout
+
+\begin_layout Standard
+Suppose now that the compartment 
+\begin_inset Formula $B$
+\end_inset
+
+ is sub-divided into multiple compartments.
+ For now, to keep things general, assume that 
+\begin_inset Formula $\vec{B}=\left[B_{1},B_{2},\ldots,B_{p}\right]$
+\end_inset
+
+ though we will change the indexing later.
+ We make the assumptions that i) all newly recruited mosquitoes enter the
+ blood feeding phase, ii) the only way to enter 
+\begin_inset Formula $V$
+\end_inset
+
+ is to exit 
+\begin_inset Formula $B$
+\end_inset
+
+, and iii) the waiting time dsitribution to leave 
+\begin_inset Formula $V$
+\end_inset
+
+ is exponential with mean 
+\begin_inset Formula $\gamma$
+\end_inset
+
+.
+ Then we obtain the general model
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}L & =\sigma_{M}fV\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
+\frac{d}{dt}V & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V
+\end{align*}
+
+\end_inset
+
+where the matrix 
+\begin_inset Formula $A$
+\end_inset
+
+ describes the transient state rate matrix associated with the phase-type
+ distribution describing the waiting times in 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+.
+ We will explore two models of multiple blood feeding which are expressed
+ in terms of the matrix 
+\begin_inset Formula $A$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section*
+The 
+\begin_inset Quotes eld
+\end_inset
+
+Disrupt
+\begin_inset Quotes erd
+\end_inset
+
+ Model
+\end_layout
+
+\begin_layout Standard
+This model envisions multiple blood feeding as being driven by interruptions
+ in feeding, perhaps due to host defensive behaviors, as opposed to inherent
+ biological traits of the individual mosquito (i.e.
+ conditions experienced as a larva).
+ In this case, the waiting time distribution is described by a Coxian distributi
+on.
+ We first have to define an integer describing the upper limit to the number
+ of mosquito blood meals in a single gonotrophic cycle, which we denote
+ 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $A$
+\end_inset
+
+ is a 
+\begin_inset Formula $k\times k$
+\end_inset
+
+ matrix that is upper-triangular because an individual mosquito can only
+ increase in the number of blood meals it has taken.
+ For the same reason, 
+\begin_inset Formula $\vec{\alpha}$
+\end_inset
+
+ is a 
+\begin_inset Formula $k\times1$
+\end_inset
+
+ vector with a 
+\begin_inset Formula $1$
+\end_inset
+
+ in its first entry and 
+\begin_inset Formula $0$
+\end_inset
+
+ in all others.
+\begin_inset Formula 
+\[
+\vec{\alpha}=\begin{bmatrix}1\\
+0\\
+\vdots\\
+0\\
+0
+\end{bmatrix},A=\begin{bmatrix}-\lambda_{1} & \rho_{1}\lambda_{1} & 0 & \cdots & 0\\
+0 & -\lambda_{2} & \rho_{2}\lambda_{2} & \cdots & 0\\
+\vdots & \vdots & \ddots & \ddots & \vdots\\
+0 & 0 & \cdots & -\lambda_{k-1} & \rho_{k-1}\lambda_{k-1}\\
+0 & 0 & \cdots & 0 & -\lambda_{k}
+\end{bmatrix}
+\]
+
+\end_inset
+
+Here, the quantities 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+ are the total rates out of compartment 
+\begin_inset Formula $B_{i}$
+\end_inset
+
+ and the 
+\begin_inset Formula $\rho_{i}$
+\end_inset
+
+ are the probabilities of transitioning from 
+\begin_inset Formula $B_{i}$
+\end_inset
+
+ to 
+\begin_inset Formula $V$
+\end_inset
+
+ (instead of 
+\begin_inset Formula $B_{i}$
+\end_inset
+
+ to 
+\begin_inset Formula $B_{i+1}$
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+We first determine the equilibria of this model
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+0 & =\sigma_{M}fV\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\boldsymbol{0} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
+0 & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+L= & \frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)V}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)V}K_{L}\\
+\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}\\
+V & =\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+L & =\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}\\
+\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}\\
+V & =\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\right)\vec{\alpha}\\
+\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\right)\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\vec{\alpha}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left(\mu I-A^{T}\right)\boldsymbol{B} & =\begin{bmatrix}\mu+\lambda_{1} & 0 & 0 &  & \cdots & 0\\
+-\rho_{1}\lambda_{1} & \mu+\lambda_{2} & 0 &  & \cdots & 0\\
+ & -\rho_{2}\lambda_{2} &  & \ddots & 0 & 0\\
+0 & 0 & 0 & \cdots & \mu+\lambda_{k-1} & 0\\
+0 & 0 & 0 & \cdots & -\rho_{k-1}\lambda_{k-1} & \mu+\lambda_{k}
+\end{bmatrix}\begin{bmatrix}B_{1}\\
+B_{2}\\
+\vdots\\
+B_{k-1}\\
+B_{k}
+\end{bmatrix}\\
+ & =\begin{bmatrix}\left(\mu+\lambda_{1}\right)B_{1}\\
+\left(\mu+\lambda_{2}\right)B_{2}-\rho_{1}\lambda_{1}B_{1}\\
+\vdots\\
+\left(\mu+\lambda_{k-1}\right)B_{k-1}-\rho_{k-2}\lambda_{k-2}B_{k-2}\\
+\left(\mu+\lambda_{k}\right)B_{k}-\rho_{k-1}\lambda_{k-1}B_{k-1}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\right)\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\vec{\alpha}\\
+\begin{bmatrix}\left(\mu+\lambda_{1}\right)B_{1}\\
+\left(\mu+\lambda_{2}\right)B_{2}-\rho_{1}\lambda_{1}B_{1}\\
+\vdots\\
+\left(\mu+\lambda_{k-1}\right)B_{k-1}-\rho_{k-2}\lambda_{k-2}B_{k-2}\\
+\left(\mu+\lambda_{k}\right)B_{k}-\rho_{k-1}\lambda_{k-1}B_{k-1}
+\end{bmatrix} & =\begin{bmatrix}\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\gamma\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\\
+0\\
+\vdots\\
+0\\
+0
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+Thus 
+\begin_inset Formula $B_{i}=\frac{1}{\lambda_{i}}\rho_{i-1}\lambda_{i-1}B_{i-1}$
+\end_inset
+
+ for 
+\begin_inset Formula $i>1$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+B_{2} & =\frac{1}{\mu+\lambda_{2}}\rho_{1}\lambda_{1}B_{1}\\
+\\
+B_{3} & =\frac{1}{\mu+\lambda_{3}}\rho_{2}\lambda_{2}B_{2}\\
+ & =\frac{\mu+\lambda_{1}}{\mu+\lambda_{3}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\rho_{1}B_{1}\\
+\\
+B_{4} & =\frac{1}{\mu+\lambda_{4}}\rho_{3}\lambda_{3}B_{3}\\
+ & =\frac{\mu+\lambda_{1}}{\mu+\lambda_{4}}\frac{\lambda_{3}}{\mu+\lambda_{3}}\rho_{3}\frac{\lambda_{2}}{\mu+\lambda_{2}}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\rho_{1}B_{1}\\
+\\
+B_{i} & =B_{1}\left(\frac{\mu+\lambda_{1}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\frac{\lambda_{j}}{\mu+\lambda_{j}}\rho_{j}\\
+\end{align*}
+
+\end_inset
+
+ which can be written in terms of 
+\begin_inset Formula $B_{1}$
+\end_inset
+
+ as 
+\begin_inset Formula $B_{i}=B_{1}\left(\frac{\mu+\lambda_{1}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\rho_{j}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Proceeding using the fact that 
+\begin_inset Formula $-\boldsymbol{1}^{T}A^{T}=\left[\left(1-\rho_{i}\right)\lambda_{i}\right]_{i=1}^{k}$
+\end_inset
+
+where 
+\begin_inset Formula $\rho_{k}=0$
+\end_inset
+
+, we obtain
+\begin_inset Formula 
+\begin{align*}
+-\boldsymbol{1}^{T}A^{T}\boldsymbol{B} & =\sum_{i=1}^{k}\left(1-\rho_{i}\right)\lambda_{i}B_{i}\\
+ & =B_{1}\left(\mu+\lambda_{1}\right)\sum_{i=1}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\rho_{j}\\
+ & =\varrho\left(\mu+\lambda_{1}\right)B_{1}
+\end{align*}
+
+\end_inset
+
+where we have defined 
+\begin_inset Formula $\varrho=\sum_{i=1}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\rho_{j}$
+\end_inset
+
+, which likely simplifies, but let's leave it alone for now.
+\end_layout
+
+\begin_layout Standard
+Set 
+\begin_inset Formula $e=\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\sigma_{M}f\frac{1}{\gamma+\mu}\varrho$
+\end_inset
+
+.
+ 
+\begin_inset Formula $e$
+\end_inset
+
+ then represents the average number of new mosquitoes produced in a single
+ gonotrophic cycle since 
+\begin_inset Formula $\varrho$
+\end_inset
+
+ is the probability an adult successfully finds a bloodmeal, 
+\begin_inset Formula $\sigma_{M}f\frac{1}{\gamma+\mu}$
+\end_inset
+
+ is the number of eggs it lays within a single oviposition event, and 
+\begin_inset Formula $\frac{\rho_{L}}{\rho_{L}+\mu_{L}}$
+\end_inset
+
+ is the probability of the eggs surviving to adulthood.
+ Further, note that 
+\begin_inset Formula $n_{G}=\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\varrho\right]^{-1}=\sum_{j=1}^{\infty}\left(\frac{\gamma}{\gamma+\mu}\right)^{j}\varrho^{j}$
+\end_inset
+
+ represents the average number of gonotrophic cycles survived by a mosquito.
+ Finally, we can solve for 
+\begin_inset Formula $B_{1}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+\left(\mu+\lambda_{1}\right)B_{1} & =\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\\
+\\
+\left(\mu+\lambda_{1}\right)B_{1} & =\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\varrho\left(\mu+\lambda_{1}\right)B_{1}}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\varrho\left(\mu+\lambda_{1}\right)B_{1}}K_{L}+\frac{\gamma}{\gamma+\mu}\varrho\left(\mu+\lambda_{1}\right)B_{1}\\
+\\
+1 & =\frac{e}{K_{L}+\frac{1}{\rho_{L}}e\left(\mu+\lambda_{1}\right)B_{1}}K_{L}+\frac{\gamma}{\gamma+\mu}\varrho\\
+1-\frac{\gamma}{\gamma+\mu}\varrho & =\frac{e}{K_{L}+\frac{1}{\rho_{L}}e\left(\mu+\lambda_{1}\right)B_{1}}K_{L}\\
+K_{L}+\frac{1}{\rho_{L}}e\left(\mu+\lambda_{1}\right)B_{1} & =en_{G}K_{L}\\
+B_{1} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\left(\frac{en_{G}-1}{e}\right)\rho_{L}K_{L}\\
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We need the equilibrium to be positive which occurs when 
+\begin_inset Formula $en_{G}>1$
+\end_inset
+
+, i.e.
+ when on average a mosquito produces more than one offspring over its lifespan.
+ We define 
+\begin_inset Formula $R=en_{G}$
+\end_inset
+
+ to be the reproductive number for the population.
+ As we will see, the sign of 
+\begin_inset Formula $R-1$
+\end_inset
+
+ controls the stability of the extinction equilibrium.
+ First, we try to identify any additional equilibria.
+\end_layout
+
+\begin_layout Standard
+where we had to assume that 
+\begin_inset Formula $B_{1}>0$
+\end_inset
+
+.
+ The remaining compartments can then be calculated from 
+\begin_inset Formula $B_{1}$
+\end_inset
+
+.
+ Thus there are two equilibria, the extinction equilibrium 
+\begin_inset Formula $E_{0}=\left[0,\boldsymbol{0},0\right]$
+\end_inset
+
+ and the persistence equilibrium 
+\begin_inset Formula $E_{1}=\left[L^{*},\boldsymbol{B}^{*},V^{*}\right]$
+\end_inset
+
+ where 
+\begin_inset Formula 
+\begin{align*}
+L^{*} & =\frac{en_{G}-1}{en_{G}}K_{L}\\
+B_{i}^{*} & =\left(\frac{en_{G}-1}{e}\right)\rho_{L}K_{L}\left(\frac{1}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\frac{\lambda_{j}}{\mu+\lambda_{j}}\rho_{j},1<i\le k\\
+V^{*} & =\frac{1}{\gamma+\mu}\varrho\left(\frac{en_{G}-1}{e}\right)\rho_{L}K_{L}
+\end{align*}
+
+\end_inset
+
+can be expressed in terms of 
+\begin_inset Formula $B_{1}^{*}=\left(\frac{1}{\mu+\lambda_{1}}\right)\left(\frac{en_{G}-1}{e}\right)\rho_{L}K_{L}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Following Hurtado and Richards 2020, we can somewhat quickly determine the
+ reproductive ratio for the mosquito population in this case.
+ We employ the next generation operator approach developed in van den Driessche
+ and Watmough (2002).
+ We begin by re-writing our model as
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}L & =\sigma_{M}fV\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}\vec{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
+\frac{d}{dt}V & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}\begin{bmatrix}L\\
+\boldsymbol{B}\\
+V
+\end{bmatrix} & =\begin{bmatrix}\sigma_{M}fV\left(1-\frac{L}{K_{L}}\right)\\
+\boldsymbol{0}\\
+0
+\end{bmatrix}-\left\{ \begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)L\\
+-D_{\textrm{diag}A}^{T}\boldsymbol{B}+\mu\boldsymbol{B}\\
+\left(\gamma+\mu\right)V
+\end{bmatrix}-\begin{bmatrix}0\\
+\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+\left(A-D_{\textrm{diag}A}\right)^{T}\boldsymbol{B}\\
+\left(-\boldsymbol{1}^{T}A^{T}\vec{B}\right)
+\end{bmatrix}\right\} \\
+ & =\mathcal{F}-\left(\mathcal{V}_{-}-\mathcal{V}_{+}\right)
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $D_{v}$
+\end_inset
+
+ denotes a diagonal matrix with diagonal elements defiend by the vector
+ 
+\begin_inset Formula $v$
+\end_inset
+
+.
+ We now calculate the determinants of 
+\begin_inset Formula $\mathcal{F}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathcal{V}$
+\end_inset
+
+ and evaluate them at the extinction equilibrium, 
+\begin_inset Formula $E_{0}$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+\mathcal{F}_{x} & =\begin{pmatrix}-\sigma_{M}fV\frac{1}{K_{L}} & 0 & \cdots & 0 & \sigma_{M}f\left(1-\frac{L}{K_{L}}\right)\\
+0 & 0 & \cdots & 0 & 0\\
+\vdots & \vdots & \ddots & \vdots & \vdots\\
+0 & 0 & 0 & 0 & 0
+\end{pmatrix}\\
+F & =\begin{bmatrix}\vec{0}_{1\times k+1} & \sigma_{M}f\\
+\vec{0}_{k+1\times k+1} & 0
+\end{bmatrix}\\
+\mathcal{V}_{x} & =\partial_{x}\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)L\\
+-\left(\rho_{L}L+\gamma V\right)\vec{\alpha}-A^{T}\boldsymbol{B}+\mu\boldsymbol{B}\\
+\left(\gamma+\mu\right)V-\left(-\boldsymbol{1}^{T}A^{T}\vec{B}\right)
+\end{bmatrix}\\
+V & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \vec{0}_{1\times k} & 0\\
+-\rho_{L}\vec{\alpha} & -A^{T}+\mu I & -\gamma\vec{\alpha}\\
+0 & \boldsymbol{1}^{T}A^{T} & \left(\gamma+\mu\right)
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+Let 
+\begin_inset Formula $W=\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \vec{0}_{1\times k}\\
+-\rho_{L}\vec{\alpha} & -A^{T}+\mu I
+\end{bmatrix}_{k+1\times k+1}$
+\end_inset
+
+, 
+\begin_inset Formula $X=\begin{bmatrix}0\\
+-\gamma\vec{\alpha}
+\end{bmatrix}_{k+1\times1}$
+\end_inset
+
+, 
+\begin_inset Formula $Y=\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\end{bmatrix}_{1\times k+1}$
+\end_inset
+
+, 
+\begin_inset Formula $Z=\begin{bmatrix}\left(\gamma+\mu\right)\end{bmatrix}_{1\times1}$
+\end_inset
+
+ then
+\begin_inset Formula 
+\begin{align*}
+W^{-1} & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \vec{0}_{1\times k}\\
+-\rho_{L}\vec{\alpha} & \mu I-A^{T}
+\end{bmatrix}^{-1}\\
+W^{-1} & =\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \vec{0}_{1\times k}\\
+\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\left(\mu I-A^{T}\right)^{-1}\vec{\alpha} & \left(\mu I-A^{T}\right)^{-1}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\begin{align*}
+\left(\mu I-A^{T}\right)^{-1} & =\begin{bmatrix}\mu+\lambda_{1} & 0 & 0 &  & \cdots & 0\\
+-\rho_{1}\lambda_{1} & \mu+\lambda_{2} & 0 &  & \cdots & 0\\
+ & -\rho_{2}\lambda_{2} &  & \ddots & 0 & 0\\
+0 & 0 & 0 & \cdots & \mu+\lambda_{k-1} & 0\\
+0 & 0 & 0 & \cdots & -\rho_{k-1}\lambda_{k-1} & \mu+\lambda_{k}
+\end{bmatrix}^{-1}\\
+ & =\begin{bmatrix}\frac{1}{\mu+\lambda_{1}} & 0 & 0 & \cdots & 0\\
+\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \frac{1}{\mu+\lambda_{2}}\\
+\rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \rho_{2}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \frac{1}{\mu+\lambda_{3}}\\
+\vdots & \vdots &  & \ddots\\
+{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=2}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} &  &  & \frac{1}{\mu+\lambda_{k}}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left(\mu I-A^{T}\right)^{-1}\vec{\alpha} & =\begin{bmatrix}\frac{1}{\mu+\lambda_{1}} & 0 & 0 & \cdots & 0\\
+\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \frac{1}{\mu+\lambda_{2}}\\
+\rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \rho_{2}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \frac{1}{\mu+\lambda_{3}}\\
+\vdots & \vdots &  & \ddots\\
+{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=2}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} &  &  & \frac{1}{\mu+\lambda_{k}}
+\end{bmatrix}\begin{bmatrix}1\\
+0\\
+\vdots\\
+0\\
+0
+\end{bmatrix}\\
+ & =\begin{bmatrix}\frac{1}{\mu+\lambda_{1}}\\
+\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
+\rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
+\vdots\\
+{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+V=\begin{bmatrix}W & X\\
+Y & Z
+\end{bmatrix}
+\]
+
+\end_inset
+
+and, since 
+\begin_inset Formula $W$
+\end_inset
+
+ is invertible, we can form
+\begin_inset Formula 
+\begin{align*}
+V^{-1} & =\begin{bmatrix}W^{-1}+W^{-1}X\left(Z-YW^{-1}X\right)^{-1}YW^{-1} & -W^{-1}X\left(Z-YW^{-1}X\right)^{-1}\\
+-\left(Z-YW^{-1}X\right)^{-1}YW^{-1} & \left(Z-YW^{-1}X\right)^{-1}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\begin{align*}
+Z-YW^{-1}X & =\left(\gamma+\mu\right)-\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \vec{0}_{1\times k}\\
+\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\left(\mu I-A^{T}\right)^{-1}\vec{\alpha} & \left(\mu I-A^{T}\right)^{-1}
+\end{bmatrix}\begin{bmatrix}0\\
+-\gamma\vec{\alpha}
+\end{bmatrix}\\
+ & =\left(\gamma+\mu\right)+\gamma\begin{bmatrix}0 & -\left(1-\rho_{1}\right)\lambda_{1} & -\left(1-\rho_{2}\right)\lambda_{2} & \cdots & -\left(1-\rho_{k}\right)\lambda_{k}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \vec{0}_{1\times k}\\
+\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\left(\mu I-A^{T}\right)^{-1}\vec{\alpha} & \left(\mu I-A^{T}\right)^{-1}
+\end{bmatrix}\begin{bmatrix}0\\
+1\\
+0\\
+\vdots\\
+0
+\end{bmatrix}\\
+\\
+ & =\left(\gamma+\mu\right)+\gamma\begin{bmatrix}0 & -\left(1-\rho_{1}\right)\lambda_{1} & -\left(1-\rho_{2}\right)\lambda_{2} & \cdots & -\left(1-\rho_{k}\right)\lambda_{k}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & 0 & 0 & 0\\
+\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\frac{1}{\mu+\lambda_{1}} & \frac{1}{\mu+\lambda_{1}} & 0 & 0 & \cdots & 0\\
+\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \frac{1}{\mu+\lambda_{2}}\\
+\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \rho_{2}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \frac{1}{\mu+\lambda_{3}}\\
+\vdots & \vdots & \vdots &  & \ddots\\
+\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right){\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=2}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} &  &  & \frac{1}{\mu+\lambda_{k}}
+\end{bmatrix}\begin{bmatrix}0\\
+1\\
+0\\
+\vdots\\
+0
+\end{bmatrix}\\
+\\
+ & =\left(\gamma+\mu\right)-\gamma\begin{bmatrix}0 & \left(1-\rho_{1}\right)\lambda_{1} & \left(1-\rho_{2}\right)\lambda_{2} & \cdots & \left(1-\rho_{k}\right)\lambda_{k}\end{bmatrix}\begin{bmatrix}0\\
+\frac{1}{\mu+\lambda_{1}}\\
+\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
+\rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
+\vdots\\
+{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}}
+\end{bmatrix}\\
+ & =\left(\gamma+\mu\right)-\gamma\left[\left(1-\rho_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}+\left(1-\rho_{2}\right)\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}+\cdots+\left(1-\rho_{k}\right){\displaystyle \frac{\lambda_{k}}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}}\right]\\
+ & =\left(\gamma+\mu\right)\left(1-\left(\frac{\gamma}{\gamma+\mu}\right)\sum_{i=1}^{k}\left(1-\rho_{i}\right)\frac{\lambda_{i}}{\mu+\lambda_{i}}\prod_{j=1}^{i-1}\rho_{j}\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\\
+ & =\left(\gamma+\mu\right)\left(1-\left(\frac{\gamma}{\gamma+\mu}\right)\varrho\right)\\
+Z-YW^{-1}X & =\left(\gamma+\mu\right)\frac{1}{n_{G}}
+\end{align*}
+
+\end_inset
+
+where we used the definition 
+\begin_inset Formula $n_{G}=\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\varrho\right]^{-1}$
+\end_inset
+
+.
+ Hence 
+\begin_inset Formula $\left(Z-YW^{-1}X\right)^{-1}=\frac{n_{G}}{\gamma+\mu}$
+\end_inset
+
+ Recall that 
+\begin_inset Formula $W=\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \vec{0}_{1\times k}\\
+-\rho_{L}\vec{\alpha} & -A^{T}+\mu I
+\end{bmatrix}_{k+1\times k+1}$
+\end_inset
+
+, 
+\begin_inset Formula $X=\begin{bmatrix}0\\
+-\gamma\vec{\alpha}
+\end{bmatrix}_{k+1\times1}$
+\end_inset
+
+, 
+\begin_inset Formula $Y=\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\end{bmatrix}_{1\times k+1}$
+\end_inset
+
+, 
+\begin_inset Formula $Z=\begin{bmatrix}\left(\gamma+\mu\right)\end{bmatrix}_{1\times1}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Note that, because of the form of the matrix 
+\begin_inset Formula $F$
+\end_inset
+
+, the only non-zero entries of the matrix 
+\begin_inset Formula $K=FV^{-1}$
+\end_inset
+
+ are determined by the final row of 
+\begin_inset Formula $V^{-1}$
+\end_inset
+
+.
+ These we need only determine the final row of 
+\begin_inset Formula $-\frac{n_{G}}{\gamma+\mu}YW^{-1}$
+\end_inset
+
+ to complete this analysis since:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+V^{-1} & =\begin{bmatrix}W^{-1}+W^{-1}X\left(Z-YW^{-1}X\right)^{-1}YW^{-1} & -W^{-1}X\left(Z-YW^{-1}X\right)^{-1}\\
+-\left(Z-YW^{-1}X\right)^{-1}YW^{-1} & \left(Z-YW^{-1}X\right)^{-1}
+\end{bmatrix}\\
+ & =\begin{bmatrix}W^{-1}+\frac{n_{G}}{\gamma+\mu}W^{-1}XYW^{-1} & -\frac{n_{G}}{\gamma+\mu}W^{-1}X\\
+-\frac{n_{G}}{\gamma+\mu}YW^{-1} & \frac{n_{G}}{\gamma+\mu}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+YW^{-1} & =\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \vec{0}_{1\times k}\\
+\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\left(\mu I-A^{T}\right)^{-1}\vec{\alpha} & \left(\mu I-A^{T}\right)^{-1}
+\end{bmatrix}\\
+ & =\begin{bmatrix}0 & -\left(1-\rho_{1}\right)\lambda_{1} & -\left(1-\rho_{2}\right)\lambda_{2} & \cdots & -\left(1-\rho_{k}\right)\lambda_{k}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \vec{0}_{1\times k}\\
+\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\left(\mu I-A^{T}\right)^{-1}\vec{\alpha} & \left(\mu I-A^{T}\right)^{-1}
+\end{bmatrix}\\
+ & =\begin{bmatrix}0 & -\left(1-\rho_{1}\right)\lambda_{1} & -\left(1-\rho_{2}\right)\lambda_{2} & \cdots & -\left(1-\rho_{k}\right)\lambda_{k}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & 0 & 0 & 0\\
+\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\frac{1}{\mu+\lambda_{1}} & \frac{1}{\mu+\lambda_{1}} & 0 & 0 & \cdots & 0\\
+\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \frac{1}{\mu+\lambda_{2}}\\
+\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \rho_{2}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \frac{1}{\mu+\lambda_{3}}\\
+\vdots & \vdots & \vdots &  & \ddots\\
+\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right){\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=2}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} &  &  & \frac{1}{\mu+\lambda_{k}}
+\end{bmatrix}\\
+ & =\begin{bmatrix}-\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\varrho\\
+-\varrho\\
+-{\displaystyle \sum_{i=2}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\prod_{j=2}^{i-1}\rho_{j}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)}\\
+-{\displaystyle \sum_{i=3}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\prod_{j=3}^{i-1}\rho_{j}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)}\\
+\vdots\\
+-\left(1-\rho_{k}\right)\frac{\lambda_{k}}{\mu+\lambda_{k}}
+\end{bmatrix}^{T}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+K & =FV^{-1}\\
+ & =\begin{bmatrix}0_{k+1,k+2}\\
+\vec{k}_{1,k+2}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\[
+\vec{k}=\sigma_{M}f\begin{bmatrix}-\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\varrho\\
+-\varrho\\
+-{\displaystyle \sum_{i=2}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\prod_{j=2}^{i-1}\rho_{j}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)}\\
+-{\displaystyle \sum_{i=3}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\prod_{j=3}^{i-1}\rho_{j}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)}\\
+\vdots\\
+-\left(1-\rho_{k}\right)\frac{\lambda_{k}}{\mu+\lambda_{k}}\\
+\frac{n_{G}}{\gamma+\mu}
+\end{bmatrix}^{T}
+\]
+
+\end_inset
+
+The only non-zero eigenvalue of 
+\begin_inset Formula $K$
+\end_inset
+
+ is therefore 
+\begin_inset Formula $\sigma_{M}f\frac{n_{G}}{\gamma+\mu}$
+\end_inset
+
+.
+ Recall that 
+\begin_inset Formula $e=\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\sigma_{M}f\frac{1}{\gamma+\mu}\varrho$
+\end_inset
+
+.
+ Check that 
+\begin_inset Formula $e>1$
+\end_inset
+
+ if and only if 
+\begin_inset Formula $\sigma_{M}f\frac{n_{G}}{\gamma+\mu}>1$
+\end_inset
+
+.
+ Recall that 
+\begin_inset Formula $n_{G}=\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\varrho\right]^{-1}$
+\end_inset
+
+ !!! Something's not quite right.
+ Double-check the computation of the eigenvalues of 
+\begin_inset Formula $K$
+\end_inset
+
+.
+ We lost a factor of 
+\begin_inset Formula $\frac{\rho_{L}}{\rho_{L}+\mu_{L}}$
+\end_inset
+
+ somewhere
+\begin_inset Formula 
+\[
+en_{G}=\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\sigma_{M}f\frac{1}{\gamma+\mu}n_{G}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+The 
+\begin_inset Quotes eld
+\end_inset
+
+Fate
+\begin_inset Quotes erd
+\end_inset
+
+ Model
+\end_layout
+
+\begin_layout Standard
+In this model, the number of blood meals necessary to attain repletion is
+ determined by the conditions in which the mosquito larvae is reared.
+ Generally, worse larval rearing conditions are associated with a greater
+ number of blood meals necessary for repletion.
+ We aim to determine the matrix 
+\begin_inset Formula $A$
+\end_inset
+
+ and vector 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ so that this model has the form
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}L & =\sigma_{M}fV\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}\vec{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
+\frac{d}{dt}V & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V
+\end{align*}
+
+\end_inset
+
+However, we will require multiple oviposition compartments to keep track
+ of the 
+\begin_inset Quotes eld
+\end_inset
+
+type
+\begin_inset Quotes erd
+\end_inset
+
+ of mosquito, i.e.
+ the number of blood meals it requires to reach repletion.
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}L & =\sigma_{M}fV\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}B_{i,1} & =\rho_{j}\left(\rho_{L}L\right)+\gamma V_{i}-\lambda_{1}B_{i,1}-\mu B_{i,1}\\
+\frac{d}{dt}B_{i,j} & =\lambda_{j-1}B_{i,j-1}-\lambda_{j}B_{i,j}-\mu B_{i,j}\\
+\frac{d}{dt}V_{i} & =\lambda_{i}B_{i,i}-\gamma V_{i}-\mu V_{i}
+\end{align*}
+
+\end_inset
+
+Let 
+\begin_inset Formula $\boldsymbol{B}_{i}=\left[B_{i,1},B_{i,2},\cdots,B_{i,i-1},B_{i,i}\right]^{T}$
+\end_inset
+
+ ,
+\begin_inset Formula $\boldsymbol{\rho}_{i}=\left[\rho_{1},\rho_{2},\ldots,\rho_{k}\right]^{T}$
+\end_inset
+
+, and 
+\series bold
+
+\begin_inset Formula $\boldsymbol{V}=\left[V_{1},V_{2},\ldots,V_{k}\right]^{T}$
+\end_inset
+
+
+\series default
+.
+ Then
+\begin_inset Formula 
+\[
+\frac{d}{dt}\boldsymbol{B}_{i}=\left(\rho_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}+A_{i}^{T}\boldsymbol{B}_{i}-\mu\boldsymbol{B}_{i}
+\]
+
+\end_inset
+
+where 
+\series bold
+
+\begin_inset Formula $\boldsymbol{\alpha}_{i}=\left[1,0,\ldots,0\right]^{T}$
+\end_inset
+
+ 
+\series default
+is a vector of length 
+\begin_inset Formula $i$
+\end_inset
+
+ and
+\begin_inset Formula 
+\begin{align*}
+A_{i} & =\begin{bmatrix}-\lambda_{1} & \lambda_{1} & 0 & \cdots & 0\\
+0 & -\lambda_{2} & \lambda_{2} & \cdots & 0\\
+\vdots & \vdots & \ddots & \ddots & \vdots\\
+0 & 0 & \cdots & -\lambda_{k-1} & \lambda_{k-1}\\
+0 & 0 & \cdots & 0 & -\lambda_{k}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+is size 
+\begin_inset Formula $i\times i$
+\end_inset
+
+.
+ We can also write
+\begin_inset Formula 
+\[
+\frac{d}{dt}\boldsymbol{V}=\boldsymbol{\lambda}\circ\textrm{diag}\left(\boldsymbol{B}\right)-\left(\gamma+\mu\right)\boldsymbol{V}
+\]
+
+\end_inset
+
+but this isn't so useful if we can't also combine the 
+\begin_inset Formula $B$
+\end_inset
+
+ compartments together similarly.
+ Let 
+\begin_inset Formula $\boldsymbol{B}=\left[\boldsymbol{B_{1}},\boldsymbol{B_{2}},\cdots,\boldsymbol{B_{k-1}},\boldsymbol{B_{k}}\right]^{T}$
+\end_inset
+
+where 
+\begin_inset Formula $\boldsymbol{B_{i}}=\left[B_{i,1},B_{i,2},\cdots,B_{i,i-1},B_{i,i}\right]^{T}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\boldsymbol{B}$
+\end_inset
+
+ is then a vector of size 
+\begin_inset Formula $n\times1$
+\end_inset
+
+, 
+\begin_inset Formula $n=k\left(k+1\right)/2$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\boldsymbol{A}$
+\end_inset
+
+ be a block diagonal matrix whose diagonal elements are the 
+\begin_inset Formula $A_{i}$
+\end_inset
+
+ matrices, i.e.
+\begin_inset Formula 
+\[
+\boldsymbol{A}=\begin{bmatrix}A_{1} & 0 & 0 & 0 & 0\\
+0 & A_{2} & 0 & 0 & 0\\
+0 & 0 & \ddots & 0 & 0\\
+0 & 0 & 0 & A_{k-1} & 0\\
+0 & 0 & 0 & 0 & A_{k}
+\end{bmatrix}
+\]
+
+\end_inset
+
+where the zero entries are matrices of the appropriate size.
+ Then 
+\begin_inset Formula $\boldsymbol{A}$
+\end_inset
+
+ has size 
+\begin_inset Formula $n\times n$
+\end_inset
+
+.
+ Finally,
+\begin_inset Formula 
+\begin{align*}
+\boldsymbol{A}^{T}\boldsymbol{B} & =\begin{bmatrix}A_{1} & 0 & 0 & 0 & 0\\
+0 & A_{2} & 0 & 0 & 0\\
+0 & 0 & \ddots & 0 & 0\\
+0 & 0 & 0 & A_{k-1} & 0\\
+0 & 0 & 0 & 0 & A_{k}
+\end{bmatrix}\begin{bmatrix}\boldsymbol{B}_{1}\\
+\boldsymbol{B}_{2}\\
+\vdots\\
+\boldsymbol{B}_{k-1}\\
+\boldsymbol{B}_{k}
+\end{bmatrix}\\
+ & =\begin{bmatrix}A_{1}^{T}\boldsymbol{B}_{1}\\
+A_{2}^{T}\boldsymbol{B}_{2}\\
+\vdots\\
+A_{k-1}^{T}\boldsymbol{B}_{k-1}\\
+A_{k}^{T}\boldsymbol{B}_{k}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+Now we can write 
+\begin_inset Formula 
+\[
+\frac{d}{dt}\boldsymbol{B}=\boldsymbol{\alpha}\left(\vec{\rho}\rho_{L}L+\gamma\boldsymbol{V}\right)+\boldsymbol{A}^{T}\boldsymbol{B}-\mu\boldsymbol{B}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{\rho}=\left[\rho_{1},\rho_{2},\cdots,\rho_{k-1},\rho_{k}\right]^{T}$
+\end_inset
+
+ and 
+\begin_inset Formula $\boldsymbol{\alpha}=\left[\boldsymbol{\alpha}_{1}^{T},\boldsymbol{\alpha}_{2}^{T},\cdots,\boldsymbol{\alpha}_{k-1}^{T},\boldsymbol{\alpha}_{k}^{T}\right]$
+\end_inset
+
+ .
+ We define the 
+\series bold
+
+\begin_inset Formula $\boldsymbol{\alpha}_{i}=\left[\alpha_{i,j}\right]_{j=1}^{n}$
+\end_inset
+
+ 
+\series default
+with 
+\begin_inset Formula $\alpha_{i,j}=1$
+\end_inset
+
+ if and only if 
+\begin_inset Formula $j=1+\frac{i\left(i-1\right)}{2}$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\begin{align*}
+\boldsymbol{\alpha}\left(\vec{\rho}\rho_{L}L+\gamma\boldsymbol{V}\right) & =\begin{bmatrix}\rho_{1}\rho_{L}L+\gamma V_{1}\\
+\rho_{2}\rho_{L}L+\gamma V_{2}\\
+0\\
+\rho_{3}\rho_{L}L+\gamma V_{3}\\
+\boldsymbol{0}_{2,1}\\
+\vdots\\
+\rho_{k}\rho_{L}L+\gamma V_{k}\\
+\boldsymbol{0}_{k-1,1}
+\end{bmatrix}\\
+ & =\begin{bmatrix}\rho_{1}\\
+\rho_{2}\\
+0\\
+\rho_{3}\\
+\boldsymbol{0}_{2,1}\\
+\vdots\\
+\rho_{k}\\
+\boldsymbol{0}_{k-1,1}
+\end{bmatrix}\rho_{L}L+\gamma\boldsymbol{\alpha}\boldsymbol{V}\\
+ & =\boldsymbol{\alpha}\boldsymbol{\rho}\rho_{L}L+\gamma\boldsymbol{\alpha}\boldsymbol{V}
+\end{align*}
+
+\end_inset
+
+since 
+\begin_inset Formula $\boldsymbol{V}$
+\end_inset
+
+ is 
+\begin_inset Formula $k\times1$
+\end_inset
+
+, we must have that 
+\begin_inset Formula $\boldsymbol{\alpha}$
+\end_inset
+
+ is 
+\begin_inset Formula $n\times k$
+\end_inset
+
+ and 
+\begin_inset Formula $\boldsymbol{\rho}$
+\end_inset
+
+ is 
+\begin_inset Formula $k\times1$
+\end_inset
+
+.
+ The full system is then written in matrix-vector form as
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}L & =\sigma_{M}f\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}\boldsymbol{B} & =\boldsymbol{\alpha}\left(\vec{\rho}\rho_{L}L+\gamma\boldsymbol{V}\right)+\boldsymbol{A}^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
+\frac{d}{dt}\boldsymbol{V} & =\left(-X\boldsymbol{A}^{T}\boldsymbol{B}\right)-\left(\gamma+\mu\right)\boldsymbol{V}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\[
+X=\begin{bmatrix}\boldsymbol{1}_{1}^{T} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0}\\
+0 & \boldsymbol{1}_{2}^{T} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0}\\
+0 & \boldsymbol{0} & \ddots & \boldsymbol{0} & \boldsymbol{0}\\
+0 & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{1}_{k-1}^{T} & \boldsymbol{0}\\
+0 & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{1}_{k}^{T}
+\end{bmatrix}
+\]
+
+\end_inset
+
+where
+\begin_inset Formula $\boldsymbol{1}_{i}$
+\end_inset
+
+ is a column vector of size 
+\begin_inset Formula $1\times i$
+\end_inset
+
+ with all entires equal to 
+\begin_inset Formula $1$
+\end_inset
+
+.
+ Hence 
+\begin_inset Formula $X$
+\end_inset
+
+ is size 
+\begin_inset Formula $k\times n$
+\end_inset
+
+.
+ Note that because of the form of the 
+\begin_inset Formula $A_{i}$
+\end_inset
+
+ matrices, the term 
+\begin_inset Formula $-X\boldsymbol{A}^{T}\boldsymbol{B}$
+\end_inset
+
+ simplifies significantly:
+\begin_inset Formula 
+\[
+-X\boldsymbol{A}^{T}\boldsymbol{B}=\begin{bmatrix}\lambda_{1}B_{1,1}\\
+\lambda_{2}B_{2,2}\\
+\vdots\\
+\lambda_{k-1}B_{k-1,k-1}\\
+\lambda_{k}B_{k,k}
+\end{bmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part*
+Generalizing the model
+\end_layout
+
+\begin_layout Standard
+Following Hurtado and Kirosingh (2019), we proceed by defining the waiting
+ time distributions out of compartment 
+\begin_inset Formula $X$
+\end_inset
+
+ as a 
+\begin_inset Formula $k$
+\end_inset
+
+th event time distributions under a Poisson process with rate 
+\begin_inset Formula $r_{X}\left(t\right)$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\mathcal{S}_{X}^{k}\left(t,\tau\right)$
+\end_inset
+
+ denote the survival function for the dwell time distribution for an individual
+ that entered compartment 
+\begin_inset Formula $X$
+\end_inset
+
+ at time 
+\begin_inset Formula $\tau$
+\end_inset
+
+ and let 
+\begin_inset Formula $h_{X}^{k}\left(t,\tau\right)$
+\end_inset
+
+ be the density function.
+ These functions are related by the formula
+\begin_inset Formula 
+\begin{align*}
+h_{X}^{k}\left(t,\tau\right) & =r_{X}\left(t\right)\frac{m_{X}\left(t,\tau\right)^{k-1}}{\left(k-1\right)!}e^{-m_{X}\left(t,\tau\right)},\\
+\mathcal{S}_{X}^{k}\left(t,\tau\right) & =\sum_{j=1}^{k}\frac{h_{X}^{j}\left(t,\tau\right)}{r_{X}\left(t\right)}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $m_{X}\left(t,\tau\right)=\int_{\tau}^{t}r_{X}\left(s\right)ds$
+\end_inset
+
+ and hence 
+\begin_inset Formula $\frac{d}{dt}m_{X}\left(t,\tau\right)=r\left(t\right)$
+\end_inset
+
+.
+ Now let 
+\begin_inset Formula $\mathcal{I}_{X}\left(t\right)$
+\end_inset
+
+ denote the inflow rate to compartment 
+\begin_inset Formula $X$
+\end_inset
+
+ at time 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ Then we can represent the dynamics of blood feeding and oviposition with
+ the following set of integral equations.
+ 
+\begin_inset Formula 
+\begin{align*}
+B\left(t\right) & =s_{0}\mathcal{S}_{B}\left(t,0\right)+\int_{0}^{t}\left[\mathcal{I}_{B}\left(\tau\right)+v_{0}h_{V}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{V}\left(s\right)h_{V}\left(\tau,s\right)ds\right]\mathcal{S}_{B}\left(t,\tau\right)d\tau\\
+V\left(t\right) & =v_{0}\mathcal{S}_{V}\left(t,0\right)+\int_{0}^{t}\left[\mathcal{I}_{V}\left(\tau\right)+s_{0}h_{B}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{B}\left(s\right)h_{B}\left(\tau,s\right)ds\right]\mathcal{S}_{V}\left(t,\tau\right)d\tau
+\end{align*}
+
+\end_inset
+
+We make the following additional assumptions:
+\end_layout
+
+\begin_layout Enumerate
+all newly recruited adults start in stage 
+\begin_inset Formula $B$
+\end_inset
+
+ and this rate is given by 
+\begin_inset Formula $\rho_{L}L\left(t\right)$
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Enumerate
+the only way to enter 
+\begin_inset Formula $V$
+\end_inset
+
+ is after exiting stage 
+\begin_inset Formula $B$
+\end_inset
+
+, and
+\end_layout
+
+\begin_layout Enumerate
+the waiting time distribution for compartment 
+\begin_inset Formula $V$
+\end_inset
+
+ is exponential with mean 
+\begin_inset Formula $\gamma$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+This translates to the set of assumptions:
+\begin_inset Formula 
+\begin{align*}
+v_{0} & =0,\\
+\mathcal{I}_{S}\left(t\right) & =\rho_{L}L\left(t\right)+\gamma V\left(t\right),\\
+\mathcal{I}_{V}\left(t\right) & \equiv0.
+\end{align*}
+
+\end_inset
+
+Then the integral equations above reduce to the following system of equations
+\begin_inset Formula 
+\begin{align*}
+B\left(t\right) & =s_{0}\mathcal{S}_{B}\left(t,0\right)+\int_{0}^{t}\left[\rho_{L}L\left(\tau\right)+\gamma V\left(\tau\right)\right]\mathcal{S}_{B}\left(t,\tau\right)d\tau\\
+V\left(t\right) & =\int_{0}^{t}\left[s_{0}h_{B}\left(\tau,0\right)+\int_{0}^{\tau}\left[\rho_{L}L\left(s\right)+\gamma V\left(s\right)\right]h_{B}\left(\tau,s\right)ds\right]e^{-\left(t-\tau\right)/\gamma}d\tau
+\end{align*}
+
+\end_inset
+
+Can we translate this to a system of integro-differential equations?
+\begin_inset Formula 
+\begin{align*}
+B'\left(t\right) & =s_{0}\mathcal{S}'_{B}\left(t,0\right)+\left(\rho_{L}L\left(t\right)+\gamma V\left(t\right)\right)\mathcal{S}_{B}\left(t,t\right)+\int_{0}^{t}\frac{d}{dt}\left[\rho_{L}L\left(\tau\right)+\gamma V\left(\tau\right)\right]\mathcal{S}_{B}\left(t,\tau\right)d\tau\\
+ & =s_{0}\mathcal{S}'_{B}\left(t,0\right)+\left(\rho_{L}L\left(t\right)+\gamma V\left(t\right)\right)\mathcal{S}_{B}\left(t,t\right)+\int_{0}^{t}\left[\rho_{L}L'\left(\tau\right)+\gamma V'\left(\tau\right)\right]\mathcal{S}_{B}\left(t,\tau\right)+\left[\rho_{L}L\left(\tau\right)+\gamma V\left(\tau\right)\right]\mathcal{S}'_{B}\left(t,\tau\right)d\tau
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It remains to describe the distribution of the waiting time to leave the
+ host seeking class, 
+\begin_inset Formula $S$
+\end_inset
+
+, which is in fact the main point of this project.
+\end_layout
+
+\begin_layout Problem
+(Erlang distributed biting rate) Suppose that individuals bite on average
+ at a rate of 
+\begin_inset Formula $b$
+\end_inset
+
+ and must make, on average, 
+\begin_inset Formula $k$
+\end_inset
+
+ bites to reach repletion and reproduce.
+ Then the dwell time distribution out of 
+\begin_inset Formula $S$
+\end_inset
+
+ has an 
+\begin_inset Formula $\textrm{Erlang}\left(r,k\right)$
+\end_inset
+
+ distribution with shape parameter 
+\begin_inset Formula $k$
+\end_inset
+
+ and rate 
+\begin_inset Formula $r=\frac{k}{b}$
+\end_inset
+
+.
+ Then
+\begin_inset Formula 
+\begin{align*}
+\mathcal{S}_{S}\left(t,\tau\right) & =\frac{1}{r}\sum_{j=1}^{k}g^{j}\left(t-\tau\right),\\
+g^{j}\left(t\right) & =r\frac{\left(rt\right)^{j-1}}{\left(j-1\right)!}e^{-rt}
+\end{align*}
+
+\end_inset
+
+Note that this distribution has mean 
+\begin_inset Formula $\mu=\frac{k}{r}=b$
+\end_inset
+
+.
+ Using the Linear Chain Trick, we can convert the system of integral equations
+ above to a system of ODEs.
+ Let 
+\begin_inset Formula 
+\[
+S_{j}\left(t\right)=s_{0}\frac{1}{r}g^{j}\left(t\right)+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\frac{1}{r}g^{j}\left(t-\tau\right)d\tau
+\]
+
+\end_inset
+
+with 
+\begin_inset Formula $S_{1}\left(0\right)=x_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{j}\left(0\right)=0$
+\end_inset
+
+ for 
+\begin_inset Formula $j\ge2$
+\end_inset
+
+.
+ Then
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}S_{1}\left(t\right) & =\frac{d}{dt}\left[s_{0}\frac{1}{r}g^{1}\left(t\right)+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\frac{1}{r}g^{1}\left(t-\tau\right)d\tau\right]\\
+ & =\frac{d}{dt}\left[s_{0}\frac{1}{r}re^{-rt}+\int_{0}^{t}\mathcal{\mathcal{I}_{S}}\left(\tau\right)\frac{1}{r}re^{-r\left(t-\tau\right)}d\tau\right]\\
+ & =\frac{d}{dt}\left[s_{0}e^{-rt}+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)e^{-r\left(t-\tau\right)}d\tau\right]\\
+ & =s_{0}\frac{d}{dt}e^{-rt}+\mathcal{\mathcal{I}_{S}}\left(t\right)e^{-r\left(t-t\right)}+\int_{0}^{t}\frac{d}{dt}\mathcal{I}_{S}\left(\tau\right)e^{-r\left(t-\tau\right)}d\tau\\
+ & =-s_{0}re^{-rt}+\mathcal{\mathcal{I}_{S}}\left(t\right)-r\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)e^{-r\left(t-\tau\right)}d\tau\\
+ & =\mathcal{I}_{S}\left(t\right)-r\left[s_{0}e^{-rt}-\int_{0}^{t}\mathcal{\mathcal{I}_{S}}\left(\tau\right)e^{-r\left(t-\tau\right)}d\tau\right]\\
+ & =\mathcal{I}_{S}\left(t\right)-rS_{1}\left(t\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}S_{j}\left(t\right) & =s_{0}\frac{1}{r}\frac{d}{dt}g^{j}\left(t\right)+\frac{d}{dt}\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\frac{1}{r}g^{j}\left(t-\tau\right)d\tau\\
+ & =s_{0}\left[g^{j-1}\left(t\right)-g^{j}\left(t\right)\right]+\mathcal{I}_{S}\left(t\right)\frac{1}{r}g^{j}\left(0\right)+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\left[g^{j-1}\left(t-\tau\right)-g^{j}\left(t-\tau\right)\right]d\tau\\
+ & =s_{0}\left[g^{j-1}\left(t\right)-g^{j}\left(t\right)\right]+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\left[g^{j-1}\left(t-\tau\right)-g^{j}\left(t-\tau\right)\right]d\tau\\
+ & =r\left[s_{0}\frac{1}{r}g^{j-1}\left(t\right)+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\frac{1}{r}g^{j-1}\left(t-\tau\right)d\tau\right]-r\left[s_{0}\frac{1}{r}g^{j}\left(t\right)+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\frac{1}{r}g^{j}\left(t-\tau\right)d\tau\right]\\
+ & =rS_{j-1}\left(t\right)-rS_{j}\left(t\right)
+\end{align*}
+
+\end_inset
+
+Note additionally that 
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}S\left(t\right) & =\sum_{j=1}^{k}\frac{d}{dt}S_{j}\left(t\right)\\
+ & =\mathcal{I}_{S}\left(t\right)-rS_{1}\left(t\right)+\sum_{j=2}^{k}\left[rS_{j-1}\left(t\right)-rS_{j}\left(t\right)\right]\\
+ & =\mathcal{I}_{S}\left(t\right)-rS_{k}\left(t\right)
+\end{align*}
+
+\end_inset
+
+where we liberally used the fact that 
+\begin_inset Formula 
+\begin{align*}
+\frac{d}{dt}g^{1}\left(t\right) & =-rg^{1}\left(t\right),\\
+\frac{d}{dt}g^{j}\left(t\right) & =r\left[g^{j-1}\left(t\right)-g^{j}\left(t\right)\right]
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Problem
+Suppose, similar to above, that individual mosquitoes, on average, bite
+ at a rate 
+\begin_inset Formula $b$
+\end_inset
+
+ and must take 
+\begin_inset Formula $k$
+\end_inset
+
+ bites to repletion.
+ Additionally, assume that if an individual does not reach repletion, on
+ average, within 
+\begin_inset Formula $1/\rho$
+\end_inset
+
+ days, then they experience mortality.
+ In this case, the dwell time distribution for 
+\begin_inset Formula $S$
+\end_inset
+
+ is given by the minimum of an 
+\begin_inset Formula $\textrm{Erlang}\left(\frac{k}{b},k\right)$
+\end_inset
+
+ distribution and an 
+\begin_inset Formula $\textrm{Exponential}\left(\rho\right)$
+\end_inset
+
+ distribution.
+ The generalized linear chain trick will give us a way to deal with this
+ scenario.
+ The assumption of mortality can be relaxed so that individuals which do
+ not blood feed to repletion go to feed on sugar sources to prevent mortality
+ and then return back to blood feed (by then requiring a full set of blood-meals
+).
+ Both of these cases can be dealt with rather easily using the GLCT.
+ See sections 3.5.1 and 3.5.4 from Hurtado and Kirosingh 2019.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Problem
+So far we have assumed that the time between biting events (equivalently,
+ the biting rate) is constant.
+ However, it is realistic to assume that the animals upon which mosquitoes
+ feed i) are able to engage in behaviors to limit how often they are bitten
+ and ii) may be difficult to find.
+ A simple model which takes these two assumptions into account is due to
+ Chitnis et al.
+ (Chitnis et al., 2006).
+ This model assumes that there is a theoretical maximum mosquito biting
+ rate, 
+\begin_inset Formula $\sigma_{M}$
+\end_inset
+
+, and a theoretical maximum rate at which an animal will tolerate being
+ bitten, 
+\begin_inset Formula $\sigma_{H}$
+\end_inset
+
+.
+ Then, the actual biting rate for mosquitoes, 
+\begin_inset Formula $b$
+\end_inset
+
+, is a function of these theoretical maxima and the abundances of mosquitoes
+ and hosts:
+\begin_inset Formula 
+\[
+b\left(t\right)=\sigma_{M}\left(\frac{\sigma_{H}H}{\sigma_{M}M+\sigma_{H}H}\right)
+\]
+
+\end_inset
+
+Notice this is now dependent on time through the state variables 
+\begin_inset Formula $H$
+\end_inset
+
+ and 
+\begin_inset Formula $M$
+\end_inset
+
+.
+ We can return to the set up of Problem 2, this time using 
+\begin_inset Formula $b$
+\end_inset
+
+ as above.
+ This can also be converted to a system of ODEs using the GLCT since it
+ is still a Poisson process (although in this case it is inhomogeneous).
+ In fact, since 
+\begin_inset Formula $b\left(t\right)$
+\end_inset
+
+ is only dependent on time through the state parameters, the system of ODEs
+ will remain autonomous, so equilibrium analyses will be straightforward.
+\end_layout
+
+\begin_layout Section
+Key quantities of mosquito blood-feeding
+\end_layout
+
+\begin_layout Standard
+We consider three key components to modeling mosquito blood-feeding: the
+ number of feedings in a single gonotrophic cycle, the waiting time between
+ feedings, and the number of gonotrophic cycles in a single lifespan.
+ Each of these quantities can be considered random variables, representing
+ individual variation among individuals in the population.
+ 
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $K$
+\end_inset
+
+ be the number of feedings in a single gonotrophic cycle, 
+\begin_inset Formula $\Gamma_{i}$
+\end_inset
+
+ the waiting time between feeding number 
+\begin_inset Formula $i-1$
+\end_inset
+
+ and 
+\begin_inset Formula $i$
+\end_inset
+
+, 
+\begin_inset Formula $G$
+\end_inset
+
+ the number of gonotrophic cycles in one lifespan, 
+\begin_inset Formula $R$
+\end_inset
+
+ the waiting time between oviposition and returning to host-seeking and
+ blood feeding, and 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+ the lifespan of a mosquito.
+ 
+\end_layout
+
+\begin_layout Standard
+Then the waiting time between oviposition events is given by 
+\begin_inset Formula $H=\sum_{i=1}^{K}\Gamma_{i}$
+\end_inset
+
+.
+ Suppose that 
+\begin_inset Formula $E\left[K\right]=k$
+\end_inset
+
+ and 
+\begin_inset Formula $E\left[\Gamma_{i}\right]=\gamma_{i}$
+\end_inset
+
+.
+ If all 
+\begin_inset Formula $\gamma_{i}=\gamma$
+\end_inset
+
+, then 
+\begin_inset Formula $E\left[H\right]=k\gamma$
+\end_inset
+
+ but in general we cannot say much about the mean of this distribution.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Defensive behaviors and mosquito biting
+\end_layout
+
+\end_body
+\end_document
