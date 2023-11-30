@@ -117,7 +117,7 @@ V
 \left(\gamma+\mu\right)V-\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
 \end{bmatrix}\\
  & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)+\sigma_{M}fV\left(\frac{1}{K_{L}}\right) & \vec{0} & -\sigma_{M}f\left(1-\frac{L}{K_{L}}\right)\\
-0 & \mu I-A^{T} & -\gamma\vec{\alpha}\\
+\boldsymbol{0} & \mu I-A^{T} & -\gamma\vec{\alpha}\\
 0 & \boldsymbol{1}^{T}A^{T} & \left(\gamma+\mu\right)
 \end{bmatrix}
 \end{align*}

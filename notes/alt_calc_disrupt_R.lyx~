@@ -334,18 +334,18 @@ FV^{-1} & =\begin{bmatrix}0 & 0 & \cdots & 0 & 0\\
 0 & 0 & \cdots & 0 & 0\\
 \vdots & \vdots & \cdots & 0 & 0\\
 0 & 0 & \cdots & 0 & 0
-\end{bmatrix}\begin{bmatrix}W^{-1}+W^{-1}XYW^{-1}\left(\gamma+\mu\right)\frac{1}{n_{G}} & -W^{-1}X\left(\gamma+\mu\right)\frac{1}{n_{G}}\\
--\left(\gamma+\mu\right)\frac{1}{n_{G}}YW^{-1} & \left(\gamma+\mu\right)\frac{1}{n_{G}}
+\end{bmatrix}\begin{bmatrix}W^{-1}+W^{-1}XYW^{-1}\frac{n_{G}}{\gamma+\mu} & -W^{-1}X\frac{n_{G}}{\gamma+\mu}\\
+-\frac{n_{G}}{\gamma+\mu}YW^{-1} & \frac{n_{G}}{\gamma+\mu}
 \end{bmatrix}\\
  & =\begin{bmatrix}0 & 0 & \cdots & 0 & 0\\
 \rho_{L} & 0 & \cdots & 0 & 0\\
 0 & 0 & \cdots & 0 & 0\\
 \vdots & \vdots & \cdots & 0 & 0\\
 0 & 0 & \cdots & 0 & 0
-\end{bmatrix}\begin{bmatrix}\left[W^{-1}+W^{-1}XYW^{-1}\left(\gamma+\mu\right)\frac{1}{n_{G}}\right]_{k+1\times k+1} & \left[-W^{-1}X\left(\gamma+\mu\right)\frac{1}{n_{G}}\right]_{k+1\times1}\\
-\left[-\left(\gamma+\mu\right)\frac{1}{n_{G}}YW^{-1}\right]_{1\times k+1} & \left(\gamma+\mu\right)\frac{1}{n_{G}}
+\end{bmatrix}\begin{bmatrix}\left[W^{-1}+W^{-1}XYW^{-1}\frac{n_{G}}{\gamma+\mu}\right]_{k+1\times k+1} & \left[-W^{-1}X\frac{n_{G}}{\gamma+\mu}\right]_{k+1\times1}\\
+\left[-\frac{n_{G}}{\gamma+\mu}YW^{-1}\right]_{1\times k+1} & \frac{n_{G}}{\gamma+\mu}
 \end{bmatrix}\\
- & =\rho_{L}\left(\gamma+\mu\right)\frac{1}{n_{G}}\begin{bmatrix}0 & 0\\
+ & =\rho_{L}\frac{n_{G}}{\gamma+\mu}\begin{bmatrix}0 & 0\\
 \left[W^{-1}+W^{-1}XYW^{-1}\right]_{1,\cdot} & \left[-W^{-1}X\right]_{1,\cdot}\\
 0 & 0\\
 \vdots & \vdots\\
@@ -428,22 +428,13 @@ YW^{-1} & =\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\end{bmatrix}\begin{bmatrix
 Hence there is a single non-zero eigenvalue
 \begin_inset Formula 
 \begin{align*}
-R & =\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\sigma_{M}f\varrho\left[n_{G}\frac{1}{\left(\gamma+\mu\right)}\right]^{-1}\\
- & =\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\sigma_{M}f\left(\gamma+\mu\right)\varrho\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\varrho\right]\\
- & =\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\sigma_{M}f\varrho\left[\left(\gamma+\mu\right)-\gamma\varrho\right]
+R & =\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\sigma_{M}f\varrho n_{G}\frac{1}{\gamma+\mu}
 \end{align*}
 
 \end_inset
 
-I think this should be:
-\begin_inset Formula 
-\[
-"R"=n_{G}\left(\sigma_{M}f\frac{1}{\gamma+\mu}\right)\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\varrho
-\]
-
-\end_inset
-
-where 
+as expected.
+ where 
 \begin_inset Formula $\sigma_{M}f\frac{1}{\gamma+\mu}$
 \end_inset
 
