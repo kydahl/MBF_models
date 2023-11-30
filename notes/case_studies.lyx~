@@ -674,7 +674,7 @@ V
 \left(\gamma+\mu\right)V
 \end{bmatrix}-\begin{bmatrix}0\\
 \left(\rho_{L}L+\gamma V\right)\vec{\alpha}+\left(A-D_{\textrm{diag}A}\right)^{T}\boldsymbol{B}\\
-\left(-\boldsymbol{1}^{T}A^{T}\vec{B}\right)
+\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
 \end{bmatrix}\right\} \\
  & =\mathcal{F}-\left(\mathcal{V}_{-}-\mathcal{V}_{+}\right)
 \end{align*}
@@ -711,15 +711,22 @@ where
 \vdots & \vdots & \ddots & \vdots & \vdots\\
 0 & 0 & 0 & 0 & 0
 \end{pmatrix}\\
+\mathcal{V}_{x} & =\partial_{x}\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)L\\
+-\left(\rho_{L}L+\gamma V\right)\vec{\alpha}-A^{T}\boldsymbol{B}+\mu\boldsymbol{B}\\
+\left(\gamma+\mu\right)V-\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
 F & =\begin{bmatrix}\vec{0}_{1\times k+1} & \sigma_{M}f\\
 \vec{0}_{k+1\times k+1} & 0
 \end{bmatrix}\\
-\mathcal{V}_{x} & =\partial_{x}\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)L\\
--\left(\rho_{L}L+\gamma V\right)\vec{\alpha}-A^{T}\boldsymbol{B}+\mu\boldsymbol{B}\\
-\left(\gamma+\mu\right)V-\left(-\boldsymbol{1}^{T}A^{T}\vec{B}\right)
-\end{bmatrix}\\
 V & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \vec{0}_{1\times k} & 0\\
--\rho_{L}\vec{\alpha} & -A^{T}+\mu I & -\gamma\vec{\alpha}\\
+-\rho_{L}\vec{\alpha} & \mu I-A^{T} & -\gamma\vec{\alpha}\\
 0 & \boldsymbol{1}^{T}A^{T} & \left(\gamma+\mu\right)
 \end{bmatrix}
 \end{align*}
@@ -728,7 +735,7 @@ V & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \vec{0}_{1\times k} & 0\\
 
 Let 
 \begin_inset Formula $W=\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \vec{0}_{1\times k}\\
--\rho_{L}\vec{\alpha} & -A^{T}+\mu I
+-\rho_{L}\vec{\alpha} & \mu I-A^{T}
 \end{bmatrix}_{k+1\times k+1}$
 \end_inset
 
@@ -746,7 +753,18 @@ Let
 \begin_inset Formula $Z=\begin{bmatrix}\left(\gamma+\mu\right)\end{bmatrix}_{1\times1}$
 \end_inset
 
- then
+ so that 
+\begin_inset Formula $V$
+\end_inset
+
+ can be written in block matrix form as 
+\begin_inset Formula $V=\begin{bmatrix}W & X\\
+Y & Z
+\end{bmatrix}$
+\end_inset
+
+.
+ Now 
 \begin_inset Formula 
 \begin{align*}
 W^{-1} & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \vec{0}_{1\times k}\\
@@ -762,11 +780,11 @@ W^{-1} & =\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \vec{0}_{1\times k}\\
 where
 \begin_inset Formula 
 \begin{align*}
-\left(\mu I-A^{T}\right)^{-1} & =\begin{bmatrix}\mu+\lambda_{1} & 0 & 0 &  & \cdots & 0\\
--\rho_{1}\lambda_{1} & \mu+\lambda_{2} & 0 &  & \cdots & 0\\
- & -\rho_{2}\lambda_{2} &  & \ddots & 0 & 0\\
-0 & 0 & 0 & \cdots & \mu+\lambda_{k-1} & 0\\
-0 & 0 & 0 & \cdots & -\rho_{k-1}\lambda_{k-1} & \mu+\lambda_{k}
+\left(\mu I-A^{T}\right)^{-1} & =\begin{bmatrix}\mu+\lambda_{1} & 0 & 0 & \cdots & 0\\
+-\rho_{1}\lambda_{1} & \mu+\lambda_{2} & 0 & \cdots & 0\\
+0 & -\rho_{2}\lambda_{2} & \ddots & 0 & 0\\
+0 & 0 &  & \mu+\lambda_{k-1} & 0\\
+0 & 0 & 0 & -\rho_{k-1}\lambda_{k-1} & \mu+\lambda_{k}
 \end{bmatrix}^{-1}\\
  & =\begin{bmatrix}\frac{1}{\mu+\lambda_{1}} & 0 & 0 & \cdots & 0\\
 \rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \frac{1}{\mu+\lambda_{2}}\\
@@ -802,17 +820,13 @@ where
 
 \end_inset
 
-
-\begin_inset Formula 
-\[
-V=\begin{bmatrix}W & X\\
+Now since 
+\begin_inset Formula $V=\begin{bmatrix}W & X\\
 Y & Z
-\end{bmatrix}
-\]
-
+\end{bmatrix}$
 \end_inset
 
-and, since 
+and 
 \begin_inset Formula $W$
 \end_inset
 
@@ -842,8 +856,7 @@ Z-YW^{-1}X & =\left(\gamma+\mu\right)-\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}
 \vdots\\
 0
 \end{bmatrix}\\
-\\
- & =\left(\gamma+\mu\right)+\gamma\begin{bmatrix}0 & -\left(1-\rho_{1}\right)\lambda_{1} & -\left(1-\rho_{2}\right)\lambda_{2} & \cdots & -\left(1-\rho_{k}\right)\lambda_{k}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & 0 & 0 & 0\\
+ & =\left(\gamma+\mu\right)+\gamma\begin{bmatrix}0 & -\left(1-\rho_{1}\right)\lambda_{1} & -\left(1-\rho_{2}\right)\lambda_{2} & \cdots & -\left(1-\rho_{k}\right)\lambda_{k}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & 0 & 0 & 0 & \cdots & 0\\
 \left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\frac{1}{\mu+\lambda_{1}} & \frac{1}{\mu+\lambda_{1}} & 0 & 0 & \cdots & 0\\
 \left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \frac{1}{\mu+\lambda_{2}}\\
 \left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \rho_{2}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \frac{1}{\mu+\lambda_{3}}\\
@@ -855,7 +868,6 @@ Z-YW^{-1}X & =\left(\gamma+\mu\right)-\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}
 \vdots\\
 0
 \end{bmatrix}\\
-\\
  & =\left(\gamma+\mu\right)-\gamma\begin{bmatrix}0 & \left(1-\rho_{1}\right)\lambda_{1} & \left(1-\rho_{2}\right)\lambda_{2} & \cdots & \left(1-\rho_{k}\right)\lambda_{k}\end{bmatrix}\begin{bmatrix}0\\
 \frac{1}{\mu+\lambda_{1}}\\
 \rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
@@ -906,7 +918,9 @@ where we used the definition
 
 \begin_layout Standard
 Note that, because of the form of the matrix 
-\begin_inset Formula $F$
+\begin_inset Formula $F=\begin{bmatrix}\vec{0}_{1\times k+1} & \sigma_{M}f\\
+\vec{0}_{k+1\times k+1} & 0
+\end{bmatrix}$
 \end_inset
 
 , the only non-zero entries of the matrix 
@@ -918,7 +932,7 @@ Note that, because of the form of the matrix
 \end_inset
 
 .
- These we need only determine the final row of 
+ Thus we need only determine the final row of 
 \begin_inset Formula $-\frac{n_{G}}{\gamma+\mu}YW^{-1}$
 \end_inset
 
@@ -1001,7 +1015,7 @@ The only non-zero eigenvalue of
 
 .
  Recall that 
-\begin_inset Formula $e=\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\sigma_{M}f\frac{1}{\gamma+\mu}\varrho$
+\begin_inset Formula $e=\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\varrho\sigma_{M}f\frac{1}{\gamma+\mu}$
 \end_inset
 
 .
@@ -1031,12 +1045,43 @@ The only non-zero eigenvalue of
  somewhere
 \begin_inset Formula 
 \[
-en_{G}=\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\sigma_{M}f\frac{1}{\gamma+\mu}n_{G}
+R=en_{G}=\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\varrho\left(\sigma_{M}f\frac{1}{\gamma+\mu}n_{G}\right)
 \]
 
 \end_inset
 
+If 
+\begin_inset Formula $en_{g}>1$
+\end_inset
 
+, then 
+\begin_inset Formula $\sigma_{M}f\frac{1}{\gamma+\mu}n_{G}>1$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $e>1$
+\end_inset
+
+, then 
+\begin_inset Formula $\sigma_{M}f\frac{1}{\gamma+\mu}>1$
+\end_inset
+
+ and since 
+\begin_inset Formula $n_{G}\ge1$
+\end_inset
+
+, we must have that 
+\begin_inset Formula $\sigma_{M}f\frac{n_{G}}{\gamma+\mu}>1$
+\end_inset
+
+.
+ Hence 
+\begin_inset Formula $e>1\implies\sigma_{M}f\frac{n_{G}}{\gamma+\mu}>1$
+\end_inset
+
+.
+ However, the other direction is not necessarily true.
 \end_layout
 
 \begin_layout Section*
@@ -1369,24 +1414,16 @@ where
 \begin_inset Formula $k\times n$
 \end_inset
 
- and this equates to
-\begin_inset Formula 
-\[
--X\boldsymbol{A}^{T}\boldsymbol{B}=\begin{bmatrix}-\boldsymbol{1}_{1}^{T}A_{1}^{T}\boldsymbol{B}_{1}\\
--\boldsymbol{1}_{2}^{T}A_{2}^{T}\boldsymbol{B}_{2}\\
-\vdots\\
--\boldsymbol{1}_{k-1}^{T}A_{k-1}^{T}\boldsymbol{B}_{k-1}\\
--\boldsymbol{1}_{k}^{T}A_{k}^{T}\boldsymbol{B}_{k}
-\end{bmatrix}
-\]
-
-\end_inset
-
-Note that because of the form of the 
+.
+ Note that because of the form of the 
 \begin_inset Formula $A_{i}$
 \end_inset
 
- matrices, this simplifies significantly:
+ matrices, the term 
+\begin_inset Formula $-X\boldsymbol{A}^{T}\boldsymbol{B}$
+\end_inset
+
+ simplifies significantly:
 \begin_inset Formula 
 \[
 -X\boldsymbol{A}^{T}\boldsymbol{B}=\begin{bmatrix}\lambda_{1}B_{1,1}\\
