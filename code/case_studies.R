@@ -66,6 +66,10 @@ library(cowplot)
 ## Transient trajectories ----
 # Use deSolve
 
+# Idea: in "fate" model, what is the effect of shifting the mean/mode/median of the rho distribution?
+#       Come up with a way to systematically shift the mean from 1, to 2, to 3, etc.
+#       How do results change as this shift occurs?
+
 
 # Summarize results -------------------------------------------------------
 

@@ -2506,33 +2506,6 @@ Define
  & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\left|X+\left(-\boldsymbol{\alpha}\right)\left(\boldsymbol{\omega}\boldsymbol{L}\right)\right|\\
  & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\det\left(X\right)\left|I+\left(\boldsymbol{\omega}\boldsymbol{L}\right)X^{-1}\left(-\boldsymbol{\alpha}\right)\right|\\
  & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\det\left(X\right)\left|I+\left(\boldsymbol{\omega}\boldsymbol{L}\right)_{1\times n}\left(X^{-1}\right)_{n\times n}\left(-\boldsymbol{\alpha}\right)_{n\times1}\right|\\
- & =e\lambda^{n+1}\prod_{i=1}^{k}\lambda_{i,i}^{1-i}\left|I+\left(\boldsymbol{\omega}\boldsymbol{L}\right)_{1\times n}\left(X^{-1}\right)_{n\times n}\left(-\boldsymbol{\alpha}\right)_{n\times1}\right|\\
-\\
- & =e\lambda^{n+1}\prod_{i=1}^{k}\lambda_{i,i}^{1-i}\left|I+\left(\frac{e}{\lambda}\right)\left(\boldsymbol{\omega}\boldsymbol{L}\right)_{1\times n}\begin{bmatrix}\lambda_{1,1} & 0 & \cdots & 0 & 0\\
-0 & \lambda_{2,2}I_{2} & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & \lambda_{k-1,k-1}I_{k-1} & 0\\
-0 & 0 & \cdots & 0 & \lambda_{k,k}I_{k}
-\end{bmatrix}\left(-\boldsymbol{\alpha}\right)_{n\times1}\right|\\
- & =e\lambda^{n+1}\prod_{i=1}^{k}\lambda_{i,i}^{1-i}\left|I+\left(\frac{e}{\lambda}\right)\left(\boldsymbol{\omega}\boldsymbol{L}\right)_{1\times n}\begin{bmatrix}-\lambda_{1,1}\boldsymbol{\alpha}_{1}\\
--\lambda_{2,2}\boldsymbol{\alpha}_{2}\\
-\vdots\\
--\lambda_{k-1,k-1}\boldsymbol{\alpha}_{k-1}\\
--\lambda_{k,k}\boldsymbol{\alpha}_{k}
-\end{bmatrix}\right|\\
- & =e\lambda^{n}\prod_{i=1}^{k}\lambda_{i,i}^{1-i}\left|\lambda-e\begin{bmatrix}\boldsymbol{\omega}_{1}L_{1} & \boldsymbol{\omega}_{2}L_{2} & \cdots & \boldsymbol{\omega}_{k-1}L_{k-1} & \boldsymbol{\omega}_{k}L_{k}\end{bmatrix}\begin{bmatrix}\lambda_{1,1}\boldsymbol{\alpha}_{1}\\
-\lambda_{2,2}\boldsymbol{\alpha}_{2}\\
-\vdots\\
-\lambda_{k-1,k-1}\boldsymbol{\alpha}_{k-1}\\
-\lambda_{k,k}\boldsymbol{\alpha}_{k}
-\end{bmatrix}\right|\\
- & =e\lambda^{n}\prod_{i=1}^{k}\lambda_{i,i}^{1-i}\left|\lambda-e\sum_{i=1}^{k}\frac{n_{i}}{\lambda_{i,i}}\lambda_{i,i}T_{i}\right|\\
- & =e\lambda^{n}\prod_{i=1}^{k}\lambda_{i,i}^{1-i}\left|\lambda-e\sum_{i=1}^{k}n_{i}T_{i}\right|\\
-\\
- & \textrm{!!! close but i lost a \ensuremath{\rho} somewhere !!!}\\
-\\
-\\
-\\
 \\
  & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\left|\begin{bmatrix}\frac{\lambda}{e\lambda_{1,1}} & 0 & \cdots & 0 & 0\\
 0 & \frac{\lambda}{e\lambda_{2,2}} & \cdots & 0 & 0\\
@@ -2682,7 +2655,7 @@ D & =\det\left\{ -I+\frac{e\lambda_{k,k}}{\lambda}\boldsymbol{\alpha}_{k}\boldsy
 
 \begin_inset Formula 
 \[
-\boldsymbol{\omega}_{i}L_{i}=\frac{n_{i}}{\lambda_{i,i}}\begin{bmatrix}T_{i} & \left(\prod_{j=2}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & \cdots & \left(\prod_{j=i-1}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & 1\end{bmatrix}
+\boldsymbol{\omega}_{i}L_{i}=\frac{n_{i}}{\lambda_{i,i}}\begin{bmatrix}\left(\prod_{j=1}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & \left(\prod_{j=2}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & \cdots & \left(\prod_{j=i-1}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & 1\end{bmatrix}
 \]
 
 \end_inset
