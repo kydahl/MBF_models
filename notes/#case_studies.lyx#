@@ -263,7 +263,7 @@ Suppose now that the compartment
  Then we obtain the general model
 \begin_inset Formula 
 \begin{align*}
-\frac{d}{dt}L & =\sigma_{M}fV\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}L & =\phi V\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
 \frac{d}{dt}\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
 \frac{d}{dt}V & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V
 \end{align*}
@@ -286,6 +286,418 @@ where the matrix
 \end_inset
 
 .
+ The table below provides definitions for the parameters common to both
+ models
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="8" columns="5">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Parameter symbol
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Units
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Notes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\phi$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fecundity
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+eggs per ovipositing female per unit time
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $K_{L}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Larval carrying capacity
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+individuals
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\rho_{L}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Larval maturation rate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+per time
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mu_{L}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Larval mortality rate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+per time
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\gamma$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Rate leaving oviposition stage
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+per time
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mu$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Adult mortality rate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+per time
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section*
@@ -348,10 +760,10 @@ on.
 \vdots\\
 0\\
 0
-\end{bmatrix},A=\begin{bmatrix}-\lambda_{1} & \rho_{1}\lambda_{1} & 0 & \cdots & 0\\
-0 & -\lambda_{2} & \rho_{2}\lambda_{2} & \cdots & 0\\
-\vdots & \vdots & \ddots & \ddots & \vdots\\
-0 & 0 & \cdots & -\lambda_{k-1} & \rho_{k-1}\lambda_{k-1}\\
+\end{bmatrix},A=\begin{bmatrix}-\lambda_{1} & \left(1-\sigma_{1}\right)\lambda_{1} & \cdots & 0 & 0\\
+0 & -\lambda_{2} & \cdots & 0 & 0\\
+\vdots & \vdots & \ddots & \vdots & \vdots\\
+0 & 0 & \cdots & -\lambda_{k-1} & \left(1-\sigma_{k-1}\right)\lambda_{k-1}\\
 0 & 0 & \cdots & 0 & -\lambda_{k}
 \end{bmatrix}
 \]
@@ -367,14 +779,14 @@ Here, the quantities
 \end_inset
 
  and the 
-\begin_inset Formula $\rho_{i}$
+\begin_inset Formula $\sigma_{i}$
 \end_inset
 
  are the probabilities of transitioning from 
 \begin_inset Formula $B_{i}$
 \end_inset
 
- to 
+ directly to 
 \begin_inset Formula $V$
 \end_inset
 
@@ -401,7 +813,7 @@ We first determine the equilibria of this model
 \begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
-0 & =\sigma_{M}fV\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+0 & =\phi V\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
 \boldsymbol{0} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
 0 & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V
 \end{align*}
@@ -411,7 +823,7 @@ We first determine the equilibria of this model
 
 \begin_inset Formula 
 \begin{align*}
-L= & \frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)V}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)V}K_{L}\\
+L= & \frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)V}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)V}K_{L}\\
 \left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}\\
 V & =\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
 \end{align*}
@@ -421,7 +833,7 @@ V & =\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
 
 \begin_inset Formula 
 \begin{align*}
-L & =\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}\\
+L & =\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}\\
 \left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}\\
 V & =\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
 \end{align*}
@@ -431,7 +843,7 @@ V & =\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
 
 \begin_inset Formula 
 \begin{align*}
-\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\right)\vec{\alpha}
+\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\right)\vec{\alpha}
 \end{align*}
 
 \end_inset
@@ -439,11 +851,11 @@ V & =\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
 
 \begin_inset Formula 
 \begin{align*}
-\left(\mu I-A^{T}\right)\boldsymbol{B} & =\begin{bmatrix}\mu+\lambda_{1} & 0 & 0 &  & \cdots & 0\\
--\rho_{1}\lambda_{1} & \mu+\lambda_{2} & 0 &  & \cdots & 0\\
- & -\rho_{2}\lambda_{2} &  & \ddots & 0 & 0\\
-0 & 0 & 0 & \cdots & \mu+\lambda_{k-1} & 0\\
-0 & 0 & 0 & \cdots & -\rho_{k-1}\lambda_{k-1} & \mu+\lambda_{k}
+\left(\mu I-A^{T}\right)\boldsymbol{B} & =\begin{bmatrix}\mu+\lambda_{1} & 0 & \cdots & 0 & 0\\
+-\left(1-\sigma_{1}\right)\lambda_{1} & \mu+\lambda_{2} & \cdots & 0 & 0\\
+\vdots & \vdots & \ddots & \vdots & \vdots\\
+0 & 0 & \cdots & \mu+\lambda_{k-1} & 0\\
+0 & 0 & \cdots & -\left(1-\sigma_{k-1}\right)\lambda_{k-1} & \mu+\lambda_{k}
 \end{bmatrix}\begin{bmatrix}B_{1}\\
 B_{2}\\
 \vdots\\
@@ -451,10 +863,10 @@ B_{k-1}\\
 B_{k}
 \end{bmatrix}\\
  & =\begin{bmatrix}\left(\mu+\lambda_{1}\right)B_{1}\\
-\left(\mu+\lambda_{2}\right)B_{2}-\rho_{1}\lambda_{1}B_{1}\\
+\left(\mu+\lambda_{2}\right)B_{2}-\left(1-\sigma_{1}\right)\lambda_{1}B_{1}\\
 \vdots\\
-\left(\mu+\lambda_{k-1}\right)B_{k-1}-\rho_{k-2}\lambda_{k-2}B_{k-2}\\
-\left(\mu+\lambda_{k}\right)B_{k}-\rho_{k-1}\lambda_{k-1}B_{k-1}
+\left(\mu+\lambda_{k-1}\right)B_{k-1}-\left(1-\sigma_{k-2}\right)\lambda_{k-2}B_{k-2}\\
+\left(\mu+\lambda_{k}\right)B_{k}-\left(1-\sigma_{k-1}\right)\lambda_{k-1}B_{k-1}
 \end{bmatrix}
 \end{align*}
 
@@ -463,7 +875,7 @@ B_{k}
 
 \begin_inset Formula 
 \[
-\left(\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\right)\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\vec{\alpha}=\begin{bmatrix}\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\gamma\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\\
+\left(\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\right)\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\vec{\alpha}=\begin{bmatrix}\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\gamma\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\\
 0\\
 \vdots\\
 0\\
@@ -476,13 +888,13 @@ B_{k}
 
 \begin_inset Formula 
 \begin{align*}
-\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\right)\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\vec{\alpha}\\
+\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\right)\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\vec{\alpha}\\
 \begin{bmatrix}\left(\mu+\lambda_{1}\right)B_{1}\\
-\left(\mu+\lambda_{2}\right)B_{2}-\rho_{1}\lambda_{1}B_{1}\\
+\left(\mu+\lambda_{2}\right)B_{2}-\left(1-\sigma_{1}\right)\lambda_{1}B_{1}\\
 \vdots\\
-\left(\mu+\lambda_{k-1}\right)B_{k-1}-\rho_{k-2}\lambda_{k-2}B_{k-2}\\
-\left(\mu+\lambda_{k}\right)B_{k}-\rho_{k-1}\lambda_{k-1}B_{k-1}
-\end{bmatrix} & =\begin{bmatrix}\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\gamma\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\\
+\left(\mu+\lambda_{k-1}\right)B_{k-1}-\left(1-\sigma_{k-2}\right)\lambda_{k-2}B_{k-2}\\
+\left(\mu+\lambda_{k}\right)B_{k}-\left(1-\sigma_{k-1}\right)\lambda_{k-1}B_{k-1}
+\end{bmatrix} & =\begin{bmatrix}\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\gamma\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\\
 0\\
 \vdots\\
 0\\
@@ -493,7 +905,7 @@ B_{k}
 \end_inset
 
 Thus 
-\begin_inset Formula $B_{i}=\frac{1}{\lambda_{i}}\rho_{i-1}\lambda_{i-1}B_{i-1}$
+\begin_inset Formula $B_{i}=\frac{1}{\lambda_{i}}\sigma_{i-1}\lambda_{i-1}B_{i-1}$
 \end_inset
 
  for 
@@ -503,15 +915,15 @@ Thus
 
 \begin_inset Formula 
 \begin{align*}
-B_{2} & =\frac{1}{\mu+\lambda_{2}}\rho_{1}\lambda_{1}B_{1}\\
+B_{2} & =\frac{1}{\mu+\lambda_{2}}\left(1-\sigma_{1}\right)\lambda_{1}B_{1}\\
 \\
-B_{3} & =\frac{1}{\mu+\lambda_{3}}\rho_{2}\lambda_{2}B_{2}\\
- & =\frac{\mu+\lambda_{1}}{\mu+\lambda_{3}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\rho_{1}B_{1}\\
+B_{3} & =\frac{1}{\mu+\lambda_{3}}\left(1-\sigma_{2}\right)\lambda_{2}B_{2}\\
+ & =\frac{\mu+\lambda_{1}}{\mu+\lambda_{3}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\left(1-\sigma_{2}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\left(1-\sigma_{1}\right)B_{1}\\
 \\
-B_{4} & =\frac{1}{\mu+\lambda_{4}}\rho_{3}\lambda_{3}B_{3}\\
- & =\frac{\mu+\lambda_{1}}{\mu+\lambda_{4}}\frac{\lambda_{3}}{\mu+\lambda_{3}}\rho_{3}\frac{\lambda_{2}}{\mu+\lambda_{2}}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\rho_{1}B_{1}\\
+B_{4} & =\frac{1}{\mu+\lambda_{4}}\left(1-\sigma_{3}\right)\lambda_{3}B_{3}\\
+ & =\frac{\mu+\lambda_{1}}{\mu+\lambda_{4}}\frac{\lambda_{3}}{\mu+\lambda_{3}}\left(1-\sigma_{3}\right)\frac{\lambda_{2}}{\mu+\lambda_{2}}\left(1-\sigma_{2}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\left(1-\sigma_{1}\right)B_{1}\\
 \\
-B_{i} & =B_{1}\left(\frac{\mu+\lambda_{1}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\frac{\lambda_{j}}{\mu+\lambda_{j}}\rho_{j}\\
+B_{i} & =B_{1}\left(\frac{\mu+\lambda_{1}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\frac{\lambda_{j}}{\mu+\lambda_{j}}\left(1-\sigma_{j}\right)\\
 \end{align*}
 
 \end_inset
@@ -521,7 +933,7 @@ B_{i} & =B_{1}\left(\frac{\mu+\lambda_{1}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i
 \end_inset
 
  as 
-\begin_inset Formula $B_{i}=B_{1}\left(\frac{\mu+\lambda_{1}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\rho_{j}$
+\begin_inset Formula $B_{i}=B_{1}\left(\frac{\mu+\lambda_{1}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)$
 \end_inset
 
 .
@@ -530,7 +942,7 @@ B_{i} & =B_{1}\left(\frac{\mu+\lambda_{1}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i
 
 \begin_layout Standard
 Proceeding using the fact that 
-\begin_inset Formula $-\boldsymbol{1}^{T}A^{T}=\left[\left(1-\rho_{i}\right)\lambda_{i}\right]_{i=1}^{k}$
+\begin_inset Formula $-\boldsymbol{1}^{T}A^{T}=\left[\sigma_{i}\lambda_{i}\right]_{i=1}^{k}$
 \end_inset
 
 where 
@@ -540,15 +952,15 @@ where
 , we obtain
 \begin_inset Formula 
 \begin{align*}
--\boldsymbol{1}^{T}A^{T}\boldsymbol{B} & =\sum_{i=1}^{k}\left(1-\rho_{i}\right)\lambda_{i}B_{i}\\
- & =B_{1}\left(\mu+\lambda_{1}\right)\sum_{i=1}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\rho_{j}\\
+-\boldsymbol{1}^{T}A^{T}\boldsymbol{B} & =\sum_{i=1}^{k}\sigma_{i}\lambda_{i}B_{i}\\
+ & =B_{1}\left(\mu+\lambda_{1}\right)\sum_{i=1}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\\
  & =\varrho\left(\mu+\lambda_{1}\right)B_{1}
 \end{align*}
 
 \end_inset
 
 where we have defined 
-\begin_inset Formula $\varrho=\sum_{i=1}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\rho_{j}$
+\begin_inset Formula $\tau=\sum_{i=1}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)$
 \end_inset
 
 , which represents the total probability of a newly-emerged mosquito surviving
@@ -557,7 +969,7 @@ where we have defined
 
 \begin_layout Standard
 Set 
-\begin_inset Formula $e=\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\sigma_{M}f\frac{1}{\gamma+\mu}\varrho$
+\begin_inset Formula $e=\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\phi\frac{1}{\gamma+\mu}$
 \end_inset
 
 .
@@ -566,12 +978,8 @@ Set
 \end_inset
 
  then represents the average number of new mosquitoes produced in a single
- gonotrophic cycle since 
-\begin_inset Formula $\varrho$
-\end_inset
-
- is the probability an adult successfully finds a bloodmeal, 
-\begin_inset Formula $\sigma_{M}f\frac{1}{\gamma+\mu}$
+ oviposition event since 
+\begin_inset Formula $\phi\frac{1}{\gamma+\mu}$
 \end_inset
 
  is the number of eggs it lays within a single oviposition event, and 
@@ -580,7 +988,7 @@ Set
 
  is the probability of the eggs surviving to adulthood.
  Further, note that 
-\begin_inset Formula $n_{G}=\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\varrho\right]^{-1}=\sum_{j=1}^{\infty}\left(\frac{\gamma}{\gamma+\mu}\right)^{j}\varrho^{j}$
+\begin_inset Formula $n_{G}=\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau\right]^{-1}=\sum_{j=1}^{\infty}\left(\frac{\gamma}{\gamma+\mu}\right)^{j}\tau^{j}$
 \end_inset
 
  represents the average number of gonotrophic cycles survived by a mosquito.
@@ -591,14 +999,14 @@ Set
 :
 \begin_inset Formula 
 \begin{align*}
-\left(\mu+\lambda_{1}\right)B_{1} & =\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\\
+\left(\mu+\lambda_{1}\right)B_{1} & =\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\\
 \\
-\left(\mu+\lambda_{1}\right)B_{1} & =\rho_{L}\frac{\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\varrho\left(\mu+\lambda_{1}\right)B_{1}}{K_{L}+\left(\frac{\sigma_{M}f}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\varrho\left(\mu+\lambda_{1}\right)B_{1}}K_{L}+\frac{\gamma}{\gamma+\mu}\varrho\left(\mu+\lambda_{1}\right)B_{1}\\
+\left(\mu+\lambda_{1}\right)B_{1} & =\frac{e\tau\left(\mu+\lambda_{1}\right)B_{1}}{K_{L}+\frac{1}{\rho_{L}}e\tau\left(\mu+\lambda_{1}\right)B_{1}}K_{L}+\frac{\gamma}{\gamma+\mu}\tau\left(\mu+\lambda_{1}\right)B_{1}\\
 \\
-1 & =\frac{e}{K_{L}+\frac{1}{\rho_{L}}e\left(\mu+\lambda_{1}\right)B_{1}}K_{L}+\frac{\gamma}{\gamma+\mu}\varrho\\
-1-\frac{\gamma}{\gamma+\mu}\varrho & =\frac{e}{K_{L}+\frac{1}{\rho_{L}}e\left(\mu+\lambda_{1}\right)B_{1}}K_{L}\\
-K_{L}+\frac{1}{\rho_{L}}e\left(\mu+\lambda_{1}\right)B_{1} & =en_{G}K_{L}\\
-B_{1} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\left(\frac{en_{G}-1}{e}\right)\rho_{L}K_{L}\\
+1 & =\frac{e\tau}{K_{L}+\frac{1}{\rho_{L}}e\tau\left(\mu+\lambda_{1}\right)B_{1}}K_{L}+\frac{\gamma}{\gamma+\mu}\tau\\
+1-\frac{\gamma}{\gamma+\mu}\tau & =\frac{e\tau}{K_{L}+\frac{1}{\rho_{L}}e\tau\left(\mu+\lambda_{1}\right)B_{1}}K_{L}\\
+K_{L}+\frac{1}{\rho_{L}}e\tau\left(\mu+\lambda_{1}\right)B_{1} & =e\tau n_{G}K_{L}\\
+B_{1} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\left(\frac{e\tau n_{G}-1}{e\tau}\right)\rho_{L}K_{L}
 \end{align*}
 
 \end_inset
@@ -608,13 +1016,13 @@ B_{1} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\left(\frac{en_{G}-1}{e}\right)\r
 
 \begin_layout Standard
 We need the equilibrium to be positive which occurs when 
-\begin_inset Formula $en_{G}>1$
+\begin_inset Formula $e\tau n_{G}>1$
 \end_inset
 
 , i.e.
  when on average a mosquito produces more than one offspring over its lifespan.
  We define 
-\begin_inset Formula $R=en_{G}$
+\begin_inset Formula $R=e\varrho n_{G}$
 \end_inset
 
  to be the reproductive number for the population.
@@ -648,16 +1056,12 @@ where we had to assume that
  where 
 \begin_inset Formula 
 \begin{align*}
-L^{*} & =\frac{en_{G}-1}{en_{G}}K_{L}\\
-B_{1}^{*} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\left(\frac{en_{G}-1}{e}\right)\rho_{L}K_{L}\\
-B_{i}^{*} & =\left(\frac{en_{G}-1}{e}\right)\rho_{L}K_{L}\left(\frac{1}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\frac{\lambda_{j}}{\mu+\lambda_{j}}\rho_{j},1<i\le k\\
-V^{*} & =\frac{1}{\gamma+\mu}\varrho\left(\frac{en_{G}-1}{e}\right)\rho_{L}K_{L}
+L^{*} & =\left(\frac{e\tau n_{G}-1}{e\tau n_{G}}\right)K_{L}\\
+B_{1}^{*} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\rho_{L}\left(\frac{e\tau n_{G}-1}{e\tau}\right)K_{L}\\
+B_{i}^{*} & =\left[\left(\frac{1}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\tau n_{G}-1}{e\tau}\right)K_{L},1<i\le k\\
+V^{*} & =\left(\frac{1}{\gamma+\mu}\right)\rho_{L}\left(\frac{e\tau n_{G}-1}{e}\right)K_{L}
 \end{align*}
 
-\end_inset
-
-where we use the unconventional notation that 
-\begin_inset Formula $\sum_{j=1}^{0}f\left(j\right)=0$
 \end_inset
 
 
@@ -684,7 +1088,7 @@ Following Hurtado and Richards 2020, we can somewhat quickly determine the
 We begin by re-writing our model as
 \begin_inset Formula 
 \begin{align*}
-\frac{d}{dt}L & =\sigma_{M}fV\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}L & =\phi V\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
 \frac{d}{dt}\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
 \frac{d}{dt}V & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V
 \end{align*}
@@ -703,7 +1107,7 @@ V
 \end{bmatrix}-\left\{ \begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)L\\
 -D_{\textrm{diag}A}^{T}\boldsymbol{B}+\mu\boldsymbol{B}\\
 \left(\gamma+\mu\right)V
-\end{bmatrix}-\begin{bmatrix}-\sigma_{M}fV\left(1-\frac{L}{K_{L}}\right)\\
+\end{bmatrix}-\begin{bmatrix}-\phi V\left(1-\frac{L}{K_{L}}\right)\\
 \gamma V\vec{\alpha}+\left(A-D_{\textrm{diag}A}\right)^{T}\boldsymbol{B}\\
 \left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
 \end{bmatrix}\right\} \\
@@ -745,11 +1149,11 @@ where
 \rho_{L}\vec{\alpha} & \boldsymbol{0}_{k+1\times k+1}\\
 0 & 0
 \end{bmatrix}\\
-\mathcal{V}_{x} & =\partial_{x}\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)L-\sigma_{M}fV\left(1-\frac{L}{K_{L}}\right)\\
+\mathcal{V}_{x} & =\partial_{x}\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)L-\phi V\left(1-\frac{L}{K_{L}}\right)\\
 -\gamma V\vec{\alpha}-A^{T}\boldsymbol{B}+\mu\boldsymbol{B}\\
 \left(\gamma+\mu\right)V-\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
 \end{bmatrix}\\
- & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)+\sigma_{M}fV\left(\frac{1}{K_{L}}\right) & \boldsymbol{0}_{1\times k} & -\sigma_{M}f\left(1-\frac{L}{K_{L}}\right)\\
+ & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)+\phi V\left(\frac{1}{K_{L}}\right) & \boldsymbol{0}_{1\times k} & -\sigma_{M}f\left(1-\frac{L}{K_{L}}\right)\\
 \boldsymbol{0}_{k\times1} & \mu I-A^{T} & -\gamma\vec{\alpha}\\
 0 & \boldsymbol{1}^{T}A^{T} & \left(\gamma+\mu\right)
 \end{bmatrix}
@@ -764,7 +1168,7 @@ F & =\begin{bmatrix}0 & \boldsymbol{0}_{1\times k+1}\\
 \rho_{L} & 0\\
 \boldsymbol{0}_{k\times1} & \boldsymbol{0}_{k\times k+1}
 \end{bmatrix}\\
-V & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \boldsymbol{0}_{1\times k} & -\sigma_{M}f\\
+V & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \boldsymbol{0}_{1\times k} & -\phi\\
 \boldsymbol{0}_{k\times1} & \mu I-A^{T} & -\gamma\vec{\alpha}\\
 0 & \boldsymbol{1}^{T}A^{T} & \left(\gamma+\mu\right)
 \end{bmatrix}
@@ -779,7 +1183,7 @@ Let
 \end_inset
 
 , 
-\begin_inset Formula $X=\begin{bmatrix}-\sigma_{M}f\\
+\begin_inset Formula $X=\begin{bmatrix}-\phi\\
 -\gamma\vec{\alpha}
 \end{bmatrix}_{k+1\times1}$
 \end_inset
@@ -819,17 +1223,17 @@ W^{-1} & =\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \boldsymbol{0}_{1\times k}
 where
 \begin_inset Formula 
 \begin{align*}
-\left(\mu I-A^{T}\right)^{-1} & =\begin{bmatrix}\mu+\lambda_{1} & 0 & 0 & \cdots & 0\\
--\rho_{1}\lambda_{1} & \mu+\lambda_{2} & 0 & \cdots & 0\\
-0 & -\rho_{2}\lambda_{2} & \ddots & 0 & 0\\
-0 & 0 &  & \mu+\lambda_{k-1} & 0\\
-0 & 0 & 0 & -\rho_{k-1}\lambda_{k-1} & \mu+\lambda_{k}
+\left(\mu I-A^{T}\right)^{-1} & =\begin{bmatrix}\mu+\lambda_{1} & 0 & \cdots & 0 & 0\\
+-\left(1-\sigma_{1}\right)\lambda_{1} & \mu+\lambda_{2} & \cdots & 0 & 0\\
+\vdots & \vdots & \ddots & \vdots & \vdots\\
+0 & 0 & \cdots & \mu+\lambda_{k-1} & 0\\
+0 & 0 & \cdots & -\left(1-\sigma_{k-1}\right)\lambda_{k-1} & \mu+\lambda_{k}
 \end{bmatrix}^{-1}\\
- & =\begin{bmatrix}\frac{1}{\mu+\lambda_{1}} & 0 & 0 & \cdots & 0\\
-\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \frac{1}{\mu+\lambda_{2}}\\
-\rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \rho_{2}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \frac{1}{\mu+\lambda_{3}}\\
-\vdots & \vdots &  & \ddots\\
-{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=2}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} &  &  & \frac{1}{\mu+\lambda_{k}}
+ & =\begin{bmatrix}\frac{1}{\mu+\lambda_{1}} & 0 & \cdots & 0 & 0\\
+\left(1-\sigma_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \frac{1}{\mu+\lambda_{2}} & \cdots & 0 & 0\\
+\vdots & \vdots & \ddots & \vdots & \vdots\\
+\frac{1}{\mu+\lambda_{k-1}}\prod_{i=1}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right) & \frac{1}{\mu+\lambda_{k}}\prod_{i=2}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right) & \cdots & \mu+\lambda_{k-1} & 0\\
+{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)} & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=2}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)} & \cdots & \frac{1}{\mu+\lambda_{k}}\frac{\lambda_{k-1}}{\mu+\lambda_{k-1}}\left(1-\sigma_{k-1}\right) & \frac{1}{\mu+\lambda_{k}}
 \end{bmatrix}
 \end{align*}
 
@@ -864,18 +1268,19 @@ We will calculate a few of these matrix products as they will be useful
 \begin{align*}
 W^{-1}X & =\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \boldsymbol{0}_{1\times k}\\
 \boldsymbol{0}_{k\times1} & \left(\mu I-A^{T}\right)^{-1}
-\end{bmatrix}\begin{bmatrix}-\sigma_{M}f\\
+\end{bmatrix}\begin{bmatrix}-\phi\\
 -\gamma\vec{\alpha}
 \end{bmatrix}\\
- & =\begin{bmatrix}-\sigma_{M}f\frac{1}{\rho_{L}+\mu_{L}}\\
+ & =\begin{bmatrix}-\phi\frac{1}{\rho_{L}+\mu_{L}}\\
 -\gamma\left(\mu I-A^{T}\right)^{-1}\vec{\alpha}
 \end{bmatrix}\\
- & =-\gamma\begin{bmatrix}\frac{1}{\gamma}\sigma_{M}f\frac{1}{\rho_{L}+\mu_{L}}\\
+ & =-\gamma\begin{bmatrix}\frac{1}{\gamma}\phi\frac{1}{\rho_{L}+\mu_{L}}\\
 \frac{1}{\mu+\lambda_{1}}\\
-\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
-\rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
+\left(1-\sigma_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
+\left(1-\sigma_{1}\right)\left(1-\sigma_{2}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
 \vdots\\
-{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}}
+\frac{1}{\mu+\lambda_{k-1}}\prod_{i=1}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)\\
+{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)}
 \end{bmatrix}
 \end{align*}
 
@@ -884,41 +1289,43 @@ W^{-1}X & =\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \boldsymbol{0}_{1\times k
 
 \begin_inset Formula 
 \begin{align*}
-Z-YW^{-1}X & =\left(\gamma+\mu\right)+\gamma\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\end{bmatrix}\begin{bmatrix}\sigma_{M}f\frac{1}{\gamma}\frac{1}{\rho_{L}+\mu_{L}}\\
+Z-YW^{-1}X & =\left(\gamma+\mu\right)+\gamma\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\end{bmatrix}\begin{bmatrix}\phi\frac{1}{\gamma}\frac{1}{\rho_{L}+\mu_{L}}\\
 \frac{1}{\mu+\lambda_{1}}\\
-\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
-\rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
+\left(1-\sigma_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
+\left(1-\sigma_{1}\right)\left(1-\sigma_{2}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
 \vdots\\
-{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}}
+\frac{1}{\mu+\lambda_{k-1}}\prod_{i=1}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)\\
+{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)}
 \end{bmatrix}\\
- & =\left(\gamma+\mu\right)+\gamma\begin{bmatrix}0 & -\left(1-\rho_{1}\right)\lambda_{1} & -\left(1-\rho_{2}\right)\lambda_{2} & \cdots & -\left(1-\rho_{k}\right)\lambda_{k}\end{bmatrix}\begin{bmatrix}\sigma_{M}f\frac{1}{\gamma}\frac{1}{\rho_{L}+\mu_{L}}\\
+ & =\left(\gamma+\mu\right)+\gamma\begin{bmatrix}0, & -\sigma_{1}\lambda_{1}, & -\sigma_{2}\lambda_{2}, & \cdots & -\sigma_{k-1}\lambda_{k-1}, & -\sigma_{k}\lambda_{k}\end{bmatrix}\begin{bmatrix}\phi\frac{1}{\gamma}\frac{1}{\rho_{L}+\mu_{L}}\\
 \frac{1}{\mu+\lambda_{1}}\\
-\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
-\rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
+\left(1-\sigma_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
+\left(1-\sigma_{1}\right)\left(1-\sigma_{2}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
 \vdots\\
-{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}}
+\frac{1}{\mu+\lambda_{k-1}}\prod_{i=1}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)\frac{\lambda_{i}}{\mu+\lambda_{i}}\\
+{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}}\left(1-\sigma_{i}\right)
 \end{bmatrix}\\
- & =\left(\gamma+\mu\right)-\gamma\left[\left(1-\rho_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}+\left(1-\rho_{2}\right)\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}+\cdots+\left(1-\rho_{k}\right){\displaystyle \frac{\lambda_{k}}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}}\right]\\
- & =\left(\gamma+\mu\right)\left(1-\left(\frac{\gamma}{\gamma+\mu}\right)\varrho\right)\\
-Z-YW^{-1}X & =\left(\gamma+\mu\right)\frac{1}{n_{G}}
+ & =\left(\gamma+\mu\right)-\gamma\left[\frac{\lambda_{1}}{\mu+\lambda_{1}}\sigma_{1}+\frac{\lambda_{1}}{\mu+\lambda_{1}}\sigma_{1}\frac{\lambda_{2}}{\mu+\lambda_{2}}\left(1-\sigma_{2}\right)+\cdots+{\displaystyle \frac{\lambda_{k}}{\mu+\lambda_{k}}\sigma_{k}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)}\right]\\
+ & =\left(\gamma+\mu\right)\left(1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau\right)\\
+Z-YW^{-1}X & =\left(\gamma+\mu\right)\frac{1}{\nu_{G}}
 \end{align*}
 
 \end_inset
 
 where we used the definition 
-\begin_inset Formula $n_{G}=\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\varrho\right]^{-1}$
+\begin_inset Formula $\nu_{G}=\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau\right]^{-1}$
 \end_inset
 
 .
  Hence 
-\begin_inset Formula $\left(Z-YW^{-1}X\right)^{-1}=\frac{n_{G}}{\gamma+\mu}$
+\begin_inset Formula $\left(Z-YW^{-1}X\right)^{-1}=\frac{\nu_{G}}{\gamma+\mu}$
 \end_inset
 
  and we obtain
 \begin_inset Formula 
 \[
-V^{-1}=\begin{bmatrix}W^{-1}+\frac{n_{G}}{\gamma+\mu}W^{-1}XYW^{-1} & -\frac{n_{G}}{\gamma+\mu}W^{-1}X\\
--\frac{n_{G}}{\gamma+\mu}YW^{-1} & \frac{n_{G}}{\gamma+\mu}
+V^{-1}=\begin{bmatrix}W^{-1}+\frac{\nu_{G}}{\gamma+\mu}W^{-1}XYW^{-1} & -\frac{\nu_{G}}{\gamma+\mu}W^{-1}X\\
+-\frac{\nu_{G}}{\gamma+\mu}YW^{-1} & \frac{\nu_{G}}{\gamma+\mu}
 \end{bmatrix}
 \]
 
@@ -931,7 +1338,7 @@ V^{-1}=\begin{bmatrix}W^{-1}+\frac{n_{G}}{\gamma+\mu}W^{-1}XYW^{-1} & -\frac{n_{
 \end_inset
 
 , 
-\begin_inset Formula $X=\begin{bmatrix}-\sigma_{M}f\\
+\begin_inset Formula $X=\begin{bmatrix}-\phi\\
 -\gamma\vec{\alpha}
 \end{bmatrix}_{k+1\times1}$
 \end_inset
@@ -963,11 +1370,11 @@ Note that, because of the form of the matrix
  to find its eigenvalues.
  In fact, we will only need to know the entries of the first row of the
  matrices 
-\begin_inset Formula $W^{-1}+\frac{n_{G}}{\gamma+\mu}W^{-1}XYW^{-1}$
+\begin_inset Formula $W^{-1}+\frac{\nu_{G}}{\gamma+\mu}W^{-1}XYW^{-1}$
 \end_inset
 
  and 
-\begin_inset Formula $-\frac{n_{G}}{\gamma+\mu}W^{-1}X$
+\begin_inset Formula $-\frac{\nu_{G}}{\gamma+\mu}W^{-1}X$
 \end_inset
 
 
@@ -986,8 +1393,8 @@ K=FV^{-1} & =\begin{bmatrix}0 & 0 & \cdots & 0 & 0\\
 0 & 0 & \cdots & 0 & 0\\
 \vdots & \vdots & \cdots & 0 & 0\\
 0 & 0 & \cdots & 0 & 0
-\end{bmatrix}\begin{bmatrix}W^{-1}+W^{-1}XYW^{-1}\frac{n_{G}}{\gamma+\mu} & -W^{-1}X\frac{n_{G}}{\gamma+\mu}\\
--\frac{n_{G}}{\gamma+\mu}YW^{-1} & \frac{n_{G}}{\gamma+\mu}
+\end{bmatrix}\begin{bmatrix}W^{-1}+W^{-1}XYW^{-1}\frac{n_{G}}{\gamma+\mu} & -W^{-1}X\frac{\nu_{G}}{\gamma+\mu}\\
+-\frac{\nu_{G}}{\gamma+\mu}YW^{-1} & \frac{\nu_{G}}{\gamma+\mu}
 \end{bmatrix}\\
  & =\rho_{L}\frac{n_{G}}{\gamma+\mu}\begin{bmatrix}0 & 0\\
 \left[\frac{\gamma+\mu}{n_{G}}W^{-1}+W^{-1}XYW^{-1}\right]_{1,\cdot} & \left[-W^{-1}X\right]_{1,\cdot}\\
@@ -1009,11 +1416,11 @@ Since the second row is the only non-zero row of the matrix
 
  is given by the entry in its second row, second column.
  This value is given by the product of 
-\begin_inset Formula $\rho_{L}\frac{n_{G}}{\gamma+\mu}$
+\begin_inset Formula $\rho_{L}\frac{\nu_{G}}{\gamma+\mu}$
 \end_inset
 
  and the entry in the first row, second column of the matrix 
-\begin_inset Formula $\frac{\gamma+\mu}{n_{G}}W^{-1}+W^{-1}XYW^{-1}$
+\begin_inset Formula $\frac{\gamma+\mu}{\nu_{G}}W^{-1}+W^{-1}XYW^{-1}$
 \end_inset
 
 .
@@ -1034,15 +1441,14 @@ Since the second row is the only non-zero row of the matrix
 YW^{-1} & =\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \boldsymbol{0}_{1\times k}\\
 \boldsymbol{0}_{k\times1} & \left(\mu I-A^{T}\right)^{-1}
 \end{bmatrix}\\
- & =\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\left(\mu I-A^{T}\right)^{-1}\end{bmatrix}\\
- & =\begin{bmatrix}0 & -\left(1-\rho_{1}\right)\lambda_{1} & -\left(1-\rho_{2}\right)\lambda_{2} & \cdots & -\left(1-\rho_{k}\right)\lambda_{k}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & 0 & 0 & 0 & \cdots & 0\\
-0 & \frac{1}{\mu+\lambda_{1}} & 0 & 0 & \cdots & 0\\
-0 & \rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \frac{1}{\mu+\lambda_{2}}\\
-0 & \rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \rho_{2}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}} & \frac{1}{\mu+\lambda_{3}}\\
-\vdots & \vdots & \vdots &  & \ddots\\
-0 & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=2}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}} &  &  & \frac{1}{\mu+\lambda_{k}}
+ & =\begin{bmatrix}0, & -\sigma_{1}\lambda_{1}, & -\sigma_{2}\lambda_{2}, & \cdots & -\sigma_{k-1}\lambda_{k-1}, & -\sigma_{k}\lambda_{k}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & 0 & 0 & 0 & \cdots & 0\\
+0 & \frac{1}{\mu+\lambda_{1}} & 0 & \cdots & 0 & 0\\
+0 & \left(1-\sigma_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \frac{1}{\mu+\lambda_{2}} & \cdots & 0 & 0\\
+0 & \vdots & \vdots & \ddots & \vdots & \vdots\\
+\vdots & \frac{1}{\mu+\lambda_{k-1}}\prod_{i=1}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right) & \frac{1}{\mu+\lambda_{k}}\prod_{i=2}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right) & \cdots & \mu+\lambda_{k-1} & 0\\
+0 & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)} & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=2}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)} & \cdots & \frac{1}{\mu+\lambda_{k}}\frac{\lambda_{k-1}}{\mu+\lambda_{k-1}}\left(1-\sigma_{k-1}\right) & \frac{1}{\mu+\lambda_{k}}
 \end{bmatrix}\\
- & =\begin{bmatrix}0 & -\varrho & -\sum_{i=2}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\prod_{j=2}^{i-1}\rho_{j}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right) & -\sum_{i=3}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\prod_{j=3}^{i-1}\rho_{j}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right) & \cdots & -\left(1-\rho_{k}\right)\frac{\lambda_{k}}{\mu+\lambda_{k}}\end{bmatrix}
+ & =\begin{bmatrix}0 & -\tau & -\sum_{i=2}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=2}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right) & -\sum_{i=3}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=3}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right) & \cdots & -\frac{\lambda_{k}}{\mu+\lambda_{k}}\sigma_{k}\end{bmatrix}
 \end{align*}
 
 \end_inset
@@ -1050,13 +1456,14 @@ YW^{-1} & =\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\end{bmatrix}\begin{bmatrix
 
 \begin_inset Formula 
 \[
-W^{-1}XYW^{-1}=\gamma\begin{bmatrix}\frac{1}{\gamma}\sigma_{M}f\frac{1}{\rho_{L}+\mu_{L}}\\
+W^{-1}XYW^{-1}=\gamma\begin{bmatrix}\frac{1}{\gamma}\phi\frac{1}{\rho_{L}+\mu_{L}}\\
 \frac{1}{\mu+\lambda_{1}}\\
-\rho_{1}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
-\rho_{1}\rho_{2}\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
+\left(1-\sigma_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
+\left(1-\sigma_{1}\right)\left(1-\sigma_{2}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
 \vdots\\
-{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\rho_{i}\frac{\lambda_{i}}{\mu+\lambda_{i}}}
-\end{bmatrix}\begin{bmatrix}0 & \varrho & \sum_{i=2}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\prod_{j=2}^{i-1}\rho_{j}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right) & \sum_{i=3}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\prod_{j=3}^{i-1}\rho_{j}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right) & \cdots & \left(1-\rho_{k}\right)\frac{\lambda_{k}}{\mu+\lambda_{k}}\end{bmatrix}
+\frac{1}{\mu+\lambda_{k-1}}\prod_{i=1}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)\\
+{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)}
+\end{bmatrix}\begin{bmatrix}0, & \tau, & \sum_{i=2}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=2}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right), & \sum_{i=3}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=3}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right), & \cdots & -\frac{\lambda_{k}}{\mu+\lambda_{k}}\sigma_{k}\end{bmatrix}
 \]
 
 \end_inset
@@ -1064,7 +1471,7 @@ W^{-1}XYW^{-1}=\gamma\begin{bmatrix}\frac{1}{\gamma}\sigma_{M}f\frac{1}{\rho_{L}
 
 \begin_inset Formula 
 \[
-\left[W^{-1}XYW^{-1}\right]_{1,2}=\sigma_{M}f\frac{1}{\rho_{L}+\mu_{L}}\varrho
+\left[W^{-1}XYW^{-1}\right]_{1,2}=\phi\frac{1}{\rho_{L}+\mu_{L}}\tau
 \]
 
 \end_inset
@@ -1072,25 +1479,27 @@ W^{-1}XYW^{-1}=\gamma\begin{bmatrix}\frac{1}{\gamma}\sigma_{M}f\frac{1}{\rho_{L}
 Hence there is a single non-zero eigenvalue given by
 \begin_inset Formula 
 \begin{align*}
-R & =\rho_{L}\frac{n_{G}}{\gamma+\mu}\left(\sigma_{M}f\frac{1}{\rho_{L}+\mu_{L}}\varrho\right)=en_{G}
+R & =\rho_{L}\frac{\nu_{G}}{\gamma+\mu}\left(\phi\frac{1}{\rho_{L}+\mu_{L}}\tau\right)=e\tau\nu_{G}
 \end{align*}
 
 \end_inset
 
 as expected.
  where 
-\begin_inset Formula $\sigma_{M}f\frac{1}{\gamma+\mu}$
+\begin_inset Formula $e=\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\phi\frac{1}{\gamma+\mu}$
 \end_inset
 
- is the average number of eggs per gonotrophic cycle, 
-\begin_inset Formula $n_{G}$
+ is the average number of viable eggs per female per gonotrophic cycle,
+ 
+\begin_inset Formula $\nu_{G}$
 \end_inset
 
  is the average number of gonotrophic cycles, and 
-\begin_inset Formula $\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\varrho$
+\begin_inset Formula $\tau$
 \end_inset
 
- is the average proportion of eggs surviving to reach oviposition.
+ is the average proportion of newly-emerged mosquitoes surviving to reach
+ oviposition.
 \end_layout
 
 \begin_layout Section*
@@ -1165,7 +1574,7 @@ We aim to determine the matrix
  so that this model has the form
 \begin_inset Formula 
 \begin{align*}
-\frac{d}{dt}L & =\sigma_{M}fV\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}L & =\phi V\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
 \frac{d}{dt}\vec{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
 \frac{d}{dt}V & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V
 \end{align*}
@@ -1185,8 +1594,8 @@ type
  the number of blood meals it requires to reach repletion.
 \begin_inset Formula 
 \begin{align*}
-\frac{d}{dt}L & =\sigma_{M}f\left(1-\frac{L}{K_{L}}\right)\sum_{i=1}^{k}V_{i}-\left(\rho_{L}+\mu_{L}\right)L\\
-\frac{d}{dt}B_{i,1} & =\rho_{i}\left(\rho_{L}L\right)+\gamma V_{i}-\lambda_{i,1}B_{i,1}-\mu B_{i,1}\\
+\frac{d}{dt}L & =\phi\left(1-\frac{L}{K_{L}}\right)\sum_{i=1}^{k}V_{i}-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}B_{i,1} & =\kappa_{i}\left(\rho_{L}L\right)+\gamma V_{i}-\lambda_{i,1}B_{i,1}-\mu B_{i,1}\\
 \frac{d}{dt}B_{i,j} & =\lambda_{i,j-1}B_{i,j-1}-\lambda_{i,j}B_{i,j}-\mu B_{i,j}\\
 \frac{d}{dt}V_{i} & =\lambda_{i,i}B_{i,i}-\gamma V_{i}-\mu V_{i}
 \end{align*}
@@ -1198,7 +1607,7 @@ Let
 \end_inset
 
  ,
-\begin_inset Formula $\boldsymbol{\rho}=\left[\rho_{1},\rho_{2},\ldots,\rho_{k}\right]^{T}$
+\begin_inset Formula $\boldsymbol{\kappa}=\left[\kappa_{1},\kappa_{2},\ldots,\kappa_{k}\right]^{T}$
 \end_inset
 
 , 
@@ -1217,7 +1626,7 @@ Let
  Then
 \begin_inset Formula 
 \[
-\frac{d}{dt}\boldsymbol{B}_{i}=\left(\rho_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}+A_{i}^{T}\boldsymbol{B}_{i}-\mu\boldsymbol{B}_{i}
+\frac{d}{dt}\boldsymbol{B}_{i}=\left(\kappa_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}+A_{i}^{T}\boldsymbol{B}_{i}-\mu\boldsymbol{B}_{i}
 \]
 
 \end_inset
@@ -1357,13 +1766,13 @@ A_{k}^{T}\boldsymbol{B}_{k}
 Now we can write 
 \begin_inset Formula 
 \[
-\frac{d}{dt}\boldsymbol{B}=\boldsymbol{\alpha}\left(\vec{\rho}\rho_{L}L+\gamma\boldsymbol{V}\right)+\boldsymbol{A}^{T}\boldsymbol{B}-\mu\boldsymbol{B}
+\frac{d}{dt}\boldsymbol{B}=\boldsymbol{\alpha}\left(\boldsymbol{\kappa}\rho_{L}L+\gamma\boldsymbol{V}\right)+\boldsymbol{A}^{T}\boldsymbol{B}-\mu\boldsymbol{B}
 \]
 
 \end_inset
 
 where 
-\begin_inset Formula $\vec{\rho}=\left[\rho_{1},\rho_{2},\cdots,\rho_{k-1},\rho_{k}\right]^{T}$
+\begin_inset Formula $\boldsymbol{\kappa}=\left[\kappa_{1},\kappa_{2},\ldots,\kappa_{k}\right]^{T}$
 \end_inset
 
  and 
@@ -1391,7 +1800,7 @@ with
  
 \begin_inset Formula 
 \begin{align*}
-\boldsymbol{\alpha}\left(\vec{\rho}\rho_{L}L+\gamma\boldsymbol{V}\right) & =\begin{bmatrix}\rho_{1}\rho_{L}L+\gamma V_{1}\\
+\boldsymbol{\alpha}\left(\boldsymbol{\kappa}\rho_{L}L+\gamma\boldsymbol{V}\right) & =\begin{bmatrix}\rho_{1}\rho_{L}L+\gamma V_{1}\\
 \rho_{2}\rho_{L}L+\gamma V_{2}\\
 0\\
 \rho_{3}\rho_{L}L+\gamma V_{3}\\
@@ -1400,13 +1809,13 @@ with
 \rho_{k}\rho_{L}L+\gamma V_{k}\\
 \boldsymbol{0}_{k-1,1}
 \end{bmatrix}\\
- & =\begin{bmatrix}\rho_{1}\\
-\rho_{2}\\
+ & =\begin{bmatrix}\kappa_{1}\\
+\kappa_{2}\\
 0\\
-\rho_{3}\\
+\kappa_{3}\\
 \boldsymbol{0}_{2,1}\\
 \vdots\\
-\rho_{k}\\
+\kappa_{k}\\
 \boldsymbol{0}_{k-1,1}
 \end{bmatrix}\rho_{L}L+\gamma\boldsymbol{\alpha}\boldsymbol{V}\\
  & =\boldsymbol{\alpha}\boldsymbol{\rho}\rho_{L}L+\gamma\boldsymbol{\alpha}\boldsymbol{V}
@@ -1431,7 +1840,7 @@ since
 \end_inset
 
  and 
-\begin_inset Formula $\boldsymbol{\rho}$
+\begin_inset Formula $\boldsymbol{\kappa}$
 \end_inset
 
  is 
@@ -1442,8 +1851,8 @@ since
  The full system is then written in matrix-vector form as
 \begin_inset Formula 
 \begin{align*}
-\frac{d}{dt}L & =\sigma_{M}f\left(1-\frac{L}{K_{L}}\right)\boldsymbol{1}^{T}\boldsymbol{V}-\left(\rho_{L}+\mu_{L}\right)L\\
-\frac{d}{dt}\boldsymbol{B} & =\boldsymbol{\alpha}\left(\vec{\rho}\rho_{L}L+\gamma\boldsymbol{V}\right)+\boldsymbol{A}^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
+\frac{d}{dt}L & =\phi\left(1-\frac{L}{K_{L}}\right)\boldsymbol{1}^{T}\boldsymbol{V}-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}\boldsymbol{B} & =\boldsymbol{\alpha}\left(\boldsymbol{\kappa}\rho_{L}L+\gamma\boldsymbol{V}\right)+\boldsymbol{A}^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
 \frac{d}{dt}\boldsymbol{V} & =\left(-X\boldsymbol{A}^{T}\boldsymbol{B}\right)-\left(\gamma+\mu\right)\boldsymbol{V}
 \end{align*}
 
@@ -1572,8 +1981,8 @@ We proceed by solving the system of equations.
 It's actually easier to look at the simpler equations
 \begin_inset Formula 
 \begin{align*}
-\frac{d}{dt}L & =\sigma_{M}f\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
-\frac{d}{dt}\boldsymbol{B}_{i} & =\left(\rho_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}+A_{i}^{T}\boldsymbol{B}_{i}-\mu\boldsymbol{B}_{i}\\
+\frac{d}{dt}L & =\phi\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}\boldsymbol{B}_{i} & =\left(\kappa_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}+A_{i}^{T}\boldsymbol{B}_{i}-\mu\boldsymbol{B}_{i}\\
 \frac{d}{dt}V_{i} & =\lambda_{i,i}B_{i,i}-\left(\gamma+\mu\right)V_{i}
 \end{align*}
 
@@ -1582,8 +1991,8 @@ It's actually easier to look at the simpler equations
 
 \begin_inset Formula 
 \begin{align*}
-\left(\rho_{L}+\mu_{L}\right)L & =\sigma_{M}f\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)\\
-\left(\mu I-A_{i}^{T}\right)\boldsymbol{B}_{i} & =\left(\rho_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}\\
+\left(\rho_{L}+\mu_{L}\right)L & =\phi\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)\\
+\left(\mu I-A_{i}^{T}\right)\boldsymbol{B}_{i} & =\left(\kappa_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}\\
 V_{i} & =\frac{1}{\gamma+\mu}\lambda_{i,i}B_{i,i}
 \end{align*}
 
@@ -1592,19 +2001,19 @@ V_{i} & =\frac{1}{\gamma+\mu}\lambda_{i,i}B_{i,i}
 
 \begin_inset Formula 
 \begin{align*}
-L & =K_{L}\frac{\sigma_{M}f\frac{1}{\rho_{L}+\mu_{L}}\boldsymbol{1}^{T}\boldsymbol{V}}{K_{L}+\sigma_{M}f\frac{1}{\rho_{L}+\mu_{L}}\boldsymbol{1}^{T}\boldsymbol{V}}\\
-\left(\mu I-A_{i}^{T}\right)\boldsymbol{B}_{i} & =\left(\rho_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}\\
+L & =K_{L}\frac{\phi\frac{1}{\rho_{L}+\mu_{L}}\boldsymbol{1}^{T}\boldsymbol{V}}{K_{L}+\phi\frac{1}{\rho_{L}+\mu_{L}}\boldsymbol{1}^{T}\boldsymbol{V}}\\
+\left(\mu I-A_{i}^{T}\right)\boldsymbol{B}_{i} & =\left(\kappa_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}\\
 \boldsymbol{1}^{T}\boldsymbol{V} & =\frac{1}{\gamma+\mu}\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}
 \end{align*}
 
 \end_inset
 
-It will be useful to define the quantity 
-\begin_inset Formula $F=\sigma_{m}f\frac{1}{\gamma+\mu}\frac{\rho_{L}}{\rho_{L}+\mu_{L}}$
+It will be useful to recall the quantity 
+\begin_inset Formula $e=\phi\frac{1}{\gamma+\mu}\frac{\rho_{L}}{\rho_{L}+\mu_{L}}$
 \end_inset
 
-, representing the average number of new adult mosquito recruits produced
- by a single mosquito each gonotrophic cycle.
+, representing the average number of new viable eggs by a single mosquito
+ each gonotrophic cycle.
  We obtain a system of equations for each 
 \begin_inset Formula $\boldsymbol{B}_{i}$
 \end_inset
@@ -1616,12 +2025,12 @@ It will be useful to define the quantity
 .
 \begin_inset Formula 
 \begin{align*}
-\left(\mu I-A_{i}^{T}\right)\boldsymbol{B}_{i} & =\left(\rho_{i}\rho_{L}K_{L}\frac{F\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{\rho_{L}K_{L}+F\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\right)\boldsymbol{\alpha}_{i}
+\left(\mu I-A_{i}^{T}\right)\boldsymbol{B}_{i} & =\left(\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\right)\boldsymbol{\alpha}_{i}
 \end{align*}
 
 \end_inset
 
-
+Now we expand both sides of this equation and compare elements.
 \begin_inset Formula 
 \begin{align*}
 \left(\mu I-A_{i}^{T}\right)\boldsymbol{B}_{i} & =\begin{bmatrix}\mu+\lambda_{i,1} & 0 & 0 & \cdots & 0\\
@@ -1648,7 +2057,7 @@ B_{i,i}
 
 \begin_inset Formula 
 \[
-\left(\rho_{i}\rho_{L}K_{L}\frac{\frac{1}{\rho_{L}+\mu_{L}}F\sum_{i=1}^{k}\lambda_{i,i}B_{i,i}}{K_{L}+\frac{1}{\rho_{L}+\mu_{L}}F\sum_{i=1}^{k}\lambda_{i,i}B_{i,i}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\right)\boldsymbol{\alpha}_{i}=\begin{bmatrix}\rho_{i}\rho_{L}K_{L}\frac{F\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{\rho_{L}K_{L}+F\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\\
+\left(\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\right)\boldsymbol{\alpha}_{i}=\begin{bmatrix}\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\\
 0\\
 \vdots\\
 0\\
@@ -1666,7 +2075,7 @@ B_{i,i}
 \vdots\\
 \left(\mu+\lambda_{i,i-1}\right)B_{i,i-1}-\lambda_{i,i-2}B_{i,i-2}\\
 \left(\mu+\lambda_{i,i}\right)B_{i,i}-\lambda_{i,i-1}B_{i,i-1}
-\end{bmatrix} & =\begin{bmatrix}\rho_{i}\rho_{L}K_{L}\frac{F\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{\rho_{L}K_{L}+F\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\\
+\end{bmatrix} & =\begin{bmatrix}\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\\
 0\\
 \vdots\\
 0\\
@@ -1702,11 +2111,11 @@ so that
 
 .
  Now let 
-\begin_inset Formula $T_{l}=\prod_{j=1}^{l}\frac{\lambda_{l,j}}{\mu+\lambda_{l,j}}$
+\begin_inset Formula $\tau_{l}=\prod_{j=1}^{l}\frac{\lambda_{l,j}}{\mu+\lambda_{l,j}}$
 \end_inset
 
  so that 
-\begin_inset Formula $B_{i,i}=\left(\frac{\mu+\lambda_{i,1}}{\lambda_{i,i}}\right)T_{i}B_{i,1}$
+\begin_inset Formula $B_{i,i}=\left(\frac{\mu+\lambda_{i,1}}{\lambda_{i,i}}\right)\tau_{i}B_{i,1}$
 \end_inset
 
 and define 
@@ -1729,16 +2138,16 @@ Now we can write the equation for
 :
 \begin_inset Formula 
 \begin{align*}
-\left(\mu+\lambda_{i,1}\right)B_{i,1} & =\rho_{i}\rho_{L}K_{L}\frac{F\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{\rho_{L}K_{L}+F\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\\
-B_{i,1} & =\frac{1}{\mu+\lambda_{i,1}}\rho_{i}\rho_{L}K_{L}\frac{F\beta}{\rho_{L}K_{L}+F\beta}+\frac{\gamma}{\gamma+\mu}T_{i}B_{i,1}\\
-\left(1-\frac{\gamma}{\gamma+\mu}T_{i}\right)B_{i,1} & =\frac{1}{\mu+\lambda_{i,1}}\rho_{i}\rho_{L}K_{L}\frac{F\beta}{\rho_{L}K_{L}+F\beta}\\
-B_{i,1} & =\left[\rho_{L}K_{L}\frac{F\beta}{\rho_{L}K_{L}+F\beta}\right]\left(\rho_{i}\frac{1}{\mu+\lambda_{i,1}}n_{i}\right)
+\left(\mu+\lambda_{i,1}\right)B_{i,1} & =\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\\
+B_{i,1} & =\frac{1}{\mu+\lambda_{i,1}}\kappa_{i}K_{L}\frac{e\beta}{K_{L}+\frac{1}{\rho_{L}}e\beta}+\frac{\gamma}{\gamma+\mu}\tau_{i}B_{i,1}\\
+\left(1-\frac{\gamma}{\gamma+\mu}\tau_{i}\right)B_{i,1} & =\frac{1}{\mu+\lambda_{i,1}}\kappa_{i}K_{L}\frac{e\beta}{K_{L}+\frac{1}{\rho_{L}}e\beta}\\
+B_{i,1} & =\frac{\rho_{L}K_{L}e\beta}{\rho_{L}K_{L}+e\beta}\left(\frac{1}{\mu+\lambda_{i,1}}\kappa_{i}\nu_{i}\right)
 \end{align*}
 
 \end_inset
 
 where 
-\begin_inset Formula $n_{i}=\frac{1}{1-\frac{\gamma}{\gamma+\mu}T_{i}}$
+\begin_inset Formula $\nu_{i}=\frac{1}{1-\frac{\gamma}{\gamma+\mu}\tau_{i}}$
 \end_inset
 
  represents the average number of gonotrophic cycles per lifespan for a
@@ -1756,7 +2165,7 @@ where
 
 \begin_layout Standard
 Now, using the fact that 
-\begin_inset Formula $\beta=\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}=\sum_{l=1}^{k}\left(\mu+\lambda_{l,1}\right)T_{l}B_{l,1}$
+\begin_inset Formula $\beta=\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}=\sum_{l=1}^{k}\left(\mu+\lambda_{l,1}\right)\tau_{l}B_{l,1}$
 \end_inset
 
 , we arrive at an expression that allows us to solve for 
@@ -1766,10 +2175,8 @@ Now, using the fact that
 .
 \begin_inset Formula 
 \begin{align*}
-\left(\mu+\lambda_{l,1}\right)T_{l}B_{l,1} & =\left[\rho_{L}K_{L}\frac{F\beta}{\rho_{L}K_{L}+F\beta}\right]\left(\rho_{l}T_{l}n_{l}\right)\\
-\sum_{l=1}^{k}\left(\mu+\lambda_{l,1}\right)T_{l}B_{l,1} & =\left[\rho_{L}K_{L}\frac{F\beta}{\rho_{L}K_{L}+F\beta}\right]\left(\sum_{l=1}^{k}\rho_{l}T_{l}n_{l}\right)\\
-\beta & =\left[\rho_{L}K_{L}\frac{F\beta}{\rho_{L}K_{L}+F\beta}\right]\zeta\\
-\beta & =\left[\rho_{L}K_{L}\frac{F\beta}{\rho_{L}K_{L}+F\beta}\right]\zeta
+\beta & =\sum_{l=1}^{k}\left(\mu+\lambda_{l,1}\right)\tau_{l}B_{l,1}\\
+\beta & =\left(\frac{\rho_{L}K_{L}e\beta}{\rho_{L}K_{L}+e\beta}\right)\left(\sum_{l=1}^{k}\kappa_{l}\tau_{l}\nu_{l}\right)
 \end{align*}
 
 \end_inset
@@ -1778,68 +2185,23 @@ Now, using the fact that
 \end_layout
 
 \begin_layout Standard
-where we have defined 
-\begin_inset Formula $\zeta=\sum_{l=1}^{k}\rho_{l}T_{l}n_{l}$
+Note that 
+\begin_inset Formula $\nu_{G}=\sum_{l=1}^{k}\kappa_{l}\tau_{l}\nu_{l}$
 \end_inset
 
-.
- This represents the average number of additional gonotrophic cycles undergone
- by a mosquito conditional on it having reproduced exactly once, accounting
- for the distribution of the number of bites it needs to attain repletion.
- That is, if 
-\begin_inset Formula $\rho=\left[\rho_{1},\rho_{2},\cdots,\rho_{k}\right]$
-\end_inset
-
- and 
-\begin_inset Formula $T=\left[T_{1}n_{1},T_{2}n_{2},\cdots,T_{k}n_{k}\right]$
-\end_inset
-
- is the vector of numbers of gonotrophic cycles experienced by mosquitoes
- need 
-\begin_inset Formula $i$
-\end_inset
-
- bites to attain repletion (conditional on surviving the first transit of
- the blood-feeding cycle) , then 
-\begin_inset Formula $\zeta=\left\langle \rho,N\right\rangle $
-\end_inset
-
-.
- Another interpretation is this
-\begin_inset Formula 
-\begin{align*}
-\zeta & =\sum_{l=1}^{k}\rho_{l}T_{l}n_{l}\\
- & =\sum_{l=1}^{k}\rho_{l}\frac{T_{l}}{1-\frac{\gamma}{\gamma+\mu}T_{l}}\\
- & =\sum_{l=1}^{k}\rho_{l}\frac{\gamma+\mu}{\gamma}\left(n_{l}-1\right)\\
- & =\frac{\gamma+\mu}{\gamma}\sum_{l=1}^{k}\left(\rho_{l}n_{l}-\rho_{l}\right)\\
- & =\frac{\gamma+\mu}{\gamma}\left(\sum_{l=1}^{k}\rho_{l}n_{l}-1\right)\\
-\frac{\gamma}{\gamma+\mu}\zeta & =\sum_{l=1}^{k}\rho_{l}n_{l}-1
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-where we used the fact that 
-\begin_inset Formula $\sum_{i=1}^{k}\rho_{i}=1$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-Solving for 
+ may be interpreted to represent the (weighted) average number of additional
+ gonotrophic cycles undergone by a mosquito conditional on it having reproduced
+ exactly once, accounting for the distribution of the number of bites it
+ needs to attain repletion.
+ We are now situated to solve for 
 \begin_inset Formula $\beta$
 \end_inset
 
-, we obtain
+:
 \begin_inset Formula 
 \begin{align*}
-\beta & =\left[\rho_{L}K_{L}\frac{F\beta}{\rho_{L}K_{L}+F\beta}\right]\zeta\\
-\rho_{L}K_{L}+F\beta & =\rho_{L}K_{L}F\zeta\\
-\beta & =\rho_{L}K_{L}\left(\frac{F\zeta-1}{F}\right)
+\beta & =\left(\frac{\rho_{L}K_{L}e\beta}{\rho_{L}K_{L}+e\beta}\right)\nu_{G}\\
+\beta & =\rho_{L}K_{L}\frac{1}{e}\left(e\nu_{G}-1\right)
 \end{align*}
 
 \end_inset
@@ -1859,9 +2221,7 @@ Now that we know
 
 \begin_inset Formula 
 \begin{align*}
-B_{i,1} & =\left[\rho_{L}K_{L}\frac{F\beta}{\rho_{L}K_{L}+F\beta}\right]\left(\rho_{i}\frac{1}{\mu+\lambda_{i,1}}n_{i}\right)\\
- & =\left[\rho_{L}K_{L}\frac{\rho_{L}K_{L}\left(F\zeta-1\right)}{\rho_{L}K_{L}+\rho_{L}K_{L}\left(F\zeta-1\right)}\right]\left(\rho_{i}\frac{1}{\mu+\lambda_{i,1}}n_{i}\right)\\
- & =\left[\rho_{L}K_{L}\left(\frac{F\zeta-1}{F\zeta}\right)\right]\left(\rho_{i}\frac{1}{\mu+\lambda_{i,1}}n_{i}\right)
+B_{i,1} & =\rho_{L}K_{L}\frac{1}{e\nu_{G}}\left(e\nu_{G}-1\right)\left(\frac{1}{\mu+\lambda_{i,1}}\kappa_{i}\nu_{i}\right)
 \end{align*}
 
 \end_inset
@@ -1869,10 +2229,10 @@ B_{i,1} & =\left[\rho_{L}K_{L}\frac{F\beta}{\rho_{L}K_{L}+F\beta}\right]\left(\r
 and thus,
 \begin_inset Formula 
 \begin{align*}
-B_{i,j} & =\left[\rho_{L}K_{L}\left(\frac{F\zeta-1}{F\zeta}\right)\right]\left(\rho_{i}n_{i}\right)\frac{1}{\lambda_{i,j}}\left(\prod_{r=1}^{j}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right)\\
-V_{i} & =\frac{1}{\gamma+\mu}\left[\rho_{L}K_{L}\left(\frac{F\zeta-1}{F\zeta}\right)\right]\left(\rho_{i}n_{i}T_{i}\right)\\
-\boldsymbol{1}^{T}\boldsymbol{V} & =\frac{1}{\gamma+\mu}\left[\rho_{L}K_{L}\left(\frac{F\zeta-1}{F\zeta}\right)\right]\zeta\\
-L & =K_{L}\frac{\rho_{L}\left(F\zeta-1\right)}{1+\rho_{L}\left(F\zeta-1\right)}
+B_{i,j} & =\rho_{L}K_{L}\frac{1}{e\nu_{G}}\left(e\nu_{G}-1\right)\left(\kappa_{i}\nu_{i}\right)\left(\frac{1}{\lambda_{i,j}}\right)\left(\prod_{r=1}^{j}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right)\\
+V_{i} & =\frac{1}{\gamma+\mu}\rho_{L}K_{L}\frac{1}{e\nu_{G}}\left(e\nu_{G}-1\right)\left(\kappa_{i}\nu_{i}\tau_{i}\right)\\
+\boldsymbol{1}^{T}\boldsymbol{V} & =\frac{1}{\gamma+\mu}\rho_{L}K_{L}\frac{1}{e}\left(e\nu_{G}-1\right)\\
+L & =K_{L}\frac{1}{e\nu_{G}}\left(e\nu_{G}-1\right)
 \end{align*}
 
 \end_inset
@@ -1882,7 +2242,7 @@ L & =K_{L}\frac{\rho_{L}\left(F\zeta-1\right)}{1+\rho_{L}\left(F\zeta-1\right)}
 
 \begin_layout Standard
 Let 
-\begin_inset Formula $R=F\zeta$
+\begin_inset Formula $R=e\nu_{G}$
 \end_inset
 
 .
@@ -1890,13 +2250,17 @@ Let
  
 \begin_inset Formula 
 \begin{align*}
-R & =F\zeta\\
- & =\sigma_{m}f\frac{1}{\gamma+\mu}\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\left(\sum_{l=1}^{k}\rho_{l}T_{l}n_{l}\right)
+R & =e\nu_{G}\\
+ & =\phi\frac{1}{\gamma+\mu}\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\left(\sum_{l=1}^{k}\kappa_{l}\frac{\tau_{l}}{1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau_{l}}\right)
 \end{align*}
 
 \end_inset
 
+where 
+\begin_inset Formula $\tau_{l}=\prod_{j=1}^{l}\frac{\lambda_{l,j}}{\mu+\lambda_{l,j}}$
+\end_inset
 
+.
 \end_layout
 
 \begin_layout Subsection*
@@ -1904,8 +2268,8 @@ Stability of equilibria
 \end_layout
 
 \begin_layout Standard
-Following Hurtado and Richards 2020, we can somewhat quickly determine the
- reproductive ratio for the mosquito population in this case.
+Following Hurtado and Richards 2020, we can use matrix-vector notation to
+ determine the reproductive ratio for the mosquito population in this case.
  We employ the next generation operator approach developed in van den Driessche
  and Watmough (2002).
  We define recruitment by the number of new reproductively mature mosquitoes
@@ -1920,8 +2284,8 @@ Following Hurtado and Richards 2020, we can somewhat quickly determine the
 We begin by re-writing our model as
 \begin_inset Formula 
 \begin{align*}
-\frac{d}{dt}L & =\sigma_{M}f\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
-\frac{d}{dt}\boldsymbol{B}_{i} & =\left(\rho_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}+A_{i}^{T}\boldsymbol{B}_{i}-\mu\boldsymbol{B}_{i}\\
+\frac{d}{dt}L & =\phi\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\frac{d}{dt}\boldsymbol{B}_{i} & =\left(\kappa_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}+A_{i}^{T}\boldsymbol{B}_{i}-\mu\boldsymbol{B}_{i}\\
 \frac{d}{dt}V_{i} & =\lambda_{i,i}B_{i,i}-\left(\gamma+\mu\right)V_{i}
 \end{align*}
 
@@ -1942,11 +2306,11 @@ V_{2}\\
 V_{k-1}\\
 V_{k}
 \end{bmatrix} & =\begin{bmatrix}0\\
-\rho_{L}L\boldsymbol{\alpha}_{1}\\
-\rho_{L}L\boldsymbol{\alpha}_{2}\\
+\rho_{L}L\kappa_{1}\boldsymbol{\alpha}_{1}\\
+\rho_{L}L\kappa_{2}\boldsymbol{\alpha}_{2}\\
 \vdots\\
-\rho_{L}L\boldsymbol{\alpha}_{k-1}\\
-\rho_{L}L\boldsymbol{\alpha}_{k}\\
+\rho_{L}L\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\\
+\rho_{L}L\kappa_{k}\boldsymbol{\alpha}_{k}\\
 0\\
 0\\
 \vdots\\
@@ -1963,7 +2327,7 @@ V_{k}
 \vdots\\
 \left(\gamma+\mu\right)V_{k-1}\\
 \left(\gamma+\mu\right)V_{k}
-\end{bmatrix}-\begin{bmatrix}\sigma_{M}f\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)\\
+\end{bmatrix}-\begin{bmatrix}\phi\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)\\
 \gamma V\boldsymbol{\alpha}_{1}+\left(A_{i}-D_{\textrm{diag}A_{1}}\right)^{T}\boldsymbol{B}_{1}\\
 \gamma V\boldsymbol{\alpha}_{2}+\left(A_{i}-D_{\textrm{diag}A_{2}}\right)^{T}\boldsymbol{B}_{2}\\
 \vdots\\
@@ -2009,7 +2373,7 @@ where
 \begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
-\mathcal{V}_{x} & =\partial_{x}\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)L-\sigma_{M}f\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)\\
+\mathcal{V}_{x} & =\partial_{x}\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)L-\phi\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)\\
 -\gamma V_{1}\boldsymbol{\alpha}_{1}+\left(\mu I-A_{1}^{T}\right)\boldsymbol{B}_{1}\\
 -\gamma V_{2}\boldsymbol{\alpha}_{2}+\left(\mu I-A_{2}^{T}\right)\boldsymbol{B}_{2}\\
 \vdots\\
@@ -2021,7 +2385,7 @@ where
 \left(\gamma+\mu\right)V_{k-1}-\lambda_{k-1,k-1}B_{k-1,k-1}\\
 \left(\gamma+\mu\right)V_{k}-\lambda_{k,k}B_{k,k}
 \end{bmatrix}\\
- & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)+\sigma_{M}f\boldsymbol{1}^{T}\boldsymbol{V}\left(-\frac{1}{K_{L}}\right) & 0 & 0 & \cdots & 0 & 0 & -\sigma_{M}f\left(1-\frac{L}{K_{L}}\right) & -\sigma_{M}f\left(1-\frac{L}{K_{L}}\right) & \cdots & -\sigma_{M}f\left(1-\frac{L}{K_{L}}\right) & -\sigma_{M}f\left(1-\frac{L}{K_{L}}\right)\\
+\mathcal{V}_{x} & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)+\phi\boldsymbol{1}^{T}\boldsymbol{V}\left(-\frac{1}{K_{L}}\right) & 0 & 0 & \cdots & 0 & 0 & -\phi\left(1-\frac{L}{K_{L}}\right) & -\phi\left(1-\frac{L}{K_{L}}\right) & \cdots & -\phi\left(1-\frac{L}{K_{L}}\right) & -\phi\left(1-\frac{L}{K_{L}}\right)\\
 0 & \left[\left(\mu I-A_{1}^{T}\right)\right] & 0 & \cdots & 0 & 0 & -\gamma\boldsymbol{\alpha}_{1} & 0 & \cdots & 0 & 0\\
 \boldsymbol{0} & \boldsymbol{0} & \left[\left(\mu I-A_{2}^{T}\right)\right] & \cdots & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & -\gamma\boldsymbol{\alpha}_{2} & \cdots & \boldsymbol{0} & \boldsymbol{0}\\
 \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
@@ -2047,27 +2411,31 @@ where
 
 .
 \begin_inset Formula 
-\[
-\mathcal{F}_{x}=\begin{bmatrix}0 & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\boldsymbol{\alpha}_{1} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\boldsymbol{\alpha}_{2} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
+\begin{align*}
+\mathcal{F}_{x} & =\begin{bmatrix}0 & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
+\rho_{L}\kappa_{1}\boldsymbol{\alpha}_{1} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
+\rho_{L}\kappa_{2}\boldsymbol{\alpha}_{2} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
-\rho_{L}\boldsymbol{\alpha}_{k-1} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\boldsymbol{\alpha}_{k} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
+\rho_{L}\kappa_{k-1}\boldsymbol{\alpha}_{k-1} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
+\rho_{L}\kappa_{k}\boldsymbol{\alpha}_{k} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
 0 & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
 0 & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
 0 & 0 & 0 & \cdots & 0 & 00 & 0 & 0 & \cdots & 0 & 0\\
 0 & 0 & 0 & \cdots & 0 & 00 & 0 & 0 & \cdots & 0 & 0
+\end{bmatrix}\\
+ & =\begin{bmatrix}0 & \boldsymbol{0}_{1\times n+k}\\
+\rho_{L}\boldsymbol{\kappa}\boldsymbol{\alpha} & \boldsymbol{0}_{n\times n+k}\\
+\boldsymbol{0}_{k\times1} & \boldsymbol{0}_{k\times n+k}
 \end{bmatrix}
-\]
+\end{align*}
 
 \end_inset
 
 
 \begin_inset Formula 
 \begin{align*}
-V & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & 0 & 0 & \cdots & 0 & 0 & -\sigma_{M}f & -\sigma_{M}f & \cdots & -\sigma_{M}f & -\sigma_{M}f\\
+V & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & 0 & 0 & \cdots & 0 & 0 & -\phi & -\phi & \cdots & -\phi & -\phi\\
 0 & \left[\left(\mu I-A_{1}^{T}\right)\right] & 0 & \cdots & 0 & 0 & -\gamma\boldsymbol{\alpha}_{1} & 0 & \cdots & 0 & 0\\
 \boldsymbol{0} & \boldsymbol{0} & \left[\left(\mu I-A_{2}^{T}\right)\right] & \cdots & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & -\gamma\boldsymbol{\alpha}_{2} & \cdots & \boldsymbol{0} & \boldsymbol{0}\\
 \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
@@ -2086,8 +2454,8 @@ V & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & 0 & 0 & \cdots & 0 & 0 & -\s
 
 \begin_inset Formula 
 \[
-V=\begin{bmatrix}W_{n+1\times n+1} & X_{n+1\times k}\\
-Y_{k\times n+1} & Z_{k\times k}
+V=\begin{bmatrix}V_{1} & V_{2}\\
+V_{3} & V_{4}
 \end{bmatrix}
 \]
 
@@ -2096,27 +2464,27 @@ Y_{k\times n+1} & Z_{k\times k}
 where
 \begin_inset Formula 
 \begin{align*}
-W & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & 0 & 0 & \cdots & 0 & 0\\
+V_{1} & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & 0 & 0 & \cdots & 0 & 0\\
 0 & \left[\left(\mu I-A_{1}^{T}\right)\right] & 0 & \cdots & 0 & 0\\
 \boldsymbol{0} & \boldsymbol{0} & \left[\left(\mu I-A_{2}^{T}\right)\right] & \cdots & \boldsymbol{0} & \boldsymbol{0}\\
 \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
 \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \cdots & \left(\mu I-A_{k-1}^{T}\right) & \boldsymbol{0}\\
 \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \cdots & \boldsymbol{0} & \left(\mu I-A_{k}^{T}\right)
 \end{bmatrix}\\
-X & =\begin{bmatrix}-\sigma_{M}f & -\sigma_{M}f & \cdots & -\sigma_{M}f & -\sigma_{M}f\\
+V_{2} & =\begin{bmatrix}-\phi & -\phi & \cdots & -\phi & -\phi\\
 -\gamma\boldsymbol{\alpha}_{1} & 0 & \cdots & 0 & 0\\
 \boldsymbol{0} & -\gamma\boldsymbol{\alpha}_{2} & \cdots & \boldsymbol{0} & \boldsymbol{0}\\
 \vdots & \vdots & \ddots & \vdots & \vdots\\
 \boldsymbol{0} & \boldsymbol{0} & \cdots & -\gamma\boldsymbol{\alpha}_{k-1} & \boldsymbol{0}\\
 \boldsymbol{0} & \boldsymbol{0} & \cdots & \boldsymbol{0} & -\gamma\boldsymbol{\alpha}_{k}
 \end{bmatrix}\\
-Y & =\begin{bmatrix}0 & -\lambda_{1,1}\boldsymbol{\omega}_{1} & \boldsymbol{0} & \cdots & 0 & 0\\
+V_{3} & =\begin{bmatrix}0 & -\lambda_{1,1}\boldsymbol{\omega}_{1} & \boldsymbol{0} & \cdots & 0 & 0\\
 0 & \boldsymbol{0} & -\lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & \boldsymbol{0} & \boldsymbol{0}\\
 \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
 0 & \boldsymbol{0} & \boldsymbol{0} & \cdots & -\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & \boldsymbol{0}\\
 0 & \boldsymbol{0} & \boldsymbol{0} & \cdots & \boldsymbol{0} & -\lambda_{k,k}\boldsymbol{\omega}_{k}
 \end{bmatrix}\\
-Z & =\left(\gamma+\mu\right)I_{k}
+V_{4} & =\left(\gamma+\mu\right)I_{k}
 \end{align*}
 
 \end_inset
@@ -2128,13 +2496,33 @@ Now the inverse of
  is given by 
 \begin_inset Formula 
 \[
-V^{-1}=\begin{bmatrix}\left(W-XZ^{-1}Y\right)^{-1} & -\left(W-XZ^{-1}Y\right)^{-1}XZ^{-1}\\
--Z^{-1}Y\left(W-XZ^{-1}Y\right)^{-1} & D^{-1}+Z^{-1}Y\left(W-XZ^{-1}Y\right)^{-1}XZ^{-1}
+V^{-1}=\begin{bmatrix}W_{1} & W_{2}\\
+W_{3} & W_{4}
 \end{bmatrix}
 \]
 
 \end_inset
 
+where 
+\begin_inset Formula $W_{1}=\left(V_{1}-V_{2}V_{4}^{-1}V_{3}\right)^{-1}$
+\end_inset
+
+, 
+\begin_inset Formula $W_{2}=-W_{1}V_{2}V_{4}^{-1}$
+\end_inset
+
+, 
+\begin_inset Formula $W_{3}=-V_{4}^{-1}V_{3}W_{1}$
+\end_inset
+
+, and 
+\begin_inset Formula $W_{4}=V_{4}^{-1}+V_{4}^{-1}V_{3}W_{1}V_{2}V_{4}^{-1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
 The form of 
 \begin_inset Formula $F$
 \end_inset
@@ -2142,48 +2530,44 @@ The form of
  simplifies this calculation further
 \begin_inset Formula 
 \begin{align*}
-F & =\begin{bmatrix}0 & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\boldsymbol{\alpha}_{1} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\boldsymbol{\alpha}_{2} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
-\rho_{L}\boldsymbol{\alpha}_{k-1} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\boldsymbol{\alpha}_{k} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-0 & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-0 & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & 0 & 00 & 0 & 0 & \cdots & 0 & 0\\
-0 & 0 & 0 & \cdots & 0 & 00 & 0 & 0 & \cdots & 0 & 0
-\end{bmatrix}\\
- & =\begin{bmatrix}A_{n+1\times n+1} & \boldsymbol{0}_{n+1\times k}\\
+F & =\begin{bmatrix}\bar{F}_{n+1\times n+1} & \boldsymbol{0}_{n+1\times k}\\
 \boldsymbol{0}_{k\times n+1} & \boldsymbol{0}_{k\times k}
 \end{bmatrix}
 \end{align*}
 
 \end_inset
 
-with
+where the matrix 
+\begin_inset Formula $\bar{F}$
+\end_inset
+
+ is given by
 \begin_inset Formula 
 \[
-A=\begin{bmatrix}0 & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\boldsymbol{\alpha}_{1} & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\boldsymbol{\alpha}_{2} & 0 & 0 & \cdots & 0 & 0\\
+\bar{F}=\begin{bmatrix}0 & 0 & 0 & \cdots & 0 & 0\\
+\rho_{L}\kappa_{1}\boldsymbol{\alpha}_{1} & 0 & 0 & \cdots & 0 & 0\\
+\rho_{L}\kappa_{2}\boldsymbol{\alpha}_{2} & 0 & 0 & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
-\rho_{L}\boldsymbol{\alpha}_{k-1} & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\boldsymbol{\alpha}_{k} & 0 & 0 & \cdots & 0 & 0
+\rho_{L}\kappa_{k-1}\boldsymbol{\alpha}_{k-1} & 0 & 0 & \cdots & 0 & 0\\
+\rho_{L}\kappa_{k}\boldsymbol{\alpha}_{k} & 0 & 0 & \cdots & 0 & 0
 \end{bmatrix}
 \]
 
 \end_inset
 
+Hence, 
+\begin_inset Formula $K=FV^{-1}$
+\end_inset
 
+ can be written as a block-matrix as follows
 \begin_inset Formula 
 \begin{align*}
-K=FV^{-1} & =\begin{bmatrix}A_{n+1\times n+1} & \boldsymbol{0}_{n+1\times k}\\
+K=FV^{-1} & =\begin{bmatrix}\bar{F}_{n+1\times n+1} & \boldsymbol{0}_{n+1\times k}\\
 \boldsymbol{0}_{k\times n+1} & \boldsymbol{0}_{k\times k}
-\end{bmatrix}\begin{bmatrix}P_{n+1\times n+1} & Q_{n+1\times k}\\
-R_{k\times n+1} & S_{k\times k}
+\end{bmatrix}\begin{bmatrix}W_{1} & W_{2}\\
+W_{3} & W_{4}
 \end{bmatrix}\\
- & =\begin{bmatrix}\left[AP\right]_{n+1\times n+1} & \left[AQ\right]_{k\times k}\\
+ & =\begin{bmatrix}\left[\bar{F}W_{1}\right]_{n+1\times n+1} & \left[\bar{F}W_{2}\right]_{k\times k}\\
 \boldsymbol{0}_{k\times n+1} & \boldsymbol{0}_{k\times k}
 \end{bmatrix}
 \end{align*}
@@ -2192,42 +2576,27 @@ R_{k\times n+1} & S_{k\times k}
 
 is block upper triangular, hence the eigenvalues are the same as those of
  
-\begin_inset Formula $AP$
+\begin_inset Formula $\bar{F}W_{1}$
 \end_inset
 
- where 
-\begin_inset Formula $P=\left(W-XZ^{-1}Y\right)^{-1}$
+.
+ 
+\end_layout
+
+\begin_layout Standard
+We now proceed to compute 
+\begin_inset Formula $W_{1}=\left(V_{1}-V_{2}V_{4}^{-1}V_{3}\right)^{-1}$
 \end_inset
 
-
-\begin_inset Formula 
-\[
-W-XZ^{-1}Y=\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & 0 & 0 & \cdots & 0 & 0\\
-0 & \left[\left(\mu I-A_{1}^{T}\right)\right] & 0 & \cdots & 0 & 0\\
-0 & 0 & \left[\left(\mu I-A_{2}^{T}\right)\right] & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & \left[\left(\mu I-A_{k-1}^{T}\right)\right] & 0\\
-0 & 0 & 0 & \cdots & 0 & \left[\left(\mu I-A_{k}^{T}\right)\right]
-\end{bmatrix}-\frac{1}{\gamma+\mu}\begin{bmatrix}\sigma_{M}f & \sigma_{M}f & \cdots & \sigma_{M}f & \sigma_{M}f\\
-\gamma\boldsymbol{\alpha}_{1} & 0 & \cdots & 0 & 0\\
-0 & \gamma\boldsymbol{\alpha}_{2} & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & \gamma\boldsymbol{\alpha}_{k-1} & 0\\
-0 & 0 & \cdots & 0 & \gamma\boldsymbol{\alpha}_{k}
-\end{bmatrix}\begin{bmatrix}0 & \lambda_{1,1}\boldsymbol{\omega}_{1} & 0 & \cdots & 0 & 0\\
-0 & 0 & \lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & \lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & 0\\
-0 & 0 & 0 & \cdots & 0 & \lambda_{k,k}\boldsymbol{\omega}_{k}
-\end{bmatrix}
-\]
-
+.
+ We first calculate 
+\begin_inset Formula $V_{1}-V_{2}V_{4}^{-1}V_{3}$
 \end_inset
 
-
+ then determine its inverse.
 \begin_inset Formula 
 \begin{align*}
-XY & =\begin{bmatrix}\sigma_{M}f & \sigma_{M}f & \cdots & \sigma_{M}f & \sigma_{M}f\\
+V_{2}V_{3} & =\begin{bmatrix}\phi & \phi & \cdots & \phi & \phi\\
 \gamma\boldsymbol{\alpha}_{1} & 0 & \cdots & 0 & 0\\
 0 & \gamma\boldsymbol{\alpha}_{2} & \cdots & 0 & 0\\
 \vdots & \vdots & \ddots & \vdots & \vdots\\
@@ -2239,19 +2608,19 @@ XY & =\begin{bmatrix}\sigma_{M}f & \sigma_{M}f & \cdots & \sigma_{M}f & \sigma_{
 0 & 0 & 0 & \cdots & \lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & 0\\
 0 & 0 & 0 & \cdots & 0 & \lambda_{k,k}\boldsymbol{\omega}_{k}
 \end{bmatrix}\\
- & =\begin{bmatrix}0 & \lambda_{1,1}\sigma_{m}f\boldsymbol{\omega}_{1} & \lambda_{2,2}\sigma_{m}f\boldsymbol{\omega}_{2} & \cdots & \lambda_{k-1,k-1}\sigma_{m}f\boldsymbol{\omega}_{k-1} & \lambda_{k,k}\sigma_{m}f\boldsymbol{\omega}_{k}\\
-0 & \gamma\lambda_{1,1}\boldsymbol{\nu}_{1} & 0 & \cdots & 0 & 0\\
-0 & 0 & \gamma\lambda_{2,2}\boldsymbol{\nu}_{2} & \cdots & 0 & 0\\
+ & =\begin{bmatrix}0 & \phi\lambda_{1,1}\boldsymbol{\omega}_{1} & \phi\lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & \phi\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & \phi\lambda_{k,k}\boldsymbol{\omega}_{k}\\
+0 & \gamma\lambda_{1,1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1} & 0 & \cdots & 0 & 0\\
+0 & 0 & \gamma\lambda_{2,2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2} & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & \gamma\lambda_{k-1,k-1}\boldsymbol{\nu}_{k-1} & 0\\
-0 & 0 & 0 & \cdots & 0 & \gamma\lambda_{k,k}\boldsymbol{\nu}_{k}
+0 & 0 & 0 & \cdots & \gamma\lambda_{k-1,k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1} & 0\\
+0 & 0 & 0 & \cdots & 0 & \gamma\lambda_{k,k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}
 \end{bmatrix}
 \end{align*}
 
 \end_inset
 
 where 
-\begin_inset Formula $\boldsymbol{\nu}_{i}=\boldsymbol{\alpha}_{i}\boldsymbol{\omega}_{i}$
+\begin_inset Formula $\boldsymbol{\alpha}_{i}\boldsymbol{\omega}_{i}$
 \end_inset
 
  is an 
@@ -2259,99 +2628,63 @@ where
 \end_inset
 
  matrix with entries
-\begin_inset Formula $\left[\boldsymbol{\nu}_{i}\right]_{j,k}=\begin{cases}
+\begin_inset Formula $\left[\boldsymbol{\alpha}_{i}\boldsymbol{\omega}_{i}\right]_{j,k}=\begin{cases}
 1 & j=1,k=i\\
 0 & \textrm{otherwise}
 \end{cases}$
 \end_inset
 
 .
- Then we proceed to calculate 
-\begin_inset Formula $P$
-\end_inset
-
-.
+ 
 \begin_inset Formula 
 \begin{align*}
-W-XZ^{-1}Y & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & 0 & 0 & \cdots & 0 & 0\\
+V_{1}-V_{2}V_{4}^{-1}V_{3} & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & 0 & 0 & \cdots & 0 & 0\\
 0 & \left[\left(\mu I-A_{1}^{T}\right)\right] & 0 & \cdots & 0 & 0\\
 0 & 0 & \left[\left(\mu I-A_{2}^{T}\right)\right] & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
 0 & 0 & 0 & \cdots & \left[\left(\mu I-A_{k-1}^{T}\right)\right] & 0\\
 0 & 0 & 0 & \cdots & 0 & \left[\left(\mu I-A_{k}^{T}\right)\right]
-\end{bmatrix}+\begin{bmatrix}0 & -\lambda_{1,1}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{1} & -\lambda_{2,2}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{2} & \cdots & -\lambda_{k-1,k-1}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{k-1} & -\lambda_{k,k}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{k}\\
-0 & -\frac{\gamma}{\gamma+\mu}\lambda_{1,1}\boldsymbol{\nu}_{1} & 0 & \cdots & 0 & 0\\
-0 & 0 & -\frac{\gamma}{\gamma+\mu}\lambda_{2,2}\boldsymbol{\nu}_{2} & \cdots & 0 & 0\\
+\end{bmatrix}+\begin{bmatrix}0 & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{1,1}\boldsymbol{\omega}_{1} & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{k,k}\boldsymbol{\omega}_{k}\\
+0 & -\left(\frac{\gamma}{\gamma+\mu}\right)\lambda_{1,1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1} & 0 & \cdots & 0 & 0\\
+0 & 0 & -\left(\frac{\gamma}{\gamma+\mu}\right)\lambda_{2,2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2} & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & -\frac{\gamma}{\gamma+\mu}\lambda_{k-1,k-1}\boldsymbol{\nu}_{k-1} & 0\\
-0 & 0 & 0 & \cdots & 0 & -\frac{\gamma}{\gamma+\mu}\lambda_{k,k}\boldsymbol{\nu}_{k}
+0 & 0 & 0 & \cdots & -\left(\frac{\gamma}{\gamma+\mu}\right)\lambda_{k-1,k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1} & 0\\
+0 & 0 & 0 & \cdots & 0 & -\left(\frac{\gamma}{\gamma+\mu}\right)\lambda_{k,k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}
 \end{bmatrix}\\
- & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & -\lambda_{1,1}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{1} & -\lambda_{2,2}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{2} & \cdots & -\lambda_{k-1,k-1}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{k-1} & -\lambda_{k,k}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{k}\\
-0 & \left[\left(\mu I-A_{1}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{1,1}\boldsymbol{\nu}_{1}\right] & 0 & \cdots & 0 & 0\\
-0 & 0 & \left[\left(\mu I-A_{2}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{2,2}\boldsymbol{\nu}_{2}\right] & \cdots & 0 & 0\\
+ & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{1,1}\boldsymbol{\omega}_{1} & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{k,k}\boldsymbol{\omega}_{k}\\
+0 & L_{1} & 0 & \cdots & 0 & 0\\
+0 & 0 & L_{2} & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & \left[\left(\mu I-A_{k-1}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{k-1,k-1}\boldsymbol{\nu}_{k-1}\right] & 0\\
-0 & 0 & 0 & \cdots & 0 & \left[\left(\mu I-A_{k}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{k,k}\boldsymbol{\nu}_{k}\right]
+0 & 0 & 0 & \cdots & L_{k-1} & 0\\
+0 & 0 & 0 & \cdots & 0 & L_{k}
 \end{bmatrix}
 \end{align*}
 
 \end_inset
 
-This is block upper triangular, hence
+where 
+\begin_inset Formula $L_{i}=\left(\mu I-A_{i}^{T}\right)-\left(\frac{\gamma}{\gamma+\mu}\right)\lambda_{i,i}\boldsymbol{\alpha}_{i}\boldsymbol{\omega}_{i}$
+\end_inset
+
+.
+ This is block upper triangular with non-zero diagonal matrix entries which
+ are each invertible.
+ Hence 
+\begin_inset Formula $V_{1}-V_{2}V_{4}^{-1}V_{3}$
+\end_inset
+
+ is itself invertible.Then we calculate 
+\begin_inset Formula $W_{1}$
+\end_inset
+
+ as:
 \begin_inset Formula 
 \begin{align*}
-P & =\left(W-XZ^{-1}Y\right)^{-1}\\
- & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & -\lambda_{1,1}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{1} & -\lambda_{2,2}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{2} & \cdots & -\lambda_{k-1,k-1}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{k-1} & -\lambda_{k,k}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{k}\\
-0 & \left[\left(\mu I-A_{1}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{1,1}\boldsymbol{\nu}_{1}\right] & 0 & \cdots & 0 & 0\\
-0 & 0 & \left[\left(\mu I-A_{2}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{2,2}\boldsymbol{\nu}_{2}\right] & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & \left[\left(\mu I-A_{k-1}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{k-1,k-1}\boldsymbol{\nu}_{k-1}\right] & 0\\
-0 & 0 & 0 & \cdots & 0 & \left[\left(\mu I-A_{k}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{k,k}\boldsymbol{\nu}_{k}\right]
+W_{1} & =\begin{bmatrix}X_{1} & X_{2}\\
+X_{3} & X_{4}
 \end{bmatrix}^{-1}\\
- & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & -\lambda_{1,1}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{1} & -\lambda_{2,2}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{2} & \cdots & -\lambda_{k-1,k-1}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{k-1} & -\lambda_{k,k}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{k}\\
-0 & \left[\left(\mu I-A_{1}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{1,1}\boldsymbol{\nu}_{1}\right] & 0 & \cdots & 0 & 0\\
-0 & 0 & \left[\left(\mu I-A_{2}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{2,2}\boldsymbol{\nu}_{2}\right] & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & \left[\left(\mu I-A_{k-1}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{k-1,k-1}\boldsymbol{\nu}_{k-1}\right] & 0\\
-0 & 0 & 0 & \cdots & 0 & \left[\left(\mu I-A_{k}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{k,k}\boldsymbol{\nu}_{k}\right]
-\end{bmatrix}^{-1}
-\end{align*}
-
-\end_inset
-
-Let 
-\begin_inset Formula $P_{1}=\left[\rho_{L}+\mu_{L}\right]$
-\end_inset
-
-, 
-\begin_inset Formula $P_{2}=\begin{bmatrix}-\lambda_{1,1}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{1} & -\lambda_{2,2}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{2} & \cdots & -\lambda_{k-1,k-1}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{k-1} & -\lambda_{k,k}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\boldsymbol{\omega}_{k}\end{bmatrix}$
-\end_inset
-
-, 
-\begin_inset Formula $P_{3}=\begin{bmatrix}0, & 0, & \cdots & 0, & 0\end{bmatrix}^{T}$
-\end_inset
-
-, 
-\begin_inset Formula 
-\[
-P_{4}=\begin{bmatrix}\left[\left(\mu I-A_{1}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{1,1}\boldsymbol{\nu}_{1}\right] & 0 & \cdots & 0 & 0\\
-0 & \left[\left(\mu I-A_{2}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{2,2}\boldsymbol{\nu}_{2}\right] & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & \left[\left(\mu I-A_{k-1}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{k-1,k-1}\boldsymbol{\nu}_{k-1}\right] & 0\\
-0 & 0 & \cdots & 0 & \left[\left(\mu I-A_{k}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{k,k}\boldsymbol{\nu}_{k}\right]
-\end{bmatrix}
-\]
-
-\end_inset
-
-so that 
-\begin_inset Formula 
-\begin{align*}
-P & =\begin{bmatrix}P_{1} & P_{2}\\
-P_{3} & P_{4}
-\end{bmatrix}^{-1}\\
- & =\begin{bmatrix}P_{1}^{-1}+P_{1}^{-1}P_{2}\left(P_{4}-P_{3}P_{1}^{-1}P_{2}\right)^{-1}P_{3}P_{1}^{-1} & -P_{1}^{-1}P_{2}\left(P_{4}-P_{3}P_{1}^{-1}P_{2}\right)^{-1}\\
--\left(P_{4}-P_{3}P_{1}^{-1}P_{2}\right)^{-1}P_{3}P_{1}^{-1} & \left(P_{4}-P_{3}P_{1}^{-1}P_{2}\right)^{-1}
+ & =\begin{bmatrix}X_{1}^{-1}+X_{1}^{-1}X_{2}\left(X_{4}-X_{3}X_{1}^{-1}X_{2}\right)^{-1}X_{3}X_{1}^{-1} & -X_{1}^{-1}X_{2}\left(X_{4}-X_{3}X_{1}^{-1}X_{2}\right)^{-1}\\
+-\left(X_{4}-X_{3}X_{1}^{-1}X_{2}\right)^{-1}X_{3}X_{1}^{-1} & \left(X_{4}-X_{3}X_{1}^{-1}X_{2}\right)^{-1}
 \end{bmatrix}\\
  & =\begin{bmatrix}P_{1}^{-1} & -P_{1}^{-1}P_{2}P_{4}^{-1}\\
 0 & P_{4}^{-1}
@@ -2360,294 +2693,156 @@ P_{3} & P_{4}
 
 \end_inset
 
+where 
+\begin_inset Formula $X_{1}=\left[\left(\rho_{L}+\mu_{L}\right)\right]$
+\end_inset
 
+, 
+\begin_inset Formula $X_{2}=\begin{bmatrix}-\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{1,1}\boldsymbol{\omega}_{1}, & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{2,2}\boldsymbol{\omega}_{2}, & \cdots & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1}, & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{k,k}\boldsymbol{\omega}_{k}\end{bmatrix}$
+\end_inset
+
+, 
+\begin_inset Formula $X_{3}=\boldsymbol{0}_{k\times1},$
+\end_inset
+
+and
 \begin_inset Formula 
 \[
-P_{4}^{-1}=\begin{bmatrix}L_{1} & 0 & \cdots & 0 & 0\\
+X_{4}=\begin{bmatrix}L_{1} & 0 & \cdots & 0 & 0\\
 0 & L_{2} & \cdots & 0 & 0\\
 \vdots & \vdots & \ddots & \vdots & \vdots\\
 0 & 0 & \cdots & L_{k-1} & 0\\
-0 & 0 & \cdots & 0 & L_{K}
-\end{bmatrix}
+0 & 0 & \cdots & 0 & L_{k}
+\end{bmatrix}.
 \]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+-X_{1}^{-1}X_{2}X_{4}^{-1} & =\frac{e}{\rho_{L}}\begin{bmatrix}\lambda_{1,1}\boldsymbol{\omega}_{1} & \lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & \lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & \lambda_{k,k}\boldsymbol{\omega}_{k}\end{bmatrix}\begin{bmatrix}L_{1}^{-1} & 0 & \cdots & 0 & 0\\
+0 & L_{2}^{-1} & \cdots & 0 & 0\\
+\vdots & \vdots & \ddots & \vdots & \vdots\\
+0 & 0 & \cdots & L_{k-1}^{-1} & 0\\
+0 & 0 & \cdots & 0 & L_{k}^{-1}
+\end{bmatrix}\\
+ & =\frac{e}{\rho_{L}}\begin{bmatrix}\lambda_{1,1}\boldsymbol{\omega}_{1}L_{1}, & \lambda_{2,2}\boldsymbol{\omega}_{2}L_{2}, & \cdots & \lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1}L_{k-1}, & \lambda_{k,k}\boldsymbol{\omega}_{k}L_{k}\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+where we have used 
+\begin_inset Formula $e=\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)$
+\end_inset
+
+.
+ Now
+\begin_inset Formula 
+\begin{align*}
+\bar{F}W_{1}= & \begin{bmatrix}0 & 0 & 0 & \cdots & 0 & 0\\
+\rho_{L}\kappa_{1}\boldsymbol{\alpha}_{1} & 0 & 0 & \cdots & 0 & 0\\
+\rho_{L}\kappa_{2}\boldsymbol{\alpha}_{2} & 0 & 0 & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
+\rho_{L}\kappa_{k-1}\boldsymbol{\alpha}_{k-1} & 0 & 0 & \cdots & 0 & 0\\
+\rho_{L}\kappa_{k}\boldsymbol{\alpha}_{k} & 0 & 0 & \cdots & 0 & 0
+\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \frac{1}{\rho_{L}}e\lambda_{1,1}\boldsymbol{\omega}_{1}L_{1} & \frac{1}{\rho_{L}}e\lambda_{2,2}\boldsymbol{\omega}_{2}L_{2} & \cdots & \frac{1}{\rho_{L}}e\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & \frac{1}{\rho_{L}}e\lambda_{k,k}\boldsymbol{\omega}_{k}L_{k}\\
+0 & L_{1}^{-1} & 0 & \cdots & 0 & 0\\
+0 & 0 & L_{2}^{-1} & \cdots & 0 & 0\\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+0 & 0 & 0 & \cdots & L_{k-1}^{-1} & 0\\
+0 & 0 & 0 & \cdots & 0 & L_{k}^{-1}
+\end{bmatrix}\\
+\bar{F}W_{1}= & e\begin{bmatrix}0 & 0 & 0 & \cdots & 0 & 0\\
+\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{1}\boldsymbol{\alpha}_{1} & \lambda_{1,1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k-1,k-1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda_{k,k}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k}L_{k}\\
+\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{2}\boldsymbol{\alpha}_{2} & \lambda_{1,1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k-1,k-1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda_{k,k}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{k-1}\boldsymbol{\alpha}_{k-1} & \lambda_{1,1}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k-1,k-1}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda_{k,k}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
+\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{k}\boldsymbol{\alpha}_{k} & \lambda_{1,1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k-1,k-1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda_{k,k}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally we proceed to find determine the spectral radius of 
+\begin_inset Formula $K$
+\end_inset
+
+, which as we discussed earlier, must be the largest real part of the eigenvalue
+s of 
+\begin_inset Formula $\bar{F}P$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\left|\lambda-\bar{F}W_{1}\right| & =\begin{vmatrix}\lambda & 0 & 0 & \cdots & 0 & 0\\
+-e\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{1}\boldsymbol{\alpha}_{1} & \lambda-e\lambda_{1,1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k}L_{k}\\
+-e\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{2}\boldsymbol{\alpha}_{2} & -e\lambda_{1,1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \lambda-e\lambda_{2,2}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+-e\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{k-1}\boldsymbol{\alpha}_{k-1} & -e\lambda_{1,1}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda-e\lambda_{k-1,k-1}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
+-e\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{k}\boldsymbol{\alpha}_{k} & -e\lambda_{1,1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda-e\lambda_{k,k}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
+\end{vmatrix}\\
+ & =\lambda\begin{vmatrix}\lambda-e\lambda_{1,1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k}L_{k}\\
+-e\lambda_{1,1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \lambda-e\lambda_{2,2}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
+\vdots & \vdots & \ddots & \vdots & \vdots\\
+-e\lambda_{1,1}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda-e\lambda_{k-1,k-1}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
+-e\lambda_{1,1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda-e\lambda_{k,k}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
+\end{vmatrix}\\
+ & =\lambda\left|\lambda I_{n}-e\left(\textrm{diag}\left(\boldsymbol{\kappa}\right)\boldsymbol{\alpha}\right)\left(\textrm{diag}\left(\boldsymbol{\lambda}\right)\boldsymbol{\omega}\boldsymbol{L}\right)\right|\\
+ & \textrm{By Sylvester's determinant theorem, this is equivalent to}\\
+ & =\lambda^{n+1}\left|1-\frac{1}{\lambda}e\left(\textrm{diag}\left(\boldsymbol{\lambda}\right)\boldsymbol{\omega}\boldsymbol{L}\right)\left(\textrm{diag}\left(\boldsymbol{\kappa}\right)\boldsymbol{\alpha}\right)\right|\\
+ & =\lambda^{n}\left|\lambda-e\left(\textrm{diag}\left(\boldsymbol{\lambda}\right)\boldsymbol{\omega}\boldsymbol{L}\right)\left(\textrm{diag}\left(\boldsymbol{\kappa}\right)\boldsymbol{\alpha}\right)\right|\\
+ & =\lambda^{n}\left|\lambda-e\begin{bmatrix}\lambda_{1,1}\boldsymbol{\omega}_{1}L_{1}, & \lambda_{2.2}\boldsymbol{\omega}_{2}L_{2}, & \cdots & \lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1}L_{k-1}, & \lambda_{k,k}\boldsymbol{\omega}_{k}L_{k}\end{bmatrix}\begin{bmatrix}\kappa_{1}\boldsymbol{\alpha}_{1}\\
+\kappa_{2}\boldsymbol{\alpha}_{2}\\
+\vdots\\
+\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\\
+\kappa_{k}\boldsymbol{\alpha}_{k}
+\end{bmatrix}\right|\\
+ & =\lambda^{n}\left|\lambda-e\sum_{i=1}^{k}\kappa_{i}\lambda_{i,i}\boldsymbol{\omega}_{i}L_{i}\boldsymbol{\alpha}_{i}\right|\\
+ & =\lambda^{n}\left|\lambda-e\sum_{i=1}^{k}\kappa_{i}\frac{\nu_{i}}{\lambda_{i,i}}\lambda_{i,i}\tau_{i}\right|\\
+ & =\lambda^{n}\left|\lambda-e\nu_{G}\right|
+\end{align*}
 
 \end_inset
 
 where 
-\begin_inset Formula $L_{i}=\left[\left(\mu I-A_{i}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{i,i}\boldsymbol{\nu}_{i}\right]^{-1}$
+\begin_inset Formula $\nu_{G}=\sum_{i=1}^{k}\kappa_{i}\tau_{i}\nu_{i}$
 \end_inset
 
+ and we used the fact that the vector 
+\begin_inset Formula $\boldsymbol{\omega}_{i}L_{i}$
+\end_inset
 
+ is the 
+\begin_inset Formula $i$
+\end_inset
+
+-th row of 
+\begin_inset Formula $L_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\boldsymbol{\omega}_{i}L_{i}\boldsymbol{\alpha}_{i}$
+\end_inset
+
+ is the first entry of that row:
 \begin_inset Formula 
 \begin{align*}
--P_{1}^{-1}P_{2}P_{4}^{-1} & =\frac{1}{\rho_{L}+\mu_{L}}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\begin{bmatrix}\lambda_{1,1}\boldsymbol{\omega}_{1} & \lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & \lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & \lambda_{k,k}\boldsymbol{\omega}_{k}\end{bmatrix}\begin{bmatrix}L_{1} & 0 & \cdots & 0 & 0\\
-0 & L_{2} & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & L_{k-1} & 0\\
-0 & 0 & \cdots & 0 & L_{K}
-\end{bmatrix}\\
- & =\frac{1}{\rho_{L}+\mu_{L}}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\begin{bmatrix}\lambda_{1,1}\boldsymbol{\omega}_{1}L_{1}, & \lambda_{2,2}\boldsymbol{\omega}_{2}L_{2}, & \cdots & \lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1}L_{k-1}, & \lambda_{k,k}\boldsymbol{\omega}_{k}L_{k}\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-AP & =\begin{bmatrix}0 & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\boldsymbol{\alpha}_{1} & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\boldsymbol{\alpha}_{2} & 0 & 0 & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
-\rho_{L}\boldsymbol{\alpha}_{k-1} & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\boldsymbol{\alpha}_{k} & 0 & 0 & \cdots & 0 & 0
-\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \frac{1}{\rho_{L}+\mu_{L}}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\lambda_{1,1}\boldsymbol{\omega}_{1}L_{1} & \frac{1}{\rho_{L}+\mu_{L}}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\lambda_{2,2}\boldsymbol{\omega}_{2}L_{2} & \cdots & \frac{1}{\rho_{L}+\mu_{L}}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & \frac{1}{\rho_{L}+\mu_{L}}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\lambda_{k,k}\boldsymbol{\omega}_{k}L_{k}\\
-0 & \left[\left(\mu I-A_{1}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{1,1}\boldsymbol{\nu}_{1}\right]^{-1} & 0 & \cdots & 0 & 0\\
-0 & 0 & \left[\left(\mu I-A_{2}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{2,2}\boldsymbol{\nu}_{2}\right]^{-1} & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & \left[\left(\mu I-A_{k-1}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{k-1,k-1}\boldsymbol{\nu}_{k-1}\right]^{-1} & 0\\
-0 & 0 & 0 & \cdots & 0 & \left[\left(\mu I-A_{k}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{k,k}\boldsymbol{\nu}_{k}\right]^{-1}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Formula 
-\[
-AP=\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)\begin{bmatrix}0 & 0 & 0 & \cdots & 0 & 0\\
-\left(\frac{\gamma+\mu}{\sigma_{m}f}\right)\boldsymbol{\alpha}_{1} & \lambda_{1,1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k-1,k-1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda_{k,k}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k}L_{k}\\
-\left(\frac{\gamma+\mu}{\sigma_{m}f}\right)\boldsymbol{\alpha}_{2} & \lambda_{1,1}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k-1,k-1}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda_{k,k}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-\left(\frac{\gamma+\mu}{\sigma_{m}f}\right)\boldsymbol{\alpha}_{k-1} & \lambda_{1,1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k-1,k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda_{k,k}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
-\left(\frac{\gamma+\mu}{\sigma_{m}f}\right)\boldsymbol{\alpha}_{k} & \lambda_{1,1}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k-1,k-1}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda_{k,k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{bmatrix}
-\]
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\left[\boldsymbol{\alpha}_{i}\right]_{i\times1}\left[\boldsymbol{\omega}_{j}\right]_{1\times j} & =\begin{bmatrix}1\\
-0\\
-\vdots\\
-0\\
-0
-\end{bmatrix}\begin{bmatrix}0 & 0 & \cdots & 0 & 1\end{bmatrix}\\
- & =\begin{bmatrix}0 & 0 & \cdots & 0 & 1\\
-0 & 0 & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & 0 & 0\\
-0 & 0 & \cdots & 0 & 0
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-Define 
-\begin_inset Formula $K^{\left(ij\right)}$
-\end_inset
-
- to be the 
-\begin_inset Formula $i\times j$
-\end_inset
-
- matrix with 
-\begin_inset Formula $\left[K^{\left(ij\right)}\right]_{rs}=\begin{cases}
-1 & r=1,s=j\\
-0 & \textrm{otherwise}
-\end{cases}$
-\end_inset
-
-.
- Let 
-\begin_inset Formula $e=\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)$
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\left|\lambda-AP\right| & =\begin{vmatrix}\lambda & 0 & 0 & \cdots & 0 & 0\\
--e\left(\frac{\gamma+\mu}{\sigma_{m}f}\right)\boldsymbol{\alpha}_{1} & \lambda-e\lambda_{1,1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k}L_{k}\\
--e\left(\frac{\gamma+\mu}{\sigma_{m}f}\right)\boldsymbol{\alpha}_{2} & -e\lambda_{1,1}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \lambda-e\lambda_{2,2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
--e\left(\frac{\gamma+\mu}{\sigma_{m}f}\right)\boldsymbol{\alpha}_{k-1} & -e\lambda_{1,1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda-e\lambda_{k-1,k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
--e\left(\frac{\gamma+\mu}{\sigma_{m}f}\right)\boldsymbol{\alpha}_{k} & -e\lambda_{1,1}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda-e\lambda_{k,k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{vmatrix}\\
- & =\lambda\begin{vmatrix}\lambda-e\lambda_{1,1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k}L_{k}\\
--e\lambda_{1,1}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \lambda-e\lambda_{2,2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
--e\lambda_{1,1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda-e\lambda_{k-1,k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
--e\lambda_{1,1}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda-e\lambda_{k,k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{vmatrix}\\
- & =\lambda e^{n+1}\begin{vmatrix}\frac{\lambda}{e}-\lambda_{1,1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1}L_{1} & -\lambda_{2,2}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{2}L_{2} & \cdots & -\lambda_{k-1,k-1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k-1}L_{k-1} & -\lambda_{k,k}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k}L_{k}\\
--\lambda_{1,1}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \frac{\lambda}{e}-\lambda_{2,2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & -\lambda_{k-1,k-1}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k-1}L_{k-1} & -\lambda_{k,k}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
--\lambda_{1,1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & -\lambda_{2,2}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \frac{\lambda}{e}-\lambda_{k-1,k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & -\lambda_{k,k}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
--\lambda_{1,1}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -\lambda_{2,2}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -\lambda_{k-1,k-1}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \frac{\lambda}{e}-\lambda_{k,k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{vmatrix}\\
- & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\begin{vmatrix}\frac{\lambda}{e\lambda_{1,1}}-\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1}L_{1} & -\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{2}L_{2} & \cdots & -\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k-1}L_{k-1} & -\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k}L_{k}\\
--\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \frac{\lambda}{e\lambda_{2,2}}-\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & -\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k-1}L_{k-1} & -\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
--\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & -\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \frac{\lambda}{e\lambda_{k-1,k-1}}-\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & -\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
--\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \frac{\lambda}{e\lambda_{k,k}}-\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{vmatrix}\\
- & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\left|\begin{bmatrix}\frac{\lambda}{e\lambda_{1,1}} & 0 & \cdots & 0 & 0\\
-0 & \frac{\lambda}{e\lambda_{2,2}} & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & \frac{\lambda}{e\lambda_{k-1,k-1}} & 0\\
-0 & 0 & \cdots & 0 & \frac{\lambda}{e\lambda_{k,k}}
-\end{bmatrix}-\left[\boldsymbol{\alpha}\right]_{n\times1}\left[\boldsymbol{\omega}\boldsymbol{L}\right]_{1\times n}\right|\\
- & \textrm{By Sylvester's determinant theorem, this is equivalent to}\\
- & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\left|X+\left(-\boldsymbol{\alpha}\right)\left(\boldsymbol{\omega}\boldsymbol{L}\right)\right|\\
- & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\det\left(X\right)\left|I+\left(\boldsymbol{\omega}\boldsymbol{L}\right)X^{-1}\left(-\boldsymbol{\alpha}\right)\right|\\
- & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\det\left(X\right)\left|I+\left(\boldsymbol{\omega}\boldsymbol{L}\right)_{1\times n}\left(X^{-1}\right)_{n\times n}\left(-\boldsymbol{\alpha}\right)_{n\times1}\right|\\
-\\
- & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\left|\begin{bmatrix}\frac{\lambda}{e\lambda_{1,1}} & 0 & \cdots & 0 & 0\\
-0 & \frac{\lambda}{e\lambda_{2,2}} & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & \frac{\lambda}{e\lambda_{k-1,k-1}} & 0\\
-0 & 0 & \cdots & 0 & \frac{\lambda}{e\lambda_{k,k}}
-\end{bmatrix}-\begin{bmatrix}\boldsymbol{\alpha}_{1}\\
-\boldsymbol{\alpha}_{2}\\
-\vdots\\
-\boldsymbol{\alpha}_{k-1}\\
-\boldsymbol{\alpha}_{k}
-\end{bmatrix}\begin{bmatrix}\boldsymbol{\omega}_{1}\boldsymbol{L}_{1} & \boldsymbol{\omega}_{2}\boldsymbol{L}_{2} & \cdots & \boldsymbol{\omega}_{k-1}\boldsymbol{L}_{k-1} & \boldsymbol{\omega}_{k}\boldsymbol{L}_{k}\end{bmatrix}\right|\\
-\\
-\\
-\\
-\\
- & \textrm{Subtract first non-zero row from last "row" from the first "row"}\\
- & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\begin{vmatrix}\frac{\lambda}{e\lambda_{1,1}}I & 0 & \cdots & 0 & \boldsymbol{\alpha}_{1}\frac{\lambda}{e\lambda_{k,k}}\\
--\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \frac{\lambda}{e\lambda_{2,2}}I-\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & -\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k-1}L_{k-1} & -\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
--\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & -\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \frac{\lambda}{e\lambda_{k-1,k-1}}I-\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & -\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
--\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \frac{\lambda}{e\lambda_{k,k}}I-\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{vmatrix}\\
- & \textrm{Subtract first non-zero row from last "row" from the second "row"}\\
- & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\begin{vmatrix}\frac{\lambda}{e\lambda_{1,1}}I & 0 & \cdots & 0 & -\boldsymbol{\alpha}_{1}\frac{\lambda}{e\lambda_{k,k}}\\
-0 & \frac{\lambda}{e\lambda_{2,2}}I & \cdots & 0 & -\boldsymbol{\alpha}_{2}\frac{\lambda}{e\lambda_{k,k}}\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
--\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & -\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \frac{\lambda}{e\lambda_{k-1,k-1}}I-\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & -\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
--\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \frac{\lambda}{e\lambda_{k,k}}I-\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{vmatrix}\\
- & \textrm{continue}\\
- & =e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\begin{vmatrix}\frac{\lambda}{e\lambda_{1,1}}I_{1} & 0 & \cdots & 0 & -\boldsymbol{\alpha}_{1}\frac{\lambda}{e\lambda_{k,k}}\\
-0 & \frac{\lambda}{e\lambda_{2,2}}I_{2} & \cdots & 0 & -\boldsymbol{\alpha}_{2}\frac{\lambda}{e\lambda_{k,k}}\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & \frac{\lambda}{e\lambda_{k-1,k-1}}I_{k-1} & -\boldsymbol{\alpha}_{k-1}\frac{\lambda}{e\lambda_{k,k}}\\
--\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \frac{\lambda}{e\lambda_{k,k}}I-\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{vmatrix}\\
- & \textrm{factor out \ensuremath{-\frac{\lambda}{e\lambda_{k,k}}}}\\
- & =\left(-\frac{e\lambda_{k,k}}{\lambda}\right)e^{n+1}\lambda\prod_{i=1}^{k}\lambda_{i,i}\begin{vmatrix}\frac{\lambda}{e\lambda_{1,1}}I_{1} & 0 & \cdots & 0 & \boldsymbol{\alpha}_{1}\\
-0 & \frac{\lambda}{e\lambda_{2,2}}I_{2} & \cdots & 0 & \boldsymbol{\alpha}_{2}\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & \frac{\lambda}{e\lambda_{k-1,k-1}}I_{k-1} & \boldsymbol{\alpha}_{k-1}\\
--\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & -I+\frac{e\lambda_{k,k}}{\lambda}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{vmatrix}\\
- & =\left(-\lambda_{k,k}\right)e^{n+2}\prod_{i=1}^{k}\lambda_{i,i}\begin{vmatrix}\frac{\lambda}{e\lambda_{1,1}}I_{1} & 0 & \cdots & 0 & \boldsymbol{\alpha}_{1}\\
-0 & \frac{\lambda}{e\lambda_{2,2}}I_{2} & \cdots & 0 & \boldsymbol{\alpha}_{2}\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & \frac{\lambda}{e\lambda_{k-1,k-1}}I_{k-1} & \boldsymbol{\alpha}_{k-1}\\
--\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & -I+\frac{e\lambda_{k,k}}{\lambda}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{vmatrix}\\
- & =\left(-\lambda_{k,k}\right)e^{n+2}\prod_{i=1}^{k}\lambda_{i,i}\begin{vmatrix}\frac{\lambda}{e\lambda_{1,1}}I_{1} & 0 & \cdots & 0\\
-0 & \frac{\lambda}{e\lambda_{2,2}}I_{2} & \cdots & 0\\
-\vdots & \vdots & \ddots & \vdots\\
-0 & 0 & \cdots & \frac{\lambda}{e\lambda_{k-1,k-1}}I_{k-1}
-\end{vmatrix}D\\
-\\
-\\
-\\
-\end{align*}
-
-\end_inset
-
-where !!! check sizes.
- something weird going on !!!
-\begin_inset Formula 
-\begin{align*}
-D & =\det\left\{ -I+\frac{e\lambda_{k,k}}{\lambda}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}+\boldsymbol{\alpha}_{k}\begin{bmatrix}\boldsymbol{\omega}_{1}L_{1} & \boldsymbol{\omega}_{2}L_{2} & \cdots & \boldsymbol{\omega}_{k-1}L_{k-1}\end{bmatrix}\begin{bmatrix}\left(\frac{\lambda}{e\lambda_{1,1}}\right)^{-1}I_{1} & 0 & \cdots & 0\\
-0 & \left(\frac{\lambda}{e\lambda_{2,2}}\right)^{-1}I_{2} & \cdots & 0\\
-\vdots & \vdots & \ddots & \vdots\\
-0 & 0 & \cdots & \left(\frac{\lambda}{e\lambda_{k-1,k-1}}\right)^{-1}I_{k-1}
-\end{bmatrix}\begin{bmatrix}\boldsymbol{\alpha}_{1}\\
-\boldsymbol{\alpha}_{2}\\
-\vdots\\
-\boldsymbol{\alpha}_{k-1}
-\end{bmatrix}\right\} \\
- & =\det\left\{ -I_{k}+\frac{e\lambda_{k,k}}{\lambda}\left[\boldsymbol{\alpha}_{k}\right]_{k\times1}\left[\boldsymbol{\omega}_{k}\right]_{1\times k}\left[L_{k}\right]_{k\times k}+\left[\boldsymbol{\alpha}_{k}\right]_{k\times1}\begin{bmatrix}\boldsymbol{\omega}_{1}L_{1} & \boldsymbol{\omega}_{2}L_{2} & \cdots & \boldsymbol{\omega}_{k-1}L_{k-1}\end{bmatrix}_{1\times n-k}\begin{bmatrix}\left(\frac{\lambda}{e\lambda_{1,1}}\right)^{-1}I_{1} & 0 & \cdots & 0\\
-0 & \left(\frac{\lambda}{e\lambda_{2,2}}\right)^{-1}I_{2} & \cdots & 0\\
-\vdots & \vdots & \ddots & \vdots\\
-0 & 0 & \cdots & \left(\frac{\lambda}{e\lambda_{k-1,k-1}}\right)^{-1}I_{k-1}
-\end{bmatrix}_{n-k\times n-k}\begin{bmatrix}\boldsymbol{\alpha}_{1}\\
-\boldsymbol{\alpha}_{2}\\
-\vdots\\
-\boldsymbol{\alpha}_{k-1}
-\end{bmatrix}_{n-k\times k}\right\} \\
- & =\left(-1\right)^{k}\frac{1}{\lambda^{k}}\det\left\{ \lambda I_{k}-e\boldsymbol{\alpha}_{k}\sum_{j=1}^{k}\boldsymbol{\omega}_{j}L_{j}\lambda_{j,j}\right\} 
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\sum_{j=1}^{k}\boldsymbol{\omega}_{j}L_{j}\lambda_{j,j} & =\sum_{j=1}^{k}\lambda_{j,j}\frac{n_{j}}{\lambda_{j,j}}\begin{bmatrix}\left(\prod_{s=1}^{j}\frac{\lambda_{j,s}}{\mu+\lambda_{j,s}}\right) & \left(\prod_{s=2}^{j}\frac{\lambda_{j,s}}{\mu+\lambda_{j,s}}\right) & \cdots & \left(\prod_{s=j-1}^{j}\frac{\lambda_{j,s}}{\mu+\lambda_{j,s}}\right) & 1\end{bmatrix}\\
- & =\sum_{j=1}^{k}n_{j}\begin{bmatrix}\left(\prod_{s=1}^{j}\frac{\lambda_{j,s}}{\mu+\lambda_{j,s}}\right) & \left(\prod_{s=2}^{j}\frac{\lambda_{j,s}}{\mu+\lambda_{j,s}}\right) & \cdots & \left(\prod_{s=j-1}^{j}\frac{\lambda_{j,s}}{\mu+\lambda_{j,s}}\right) & 1\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\boldsymbol{\omega}_{i}L_{i} & =\begin{bmatrix}0 & 0 & \cdots & 0 & 1\end{bmatrix}\left[\left(\mu I-A_{i}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{i,i}\boldsymbol{\nu}_{i}\right]^{-1}\\
- & =\left\{ \left[\left(\mu I-A_{i}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{i,i}\boldsymbol{\nu}_{i}\right]^{-1}\right\} _{i,.}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\left(\mu I-A_{i}^{T}\right)-\frac{\gamma}{\gamma+\mu}\lambda_{i,i}\boldsymbol{\nu}_{i} & =\begin{bmatrix}\mu+\lambda_{i,1} & 0 & 0 & \cdots & 0\\
--\lambda_{i,1} & \mu+\lambda_{i,2} & 0 & \cdots & 0\\
-\vdots & -\lambda_{i,2} & \ddots & \cdots & \vdots\\
-0 & 0 & \ddots & \mu+\lambda_{i,i-1} & 0\\
-0 & 0 & \cdots & -\lambda_{i,i-1} & \mu+\lambda_{i,i}
-\end{bmatrix}-\frac{\gamma}{\gamma+\mu}\lambda_{i,i}\begin{bmatrix}0 & 0 & \cdots & 0 & 1\\
-0 & 0 & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & 0 & 0\\
-0 & 0 & \cdots & 0 & 0
-\end{bmatrix}\\
- & =\begin{bmatrix}\mu+\lambda_{i,1} & 0 & 0 & \cdots & -\frac{\gamma}{\gamma+\mu}\lambda_{i,i}\\
+L_{i} & =\begin{bmatrix}\mu+\lambda_{i,1} & 0 & 0 & \cdots & -\frac{\gamma}{\gamma+\mu}\lambda_{i,i}\\
 -\lambda_{i,1} & \mu+\lambda_{i,2} & 0 & \cdots & 0\\
 \vdots & \vdots & \ddots & \cdots & \vdots\\
 0 & 0 & \ddots & \mu+\lambda_{i,i-1} & 0\\
 0 & 0 & \cdots & -\lambda_{i,i-1} & \mu+\lambda_{i,i}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\boldsymbol{\omega}_{4}L_{4} & =\begin{bmatrix}\frac{\lambda_{4,1}\lambda_{4,2}\lambda_{4,3}}{\left(\mu+\lambda_{4,1}\right)\left(\mu+\lambda_{4,2}\right)\left(\mu+\lambda_{4,3}\right)\left(\mu+\lambda_{4,4}\right)-\lambda_{4,1}\lambda_{4,2}\lambda_{4,3}\lambda_{4,4}\frac{\gamma}{\gamma+\mu}} & \frac{\left(\mu+\lambda_{4,1}\right)\lambda_{4,2}\lambda_{4,3}}{\left(\mu+\lambda_{4,1}\right)\left(\mu+\lambda_{4,2}\right)\left(\mu+\lambda_{4,3}\right)\left(\mu+\lambda_{4,4}\right)-\lambda_{4,1}\lambda_{4,2}\lambda_{4,3}\lambda_{4,4}\frac{\gamma}{\gamma+\mu}} & \frac{\left(\mu+\lambda_{4,1}\right)\left(\mu+\lambda_{4,2}\right)\lambda_{4,3}}{\left(\mu+\lambda_{4,1}\right)\left(\mu+\lambda_{4,2}\right)\left(\mu+\lambda_{4,3}\right)\left(\mu+\lambda_{4,4}\right)-\lambda_{4,1}\lambda_{4,2}\lambda_{4,3}\lambda_{4,4}\frac{\gamma}{\gamma+\mu}} & \frac{\left(\mu+\lambda_{4,1}\right)\left(\mu+\lambda_{4,2}\right)\left(\mu+\lambda_{4,3}\right)}{\left(\mu+\lambda_{4,1}\right)\left(\mu+\lambda_{4,2}\right)\left(\mu+\lambda_{4,3}\right)\left(\mu+\lambda_{4,4}\right)-\lambda_{4,1}\lambda_{4,2}\lambda_{4,3}\lambda_{4,4}\frac{\gamma}{\gamma+\mu}}\end{bmatrix}\\
- & =\left(\prod_{j=1}^{4}\frac{1}{\mu+\lambda_{4,j}}\right)n_{4}\begin{bmatrix}\left(\lambda_{4,1}\lambda_{4,2}\lambda_{4,3}\right) & \left(\mu+\lambda_{4,1}\right)\lambda_{4,2}\lambda_{4,3} & \left(\mu+\lambda_{4,1}\right)\left(\mu+\lambda_{4,2}\right)\lambda_{4,3} & \left(\mu+\lambda_{4,1}\right)\left(\mu+\lambda_{4,2}\right)\left(\mu+\lambda_{4,3}\right)\end{bmatrix}\\
- & =\left(\prod_{j=1}^{4}\frac{1}{\mu+\lambda_{4,j}}\right)n_{4}\begin{bmatrix}\left(\lambda_{4,1}\lambda_{4,2}\lambda_{4,3}\right) & \left(\mu+\lambda_{4,1}\right)\lambda_{4,2}\lambda_{4,3} & \left(\mu+\lambda_{4,1}\right)\left(\mu+\lambda_{4,2}\right)\lambda_{4,3} & \left(\mu+\lambda_{4,1}\right)\left(\mu+\lambda_{4,2}\right)\left(\mu+\lambda_{4,3}\right)\end{bmatrix}\\
- & =\frac{n_{4}}{\lambda_{4,4}}\begin{bmatrix}\left(\prod_{j=1}^{4}\frac{\lambda_{4,j}}{\mu+\lambda_{4,j}}\right) & \left(\prod_{j=2}^{4}\frac{1}{\mu+\lambda_{4,j}}\right) & \left(\prod_{j=3}^{4}\frac{1}{\mu+\lambda_{4,j}}\right) & 1\end{bmatrix}
+\end{bmatrix}^{-1}\\
+\boldsymbol{\omega}_{i}L_{i}=\left[L_{i}\right]_{i,\cdot} & =\frac{n_{i}}{\lambda_{i,i}}\begin{bmatrix}T_{i} & \left(\prod_{j=2}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & \cdots & \left(\prod_{j=i-1}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & 1\end{bmatrix}
 \end{align*}
 
 \end_inset
@@ -2655,7 +2850,491 @@ D & =\det\left\{ -I+\frac{e\lambda_{k,k}}{\lambda}\boldsymbol{\alpha}_{k}\boldsy
 
 \begin_inset Formula 
 \[
-\boldsymbol{\omega}_{i}L_{i}=\frac{n_{i}}{\lambda_{i,i}}\begin{bmatrix}\left(\prod_{j=1}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & \left(\prod_{j=2}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & \cdots & \left(\prod_{j=i-1}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & 1\end{bmatrix}
+\boldsymbol{\omega}_{i}L_{i}\boldsymbol{\alpha}_{i}=\frac{n_{i}}{\lambda_{i,i}}T_{i}
+\]
+
+\end_inset
+
+Hence 
+\begin_inset Formula $R=e\nu_{G}$
+\end_inset
+
+ is a reproductive number: a positive equilibrium exists and is locally
+ asymptotically stable if and only if 
+\begin_inset Formula $R>1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section*
+Comparing equilibria and reproductive numbers
+\end_layout
+
+\begin_layout Standard
+We will use the superscript 
+\begin_inset Formula $F$
+\end_inset
+
+ for the 
+\begin_inset Quotes eld
+\end_inset
+
+fate
+\begin_inset Quotes erd
+\end_inset
+
+ model and 
+\begin_inset Formula $D$
+\end_inset
+
+ for the 
+\begin_inset Quotes eld
+\end_inset
+
+disruption
+\begin_inset Quotes erd
+\end_inset
+
+ model, respectively.
+ For now, we assume the two models have the same parameters except for the
+ 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\lambda$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ rates and 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\rho$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ probabilities.
+ Note that for the two models, the quantity 
+\begin_inset Formula $e=\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\sigma_{M}f\frac{1}{\gamma+\mu}$
+\end_inset
+
+, the (viable) eggs per female per oviposition cycle, is equivalent.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Reproductive numbers
+\end_layout
+
+\begin_layout Standard
+The comparisons here are fairly straightforward.
+\end_layout
+
+\begin_layout Standard
+The reproductive numbers of each model are given by:
+\begin_inset Formula 
+\begin{align*}
+R^{D} & =e\tau^{D}\nu_{G}^{D}\\
+R^{D} & =e\frac{\tau^{D}}{1-\frac{\gamma}{\gamma+\mu}\tau^{D}}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\tau^{D}=\sum_{i=1}^{k}\left(\frac{\lambda_{i}^{D}}{\mu+\lambda_{i}^{D}}\right)\sigma_{i}\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+R^{F} & =e\sum_{i=1}^{k}\kappa_{i}\nu_{i}^{F}\tau_{i}^{F}\\
+R^{F} & =e\sum_{i=1}^{k}\kappa_{i}\frac{\tau_{i}^{F}}{1-\frac{\gamma}{\gamma+\mu}\tau_{i}^{F}}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\tau_{i}^{F}=\prod_{j=1}^{i}\frac{\lambda_{i,j}^{F}}{\mu+\lambda_{i,j}^{F}}$
+\end_inset
+
+, 
+\begin_inset Formula $\nu_{i}^{F}=\frac{1}{1-\frac{\gamma}{\gamma+\mu}\tau_{i}^{F}}$
+\end_inset
+
+, and 
+\begin_inset Formula $\nu_{G}^{F}=\sum_{i=1}^{k}\kappa_{i}\tau_{i}\nu_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Equilibrium proportions
+\end_layout
+
+\begin_layout Standard
+We also wish to make two other comparisons.
+ First, we want to determine the equilibrium proportion of mosquitoes that
+ have taken exactly 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals in a given gonotrophic cycle, which we denote 
+\begin_inset Formula $M_{i}$
+\end_inset
+
+.
+ We'll start with the disruption model.
+\end_layout
+
+\begin_layout Subsubsection*
+Disruption model
+\end_layout
+
+\begin_layout Standard
+In this case, it is easy to determine
+\begin_inset Formula 
+\begin{align*}
+M_{i}^{D} & =\left(B_{i}^{D}\right)^{*}\\
+ & =\rho_{L}K_{L}\frac{1}{e\tau^{D}}\left(e\tau^{D}\nu_{G}^{D}-1\right)\left[\left(\frac{1}{\mu+\lambda_{i}^{D}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right)\right]
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Fate model
+\end_layout
+
+\begin_layout Standard
+This is less straightforward, but not so bad
+\begin_inset Formula 
+\begin{align*}
+M_{i}^{F} & =\sum_{s=i}^{k}\left(B_{s,i}\right)^{*}\\
+ & =\rho_{L}K_{L}\frac{1}{e\nu_{G}}\left(e\nu_{G}-1\right)\left[\sum_{s=i}^{k}\left(\kappa_{s}\nu_{s}\right)\left(\frac{1}{\lambda_{s,i}^{F}}\right)\left(\prod_{r=1}^{i}\frac{\lambda_{s,r}^{F}}{\mu+\lambda_{s,r}^{F}}\right)\right]
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Special case: All 
+\begin_inset Formula $\lambda$
+\end_inset
+
+'s equal
+\end_layout
+
+\begin_layout Standard
+Now suppose that 
+\begin_inset Formula $\lambda_{i}^{D}=\lambda_{i,j}^{F}=\lambda$
+\end_inset
+
+ for all 
+\begin_inset Formula $1\le j\le i\le k$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\xi=\frac{\lambda}{\mu+\lambda}$
+\end_inset
+
+ and 
+\begin_inset Formula $\bar{\nu}_{i}=\frac{1}{1-\left(\frac{\gamma}{\gamma+\mu}\right)\xi^{i}}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\varsigma_{i}=\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)$
+\end_inset
+
+.
+ We'll write 
+\begin_inset Formula $q=\frac{\gamma}{\gamma+\mu}$
+\end_inset
+
+ to save some space.
+\end_layout
+
+\begin_layout Standard
+Then we can say a little more about these quantities:
+\begin_inset Formula 
+\begin{align*}
+\tau_{i}^{F} & =\xi^{i}\\
+\nu_{i}^{F} & =\frac{1}{1-q\xi^{i}}\\
+R^{F} & =e\left(\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}}\right)\\
+\tau^{D} & =\sum_{i=1}^{k}\xi^{i}\varsigma_{i}\\
+\nu_{G}^{D} & =\frac{1}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\\
+R^{D} & =e\left(\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\right)
+\end{align*}
+
+\end_inset
+
+If we want 
+\begin_inset Formula $R^{F}=R^{D}$
+\end_inset
+
+, we set powers of 
+\begin_inset Formula $\xi^{i}$
+\end_inset
+
+ equal.
+ 
+\begin_inset Formula 
+\begin{align*}
+R^{F} & =R^{D}\\
+e\left(\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}}\right) & =e\left(\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\right)\\
+\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}} & =\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\\
+\sum_{i=1}^{k}\kappa_{i}\xi^{i}\left(\sum_{j=0}^{\infty}q^{j}\xi^{ij}\right) & =\sum_{i=1}^{k}\xi^{i}\varsigma_{i}\left[\sum_{j=0}^{\infty}q^{j}\left(\sum_{i=1}^{k}\xi^{i}\varsigma_{i}\right)^{j}\right]\\
+\\
+\sum_{i=1}^{k}\kappa_{i}\xi^{i}\left(\sum_{j=0}^{\infty}q^{j}\xi^{ij}\right) & =\sum_{i=1}^{k}\xi^{i}\varsigma_{i}\left[\sum_{j=0}^{\infty}q^{j}\left(\varsigma_{1}\xi+\xi^{2}\varsigma_{2}+\cdots+\xi^{k-1}\varsigma_{k-1}+\xi^{k}\varsigma_{k}\right)^{j}\right]
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\xi^{1} & \kappa_{1} & = & \varsigma_{1}\\
+\\
+\xi^{2} & \kappa_{1}q+\kappa_{2} & = & \varsigma_{1}^{2}q+\varsigma_{2}\\
+\\
+\xi^{3} & \kappa_{1}q^{2}+\kappa_{2}q+\kappa_{3} & = & \varsigma_{1}q\varsigma_{2}+\varsigma_{1}q^{2}\varsigma_{1}+\varsigma_{2}q\varsigma_{1}+\varsigma_{3}\\
+ &  & = & 2\varsigma_{1}\varsigma_{2}q+\varsigma_{1}^{2}q^{2}+\varsigma_{3}\\
+\\
+\xi^{4} & \kappa_{1}q^{3}+\kappa_{2}q^{2}+\kappa_{3}q+\kappa_{4} & = & \varsigma_{1}\left(q\varsigma_{3}+q^{2}\left(2\varsigma_{1}\varsigma_{2}\right)+q^{3}\varsigma_{1}\right)+\varsigma_{2}\left(q\varsigma_{2}+q^{2}\varsigma_{1}^{2}\right)+\varsigma_{3}\left(q\varsigma_{1}\right)+\varsigma_{4}\\
+ &  & = & q\varsigma_{1}\left(2\varsigma_{3}+2q\varsigma_{1}\varsigma_{2}+q^{2}\varsigma_{1}\right)+q\varsigma_{2}\left(\varsigma_{2}+q\varsigma_{1}^{2}\right)+\varsigma_{4}\\
+\end{align*}
+
+\end_inset
+
+Solve for 
+\begin_inset Formula $\varsigma_{i}$
+\end_inset
+
+ in terms of 
+\begin_inset Formula $\kappa_{i}$
+\end_inset
+
+, this avoids having to ensure that 
+\begin_inset Formula $\sum_{i=1}^{k}\kappa_{i}=1$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\begin{align*}
+\xi^{1} & \kappa_{1} & = & \varsigma_{1}\\
+\\
+\xi^{2} & \kappa_{1}q\left(1-\kappa_{1}\right)+\kappa_{2} & = & \varsigma_{2}\\
+\\
+\xi^{3} & \kappa_{1}q^{2}-3\kappa_{1}^{2}q^{2}+2\kappa_{1}^{3}q^{2}-2\kappa_{1}\kappa_{2}q+\kappa_{2}q+\kappa_{3} & = & \varsigma_{3}\\
+\\
+\xi^{4} & \kappa_{1}q^{3}+\kappa_{2}q^{2}+\kappa_{3}q+\kappa_{4} & = & \varsigma_{1}\left(q\varsigma_{3}+q^{2}\left(2\varsigma_{1}\varsigma_{2}\right)+q^{3}\varsigma_{1}\right)+\varsigma_{2}\left(q\varsigma_{2}+q^{2}\varsigma_{1}^{2}\right)+\varsigma_{3}\left(q\varsigma_{1}\right)+\varsigma_{4}\\
+ &  & = & q\varsigma_{1}\left(2\varsigma_{3}+2q\varsigma_{1}\varsigma_{2}+q^{2}\varsigma_{1}\right)+q\varsigma_{2}\left(\varsigma_{2}+q\varsigma_{1}^{2}\right)+\varsigma_{4}\\
+\end{align*}
+
+\end_inset
+
+After the 
+\begin_inset Formula $\varsigma_{i}$
+\end_inset
+
+ are obtained, we backsolve for the 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ from the recursive relation 
+\begin_inset Formula $\sigma_{1}=\varsigma_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $\sigma_{i}=\frac{\varsigma_{i}}{1-\sum_{j=1}^{i-1}\varsigma_{j}}$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\begin{align*}
+\xi^{1} & \kappa_{1} & = & \varsigma_{1}\\
+\\
+\xi^{2} & \kappa_{2} & = & \left(\varsigma_{1}^{2}-\varsigma_{1}\right)q+\varsigma_{2}\\
+\\
+\xi^{3} & \kappa_{1}q^{2}+\kappa_{2}q+\kappa_{3} & = & 2\varsigma_{1}\varsigma_{2}q+\varsigma_{1}^{2}q^{2}+\varsigma_{3}\\
+ & \kappa_{3} & = & 2\varsigma_{1}\varsigma_{2}q+\varsigma_{1}^{2}q-\varsigma_{1}q^{2}-\varsigma_{1}^{2}q+\varsigma_{1}q-\varsigma_{2}q+\varsigma_{3}\\
+\\
+\end{align*}
+
+\end_inset
+
+!!! Okay but that was to make the reproductive numbers equal.
+ What we actually want are for the 
+\begin_inset Formula $M_{i}$
+\end_inset
+
+ to be equal.
+ Let's go back to that.
+ Maybe we can use the same process
+\end_layout
+
+\begin_layout Standard
+Now
+\begin_inset Formula 
+\begin{align*}
+M_{i}^{D} & =\rho_{L}K_{L}\left(\frac{e\tau n_{G}-1}{e\tau}\right)\left[\left(\frac{1}{\mu+\lambda}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda}{\mu+\lambda}\right)\left(1-\sigma_{j}\right)\right]\\
+ & =\rho_{L}K_{L}\left(\frac{1}{e\lambda}\right)\xi^{i}\left[\left(\frac{1}{\sigma_{i}}\frac{\varsigma_{i}}{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\right)\left(e\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}-1\right)\right]
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+M_{i}^{F} & =\rho_{L}K_{L}\frac{1}{e\sum_{i=1}^{k}\kappa_{i}\tau_{i}^{F}\nu_{i}^{F}}\left(e\sum_{i=1}^{k}\kappa_{i}\tau_{i}^{F}\nu_{i}^{F}-1\right)\left[\left(\frac{1}{\lambda}\right)\left(\frac{\lambda}{\mu+\lambda}\right)^{i}\sum_{s=i}^{k}\left(\kappa_{s}\nu_{s}\right)\right]\\
+ & =\rho_{L}K_{L}\left(\frac{1}{e\lambda}\right)\xi^{i}\left[\frac{\sum_{s=i}^{k}\left(\kappa_{s}\frac{1}{1-q\xi^{s}}\right)}{\sum_{s=1}^{k}\left(\kappa_{s}\frac{\xi^{s}}{1-q\xi^{s}}\right)}\left(e\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}}-1\right)\right]
+\end{align*}
+
+\end_inset
+
+So we require that
+\begin_inset Formula 
+\begin{align*}
+\left(\frac{1}{\sigma_{i}}\frac{\varsigma_{i}}{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\right)\left(e\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}-1\right) & =\frac{\sum_{s=i}^{k}\left(\kappa_{s}\frac{1}{1-q\xi^{s}}\right)}{\sum_{s=1}^{k}\left(\kappa_{s}\frac{\xi^{s}}{1-q\xi^{s}}\right)}\left(e\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}}-1\right)\\
+\\
+\left(\frac{\varsigma_{i}}{\sigma_{i}}\right)\left(\sum_{s=1}^{k}\kappa_{s}\frac{\xi^{s}}{1-q\xi^{s}}\right)\left(e\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}-1\right) & =\left(\sum_{i=1}^{k}\xi^{i}\varsigma_{i}\right)\left(\sum_{s=i}^{k}\kappa_{s}\frac{1}{1-q\xi^{s}}\right)\left(e\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}}-1\right)\\
+\\
+\left(\frac{\varsigma_{i}}{\sigma_{i}}\right)\left(\sum_{n=1}^{k}\xi^{n}\kappa_{n}\sum_{j=0}^{\infty}\left(q\xi^{n}\right)^{j}\right)\left(-1+e\sum_{n=1}^{k}\varsigma_{n}\xi^{n}\left(\sum_{j=0}^{\infty}\left(q\varsigma_{n}\xi^{n}\right)^{j}\right)\right) & =\left(\sum_{n=1}^{k}\xi^{n}\varsigma_{n}\right)\left(\sum_{r=0}^{k-i}\kappa_{i+r}\sum_{j=0}^{\infty}\left(q\xi^{i+r}\right)^{j}\right)\left(-1+e\sum_{n=1}^{k}\kappa_{n}\xi^{n}\sum_{j=0}^{\infty}\left(q\xi^{n}\right)^{j}\right)\\
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\xi^{1} &  & -\left(\frac{\varsigma_{i}}{\sigma_{i}}\kappa_{1}\right) & = & -\left(\varsigma_{1}\sum_{s=i}^{k}\kappa_{s}\right)\\
+\\
+\xi^{2} &  & \left(\frac{\varsigma_{i}}{\sigma_{i}}\right)\left[-\left(\kappa_{2}+\kappa_{1}q\right)+e\left(\kappa_{1}\varsigma_{1}\right)\right] & = & -\left(\varsigma_{2}\sum_{s=i}^{k}\kappa_{s}+\varsigma_{1}\right)
+\end{align*}
+
+\end_inset
+
+for all 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ We can compare powers of 
+\begin_inset Formula $\xi$
+\end_inset
+
+ but this could be a real pain...
+\end_layout
+
+\begin_layout Standard
+Let's start with 
+\begin_inset Formula $i=1$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left(\frac{1}{\sigma_{1}}\frac{\varsigma_{1}}{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\right)\left(e\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}-1\right)=\frac{\sum_{s=1}^{k}\left(\kappa_{s}\frac{1}{1-q\xi^{s}}\right)}{\sum_{s=1}^{k}\left(\kappa_{s}\frac{\xi^{s}}{1-q\xi^{s}}\right)}\left(e\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}}-1\right)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can consider several cases in which these rates may be related between
+ the two models but, in general, they are incomparable.
+ We will use the following notation: 
+\begin_inset Formula $\lambda^{D}=\begin{bmatrix}\lambda_{1}^{D}, & \lambda_{2}^{D}, & \cdots & \lambda_{k-1}^{D}, & \lambda_{k}^{D}\end{bmatrix}$
+\end_inset
+
+ and 
+\begin_inset Formula $\lambda_{i}^{F}=\begin{bmatrix}\lambda_{i,1}^{F}, & \lambda_{i,2}^{F}, & \cdots & \lambda_{i,i-1}^{F}, & \lambda_{i,i}^{F}\end{bmatrix}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The first option we consider is the simplest case: 
+\begin_inset Formula $\lambda_{i}^{D}=\lambda_{i,j}^{F}=\lambda$
+\end_inset
+
+ for all 
+\begin_inset Formula $1\le j\le i\le k$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{\rho}^{D}=\vec{\rho}^{F}=\vec{\rho}$
+\end_inset
+
+.
+ In this case
+\begin_inset Formula 
+\begin{align*}
+\tau^{D} & =\sum_{i=1}^{k}\left(\frac{\lambda_{i}^{D}}{\mu+\lambda_{i}^{D}}\right)\sigma_{i}\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right)\\
+ & =\sum_{i=1}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda}{\mu+\lambda}\right)^{i}\left(\prod_{j=1}^{i-1}\rho_{j}\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\tau_{i}^{F}=\left(\frac{\lambda}{\mu+\lambda}\right)^{i}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+R^{D}=e\frac{\sum_{i=1}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda}{\mu+\lambda}\right)^{i}\left(\prod_{j=1}^{i-1}\rho_{j}\right)}{1-\frac{\gamma}{\gamma+\mu}\left(\sum_{i=1}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda}{\mu+\lambda}\right)^{i}\left(\prod_{j=1}^{i-1}\rho_{j}\right)\right)}
 \]
 
 \end_inset
@@ -2663,29 +3342,52 @@ D & =\det\left\{ -I+\frac{e\lambda_{k,k}}{\lambda}\boldsymbol{\alpha}_{k}\boldsy
 
 \begin_inset Formula 
 \begin{align*}
-\boldsymbol{\alpha}_{s}\boldsymbol{\omega}_{i}L_{i} & =\frac{n_{i}}{\lambda_{i,i}}\begin{bmatrix}1\\
-0\\
-0\\
-\vdots\\
-0\\
-0
-\end{bmatrix}\begin{bmatrix}\left(\prod_{j=1}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & \left(\prod_{j=2}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & \cdots & \left(\prod_{j=i-1}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & 1\end{bmatrix}\\
- & =\frac{n_{i}}{\lambda_{i,i}}\begin{bmatrix}\left(\prod_{j=1}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & \left(\prod_{j=2}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & \cdots & \left(\prod_{j=i-1}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & 1\\
-0 & 0 & \cdots & 0 & 0\\
-0 & 0 & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & 0 & 0\\
-0 & 0 & \cdots & 0 & 0
-\end{bmatrix}
+R^{F} & =e\sum_{i=1}^{k}\frac{\rho_{i}\left(\frac{\lambda}{\mu+\lambda}\right)^{i}}{1-\frac{\gamma}{\gamma+\mu}\left(\frac{\lambda}{\mu+\lambda}\right)^{i}}
 \end{align*}
 
 \end_inset
 
-It remains to find the last row of each 
-\begin_inset Formula $L_{i}$
+If in addition we assume that 
+\begin_inset Formula $\vec{\rho}=\left[\frac{1}{k},\frac{1}{k},\cdots,\frac{1}{k},\frac{1}{k}\right]$
+\end_inset
+
+, we obtain
+\begin_inset Formula 
+\begin{align*}
+R^{D} & =e\frac{k^{-n}\left(1-\frac{1}{k}\right)\sum_{i=1}^{k}\left(k\frac{\lambda}{\mu+\lambda}\right)^{i}}{1-\frac{\gamma}{\gamma+\mu}k^{-n}\left(1-\frac{1}{k}\right)\sum_{i=1}^{k}\left(k\frac{\lambda}{\mu+\lambda}\right)^{i}}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $n=\frac{k\left(k+1\right)}{2}$
 \end_inset
 
 .
+\begin_inset Formula 
+\begin{align*}
+R^{F} & =e\frac{1}{k}\sum_{i=1}^{k}\frac{\left(\frac{\lambda}{\mu+\lambda}\right)^{i}}{1-\frac{\gamma}{\gamma+\mu}\left(\frac{\lambda}{\mu+\lambda}\right)^{i}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The next option we consider is setting 
+\begin_inset Formula $\lambda_{i,j}^{F}=\lambda_{j}^{D}$
+\end_inset
+
+ for all 
+\begin_inset Formula $j\le i\le k$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The next option we consider 
 \end_layout
 
 \begin_layout Part*
