@@ -62,9 +62,10 @@ figs-within-sections
 \shortcut idx
 \color #008000
 \end_index
-\leftmargin 2.54cm
-\topmargin 2.54cm
-\bottommargin 2.54cm
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
@@ -262,11 +263,11 @@ Suppose now that the compartment
 .
  Then we obtain the general model
 \begin_inset Formula 
-\begin{align*}
-\frac{d}{dt}L & =\phi V\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
-\frac{d}{dt}\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
-\frac{d}{dt}V & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V
-\end{align*}
+\begin{align}
+\frac{d}{dt}L & =\phi V\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\nonumber \\
+\frac{d}{dt}\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\nonumber \\
+\frac{d}{dt}V & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V\label{eq:general_model}
+\end{align}
 
 \end_inset
 
@@ -280,6 +281,20 @@ where the matrix
 \end_inset
 
 .
+ The vector 
+\begin_inset Formula $\vec{\alpha}$
+\end_inset
+
+ determines how mosquitoes are distributed as they enter the blood feeding
+ compartments 
+\series bold
+
+\begin_inset Formula $\boldsymbol{B}$
+\end_inset
+
+
+\series default
+.
  We will explore two models of multiple blood feeding which are expressed
  in terms of the matrix 
 \begin_inset Formula $A$
@@ -291,10 +306,19 @@ where the matrix
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Tabular
-<lyxtabular version="3" rows="8" columns="5">
+<lyxtabular version="3" rows="7" columns="4">
 <features tabularvalignment="middle">
-<column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -327,20 +351,11 @@ Units
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Notes
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+Notes
 \end_layout
 
 \end_inset
@@ -373,15 +388,6 @@ Fecundity
 
 \begin_layout Plain Layout
 eggs per ovipositing female per unit time
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \end_inset
@@ -422,16 +428,7 @@ Larval carrying capacity
 \begin_inset Text
 
 \begin_layout Plain Layout
-individuals
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
+number of individuals
 \end_layout
 
 \end_inset
@@ -477,15 +474,6 @@ per time
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -523,15 +511,6 @@ Larval mortality rate
 
 \begin_layout Plain Layout
 per time
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \end_inset
@@ -577,15 +556,6 @@ per time
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
@@ -597,7 +567,7 @@ per time
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -609,7 +579,7 @@ per time
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -618,67 +588,11 @@ Adult mortality rate
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 per time
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \end_inset
@@ -694,6 +608,20 @@ per time
 </cell>
 </row>
 </lyxtabular>
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Parameters of the base model
+\end_layout
+
+\end_inset
+
+
+\end_layout
 
 \end_inset
 
@@ -726,7 +654,7 @@ on.
 \end_inset
 
 .
- Then 
+ Then the transient state rate matrix 
 \begin_inset Formula $A$
 \end_inset
 
@@ -754,7 +682,7 @@ on.
 
  in all others.
 \begin_inset Formula 
-\[
+\begin{equation}
 \vec{\alpha}=\begin{bmatrix}1\\
 0\\
 \vdots\\
@@ -765,8 +693,8 @@ on.
 \vdots & \vdots & \ddots & \vdots & \vdots\\
 0 & 0 & \cdots & -\lambda_{k-1} & \left(1-\sigma_{k-1}\right)\lambda_{k-1}\\
 0 & 0 & \cdots & 0 & -\lambda_{k}
-\end{bmatrix}
-\]
+\end{bmatrix}\label{eq:disrupt_model}
+\end{equation}
 
 \end_inset
 
@@ -807,159 +735,40 @@ Existence of equilibria
 \end_layout
 
 \begin_layout Standard
-We first determine the equilibria of this model
+We first determine the equilibria of this model.
+ These are solutions to the (system of) equations defined by:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
-0 & =\phi V\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
-\boldsymbol{0} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
-0 & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V
+\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\right)\vec{\alpha}.
 \end{align*}
 
 \end_inset
 
-
+This system is equivalent to 
 \begin_inset Formula 
 \begin{align*}
-L= & \frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)V}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)V}K_{L}\\
-\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}\\
-V & =\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
+B_{1} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\left(\frac{1}{\mu+\lambda_{1}}\right)\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\\
+B_{i} & =B_{1}\left(\frac{\mu+\lambda_{1}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\frac{\lambda_{j}}{\mu+\lambda_{j}}\left(1-\sigma_{j}\right),1<i\le k
 \end{align*}
 
 \end_inset
 
-
-\begin_inset Formula 
-\begin{align*}
-L & =\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}\\
-\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}\\
-V & =\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\right)\vec{\alpha}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\left(\mu I-A^{T}\right)\boldsymbol{B} & =\begin{bmatrix}\mu+\lambda_{1} & 0 & \cdots & 0 & 0\\
--\left(1-\sigma_{1}\right)\lambda_{1} & \mu+\lambda_{2} & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & \mu+\lambda_{k-1} & 0\\
-0 & 0 & \cdots & -\left(1-\sigma_{k-1}\right)\lambda_{k-1} & \mu+\lambda_{k}
-\end{bmatrix}\begin{bmatrix}B_{1}\\
-B_{2}\\
-\vdots\\
-B_{k-1}\\
-B_{k}
-\end{bmatrix}\\
- & =\begin{bmatrix}\left(\mu+\lambda_{1}\right)B_{1}\\
-\left(\mu+\lambda_{2}\right)B_{2}-\left(1-\sigma_{1}\right)\lambda_{1}B_{1}\\
-\vdots\\
-\left(\mu+\lambda_{k-1}\right)B_{k-1}-\left(1-\sigma_{k-2}\right)\lambda_{k-2}B_{k-2}\\
-\left(\mu+\lambda_{k}\right)B_{k}-\left(1-\sigma_{k-1}\right)\lambda_{k-1}B_{k-1}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\[
-\left(\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\right)\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\vec{\alpha}=\begin{bmatrix}\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\gamma\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\\
-0\\
-\vdots\\
-0\\
-0
-\end{bmatrix}
-\]
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\right)\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\vec{\alpha}\\
-\begin{bmatrix}\left(\mu+\lambda_{1}\right)B_{1}\\
-\left(\mu+\lambda_{2}\right)B_{2}-\left(1-\sigma_{1}\right)\lambda_{1}B_{1}\\
-\vdots\\
-\left(\mu+\lambda_{k-1}\right)B_{k-1}-\left(1-\sigma_{k-2}\right)\lambda_{k-2}B_{k-2}\\
-\left(\mu+\lambda_{k}\right)B_{k}-\left(1-\sigma_{k-1}\right)\lambda_{k-1}B_{k-1}
-\end{bmatrix} & =\begin{bmatrix}\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\gamma\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\\
-0\\
-\vdots\\
-0\\
-0
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-Thus 
-\begin_inset Formula $B_{i}=\frac{1}{\lambda_{i}}\sigma_{i-1}\lambda_{i-1}B_{i-1}$
-\end_inset
-
- for 
-\begin_inset Formula $i>1$
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-B_{2} & =\frac{1}{\mu+\lambda_{2}}\left(1-\sigma_{1}\right)\lambda_{1}B_{1}\\
-\\
-B_{3} & =\frac{1}{\mu+\lambda_{3}}\left(1-\sigma_{2}\right)\lambda_{2}B_{2}\\
- & =\frac{\mu+\lambda_{1}}{\mu+\lambda_{3}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\left(1-\sigma_{2}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\left(1-\sigma_{1}\right)B_{1}\\
-\\
-B_{4} & =\frac{1}{\mu+\lambda_{4}}\left(1-\sigma_{3}\right)\lambda_{3}B_{3}\\
- & =\frac{\mu+\lambda_{1}}{\mu+\lambda_{4}}\frac{\lambda_{3}}{\mu+\lambda_{3}}\left(1-\sigma_{3}\right)\frac{\lambda_{2}}{\mu+\lambda_{2}}\left(1-\sigma_{2}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\left(1-\sigma_{1}\right)B_{1}\\
-\\
-B_{i} & =B_{1}\left(\frac{\mu+\lambda_{1}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\frac{\lambda_{j}}{\mu+\lambda_{j}}\left(1-\sigma_{j}\right)\\
-\end{align*}
-
-\end_inset
-
- which can be written in terms of 
-\begin_inset Formula $B_{1}$
-\end_inset
-
- as 
-\begin_inset Formula $B_{i}=B_{1}\left(\frac{\mu+\lambda_{1}}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)$
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Standard
-Proceeding using the fact that 
+Now, since 
 \begin_inset Formula $-\boldsymbol{1}^{T}A^{T}=\left[\sigma_{i}\lambda_{i}\right]_{i=1}^{k}$
 \end_inset
 
-where 
+(where here 
 \begin_inset Formula $\rho_{k}=0$
 \end_inset
 
-, we obtain
-\begin_inset Formula 
-\begin{align*}
--\boldsymbol{1}^{T}A^{T}\boldsymbol{B} & =\sum_{i=1}^{k}\sigma_{i}\lambda_{i}B_{i}\\
- & =B_{1}\left(\mu+\lambda_{1}\right)\sum_{i=1}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\\
- & =\varrho\left(\mu+\lambda_{1}\right)B_{1}
-\end{align*}
-
+), we obtain 
+\begin_inset Formula $-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}=\varrho\left(\mu+\lambda_{1}\right)B_{1}$
 \end_inset
 
-where we have defined 
+ where we have defined 
 \begin_inset Formula $\tau=\sum_{i=1}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)$
 \end_inset
 
@@ -968,27 +777,28 @@ where we have defined
 \end_layout
 
 \begin_layout Standard
-Set 
+Let 
 \begin_inset Formula $e=\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\phi\frac{1}{\gamma+\mu}$
 \end_inset
 
 .
- 
+ Then 
 \begin_inset Formula $e$
 \end_inset
 
- then represents the average number of new mosquitoes produced in a single
- oviposition event since 
+ represents the average number of new mosquitoes produced in a single ovipositio
+n event since 
 \begin_inset Formula $\phi\frac{1}{\gamma+\mu}$
 \end_inset
 
- is the number of eggs it lays within a single oviposition event, and 
+ is the number of eggs a single mosquito lays within an oviposition event,
+ and 
 \begin_inset Formula $\frac{\rho_{L}}{\rho_{L}+\mu_{L}}$
 \end_inset
 
  is the probability of the eggs surviving to adulthood.
  Further, note that 
-\begin_inset Formula $n_{G}=\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau\right]^{-1}=\sum_{j=1}^{\infty}\left(\frac{\gamma}{\gamma+\mu}\right)^{j}\tau^{j}$
+\begin_inset Formula $\nu=\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau\right]^{-1}=\sum_{j=1}^{\infty}\left(\frac{\gamma}{\gamma+\mu}\right)^{j}\tau^{j}$
 \end_inset
 
  represents the average number of gonotrophic cycles survived by a mosquito.
@@ -999,14 +809,7 @@ Set
 :
 \begin_inset Formula 
 \begin{align*}
-\left(\mu+\lambda_{1}\right)B_{1} & =\rho_{L}\frac{\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}{K_{L}+\left(\frac{\phi}{\rho_{L}+\mu_{L}}\right)\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)}K_{L}+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\\
-\\
-\left(\mu+\lambda_{1}\right)B_{1} & =\frac{e\tau\left(\mu+\lambda_{1}\right)B_{1}}{K_{L}+\frac{1}{\rho_{L}}e\tau\left(\mu+\lambda_{1}\right)B_{1}}K_{L}+\frac{\gamma}{\gamma+\mu}\tau\left(\mu+\lambda_{1}\right)B_{1}\\
-\\
-1 & =\frac{e\tau}{K_{L}+\frac{1}{\rho_{L}}e\tau\left(\mu+\lambda_{1}\right)B_{1}}K_{L}+\frac{\gamma}{\gamma+\mu}\tau\\
-1-\frac{\gamma}{\gamma+\mu}\tau & =\frac{e\tau}{K_{L}+\frac{1}{\rho_{L}}e\tau\left(\mu+\lambda_{1}\right)B_{1}}K_{L}\\
-K_{L}+\frac{1}{\rho_{L}}e\tau\left(\mu+\lambda_{1}\right)B_{1} & =e\tau n_{G}K_{L}\\
-B_{1} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\left(\frac{e\tau n_{G}-1}{e\tau}\right)\rho_{L}K_{L}
+B_{1} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\left(\frac{\tau e\nu-1}{e\tau}\right)\rho_{L}K_{L}
 \end{align*}
 
 \end_inset
@@ -1016,13 +819,13 @@ B_{1} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\left(\frac{e\tau n_{G}-1}{e\tau}
 
 \begin_layout Standard
 We need the equilibrium to be positive which occurs when 
-\begin_inset Formula $e\tau n_{G}>1$
+\begin_inset Formula $e\tau\nu>1$
 \end_inset
 
 , i.e.
  when on average a mosquito produces more than one offspring over its lifespan.
  We define 
-\begin_inset Formula $R=e\varrho n_{G}$
+\begin_inset Formula $R=\tau e\nu$
 \end_inset
 
  to be the reproductive number for the population.
@@ -1035,12 +838,8 @@ We need the equilibrium to be positive which occurs when
 \end_layout
 
 \begin_layout Standard
-where we had to assume that 
-\begin_inset Formula $B_{1}>0$
-\end_inset
-
-.
- The remaining compartments can then be calculated from 
+The equilibrium values of the remaining compartments can then be calculated
+ from 
 \begin_inset Formula $B_{1}$
 \end_inset
 
@@ -1056,10 +855,10 @@ where we had to assume that
  where 
 \begin_inset Formula 
 \begin{align*}
-L^{*} & =\left(\frac{e\tau n_{G}-1}{e\tau n_{G}}\right)K_{L}\\
-B_{1}^{*} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\rho_{L}\left(\frac{e\tau n_{G}-1}{e\tau}\right)K_{L}\\
-B_{i}^{*} & =\left[\left(\frac{1}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\tau n_{G}-1}{e\tau}\right)K_{L},1<i\le k\\
-V^{*} & =\left(\frac{1}{\gamma+\mu}\right)\rho_{L}\left(\frac{e\tau n_{G}-1}{e}\right)K_{L}
+L^{*} & =\left(\frac{e\tau\nu-1}{e\tau\nu}\right)K_{L}\\
+B_{1}^{*} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L}\\
+B_{i}^{*} & =\left[\left(\frac{1}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L},1<i\le k\\
+V^{*} & =\left(\frac{1}{\gamma+\mu}\right)\rho_{L}\left(\frac{e\tau\nu-1}{e}\right)K_{L}
 \end{align*}
 
 \end_inset
@@ -1072,30 +871,39 @@ Stability of equilibria
 \end_layout
 
 \begin_layout Standard
-Following Hurtado and Richards 2020, we can somewhat quickly determine the
- reproductive ratio for the mosquito population in this case.
- We employ the next generation operator approach developed in van den Driessche
- and Watmough (2002).
- We define recruitment by the number of new reproductively mature mosquitoes
- (compartment 
+We employ the next generation operator approach developed in van den Driessche
+ and Watmough (2002) to determine the stability of the extinction equilibrium.
+ We need to specify which compartment we deem to represent 
+\begin_inset Quotes eld
+\end_inset
+
+new
+\begin_inset Quotes erd
+\end_inset
+
+ individuals: in this case, we define these to be compartment 
+\series bold
+
+\begin_inset Formula $B_{1}$
+\end_inset
+
+,
+\series default
+ the new reproductively mature mosquitoes (compartment 
 \begin_inset Formula $B_{1}$
 \end_inset
 
 ).
+ We will use matrix vector notation throughout where a 
+\series bold
+bolded
+\series default
+ variable represents a quantity of the appropriate size for the displayed
+ operation.
 \end_layout
 
 \begin_layout Standard
 We begin by re-writing our model as
-\begin_inset Formula 
-\begin{align*}
-\frac{d}{dt}L & =\phi V\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
-\frac{d}{dt}\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
-\frac{d}{dt}V & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V
-\end{align*}
-
-\end_inset
-
-
 \begin_inset Formula 
 \begin{align*}
 \frac{d}{dt}\begin{bmatrix}L\\
@@ -1111,7 +919,7 @@ V
 \gamma V\vec{\alpha}+\left(A-D_{\textrm{diag}A}\right)^{T}\boldsymbol{B}\\
 \left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
 \end{bmatrix}\right\} \\
- & =\mathcal{F}-\left(\mathcal{V}_{-}-\mathcal{V}_{+}\right)
+ & =\mathcal{F}-\mathcal{V}
 \end{align*}
 
 \end_inset
@@ -1120,7 +928,7 @@ where
 \begin_inset Formula $D_{v}$
 \end_inset
 
- denotes a diagonal matrix with diagonal elements defiend by the vector
+ denotes a diagonal matrix with diagonal elements defined by the vector
  
 \begin_inset Formula $v$
 \end_inset
@@ -1139,7 +947,15 @@ where
 \end_inset
 
 .
- 
+ The Jacobians of the operators 
+\begin_inset Formula $\mathcal{F}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathcal{V}$
+\end_inset
+
+ are given by
 \end_layout
 
 \begin_layout Standard
@@ -1148,12 +964,8 @@ where
 \mathcal{F}_{x} & =\begin{bmatrix}0 & \boldsymbol{0}_{1\times k+1}\\
 \rho_{L}\vec{\alpha} & \boldsymbol{0}_{k+1\times k+1}\\
 0 & 0
-\end{bmatrix}\\
-\mathcal{V}_{x} & =\partial_{x}\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)L-\phi V\left(1-\frac{L}{K_{L}}\right)\\
--\gamma V\vec{\alpha}-A^{T}\boldsymbol{B}+\mu\boldsymbol{B}\\
-\left(\gamma+\mu\right)V-\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
-\end{bmatrix}\\
- & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)+\phi V\left(\frac{1}{K_{L}}\right) & \boldsymbol{0}_{1\times k} & -\sigma_{M}f\left(1-\frac{L}{K_{L}}\right)\\
+\end{bmatrix},\\
+\mathcal{V}_{x} & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)+\phi V\left(\frac{1}{K_{L}}\right) & \boldsymbol{0}_{1\times k} & -\sigma_{M}f\left(1-\frac{L}{K_{L}}\right)\\
 \boldsymbol{0}_{k\times1} & \mu I-A^{T} & -\gamma\vec{\alpha}\\
 0 & \boldsymbol{1}^{T}A^{T} & \left(\gamma+\mu\right)
 \end{bmatrix}
@@ -1161,22 +973,36 @@ where
 
 \end_inset
 
-
+and, evaluated these at the extinction equilibrium, we obtain 
 \begin_inset Formula 
 \begin{align*}
 F & =\begin{bmatrix}0 & \boldsymbol{0}_{1\times k+1}\\
 \rho_{L} & 0\\
 \boldsymbol{0}_{k\times1} & \boldsymbol{0}_{k\times k+1}
-\end{bmatrix}\\
+\end{bmatrix},\\
 V & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \boldsymbol{0}_{1\times k} & -\phi\\
 \boldsymbol{0}_{k\times1} & \mu I-A^{T} & -\gamma\vec{\alpha}\\
 0 & \boldsymbol{1}^{T}A^{T} & \left(\gamma+\mu\right)
-\end{bmatrix}
+\end{bmatrix}.
 \end{align*}
 
 \end_inset
 
-Let 
+We now need to determine the eigenvalues of 
+\begin_inset Formula $K=FV^{-1}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+We first need to find the inverse of the matrix 
+\begin_inset Formula $V$
+\end_inset
+
+.
+ Let 
 \begin_inset Formula $W=\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \boldsymbol{0}_{1\times k}\\
 \boldsymbol{0}_{k\times1} & \mu I-A^{T}
 \end{bmatrix}_{k+1\times k+1}$
@@ -1207,12 +1033,21 @@ Y & Z
 \end_inset
 
 .
- Now 
+ Clearly 
+\begin_inset Formula $Z$
+\end_inset
+
+ is invertible but it will be more helpful to find the inverse of 
+\begin_inset Formula $W$
+\end_inset
+
+ to obtain the inverse of 
+\begin_inset Formula $V$
+\end_inset
+
+: 
 \begin_inset Formula 
 \begin{align*}
-W^{-1} & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \boldsymbol{0}_{1\times k}\\
-\boldsymbol{0}_{k\times1} & \mu I-A^{T}
-\end{bmatrix}^{-1}\\
 W^{-1} & =\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \boldsymbol{0}_{1\times k}\\
 \boldsymbol{0}_{k\times1} & \left(\mu I-A^{T}\right)^{-1}
 \end{bmatrix}
@@ -1259,108 +1094,31 @@ V^{-1} & =\begin{bmatrix}W^{-1}+W^{-1}X\left(Z-YW^{-1}X\right)^{-1}YW^{-1} & -W^
 
 \end_inset
 
-We will calculate a few of these matrix products as they will be useful
- later:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-W^{-1}X & =\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \boldsymbol{0}_{1\times k}\\
-\boldsymbol{0}_{k\times1} & \left(\mu I-A^{T}\right)^{-1}
-\end{bmatrix}\begin{bmatrix}-\phi\\
--\gamma\vec{\alpha}
-\end{bmatrix}\\
- & =\begin{bmatrix}-\phi\frac{1}{\rho_{L}+\mu_{L}}\\
--\gamma\left(\mu I-A^{T}\right)^{-1}\vec{\alpha}
-\end{bmatrix}\\
- & =-\gamma\begin{bmatrix}\frac{1}{\gamma}\phi\frac{1}{\rho_{L}+\mu_{L}}\\
-\frac{1}{\mu+\lambda_{1}}\\
-\left(1-\sigma_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
-\left(1-\sigma_{1}\right)\left(1-\sigma_{2}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
-\vdots\\
-\frac{1}{\mu+\lambda_{k-1}}\prod_{i=1}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)\\
-{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)}
-\end{bmatrix}
-\end{align*}
-
+It is useful to note that 
+\begin_inset Formula $Z-YW^{-1}X=\left(\gamma+\mu\right)\frac{1}{\nu}$
 \end_inset
 
-
-\begin_inset Formula 
-\begin{align*}
-Z-YW^{-1}X & =\left(\gamma+\mu\right)+\gamma\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\end{bmatrix}\begin{bmatrix}\phi\frac{1}{\gamma}\frac{1}{\rho_{L}+\mu_{L}}\\
-\frac{1}{\mu+\lambda_{1}}\\
-\left(1-\sigma_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
-\left(1-\sigma_{1}\right)\left(1-\sigma_{2}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
-\vdots\\
-\frac{1}{\mu+\lambda_{k-1}}\prod_{i=1}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)\\
-{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)}
-\end{bmatrix}\\
- & =\left(\gamma+\mu\right)+\gamma\begin{bmatrix}0, & -\sigma_{1}\lambda_{1}, & -\sigma_{2}\lambda_{2}, & \cdots & -\sigma_{k-1}\lambda_{k-1}, & -\sigma_{k}\lambda_{k}\end{bmatrix}\begin{bmatrix}\phi\frac{1}{\gamma}\frac{1}{\rho_{L}+\mu_{L}}\\
-\frac{1}{\mu+\lambda_{1}}\\
-\left(1-\sigma_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
-\left(1-\sigma_{1}\right)\left(1-\sigma_{2}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
-\vdots\\
-\frac{1}{\mu+\lambda_{k-1}}\prod_{i=1}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)\frac{\lambda_{i}}{\mu+\lambda_{i}}\\
-{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}}\left(1-\sigma_{i}\right)
-\end{bmatrix}\\
- & =\left(\gamma+\mu\right)-\gamma\left[\frac{\lambda_{1}}{\mu+\lambda_{1}}\sigma_{1}+\frac{\lambda_{1}}{\mu+\lambda_{1}}\sigma_{1}\frac{\lambda_{2}}{\mu+\lambda_{2}}\left(1-\sigma_{2}\right)+\cdots+{\displaystyle \frac{\lambda_{k}}{\mu+\lambda_{k}}\sigma_{k}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)}\right]\\
- & =\left(\gamma+\mu\right)\left(1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau\right)\\
-Z-YW^{-1}X & =\left(\gamma+\mu\right)\frac{1}{\nu_{G}}
-\end{align*}
-
-\end_inset
-
-where we used the definition 
-\begin_inset Formula $\nu_{G}=\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau\right]^{-1}$
+ is a scalar, where here we used the definition of 
+\begin_inset Formula $\nu=\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau\right]^{-1}$
 \end_inset
 
 .
- Hence 
-\begin_inset Formula $\left(Z-YW^{-1}X\right)^{-1}=\frac{\nu_{G}}{\gamma+\mu}$
-\end_inset
-
- and we obtain
+ Hence we obtain
 \begin_inset Formula 
 \[
-V^{-1}=\begin{bmatrix}W^{-1}+\frac{\nu_{G}}{\gamma+\mu}W^{-1}XYW^{-1} & -\frac{\nu_{G}}{\gamma+\mu}W^{-1}X\\
--\frac{\nu_{G}}{\gamma+\mu}YW^{-1} & \frac{\nu_{G}}{\gamma+\mu}
+V^{-1}=\begin{bmatrix}W^{-1}+\frac{\nu}{\gamma+\mu}W^{-1}XYW^{-1} & -\frac{\nu}{\gamma+\mu}W^{-1}X\\
+-\frac{\nu}{\gamma+\mu}YW^{-1} & \frac{\nu}{\gamma+\mu}
 \end{bmatrix}
 \]
 
 \end_inset
 
- Recall that 
-\begin_inset Formula $W=\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & \vec{0}\\
-\vec{0} & \mu I-A^{T}
-\end{bmatrix}_{k+1\times k+1}$
-\end_inset
 
-, 
-\begin_inset Formula $X=\begin{bmatrix}-\phi\\
--\gamma\vec{\alpha}
-\end{bmatrix}_{k+1\times1}$
-\end_inset
-
-, 
-\begin_inset Formula $Y=\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\end{bmatrix}_{1\times k+1}$
-\end_inset
-
-, 
-\begin_inset Formula $Z=\begin{bmatrix}\left(\gamma+\mu\right)\end{bmatrix}_{1\times1}$
-\end_inset
-
-.
- 
 \end_layout
 
 \begin_layout Standard
 Note that, because of the form of the matrix 
-\begin_inset Formula $F=\begin{bmatrix}0 & \boldsymbol{0}_{1\times k+1}\\
-\rho_{L} & 0\\
-\boldsymbol{0}_{k\times1} & \boldsymbol{0}_{k\times k+1}
-\end{bmatrix}$
+\begin_inset Formula $F$
 \end_inset
 
 , we need not determine all entries of the matrix 
@@ -1370,14 +1128,14 @@ Note that, because of the form of the matrix
  to find its eigenvalues.
  In fact, we will only need to know the entries of the first row of the
  matrices 
-\begin_inset Formula $W^{-1}+\frac{\nu_{G}}{\gamma+\mu}W^{-1}XYW^{-1}$
+\begin_inset Formula $W^{-1}+\frac{\nu}{\gamma+\mu}W^{-1}XYW^{-1}$
 \end_inset
 
  and 
-\begin_inset Formula $-\frac{\nu_{G}}{\gamma+\mu}W^{-1}X$
+\begin_inset Formula $-\frac{\nu}{\gamma+\mu}W^{-1}X$
 \end_inset
 
-
+ since
 \begin_inset Formula 
 \begin{align*}
 K=FV^{-1} & =\begin{bmatrix}0 & 0 & \cdots & 0 & 0\\
@@ -1388,16 +1146,8 @@ K=FV^{-1} & =\begin{bmatrix}0 & 0 & \cdots & 0 & 0\\
 \end{bmatrix}\begin{bmatrix}W^{-1}+W^{-1}X\left(Z-YW^{-1}X\right)^{-1}YW^{-1} & -W^{-1}X\left(Z-YW^{-1}X\right)^{-1}\\
 -\left(Z-YW^{-1}X\right)^{-1}YW^{-1} & \left(Z-YW^{-1}X\right)^{-1}
 \end{bmatrix}\\
- & =\begin{bmatrix}0 & 0 & \cdots & 0 & 0\\
-\rho_{L} & 0 & \cdots & 0 & 0\\
-0 & 0 & \cdots & 0 & 0\\
-\vdots & \vdots & \cdots & 0 & 0\\
-0 & 0 & \cdots & 0 & 0
-\end{bmatrix}\begin{bmatrix}W^{-1}+W^{-1}XYW^{-1}\frac{n_{G}}{\gamma+\mu} & -W^{-1}X\frac{\nu_{G}}{\gamma+\mu}\\
--\frac{\nu_{G}}{\gamma+\mu}YW^{-1} & \frac{\nu_{G}}{\gamma+\mu}
-\end{bmatrix}\\
- & =\rho_{L}\frac{n_{G}}{\gamma+\mu}\begin{bmatrix}0 & 0\\
-\left[\frac{\gamma+\mu}{n_{G}}W^{-1}+W^{-1}XYW^{-1}\right]_{1,\cdot} & \left[-W^{-1}X\right]_{1,\cdot}\\
+ & =\begin{bmatrix}0 & 0\\
+\left[\rho_{L}W^{-1}+\rho_{L}\frac{\nu}{\gamma+\mu}W^{-1}XYW^{-1}\right]_{1,\cdot} & \left[-\rho_{L}\frac{\nu}{\gamma+\mu}W^{-1}X\right]_{1,\cdot}\\
 0 & 0\\
 \vdots & \vdots\\
 0 & 0
@@ -1406,21 +1156,26 @@ K=FV^{-1} & =\begin{bmatrix}0 & 0 & \cdots & 0 & 0\\
 
 \end_inset
 
-Since the second row is the only non-zero row of the matrix 
+where 
+\begin_inset Formula $\left[M\right]_{1,\cdot}$
+\end_inset
+
+ denotes the first row of the matrix 
+\begin_inset Formula $M$
+\end_inset
+
+.
+ Since the second row of 
 \begin_inset Formula $K$
 \end_inset
 
-, the sole non-zero eigenvalue of 
+ is its only non-zero row, the sole non-zero eigenvalue of 
 \begin_inset Formula $K$
 \end_inset
 
- is given by the entry in its second row, second column.
- This value is given by the product of 
-\begin_inset Formula $\rho_{L}\frac{\nu_{G}}{\gamma+\mu}$
-\end_inset
-
- and the entry in the first row, second column of the matrix 
-\begin_inset Formula $\frac{\gamma+\mu}{\nu_{G}}W^{-1}+W^{-1}XYW^{-1}$
+ must be given by the entry in its second row, second column.
+ This value is the entry in the first row, second column of the matrix 
+\begin_inset Formula $\rho_{L}W^{-1}+\rho_{L}\frac{\nu}{\gamma+\mu}W^{-1}XYW^{-1}$
 \end_inset
 
 .
@@ -1429,77 +1184,31 @@ Since the second row is the only non-zero row of the matrix
 \end_inset
 
 , it just remains to compute 
-\begin_inset Formula $\left[W^{-1}XYW^{-1}\right]_{1,2}$
+\begin_inset Formula $\left[\rho_{L}\frac{\nu}{\gamma+\mu}W^{-1}XYW^{-1}\right]_{1,2}$
+\end_inset
+
+.
+ After some tedious calculations, we arrive at 
+\begin_inset Formula $\left[\rho_{L}\frac{\nu}{\gamma+\mu}W^{-1}XYW^{-1}\right]_{1,2}=\rho_{L}\frac{\nu}{\gamma+\mu}\left(\phi\frac{1}{\rho_{L}+\mu_{L}}\tau\right)$
 \end_inset
 
 .
 \end_layout
 
 \begin_layout Standard
+Hence 
+\begin_inset Formula $K$
+\end_inset
+
+ has a single non-zero eigenvalue which is given by
 \begin_inset Formula 
 \begin{align*}
-YW^{-1} & =\begin{bmatrix}0 & \boldsymbol{1}^{T}A^{T}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \boldsymbol{0}_{1\times k}\\
-\boldsymbol{0}_{k\times1} & \left(\mu I-A^{T}\right)^{-1}
-\end{bmatrix}\\
- & =\begin{bmatrix}0, & -\sigma_{1}\lambda_{1}, & -\sigma_{2}\lambda_{2}, & \cdots & -\sigma_{k-1}\lambda_{k-1}, & -\sigma_{k}\lambda_{k}\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & 0 & 0 & 0 & \cdots & 0\\
-0 & \frac{1}{\mu+\lambda_{1}} & 0 & \cdots & 0 & 0\\
-0 & \left(1-\sigma_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}} & \frac{1}{\mu+\lambda_{2}} & \cdots & 0 & 0\\
-0 & \vdots & \vdots & \ddots & \vdots & \vdots\\
-\vdots & \frac{1}{\mu+\lambda_{k-1}}\prod_{i=1}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right) & \frac{1}{\mu+\lambda_{k}}\prod_{i=2}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right) & \cdots & \mu+\lambda_{k-1} & 0\\
-0 & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)} & {\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=2}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)} & \cdots & \frac{1}{\mu+\lambda_{k}}\frac{\lambda_{k-1}}{\mu+\lambda_{k-1}}\left(1-\sigma_{k-1}\right) & \frac{1}{\mu+\lambda_{k}}
-\end{bmatrix}\\
- & =\begin{bmatrix}0 & -\tau & -\sum_{i=2}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=2}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right) & -\sum_{i=3}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=3}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right) & \cdots & -\frac{\lambda_{k}}{\mu+\lambda_{k}}\sigma_{k}\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\[
-W^{-1}XYW^{-1}=\gamma\begin{bmatrix}\frac{1}{\gamma}\phi\frac{1}{\rho_{L}+\mu_{L}}\\
-\frac{1}{\mu+\lambda_{1}}\\
-\left(1-\sigma_{1}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{1}{\mu+\lambda_{2}}\\
-\left(1-\sigma_{1}\right)\left(1-\sigma_{2}\right)\frac{\lambda_{1}}{\mu+\lambda_{1}}\frac{\lambda_{2}}{\mu+\lambda_{2}}\frac{1}{\mu+\lambda_{3}}\\
-\vdots\\
-\frac{1}{\mu+\lambda_{k-1}}\prod_{i=1}^{k-2}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)\\
-{\displaystyle \frac{1}{\mu+\lambda_{k}}\prod_{i=1}^{k-1}\frac{\lambda_{i}}{\mu+\lambda_{i}}\left(1-\sigma_{i}\right)}
-\end{bmatrix}\begin{bmatrix}0, & \tau, & \sum_{i=2}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=2}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right), & \sum_{i=3}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=3}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right), & \cdots & -\frac{\lambda_{k}}{\mu+\lambda_{k}}\sigma_{k}\end{bmatrix}
-\]
-
-\end_inset
-
-
-\begin_inset Formula 
-\[
-\left[W^{-1}XYW^{-1}\right]_{1,2}=\phi\frac{1}{\rho_{L}+\mu_{L}}\tau
-\]
-
-\end_inset
-
-Hence there is a single non-zero eigenvalue given by
-\begin_inset Formula 
-\begin{align*}
-R & =\rho_{L}\frac{\nu_{G}}{\gamma+\mu}\left(\phi\frac{1}{\rho_{L}+\mu_{L}}\tau\right)=e\tau\nu_{G}
+R & =\rho_{L}\frac{\nu}{\gamma+\mu}\left(\phi\frac{1}{\rho_{L}+\mu_{L}}\tau\right)=\tau e\nu
 \end{align*}
 
 \end_inset
 
 as expected.
- where 
-\begin_inset Formula $e=\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\phi\frac{1}{\gamma+\mu}$
-\end_inset
-
- is the average number of viable eggs per female per gonotrophic cycle,
- 
-\begin_inset Formula $\nu_{G}$
-\end_inset
-
- is the average number of gonotrophic cycles, and 
-\begin_inset Formula $\tau$
-\end_inset
-
- is the average proportion of newly-emerged mosquitoes surviving to reach
- oviposition.
 \end_layout
 
 \begin_layout Section*
@@ -1519,6 +1228,16 @@ In this model, the number of blood meals necessary to attain repletion is
  determined by the conditions in which the mosquito larvae is reared.
  Generally, worse larval rearing conditions are associated with a greater
  number of blood meals necessary for repletion.
+ We assign a 
+\begin_inset Quotes eld
+\end_inset
+
+type
+\begin_inset Quotes erd
+\end_inset
+
+ to newly-emerged mosquitoes which describes how many blood meals it must
+ take to reach the oviposition stage.
  Newly-emerged mosquitoes enter compartment 
 \begin_inset Formula $B_{i,1}$
 \end_inset
@@ -1528,16 +1247,24 @@ with probability
 \end_inset
 
 .
- Mosquitoes in compartment 
-\begin_inset Formula $B_{i,1}$
+ A mosquito in blood feeding compartment 
+\begin_inset Formula $B_{i,j}$
 \end_inset
 
- must take 
+ has taken 
+\begin_inset Formula $j-1$
+\end_inset
+
+ blood meals and needs 
 \begin_inset Formula $i$
 \end_inset
 
- blood meals in order to reach the oviposition stage 
+ blood meals to reach the oviposition stage 
 \begin_inset Formula $V_{i}$
+\end_inset
+
+, where 
+\begin_inset Formula $j\le i$
 \end_inset
 
 .
@@ -1559,11 +1286,11 @@ fate
 \begin_inset Quotes erd
 \end_inset
 
- of the mosquito was determined at emergence.
+ of the mosquito was determined at emergence and never changes.
 \end_layout
 
 \begin_layout Standard
-We aim to determine the matrix 
+While we would like to determine a single transient state rate matrix 
 \begin_inset Formula $A$
 \end_inset
 
@@ -1571,57 +1298,50 @@ We aim to determine the matrix
 \begin_inset Formula $\alpha$
 \end_inset
 
- so that this model has the form
+ to put this model in the general form 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:general_model"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, in practice this seems to be more trouble than its worth.
+ Instead, we consider the following system of equations.
 \begin_inset Formula 
-\begin{align*}
-\frac{d}{dt}L & =\phi V\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
-\frac{d}{dt}\vec{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}+A^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
-\frac{d}{dt}V & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)-\gamma V-\mu V
-\end{align*}
+\begin{align}
+\frac{d}{dt}L & =\phi\left(1-\frac{L}{K_{L}}\right)\sum_{i=1}^{k}V_{i}-\left(\rho_{L}+\mu_{L}\right)L\nonumber \\
+\frac{d}{dt}B_{i,1} & =\kappa_{i}\left(\rho_{L}L\right)+\gamma V_{i}-\lambda_{i,1}B_{i,1}-\mu B_{i,1}\nonumber \\
+\frac{d}{dt}B_{i,j} & =\lambda_{i,j-1}B_{i,j-1}-\lambda_{i,j}B_{i,j}-\mu B_{i,j}\nonumber \\
+\frac{d}{dt}V_{i} & =\lambda_{i,i}B_{i,i}-\gamma V_{i}-\mu V_{i}\label{eq:fate_model}
+\end{align}
 
 \end_inset
 
-However, we will require multiple oviposition compartments to keep track
- of the 
-\begin_inset Quotes eld
-\end_inset
-
-type
-\begin_inset Quotes erd
-\end_inset
-
- of mosquito, i.e.
- the number of blood meals it requires to reach repletion.
-\begin_inset Formula 
-\begin{align*}
-\frac{d}{dt}L & =\phi\left(1-\frac{L}{K_{L}}\right)\sum_{i=1}^{k}V_{i}-\left(\rho_{L}+\mu_{L}\right)L\\
-\frac{d}{dt}B_{i,1} & =\kappa_{i}\left(\rho_{L}L\right)+\gamma V_{i}-\lambda_{i,1}B_{i,1}-\mu B_{i,1}\\
-\frac{d}{dt}B_{i,j} & =\lambda_{i,j-1}B_{i,j-1}-\lambda_{i,j}B_{i,j}-\mu B_{i,j}\\
-\frac{d}{dt}V_{i} & =\lambda_{i,i}B_{i,i}-\gamma V_{i}-\mu V_{i}
-\end{align*}
-
-\end_inset
-
-Let 
+We can somewhat condense the system of equations for each mosquito type
+ as follows.
+ Let 
 \begin_inset Formula $\boldsymbol{B}_{i}=\left[B_{i,1},B_{i,2},\cdots,B_{i,i-1},B_{i,i}\right]^{T}$
 \end_inset
 
- ,
-\begin_inset Formula $\boldsymbol{\kappa}=\left[\kappa_{1},\kappa_{2},\ldots,\kappa_{k}\right]^{T}$
-\end_inset
-
-, 
-\begin_inset Formula $\boldsymbol{\lambda}_{i}=\left[\lambda_{i,1},\lambda_{i,2},\ldots,\lambda_{i,i}\right]^{T}$
+ be the vector of blood feeding stages for mosquitoes of type 
+\begin_inset Formula $i$
 \end_inset
 
  and 
 \series bold
 
-\begin_inset Formula $\boldsymbol{V}=\left[V_{1},V_{2},\ldots,V_{k}\right]^{T}$
+\begin_inset Formula $\boldsymbol{\alpha}_{i}=\left[1,0,\ldots,0\right]^{T}$
 \end_inset
 
-
+ 
 \series default
+a vector of length 
+\begin_inset Formula $i$
+\end_inset
+
 .
  Then
 \begin_inset Formula 
@@ -1632,18 +1352,6 @@ Let
 \end_inset
 
 where 
-\series bold
-
-\begin_inset Formula $\boldsymbol{\alpha}_{i}=\left[1,0,\ldots,0\right]^{T}$
-\end_inset
-
- 
-\series default
-is a vector of length 
-\begin_inset Formula $i$
-\end_inset
-
- and
 \begin_inset Formula 
 \begin{align*}
 A_{i} & =\begin{bmatrix}-\lambda_{i,1} & \lambda_{i,1} & 0 & \cdots & 0\\
@@ -1666,283 +1374,6 @@ is size
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Subsubsection*
-Full matrix-vector notation
-\end_layout
-
-\begin_layout Standard
-We can also write
-\begin_inset Formula 
-\[
-\frac{d}{dt}\boldsymbol{V}=\boldsymbol{\lambda}\circ\textrm{diag}\left(\boldsymbol{B}\right)-\left(\gamma+\mu\right)\boldsymbol{V}
-\]
-
-\end_inset
-
-but this isn't so useful if we can't also combine the 
-\begin_inset Formula $B$
-\end_inset
-
- compartments together similarly.
- Let 
-\begin_inset Formula $\boldsymbol{B}=\left[\boldsymbol{B_{1}},\boldsymbol{B_{2}},\cdots,\boldsymbol{B_{k-1}},\boldsymbol{B_{k}}\right]^{T}$
-\end_inset
-
-where 
-\begin_inset Formula $\boldsymbol{B_{i}}=\left[B_{i,1},B_{i,2},\cdots,B_{i,i-1},B_{i,i}\right]^{T}$
-\end_inset
-
-.
- 
-\begin_inset Formula $\boldsymbol{B}$
-\end_inset
-
- is then a vector of size 
-\begin_inset Formula $n\times1$
-\end_inset
-
-, 
-\begin_inset Formula $n=k\left(k+1\right)/2$
-\end_inset
-
-.
- Let 
-\begin_inset Formula $\boldsymbol{A}$
-\end_inset
-
- be a block diagonal matrix whose diagonal elements are the 
-\begin_inset Formula $A_{i}$
-\end_inset
-
- matrices, i.e.
-\begin_inset Formula 
-\[
-\boldsymbol{A}=\begin{bmatrix}A_{1} & 0 & 0 & 0 & 0\\
-0 & A_{2} & 0 & 0 & 0\\
-0 & 0 & \ddots & 0 & 0\\
-0 & 0 & 0 & A_{k-1} & 0\\
-0 & 0 & 0 & 0 & A_{k}
-\end{bmatrix}
-\]
-
-\end_inset
-
-where the zero entries are matrices of the appropriate size.
- Then 
-\begin_inset Formula $\boldsymbol{A}$
-\end_inset
-
- has size 
-\begin_inset Formula $n\times n$
-\end_inset
-
-.
- Finally,
-\begin_inset Formula 
-\begin{align*}
-\boldsymbol{A}^{T}\boldsymbol{B} & =\begin{bmatrix}A_{1} & 0 & 0 & 0 & 0\\
-0 & A_{2} & 0 & 0 & 0\\
-0 & 0 & \ddots & 0 & 0\\
-0 & 0 & 0 & A_{k-1} & 0\\
-0 & 0 & 0 & 0 & A_{k}
-\end{bmatrix}\begin{bmatrix}\boldsymbol{B}_{1}\\
-\boldsymbol{B}_{2}\\
-\vdots\\
-\boldsymbol{B}_{k-1}\\
-\boldsymbol{B}_{k}
-\end{bmatrix}\\
- & =\begin{bmatrix}A_{1}^{T}\boldsymbol{B}_{1}\\
-A_{2}^{T}\boldsymbol{B}_{2}\\
-\vdots\\
-A_{k-1}^{T}\boldsymbol{B}_{k-1}\\
-A_{k}^{T}\boldsymbol{B}_{k}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-Now we can write 
-\begin_inset Formula 
-\[
-\frac{d}{dt}\boldsymbol{B}=\boldsymbol{\alpha}\left(\boldsymbol{\kappa}\rho_{L}L+\gamma\boldsymbol{V}\right)+\boldsymbol{A}^{T}\boldsymbol{B}-\mu\boldsymbol{B}
-\]
-
-\end_inset
-
-where 
-\begin_inset Formula $\boldsymbol{\kappa}=\left[\kappa_{1},\kappa_{2},\ldots,\kappa_{k}\right]^{T}$
-\end_inset
-
- and 
-\begin_inset Formula $\boldsymbol{\alpha}=\left[\boldsymbol{\alpha}_{1}^{T},\boldsymbol{\alpha}_{2}^{T},\cdots,\boldsymbol{\alpha}_{k-1}^{T},\boldsymbol{\alpha}_{k}^{T}\right]$
-\end_inset
-
- .
- We define the 
-\series bold
-
-\begin_inset Formula $\boldsymbol{\alpha}_{i}=\left[\alpha_{i,j}\right]_{j=1}^{n}$
-\end_inset
-
- 
-\series default
-with 
-\begin_inset Formula $\alpha_{i,j}=1$
-\end_inset
-
- if and only if 
-\begin_inset Formula $j=1+\frac{i\left(i-1\right)}{2}$
-\end_inset
-
-.
- 
-\begin_inset Formula 
-\begin{align*}
-\boldsymbol{\alpha}\left(\boldsymbol{\kappa}\rho_{L}L+\gamma\boldsymbol{V}\right) & =\begin{bmatrix}\rho_{1}\rho_{L}L+\gamma V_{1}\\
-\rho_{2}\rho_{L}L+\gamma V_{2}\\
-0\\
-\rho_{3}\rho_{L}L+\gamma V_{3}\\
-\boldsymbol{0}_{2,1}\\
-\vdots\\
-\rho_{k}\rho_{L}L+\gamma V_{k}\\
-\boldsymbol{0}_{k-1,1}
-\end{bmatrix}\\
- & =\begin{bmatrix}\kappa_{1}\\
-\kappa_{2}\\
-0\\
-\kappa_{3}\\
-\boldsymbol{0}_{2,1}\\
-\vdots\\
-\kappa_{k}\\
-\boldsymbol{0}_{k-1,1}
-\end{bmatrix}\rho_{L}L+\gamma\boldsymbol{\alpha}\boldsymbol{V}\\
- & =\boldsymbol{\alpha}\boldsymbol{\rho}\rho_{L}L+\gamma\boldsymbol{\alpha}\boldsymbol{V}
-\end{align*}
-
-\end_inset
-
-since 
-\begin_inset Formula $\boldsymbol{V}$
-\end_inset
-
- is 
-\begin_inset Formula $k\times1$
-\end_inset
-
-, we must have that 
-\begin_inset Formula $\boldsymbol{\alpha}$
-\end_inset
-
- is 
-\begin_inset Formula $n\times k$
-\end_inset
-
- and 
-\begin_inset Formula $\boldsymbol{\kappa}$
-\end_inset
-
- is 
-\begin_inset Formula $k\times1$
-\end_inset
-
-.
- The full system is then written in matrix-vector form as
-\begin_inset Formula 
-\begin{align*}
-\frac{d}{dt}L & =\phi\left(1-\frac{L}{K_{L}}\right)\boldsymbol{1}^{T}\boldsymbol{V}-\left(\rho_{L}+\mu_{L}\right)L\\
-\frac{d}{dt}\boldsymbol{B} & =\boldsymbol{\alpha}\left(\boldsymbol{\kappa}\rho_{L}L+\gamma\boldsymbol{V}\right)+\boldsymbol{A}^{T}\boldsymbol{B}-\mu\boldsymbol{B}\\
-\frac{d}{dt}\boldsymbol{V} & =\left(-X\boldsymbol{A}^{T}\boldsymbol{B}\right)-\left(\gamma+\mu\right)\boldsymbol{V}
-\end{align*}
-
-\end_inset
-
-where 
-\begin_inset Formula 
-\[
-X=\begin{bmatrix}\boldsymbol{1}_{1}^{T} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0}\\
-0 & \boldsymbol{1}_{2}^{T} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0}\\
-0 & \boldsymbol{0} & \ddots & \boldsymbol{0} & \boldsymbol{0}\\
-0 & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{1}_{k-1}^{T} & \boldsymbol{0}\\
-0 & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{1}_{k}^{T}
-\end{bmatrix}
-\]
-
-\end_inset
-
-where
-\begin_inset Formula $\boldsymbol{1}_{i}$
-\end_inset
-
- is a column vector of size 
-\begin_inset Formula $1\times i$
-\end_inset
-
- with all entires equal to 
-\begin_inset Formula $1$
-\end_inset
-
-.
- Hence 
-\begin_inset Formula $X$
-\end_inset
-
- is size 
-\begin_inset Formula $k\times n$
-\end_inset
-
-.
- Note that because of the form of the 
-\begin_inset Formula $A_{i}$
-\end_inset
-
- matrices, the term 
-\begin_inset Formula $-X\boldsymbol{A}^{T}\boldsymbol{B}$
-\end_inset
-
- simplifies significantly:
-\begin_inset Formula 
-\begin{align*}
--X\boldsymbol{A}^{T} & =\begin{bmatrix}\boldsymbol{1}_{1}^{T} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0}\\
-0 & \boldsymbol{1}_{2}^{T} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0}\\
-0 & \boldsymbol{0} & \ddots & \boldsymbol{0} & \boldsymbol{0}\\
-0 & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{1}_{k-1}^{T} & \boldsymbol{0}\\
-0 & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{1}_{k}^{T}
-\end{bmatrix}\begin{bmatrix}A_{1}^{T} & 0 & 0 & 0 & 0\\
-0 & A_{2}^{T} & 0 & 0 & 0\\
-0 & 0 & \ddots & 0 & 0\\
-0 & 0 & 0 & A_{k-1}^{T} & 0\\
-0 & 0 & 0 & 0 & A_{k}^{T}
-\end{bmatrix}\\
- & =\begin{bmatrix}\boldsymbol{1}_{1}^{T}A_{1}^{T} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0}\\
-0 & \boldsymbol{1}_{2}^{T}A_{2}^{T} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0}\\
-0 & \boldsymbol{0} & \ddots & \boldsymbol{0} & \boldsymbol{0}\\
-0 & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{1}_{k-1}^{T}A_{k-1}^{T} & \boldsymbol{0}\\
-0 & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{1}_{k}^{T}A_{k}^{T}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-where 
-\begin_inset Formula $\boldsymbol{1}_{i}^{T}A_{i}^{T}=\begin{bmatrix}0 & 0 & \cdots & 0 & -\lambda_{i}\end{bmatrix}$
-\end_inset
-
-
-\begin_inset Formula 
-\[
--X\boldsymbol{A}^{T}\boldsymbol{B}=\begin{bmatrix}\lambda_{1,1}B_{1,1}\\
-\lambda_{2,2}B_{2,2}\\
-\vdots\\
-\lambda_{k-1,k-1}B_{k-1,k-1}\\
-\lambda_{k,k}B_{k,k}
-\end{bmatrix}
-\]
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Subsection*
@@ -1974,152 +1405,12 @@ We proceed by solving the system of equations.
 \begin_inset Formula $B_{i,j}^{*}$
 \end_inset
 
-.
-\end_layout
-
-\begin_layout Standard
-It's actually easier to look at the simpler equations
-\begin_inset Formula 
-\begin{align*}
-\frac{d}{dt}L & =\phi\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
-\frac{d}{dt}\boldsymbol{B}_{i} & =\left(\kappa_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}+A_{i}^{T}\boldsymbol{B}_{i}-\mu\boldsymbol{B}_{i}\\
-\frac{d}{dt}V_{i} & =\lambda_{i,i}B_{i,i}-\left(\gamma+\mu\right)V_{i}
-\end{align*}
-
+, 
+\begin_inset Formula $V_{i}^{*}$
 \end_inset
 
-
-\begin_inset Formula 
-\begin{align*}
-\left(\rho_{L}+\mu_{L}\right)L & =\phi\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)\\
-\left(\mu I-A_{i}^{T}\right)\boldsymbol{B}_{i} & =\left(\kappa_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}\\
-V_{i} & =\frac{1}{\gamma+\mu}\lambda_{i,i}B_{i,i}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-L & =K_{L}\frac{\phi\frac{1}{\rho_{L}+\mu_{L}}\boldsymbol{1}^{T}\boldsymbol{V}}{K_{L}+\phi\frac{1}{\rho_{L}+\mu_{L}}\boldsymbol{1}^{T}\boldsymbol{V}}\\
-\left(\mu I-A_{i}^{T}\right)\boldsymbol{B}_{i} & =\left(\kappa_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}\\
-\boldsymbol{1}^{T}\boldsymbol{V} & =\frac{1}{\gamma+\mu}\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}
-\end{align*}
-
-\end_inset
-
-It will be useful to recall the quantity 
-\begin_inset Formula $e=\phi\frac{1}{\gamma+\mu}\frac{\rho_{L}}{\rho_{L}+\mu_{L}}$
-\end_inset
-
-, representing the average number of new viable eggs by a single mosquito
- each gonotrophic cycle.
- We obtain a system of equations for each 
-\begin_inset Formula $\boldsymbol{B}_{i}$
-\end_inset
-
- which depends only on the 
-\begin_inset Formula $B_{i,i}$
-\end_inset
-
-.
-\begin_inset Formula 
-\begin{align*}
-\left(\mu I-A_{i}^{T}\right)\boldsymbol{B}_{i} & =\left(\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\right)\boldsymbol{\alpha}_{i}
-\end{align*}
-
-\end_inset
-
-Now we expand both sides of this equation and compare elements.
-\begin_inset Formula 
-\begin{align*}
-\left(\mu I-A_{i}^{T}\right)\boldsymbol{B}_{i} & =\begin{bmatrix}\mu+\lambda_{i,1} & 0 & 0 & \cdots & 0\\
--\lambda_{i,1} & \mu+\lambda_{i,2} & 0 & \cdots & 0\\
-\vdots & -\lambda_{i,2} & \ddots & \cdots & \vdots\\
-0 & 0 & \ddots & \mu+\lambda_{i,i-1} & 0\\
-0 & 0 & \cdots & -\lambda_{i,i-1} & \mu+\lambda_{i,i}
-\end{bmatrix}\begin{bmatrix}B_{i,1}\\
-B_{i,2}\\
-\vdots\\
-B_{i,i-1}\\
-B_{i,i}
-\end{bmatrix}\\
- & =\begin{bmatrix}\left(\mu+\lambda_{i,1}\right)B_{i,1}\\
-\left(\mu+\lambda_{i,2}\right)B_{i,2}-\lambda_{i,1}B_{i,1}\\
-\vdots\\
-\left(\mu+\lambda_{i,i-1}\right)B_{i,i-1}-\lambda_{i,i-2}B_{i,i-2}\\
-\left(\mu+\lambda_{i,i}\right)B_{i,i}-\lambda_{i,i-1}B_{i,i-1}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\[
-\left(\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\right)\boldsymbol{\alpha}_{i}=\begin{bmatrix}\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\\
-0\\
-\vdots\\
-0\\
-0
-\end{bmatrix}
-\]
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\begin{bmatrix}\left(\mu+\lambda_{i,1}\right)B_{i,1}\\
-\left(\mu+\lambda_{i,2}\right)B_{i,2}-\lambda_{i,1}B_{i,1}\\
-\vdots\\
-\left(\mu+\lambda_{i,i-1}\right)B_{i,i-1}-\lambda_{i,i-2}B_{i,i-2}\\
-\left(\mu+\lambda_{i,i}\right)B_{i,i}-\lambda_{i,i-1}B_{i,i-1}
-\end{bmatrix} & =\begin{bmatrix}\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\\
-0\\
-\vdots\\
-0\\
-0
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-Using all the rows except the first, we obtain recurrence relations relating
- the 
-\begin_inset Formula $B_{i,i}$
-\end_inset
-
- to the 
-\begin_inset Formula $B_{i,1}$
-\end_inset
-
-.
-\begin_inset Formula 
-\begin{align*}
-B_{i,2} & =\frac{1}{\mu+\lambda_{i,2}}\lambda_{i,1}B_{i,1}\\
-B_{i,3} & =\frac{1}{\mu+\lambda_{i,3}}\left(\frac{\lambda_{i,2}}{\mu+\lambda_{i,2}}\lambda_{i,1}B_{i,1}\right)\\
- & \vdots\\
-B_{i,j} & =\left(\frac{\mu+\lambda_{i,1}}{\lambda_{i,j}}\right)B_{i,1}\left(\prod_{r=1}^{j}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right)\\
-\end{align*}
-
-\end_inset
-
-so that 
-\begin_inset Formula $B_{i,i}=\left(\frac{\mu+\lambda_{i,1}}{\lambda_{i,i}}\right)B_{i,1}\left(\prod_{r=1}^{i}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right)$
-\end_inset
-
-.
- Now let 
-\begin_inset Formula $\tau_{l}=\prod_{j=1}^{l}\frac{\lambda_{l,j}}{\mu+\lambda_{l,j}}$
-\end_inset
-
- so that 
-\begin_inset Formula $B_{i,i}=\left(\frac{\mu+\lambda_{i,1}}{\lambda_{i,i}}\right)\tau_{i}B_{i,1}$
-\end_inset
-
-and define 
-\begin_inset Formula $\beta=\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}$
+, and 
+\begin_inset Formula $L$
 \end_inset
 
 .
@@ -2127,18 +1418,70 @@ and define
 \end_layout
 
 \begin_layout Standard
-Now we can write the equation for 
+After some calculation, we obtain a system of equations for each 
+\begin_inset Formula $\boldsymbol{B}_{i}$
+\end_inset
+
+ which depends only on the final blood feeding stages 
+\begin_inset Formula $B_{l,l}$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le l\le k$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+\left(\mu I-A_{i}^{T}\right)\boldsymbol{B}_{i} & =\left(\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\right)\boldsymbol{\alpha}_{i}.
+\end{align*}
+
+\end_inset
+
+This system of equations reduces to
+\begin_inset Formula 
+\begin{align*}
+B_{i,j} & =\left(\frac{\mu+\lambda_{i,1}}{\lambda_{i,j}}\right)\left(\prod_{r=1}^{j}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right)B_{i,1},1<j\le i\\
+B_{i,1} & =\left(\frac{1}{\mu+\lambda_{i,1}}\right)\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\left(\frac{1}{\mu+\lambda_{i,1}}\right)\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}
+\end{align*}
+
+\end_inset
+
+Now let 
+\begin_inset Formula $\tau_{l}=\prod_{j=1}^{l}\frac{\lambda_{l,j}}{\mu+\lambda_{l,j}}$
+\end_inset
+
+, which represents the probability of a newly-emerged mosquito of type 
+\begin_inset Formula $l$
+\end_inset
+
+ surviving to oviposition.
+ Then 
+\begin_inset Formula $B_{i,i}=\left(\frac{\mu+\lambda_{i,1}}{\lambda_{i,i}}\right)\tau_{i}B_{i,1}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Now define 
+\begin_inset Formula $\beta=\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}$
+\end_inset
+
+.
+ We can now write the equation for 
 \begin_inset Formula $B_{i,1}$
 \end_inset
 
  totally in terms of 
-\begin_inset Formula $B_{i,1}$
+\begin_inset Formula $\beta$
 \end_inset
 
 :
 \begin_inset Formula 
 \begin{align*}
-\left(\mu+\lambda_{i,1}\right)B_{i,1} & =\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\lambda_{i,i}B_{i,i}\\
+B_{i,1} & =\left(\frac{1}{\mu+\lambda_{i,1}}\right)\kappa_{i}K_{L}\frac{e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}{K_{L}+\frac{1}{\rho_{L}}e\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}}+\frac{\gamma}{\gamma+\mu}\tau_{i}B_{i,1}\\
 B_{i,1} & =\frac{1}{\mu+\lambda_{i,1}}\kappa_{i}K_{L}\frac{e\beta}{K_{L}+\frac{1}{\rho_{L}}e\beta}+\frac{\gamma}{\gamma+\mu}\tau_{i}B_{i,1}\\
 \left(1-\frac{\gamma}{\gamma+\mu}\tau_{i}\right)B_{i,1} & =\frac{1}{\mu+\lambda_{i,1}}\kappa_{i}K_{L}\frac{e\beta}{K_{L}+\frac{1}{\rho_{L}}e\beta}\\
 B_{i,1} & =\frac{\rho_{L}K_{L}e\beta}{\rho_{L}K_{L}+e\beta}\left(\frac{1}{\mu+\lambda_{i,1}}\kappa_{i}\nu_{i}\right)
@@ -2146,17 +1489,21 @@ B_{i,1} & =\frac{\rho_{L}K_{L}e\beta}{\rho_{L}K_{L}+e\beta}\left(\frac{1}{\mu+\l
 
 \end_inset
 
-where 
-\begin_inset Formula $\nu_{i}=\frac{1}{1-\frac{\gamma}{\gamma+\mu}\tau_{i}}$
+where we defined 
+\begin_inset Formula $\nu_{i}=\left[1-\frac{\gamma}{\gamma+\mu}\tau_{i}\right]^{-1}$
 \end_inset
 
- represents the average number of gonotrophic cycles per lifespan for a
- mosquito type that bites 
+, representing the average number of gonotrophic cycles per lifespan for
+ a mosquito of type 
 \begin_inset Formula $i$
 \end_inset
 
- times.
- Notice that the bracketed quantity above is independent of the index 
+.
+ Notice that the prefactor in the equation for 
+\begin_inset Formula $B_{i,1}$
+\end_inset
+
+ is independent of the index 
 \begin_inset Formula $i$
 \end_inset
 
@@ -2164,11 +1511,19 @@ where
 \end_layout
 
 \begin_layout Standard
-Now, using the fact that 
-\begin_inset Formula $\beta=\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}=\sum_{l=1}^{k}\left(\mu+\lambda_{l,1}\right)\tau_{l}B_{l,1}$
+We now use the equation for 
+\begin_inset Formula $B_{i,1}$
 \end_inset
 
-, we arrive at an expression that allows us to solve for 
+ above, the definition of 
+\begin_inset Formula $\beta=\sum_{l=1}^{k}\lambda_{l,l}B_{l,l}$
+\end_inset
+
+, and the equation 
+\begin_inset Formula $B_{l,l}=\left(\frac{\mu+\lambda_{l,1}}{\lambda_{l,l}}\right)\tau_{l}B_{l,1}$
+\end_inset
+
+ to arrive at an expression that allows us to solve for 
 \begin_inset Formula $\beta$
 \end_inset
 
@@ -2185,14 +1540,19 @@ Now, using the fact that
 \end_layout
 
 \begin_layout Standard
-Note that 
-\begin_inset Formula $\nu_{G}=\sum_{l=1}^{k}\kappa_{l}\tau_{l}\nu_{l}$
+Let 
+\begin_inset Formula $\nu=\sum_{l=1}^{k}\kappa_{l}\tau_{l}\nu_{l}$
 \end_inset
 
- may be interpreted to represent the (weighted) average number of additional
- gonotrophic cycles undergone by a mosquito conditional on it having reproduced
- exactly once, accounting for the distribution of the number of bites it
- needs to attain repletion.
+, which may be interpreted to represent the average number of additional
+ gonotrophic cycles undergone by a newly-emerged mosquito, weighted to account
+ for the distribution of the number of bites it needs to attain repletion.
+ The factor 
+\begin_inset Formula $\tau_{l}$
+\end_inset
+
+ appears because a newly-emerged mosquito must survive to oviposit at least
+ once to be counted.
  We are now situated to solve for 
 \begin_inset Formula $\beta$
 \end_inset
@@ -2200,8 +1560,8 @@ Note that
 :
 \begin_inset Formula 
 \begin{align*}
-\beta & =\left(\frac{\rho_{L}K_{L}e\beta}{\rho_{L}K_{L}+e\beta}\right)\nu_{G}\\
-\beta & =\rho_{L}K_{L}\frac{1}{e}\left(e\nu_{G}-1\right)
+\beta & =\left(\frac{\rho_{L}K_{L}e\beta}{\rho_{L}K_{L}+e\beta}\right)\nu\\
+\beta & =\rho_{L}K_{L}\frac{1}{e}\left(e\nu-1\right)
 \end{align*}
 
 \end_inset
@@ -2218,49 +1578,27 @@ Now that we know
 \begin_inset Formula $B_{i,1}$
 \end_inset
 
-
+ and the remaining equilibrium values
 \begin_inset Formula 
 \begin{align*}
-B_{i,1} & =\rho_{L}K_{L}\frac{1}{e\nu_{G}}\left(e\nu_{G}-1\right)\left(\frac{1}{\mu+\lambda_{i,1}}\kappa_{i}\nu_{i}\right)
+L & =K_{L}\frac{1}{e\nu}\left(e\nu-1\right),\\
+B_{i,1} & =\rho_{L}K_{L}\frac{1}{e\nu}\left(e\nu-1\right)\left(\frac{1}{\mu+\lambda_{i,1}}\kappa_{i}\nu_{i}\right),\\
+B_{i,j} & =\rho_{L}K_{L}\frac{1}{e\nu}\left(e\nu-1\right)\left(\kappa_{i}\nu_{i}\right)\left(\frac{1}{\lambda_{i,j}}\right)\left(\prod_{r=1}^{j}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right),\\
+V_{i} & =\frac{1}{\gamma+\mu}\rho_{L}K_{L}\frac{1}{e\nu}\left(e\nu-1\right)\left(\kappa_{i}\nu_{i}\tau_{i}\right).
 \end{align*}
 
 \end_inset
 
-and thus,
-\begin_inset Formula 
-\begin{align*}
-B_{i,j} & =\rho_{L}K_{L}\frac{1}{e\nu_{G}}\left(e\nu_{G}-1\right)\left(\kappa_{i}\nu_{i}\right)\left(\frac{1}{\lambda_{i,j}}\right)\left(\prod_{r=1}^{j}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right)\\
-V_{i} & =\frac{1}{\gamma+\mu}\rho_{L}K_{L}\frac{1}{e\nu_{G}}\left(e\nu_{G}-1\right)\left(\kappa_{i}\nu_{i}\tau_{i}\right)\\
-\boldsymbol{1}^{T}\boldsymbol{V} & =\frac{1}{\gamma+\mu}\rho_{L}K_{L}\frac{1}{e}\left(e\nu_{G}-1\right)\\
-L & =K_{L}\frac{1}{e\nu_{G}}\left(e\nu_{G}-1\right)
-\end{align*}
-
+Letting 
+\begin_inset Formula $R=e\nu$
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Let 
-\begin_inset Formula $R=e\nu_{G}$
+, we will show later that 
+\begin_inset Formula $R$
 \end_inset
 
-.
- We will show later that this is the reproductive number.
- 
-\begin_inset Formula 
-\begin{align*}
-R & =e\nu_{G}\\
- & =\phi\frac{1}{\gamma+\mu}\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\left(\sum_{l=1}^{k}\kappa_{l}\frac{\tau_{l}}{1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau_{l}}\right)
-\end{align*}
-
-\end_inset
-
-where 
-\begin_inset Formula $\tau_{l}=\prod_{j=1}^{l}\frac{\lambda_{l,j}}{\mu+\lambda_{l,j}}$
-\end_inset
-
-.
+ is the reproductive number determining the existence and stability of a
+ positive (non-extinction) equilibrium.
 \end_layout
 
 \begin_layout Subsection*
@@ -2268,30 +1606,29 @@ Stability of equilibria
 \end_layout
 
 \begin_layout Standard
-Following Hurtado and Richards 2020, we can use matrix-vector notation to
- determine the reproductive ratio for the mosquito population in this case.
- We employ the next generation operator approach developed in van den Driessche
- and Watmough (2002).
- We define recruitment by the number of new reproductively mature mosquitoes
- (compartments 
+We again employ the next generation operator approach developed in van den
+ Driessche and Watmough (2002).
+ We now have multiple compartments that may be interpreted as representing
+ 
+\begin_inset Quotes eld
+\end_inset
+
+new
+\begin_inset Quotes erd
+\end_inset
+
+ mosquitoes.
+ We thus define recruitment as individuals entering any of the compartments
+ 
 \begin_inset Formula $B_{i,1}$
 \end_inset
 
-).
+.
+ 
 \end_layout
 
 \begin_layout Standard
 We begin by re-writing our model as
-\begin_inset Formula 
-\begin{align*}
-\frac{d}{dt}L & =\phi\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)-\left(\rho_{L}+\mu_{L}\right)L\\
-\frac{d}{dt}\boldsymbol{B}_{i} & =\left(\kappa_{i}\rho_{L}L+\gamma V_{i}\right)\boldsymbol{\alpha}_{i}+A_{i}^{T}\boldsymbol{B}_{i}-\mu\boldsymbol{B}_{i}\\
-\frac{d}{dt}V_{i} & =\lambda_{i,i}B_{i,i}-\left(\gamma+\mu\right)V_{i}
-\end{align*}
-
-\end_inset
-
-
 \begin_inset Formula 
 \begin{align*}
 \frac{d}{dt}\begin{bmatrix}L\\
@@ -2339,7 +1676,7 @@ V_{k}
 \lambda_{k-1,k-1}B_{k-1,k-1}\\
 \lambda_{k,k}B_{k,k}
 \end{bmatrix}\right\} \\
- & =\mathcal{F}-\left(\mathcal{V}_{-}-\mathcal{V}_{+}\right)
+ & =\mathcal{F}-\mathcal{V}
 \end{align*}
 
 \end_inset
@@ -2354,7 +1691,7 @@ where
 \end_inset
 
 .
- We now calculate the determinants of 
+ We now calculate the Jacobians of 
 \begin_inset Formula $\mathcal{F}$
 \end_inset
 
@@ -2367,36 +1704,40 @@ where
 \end_inset
 
 .
- 
-\end_layout
+ We can write the Jacobian of 
+\begin_inset Formula $\mathcal{V}$
+\end_inset
 
-\begin_layout Standard
+ as 
+\begin_inset Formula $\mathcal{V}_{x}=\begin{bmatrix}\mathcal{V}_{1} & \mathcal{V}_{2}\\
+\mathcal{V}_{3} & \mathcal{V}_{4}
+\end{bmatrix}$
+\end_inset
+
+ where
 \begin_inset Formula 
 \begin{align*}
-\mathcal{V}_{x} & =\partial_{x}\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)L-\phi\boldsymbol{1}^{T}\boldsymbol{V}\left(1-\frac{L}{K_{L}}\right)\\
--\gamma V_{1}\boldsymbol{\alpha}_{1}+\left(\mu I-A_{1}^{T}\right)\boldsymbol{B}_{1}\\
--\gamma V_{2}\boldsymbol{\alpha}_{2}+\left(\mu I-A_{2}^{T}\right)\boldsymbol{B}_{2}\\
-\vdots\\
--\gamma V_{k-1}\boldsymbol{\alpha}_{k-1}+\left(\mu I-A_{k-1}^{T}\right)\boldsymbol{B}_{k-1}\\
--\gamma V_{k}\boldsymbol{\alpha}_{k}+\left(\mu I-A_{k}^{T}\right)\boldsymbol{B}_{k}\\
-\left(\gamma+\mu\right)V_{1}-\lambda_{1,1}B_{1,1}\\
-\left(\gamma+\mu\right)V_{2}-\lambda_{2,2}B_{2,2}\\
-\vdots\\
-\left(\gamma+\mu\right)V_{k-1}-\lambda_{k-1,k-1}B_{k-1,k-1}\\
-\left(\gamma+\mu\right)V_{k}-\lambda_{k,k}B_{k,k}
+\mathcal{V}_{1} & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)+\phi\boldsymbol{1}^{T}\boldsymbol{V}\left(-\frac{1}{K_{L}}\right) & 0 & 0 & \cdots & 0 & 0\\
+0 & \left[\left(\mu I-A_{1}^{T}\right)\right] & 0 & \cdots & 0 & 0\\
+\boldsymbol{0} & \boldsymbol{0} & \left[\left(\mu I-A_{2}^{T}\right)\right] & \cdots & \boldsymbol{0} & \boldsymbol{0}\\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+\boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \cdots & \left(\mu I-A_{k-1}^{T}\right) & \boldsymbol{0}\\
+\boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \cdots & \boldsymbol{0} & \left(\mu I-A_{k}^{T}\right)
 \end{bmatrix}\\
-\mathcal{V}_{x} & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right)+\phi\boldsymbol{1}^{T}\boldsymbol{V}\left(-\frac{1}{K_{L}}\right) & 0 & 0 & \cdots & 0 & 0 & -\phi\left(1-\frac{L}{K_{L}}\right) & -\phi\left(1-\frac{L}{K_{L}}\right) & \cdots & -\phi\left(1-\frac{L}{K_{L}}\right) & -\phi\left(1-\frac{L}{K_{L}}\right)\\
-0 & \left[\left(\mu I-A_{1}^{T}\right)\right] & 0 & \cdots & 0 & 0 & -\gamma\boldsymbol{\alpha}_{1} & 0 & \cdots & 0 & 0\\
-\boldsymbol{0} & \boldsymbol{0} & \left[\left(\mu I-A_{2}^{T}\right)\right] & \cdots & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & -\gamma\boldsymbol{\alpha}_{2} & \cdots & \boldsymbol{0} & \boldsymbol{0}\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-\boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \cdots & \left(\mu I-A_{k-1}^{T}\right) & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \cdots & -\gamma\boldsymbol{\alpha}_{k-1} & \boldsymbol{0}\\
-\boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \cdots & \boldsymbol{0} & \left(\mu I-A_{k}^{T}\right) & \boldsymbol{0} & \boldsymbol{0} & \cdots & \boldsymbol{0} & -\gamma\boldsymbol{\alpha}_{k}\\
-0 & -\lambda_{1,1}\boldsymbol{\omega}_{1} & \boldsymbol{0} & \cdots & 0 & 0 & \left(\gamma+\mu\right) & 0 & \cdots & 0 & 0\\
-0 & \boldsymbol{0} & -\lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \left(\gamma+\mu\right) & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & \boldsymbol{0} & \boldsymbol{0} & \cdots & -\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & \boldsymbol{0} & 0 & 0 & \cdots & \left(\gamma+\mu\right) & 0\\
-0 & \boldsymbol{0} & \boldsymbol{0} & \cdots & \boldsymbol{0} & -\lambda_{k,k}\boldsymbol{\omega}_{k} & 0 & 0 & \cdots & 0 & \left(\gamma+\mu\right)
-\end{bmatrix}
+\mathcal{V}_{2} & =\begin{bmatrix}-\phi\left(1-\frac{L}{K_{L}}\right) & -\phi\left(1-\frac{L}{K_{L}}\right) & \cdots & -\phi\left(1-\frac{L}{K_{L}}\right) & -\phi\left(1-\frac{L}{K_{L}}\right)\\
+-\gamma\boldsymbol{\alpha}_{1} & 0 & \cdots & 0 & 0\\
+\boldsymbol{0} & -\gamma\boldsymbol{\alpha}_{2} & \cdots & \boldsymbol{0} & \boldsymbol{0}\\
+\vdots & \vdots & \ddots & \vdots & \vdots\\
+\boldsymbol{0} & \boldsymbol{0} & \cdots & -\gamma\boldsymbol{\alpha}_{k-1} & \boldsymbol{0}\\
+\boldsymbol{0} & \boldsymbol{0} & \cdots & \boldsymbol{0} & -\gamma\boldsymbol{\alpha}_{k}
+\end{bmatrix}\\
+\mathcal{V}_{3} & =\begin{bmatrix}0 & -\lambda_{1,1}\boldsymbol{\omega}_{1} & \boldsymbol{0} & \cdots & 0 & 0\\
+0 & \boldsymbol{0} & -\lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & \boldsymbol{0} & \boldsymbol{0}\\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+0 & \boldsymbol{0} & \boldsymbol{0} & \cdots & -\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & \boldsymbol{0}\\
+0 & \boldsymbol{0} & \boldsymbol{0} & \cdots & \boldsymbol{0} & -\lambda_{k,k}\boldsymbol{\omega}_{k}
+\end{bmatrix}\\
+\mathcal{V}_{4} & =\left(\gamma+\mu\right)I_{k}
 \end{align*}
 
 \end_inset
@@ -2410,21 +1751,14 @@ where
 \end_inset
 
 .
+ The Jacobian of 
+\begin_inset Formula $\mathcal{F}$
+\end_inset
+
+ can be written as
 \begin_inset Formula 
 \begin{align*}
-\mathcal{F}_{x} & =\begin{bmatrix}0 & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\kappa_{1}\boldsymbol{\alpha}_{1} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\kappa_{2}\boldsymbol{\alpha}_{2} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
-\rho_{L}\kappa_{k-1}\boldsymbol{\alpha}_{k-1} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\kappa_{k}\boldsymbol{\alpha}_{k} & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-0 & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-0 & 0 & 0 & \cdots & 0 & 0 & 0 & 0 & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & 0 & 00 & 0 & 0 & \cdots & 0 & 0\\
-0 & 0 & 0 & \cdots & 0 & 00 & 0 & 0 & \cdots & 0 & 0
-\end{bmatrix}\\
- & =\begin{bmatrix}0 & \boldsymbol{0}_{1\times n+k}\\
+\mathcal{F}_{x} & =\begin{bmatrix}0 & \boldsymbol{0}_{1\times n+k}\\
 \rho_{L}\boldsymbol{\kappa}\boldsymbol{\alpha} & \boldsymbol{0}_{n\times n+k}\\
 \boldsymbol{0}_{k\times1} & \boldsymbol{0}_{k\times n+k}
 \end{bmatrix}
@@ -2432,36 +1766,21 @@ where
 
 \end_inset
 
-
-\begin_inset Formula 
-\begin{align*}
-V & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & 0 & 0 & \cdots & 0 & 0 & -\phi & -\phi & \cdots & -\phi & -\phi\\
-0 & \left[\left(\mu I-A_{1}^{T}\right)\right] & 0 & \cdots & 0 & 0 & -\gamma\boldsymbol{\alpha}_{1} & 0 & \cdots & 0 & 0\\
-\boldsymbol{0} & \boldsymbol{0} & \left[\left(\mu I-A_{2}^{T}\right)\right] & \cdots & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & -\gamma\boldsymbol{\alpha}_{2} & \cdots & \boldsymbol{0} & \boldsymbol{0}\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-\boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \cdots & \left(\mu I-A_{k-1}^{T}\right) & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \cdots & -\gamma\boldsymbol{\alpha}_{k-1} & \boldsymbol{0}\\
-\boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \cdots & \boldsymbol{0} & \left(\mu I-A_{k}^{T}\right) & \boldsymbol{0} & \boldsymbol{0} & \cdots & \boldsymbol{0} & -\gamma\boldsymbol{\alpha}_{k}\\
-0 & -\lambda_{1,1}\boldsymbol{\omega}_{1} & \boldsymbol{0} & \cdots & 0 & 0 & \left(\gamma+\mu\right) & 0 & \cdots & 0 & 0\\
-0 & \boldsymbol{0} & -\lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & \boldsymbol{0} & \boldsymbol{0} & \boldsymbol{0} & \left(\gamma+\mu\right) & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & \boldsymbol{0} & \boldsymbol{0} & \cdots & -\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & \boldsymbol{0} & 0 & 0 & \cdots & \left(\gamma+\mu\right) & 0\\
-0 & \boldsymbol{0} & \boldsymbol{0} & \cdots & \boldsymbol{0} & -\lambda_{k,k}\boldsymbol{\omega}_{k} & 0 & 0 & \cdots & 0 & \left(\gamma+\mu\right)
-\end{bmatrix}
-\end{align*}
-
+where 
+\begin_inset Formula $\boldsymbol{\kappa}=\left[\kappa_{1},\kappa_{2},\ldots,\kappa_{k}\right]^{T}$
 \end_inset
 
+.
+\end_layout
 
-\begin_inset Formula 
-\[
-V=\begin{bmatrix}V_{1} & V_{2}\\
+\begin_layout Standard
+Now, evaluating these at the extinction equilibrium, we obtain 
+\begin_inset Formula $V=\begin{bmatrix}V_{1} & V_{2}\\
 V_{3} & V_{4}
-\end{bmatrix}
-\]
-
+\end{bmatrix}$
 \end_inset
 
-where
+ where
 \begin_inset Formula 
 \begin{align*}
 V_{1} & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & 0 & 0 & \cdots & 0 & 0\\
@@ -2489,11 +1808,11 @@ V_{4} & =\left(\gamma+\mu\right)I_{k}
 
 \end_inset
 
-Now the inverse of 
+The inverse of 
 \begin_inset Formula $V$
 \end_inset
 
- is given by 
+ is then given by 
 \begin_inset Formula 
 \[
 V^{-1}=\begin{bmatrix}W_{1} & W_{2}\\
@@ -2520,14 +1839,32 @@ where
 \end_inset
 
 .
+ 
+\begin_inset Formula $V^{-1}$
+\end_inset
+
+ exists since the inverse of 
+\begin_inset Formula $V_{4}$
+\end_inset
+
+ exists: 
+\begin_inset Formula $V_{4}^{-1}=\frac{1}{\gamma+\mu}I_{k}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
-The form of 
+As before, the form of 
 \begin_inset Formula $F$
 \end_inset
 
- simplifies this calculation further
+ simplifies the calculation of 
+\begin_inset Formula $K=FV^{-1}$
+\end_inset
+
+ substantially.
+ We can write
 \begin_inset Formula 
 \begin{align*}
 F & =\begin{bmatrix}\bar{F}_{n+1\times n+1} & \boldsymbol{0}_{n+1\times k}\\
@@ -2555,27 +1892,26 @@ where the matrix
 
 \end_inset
 
-Hence, 
-\begin_inset Formula $K=FV^{-1}$
+We can thus write the matrix 
+\begin_inset Formula $K$
 \end_inset
 
- can be written as a block-matrix as follows
+ in block-matrix form as follows
 \begin_inset Formula 
 \begin{align*}
-K=FV^{-1} & =\begin{bmatrix}\bar{F}_{n+1\times n+1} & \boldsymbol{0}_{n+1\times k}\\
-\boldsymbol{0}_{k\times n+1} & \boldsymbol{0}_{k\times k}
-\end{bmatrix}\begin{bmatrix}W_{1} & W_{2}\\
-W_{3} & W_{4}
-\end{bmatrix}\\
- & =\begin{bmatrix}\left[\bar{F}W_{1}\right]_{n+1\times n+1} & \left[\bar{F}W_{2}\right]_{k\times k}\\
+K=FV^{-1} & =\begin{bmatrix}\left[\bar{F}W_{1}\right]_{n+1\times n+1} & \left[\bar{F}W_{2}\right]_{k\times k}\\
 \boldsymbol{0}_{k\times n+1} & \boldsymbol{0}_{k\times k}
 \end{bmatrix}
 \end{align*}
 
 \end_inset
 
-is block upper triangular, hence the eigenvalues are the same as those of
- 
+Thus 
+\begin_inset Formula $K$
+\end_inset
+
+ is block upper triangular and its eigenvalues must be the same as those
+ of 
 \begin_inset Formula $\bar{F}W_{1}$
 \end_inset
 
@@ -2596,62 +1932,7 @@ We now proceed to compute
  then determine its inverse.
 \begin_inset Formula 
 \begin{align*}
-V_{2}V_{3} & =\begin{bmatrix}\phi & \phi & \cdots & \phi & \phi\\
-\gamma\boldsymbol{\alpha}_{1} & 0 & \cdots & 0 & 0\\
-0 & \gamma\boldsymbol{\alpha}_{2} & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & \gamma\boldsymbol{\alpha}_{k-1} & 0\\
-0 & 0 & \cdots & 0 & \gamma\boldsymbol{\alpha}_{k}
-\end{bmatrix}\begin{bmatrix}0 & \lambda_{1,1}\boldsymbol{\omega}_{1} & 0 & \cdots & 0 & 0\\
-0 & 0 & \lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & \lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & 0\\
-0 & 0 & 0 & \cdots & 0 & \lambda_{k,k}\boldsymbol{\omega}_{k}
-\end{bmatrix}\\
- & =\begin{bmatrix}0 & \phi\lambda_{1,1}\boldsymbol{\omega}_{1} & \phi\lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & \phi\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & \phi\lambda_{k,k}\boldsymbol{\omega}_{k}\\
-0 & \gamma\lambda_{1,1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1} & 0 & \cdots & 0 & 0\\
-0 & 0 & \gamma\lambda_{2,2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2} & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & \gamma\lambda_{k-1,k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1} & 0\\
-0 & 0 & 0 & \cdots & 0 & \gamma\lambda_{k,k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-where 
-\begin_inset Formula $\boldsymbol{\alpha}_{i}\boldsymbol{\omega}_{i}$
-\end_inset
-
- is an 
-\begin_inset Formula $i\times i$
-\end_inset
-
- matrix with entries
-\begin_inset Formula $\left[\boldsymbol{\alpha}_{i}\boldsymbol{\omega}_{i}\right]_{j,k}=\begin{cases}
-1 & j=1,k=i\\
-0 & \textrm{otherwise}
-\end{cases}$
-\end_inset
-
-.
- 
-\begin_inset Formula 
-\begin{align*}
-V_{1}-V_{2}V_{4}^{-1}V_{3} & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & 0 & 0 & \cdots & 0 & 0\\
-0 & \left[\left(\mu I-A_{1}^{T}\right)\right] & 0 & \cdots & 0 & 0\\
-0 & 0 & \left[\left(\mu I-A_{2}^{T}\right)\right] & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & \left[\left(\mu I-A_{k-1}^{T}\right)\right] & 0\\
-0 & 0 & 0 & \cdots & 0 & \left[\left(\mu I-A_{k}^{T}\right)\right]
-\end{bmatrix}+\begin{bmatrix}0 & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{1,1}\boldsymbol{\omega}_{1} & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{k,k}\boldsymbol{\omega}_{k}\\
-0 & -\left(\frac{\gamma}{\gamma+\mu}\right)\lambda_{1,1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1} & 0 & \cdots & 0 & 0\\
-0 & 0 & -\left(\frac{\gamma}{\gamma+\mu}\right)\lambda_{2,2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2} & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & -\left(\frac{\gamma}{\gamma+\mu}\right)\lambda_{k-1,k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1} & 0\\
-0 & 0 & 0 & \cdots & 0 & -\left(\frac{\gamma}{\gamma+\mu}\right)\lambda_{k,k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}
-\end{bmatrix}\\
- & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{1,1}\boldsymbol{\omega}_{1} & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{k,k}\boldsymbol{\omega}_{k}\\
+V_{1}-V_{2}V_{4}^{-1}V_{3} & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\right) & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{1,1}\boldsymbol{\omega}_{1} & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & -\left(\frac{\phi}{\gamma+\mu}\right)\lambda_{k,k}\boldsymbol{\omega}_{k}\\
 0 & L_{1} & 0 & \cdots & 0 & 0\\
 0 & 0 & L_{2} & \cdots & 0 & 0\\
 \vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
@@ -2667,27 +1948,26 @@ where
 \end_inset
 
 .
- This is block upper triangular with non-zero diagonal matrix entries which
- are each invertible.
+ The matrix 
+\begin_inset Formula $V_{1}-V_{2}V_{4}^{-1}V_{3}$
+\end_inset
+
+ is block upper triangular with non-zero diagonal matrix entries each of
+ which are invertible.
  Hence 
 \begin_inset Formula $V_{1}-V_{2}V_{4}^{-1}V_{3}$
 \end_inset
 
- is itself invertible.Then we calculate 
+ is itself invertible.
+ We next calculate 
 \begin_inset Formula $W_{1}$
 \end_inset
 
  as:
 \begin_inset Formula 
 \begin{align*}
-W_{1} & =\begin{bmatrix}X_{1} & X_{2}\\
-X_{3} & X_{4}
-\end{bmatrix}^{-1}\\
- & =\begin{bmatrix}X_{1}^{-1}+X_{1}^{-1}X_{2}\left(X_{4}-X_{3}X_{1}^{-1}X_{2}\right)^{-1}X_{3}X_{1}^{-1} & -X_{1}^{-1}X_{2}\left(X_{4}-X_{3}X_{1}^{-1}X_{2}\right)^{-1}\\
+W_{1} & =\begin{bmatrix}X_{1}^{-1}+X_{1}^{-1}X_{2}\left(X_{4}-X_{3}X_{1}^{-1}X_{2}\right)^{-1}X_{3}X_{1}^{-1} & -X_{1}^{-1}X_{2}\left(X_{4}-X_{3}X_{1}^{-1}X_{2}\right)^{-1}\\
 -\left(X_{4}-X_{3}X_{1}^{-1}X_{2}\right)^{-1}X_{3}X_{1}^{-1} & \left(X_{4}-X_{3}X_{1}^{-1}X_{2}\right)^{-1}
-\end{bmatrix}\\
- & =\begin{bmatrix}P_{1}^{-1} & -P_{1}^{-1}P_{2}P_{4}^{-1}\\
-0 & P_{4}^{-1}
 \end{bmatrix}
 \end{align*}
 
@@ -2705,100 +1985,105 @@ where
 \begin_inset Formula $X_{3}=\boldsymbol{0}_{k\times1},$
 \end_inset
 
-and
+and 
+\begin_inset Formula $X_{4}=\textrm{diag}\left(\left[L_{1},L_{2},\ldots,L_{k-1},L_{k}\right]\right)$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $X_{3}=\boldsymbol{0}_{k\times1}$
+\end_inset
+
+, we can simplify the expression of 
+\begin_inset Formula $W_{1}$
+\end_inset
+
+ a bit:
 \begin_inset Formula 
 \[
-X_{4}=\begin{bmatrix}L_{1} & 0 & \cdots & 0 & 0\\
-0 & L_{2} & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & L_{k-1} & 0\\
-0 & 0 & \cdots & 0 & L_{k}
-\end{bmatrix}.
+W_{1}=\begin{bmatrix}X_{1}^{-1} & -X_{1}^{-1}X_{2}X_{4}^{-1}\\
+\boldsymbol{0}_{k\times1} & X_{4}^{-1}
+\end{bmatrix}
 \]
 
 \end_inset
 
 
-\begin_inset Formula 
-\begin{align*}
--X_{1}^{-1}X_{2}X_{4}^{-1} & =\frac{e}{\rho_{L}}\begin{bmatrix}\lambda_{1,1}\boldsymbol{\omega}_{1} & \lambda_{2,2}\boldsymbol{\omega}_{2} & \cdots & \lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1} & \lambda_{k,k}\boldsymbol{\omega}_{k}\end{bmatrix}\begin{bmatrix}L_{1}^{-1} & 0 & \cdots & 0 & 0\\
-0 & L_{2}^{-1} & \cdots & 0 & 0\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & \cdots & L_{k-1}^{-1} & 0\\
-0 & 0 & \cdots & 0 & L_{k}^{-1}
-\end{bmatrix}\\
- & =\frac{e}{\rho_{L}}\begin{bmatrix}\lambda_{1,1}\boldsymbol{\omega}_{1}L_{1}, & \lambda_{2,2}\boldsymbol{\omega}_{2}L_{2}, & \cdots & \lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1}L_{k-1}, & \lambda_{k,k}\boldsymbol{\omega}_{k}L_{k}\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-where we have used 
-\begin_inset Formula $e=\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\left(\frac{\sigma_{m}f}{\gamma+\mu}\right)$
-\end_inset
-
-.
- Now
-\begin_inset Formula 
-\begin{align*}
-\bar{F}W_{1}= & \begin{bmatrix}0 & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\kappa_{1}\boldsymbol{\alpha}_{1} & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\kappa_{2}\boldsymbol{\alpha}_{2} & 0 & 0 & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
-\rho_{L}\kappa_{k-1}\boldsymbol{\alpha}_{k-1} & 0 & 0 & \cdots & 0 & 0\\
-\rho_{L}\kappa_{k}\boldsymbol{\alpha}_{k} & 0 & 0 & \cdots & 0 & 0
-\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \frac{1}{\rho_{L}}e\lambda_{1,1}\boldsymbol{\omega}_{1}L_{1} & \frac{1}{\rho_{L}}e\lambda_{2,2}\boldsymbol{\omega}_{2}L_{2} & \cdots & \frac{1}{\rho_{L}}e\lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & \frac{1}{\rho_{L}}e\lambda_{k,k}\boldsymbol{\omega}_{k}L_{k}\\
-0 & L_{1}^{-1} & 0 & \cdots & 0 & 0\\
-0 & 0 & L_{2}^{-1} & \cdots & 0 & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-0 & 0 & 0 & \cdots & L_{k-1}^{-1} & 0\\
-0 & 0 & 0 & \cdots & 0 & L_{k}^{-1}
-\end{bmatrix}\\
-\bar{F}W_{1}= & e\begin{bmatrix}0 & 0 & 0 & \cdots & 0 & 0\\
-\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{1}\boldsymbol{\alpha}_{1} & \lambda_{1,1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k-1,k-1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda_{k,k}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k}L_{k}\\
-\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{2}\boldsymbol{\alpha}_{2} & \lambda_{1,1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k-1,k-1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda_{k,k}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
-\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{k-1}\boldsymbol{\alpha}_{k-1} & \lambda_{1,1}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k-1,k-1}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda_{k,k}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
-\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{k}\boldsymbol{\alpha}_{k} & \lambda_{1,1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k-1,k-1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda_{k,k}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
-Finally we proceed to find determine the spectral radius of 
+Now
+\begin_inset Formula 
+\begin{align*}
+\bar{F}W_{1}= & \begin{bmatrix}0 & 0 & \cdots & 0\\
+\rho_{L}\kappa_{1}\boldsymbol{\alpha}_{1} & 0 & \cdots & 0\\
+\rho_{L}\kappa_{2}\boldsymbol{\alpha}_{2} & 0 & \cdots & 0\\
+\vdots & \vdots & \vdots & \vdots\\
+\rho_{L}\kappa_{k-1}\boldsymbol{\alpha}_{k-1} & 0 & \cdots & 0\\
+\rho_{L}\kappa_{k}\boldsymbol{\alpha}_{k} & 0 & \cdots & 0
+\end{bmatrix}\begin{bmatrix}\frac{1}{\rho_{L}+\mu_{L}} & \frac{1}{\rho_{L}}e\lambda_{1,1}\boldsymbol{\omega}_{1}L_{1} & \frac{1}{\rho_{L}}e\lambda_{2,2}\boldsymbol{\omega}_{2}L_{2} & \cdots & \frac{1}{\rho_{L}}e\lambda_{k,k}\boldsymbol{\omega}_{k}L_{k}\\
+0 & L_{1}^{-1} & 0 & \cdots & 0\\
+0 & 0 & L_{2}^{-1} & \cdots & 0\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+0 & 0 & 0 & \cdots & L_{k}^{-1}
+\end{bmatrix}\\
+\bar{F}W_{1}= & e\begin{bmatrix}0 & 0 & 0 & \cdots & 0\\
+\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{1}\boldsymbol{\alpha}_{1} & \lambda_{1,1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k,k}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k}L_{k}\\
+\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{2}\boldsymbol{\alpha}_{2} & \lambda_{1,1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k,k}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{k}\boldsymbol{\alpha}_{k} & \lambda_{1,1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & \lambda_{2,2}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda_{k,k}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
+\end{bmatrix}\\
+\bar{F}W_{1} & =e\left(\textrm{diag}\left(\boldsymbol{\kappa}\right)\boldsymbol{\alpha}\right)\left(\textrm{diag}\left(\boldsymbol{\lambda}\right)\boldsymbol{\omega}\boldsymbol{L}\right)
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\boldsymbol{\kappa}=\left[\kappa_{1},\ldots,\kappa_{k}\right]^{T}$
+\end_inset
+
+, 
+\begin_inset Formula $\boldsymbol{\lambda}=\left[\lambda_{1},\ldots,\lambda_{k}\right]^{T}$
+\end_inset
+
+, 
+\begin_inset Formula $\boldsymbol{\omega}=\left[\omega_{1},\ldots,\omega_{k}\right]^{T}$
+\end_inset
+
+, and 
+\begin_inset Formula $\boldsymbol{L}=\textrm{diag}\left(\left[L_{1}^{-1},\ldots,L_{k}^{-1}\right]\right)$
+\end_inset
+
+ all have the appropriate sizes to make this product work.
+\end_layout
+
+\begin_layout Standard
+Finally the non-zero eigenvalues of 
 \begin_inset Formula $K$
 \end_inset
 
-, which as we discussed earlier, must be the largest real part of the eigenvalue
-s of 
-\begin_inset Formula $\bar{F}P$
+ must be the same as the non-zero eigenvalues of 
+\begin_inset Formula $\bar{F}W_{1}$
 \end_inset
 
 .
+ These are the roots of the polynomial in 
+\begin_inset Formula $\varphi$
+\end_inset
+
+ of 
+\begin_inset Formula $\left|\varphi-\bar{F}W_{1}\right|=\lambda\left|\lambda I_{n}-e\left(\textrm{diag}\left(\boldsymbol{\kappa}\right)\boldsymbol{\alpha}\right)\left(\textrm{diag}\left(\boldsymbol{\lambda}\right)\boldsymbol{\omega}\boldsymbol{L}\right)\right|$
+\end_inset
+
+.
+ By Sylvester's determinant theorem, this is equivalent to finding the roots
+ of
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
-\left|\lambda-\bar{F}W_{1}\right| & =\begin{vmatrix}\lambda & 0 & 0 & \cdots & 0 & 0\\
--e\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{1}\boldsymbol{\alpha}_{1} & \lambda-e\lambda_{1,1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k}L_{k}\\
--e\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{2}\boldsymbol{\alpha}_{2} & -e\lambda_{1,1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \lambda-e\lambda_{2,2}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
--e\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{k-1}\boldsymbol{\alpha}_{k-1} & -e\lambda_{1,1}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda-e\lambda_{k-1,k-1}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
--e\left(\frac{\gamma+\mu}{\phi}\right)\kappa_{k}\boldsymbol{\alpha}_{k} & -e\lambda_{1,1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda-e\lambda_{k,k}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{vmatrix}\\
- & =\lambda\begin{vmatrix}\lambda-e\lambda_{1,1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\kappa_{1}\boldsymbol{\alpha}_{1}\boldsymbol{\omega}_{k}L_{k}\\
--e\lambda_{1,1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{1}L_{1} & \lambda-e\lambda_{2,2}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\kappa_{2}\boldsymbol{\alpha}_{2}\boldsymbol{\omega}_{k}L_{k}\\
-\vdots & \vdots & \ddots & \vdots & \vdots\\
--e\lambda_{1,1}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{2}L_{2} & \cdots & \lambda-e\lambda_{k-1,k-1}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k-1}L_{k-1} & -e\lambda_{k,k}\kappa_{k-1}\boldsymbol{\alpha}_{k-1}\boldsymbol{\omega}_{k}L_{k}\\
--e\lambda_{1,1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{1}L_{1} & -e\lambda_{2,2}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{2}L_{2} & \cdots & -e\lambda_{k-1,k-1}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k-1}L_{k-1} & \lambda-e\lambda_{k,k}\kappa_{k}\boldsymbol{\alpha}_{k}\boldsymbol{\omega}_{k}L_{k}
-\end{vmatrix}\\
- & =\lambda\left|\lambda I_{n}-e\left(\textrm{diag}\left(\boldsymbol{\kappa}\right)\boldsymbol{\alpha}\right)\left(\textrm{diag}\left(\boldsymbol{\lambda}\right)\boldsymbol{\omega}\boldsymbol{L}\right)\right|\\
- & \textrm{By Sylvester's determinant theorem, this is equivalent to}\\
- & =\lambda^{n+1}\left|1-\frac{1}{\lambda}e\left(\textrm{diag}\left(\boldsymbol{\lambda}\right)\boldsymbol{\omega}\boldsymbol{L}\right)\left(\textrm{diag}\left(\boldsymbol{\kappa}\right)\boldsymbol{\alpha}\right)\right|\\
+0 & =\lambda^{n+1}\left|1-\frac{1}{\lambda}e\left(\textrm{diag}\left(\boldsymbol{\lambda}\right)\boldsymbol{\omega}\boldsymbol{L}\right)\left(\textrm{diag}\left(\boldsymbol{\kappa}\right)\boldsymbol{\alpha}\right)\right|\\
  & =\lambda^{n}\left|\lambda-e\left(\textrm{diag}\left(\boldsymbol{\lambda}\right)\boldsymbol{\omega}\boldsymbol{L}\right)\left(\textrm{diag}\left(\boldsymbol{\kappa}\right)\boldsymbol{\alpha}\right)\right|\\
  & =\lambda^{n}\left|\lambda-e\begin{bmatrix}\lambda_{1,1}\boldsymbol{\omega}_{1}L_{1}, & \lambda_{2.2}\boldsymbol{\omega}_{2}L_{2}, & \cdots & \lambda_{k-1,k-1}\boldsymbol{\omega}_{k-1}L_{k-1}, & \lambda_{k,k}\boldsymbol{\omega}_{k}L_{k}\end{bmatrix}\begin{bmatrix}\kappa_{1}\boldsymbol{\alpha}_{1}\\
 \kappa_{2}\boldsymbol{\alpha}_{2}\\
@@ -2808,13 +2093,13 @@ s of
 \end{bmatrix}\right|\\
  & =\lambda^{n}\left|\lambda-e\sum_{i=1}^{k}\kappa_{i}\lambda_{i,i}\boldsymbol{\omega}_{i}L_{i}\boldsymbol{\alpha}_{i}\right|\\
  & =\lambda^{n}\left|\lambda-e\sum_{i=1}^{k}\kappa_{i}\frac{\nu_{i}}{\lambda_{i,i}}\lambda_{i,i}\tau_{i}\right|\\
- & =\lambda^{n}\left|\lambda-e\nu_{G}\right|
+ & =\lambda^{n}\left|\lambda-e\nu\right|
 \end{align*}
 
 \end_inset
 
 where 
-\begin_inset Formula $\nu_{G}=\sum_{i=1}^{k}\kappa_{i}\tau_{i}\nu_{i}$
+\begin_inset Formula $\nu=\sum_{i=1}^{k}\kappa_{i}\tau_{i}\nu_{i}$
 \end_inset
 
  and we used the fact that the vector 
@@ -2835,28 +2120,14 @@ where
 
  is the first entry of that row:
 \begin_inset Formula 
-\begin{align*}
-L_{i} & =\begin{bmatrix}\mu+\lambda_{i,1} & 0 & 0 & \cdots & -\frac{\gamma}{\gamma+\mu}\lambda_{i,i}\\
--\lambda_{i,1} & \mu+\lambda_{i,2} & 0 & \cdots & 0\\
-\vdots & \vdots & \ddots & \cdots & \vdots\\
-0 & 0 & \ddots & \mu+\lambda_{i,i-1} & 0\\
-0 & 0 & \cdots & -\lambda_{i,i-1} & \mu+\lambda_{i,i}
-\end{bmatrix}^{-1}\\
-\boldsymbol{\omega}_{i}L_{i}=\left[L_{i}\right]_{i,\cdot} & =\frac{n_{i}}{\lambda_{i,i}}\begin{bmatrix}T_{i} & \left(\prod_{j=2}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & \cdots & \left(\prod_{j=i-1}^{i}\frac{\lambda_{i,j}}{\mu+\lambda_{i,j}}\right) & 1\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
 \[
-\boldsymbol{\omega}_{i}L_{i}\boldsymbol{\alpha}_{i}=\frac{n_{i}}{\lambda_{i,i}}T_{i}
+\boldsymbol{\omega}_{i}L_{i}\boldsymbol{\alpha}_{i}=\frac{\nu_{i}}{\lambda_{i,i}}T_{i}
 \]
 
 \end_inset
 
 Hence 
-\begin_inset Formula $R=e\nu_{G}$
+\begin_inset Formula $R=e\nu$
 \end_inset
 
  is a reproductive number: a positive equilibrium exists and is locally
@@ -2867,12 +2138,15 @@ Hence
 .
 \end_layout
 
-\begin_layout Section*
-Comparing equilibria and reproductive numbers
+\begin_layout Part*
+Comparing the two Models
 \end_layout
 
 \begin_layout Standard
-We will use the superscript 
+We wish to compare and contrast the equilibrium results of the two models
+ to better understand how assumptions about multiple blood-feeding might
+ impact transmission potential.
+ We will use the superscript 
 \begin_inset Formula $F$
 \end_inset
 
@@ -2897,8 +2171,9 @@ disruption
 \end_inset
 
  model, respectively.
- For now, we assume the two models have the same parameters except for the
- 
+ Throughout this analysis, we will assume that the models are at their unique
+ positive, stable equilibrium.
+ We also assume the two models have the same parameters except for the 
 \begin_inset Quotes eld
 \end_inset
 
@@ -2915,7 +2190,19 @@ disruption
 \end_inset
 
 
-\begin_inset Formula $\rho$
+\begin_inset Formula $\sigma$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\kappa$
 \end_inset
 
 
@@ -2931,6 +2218,2135 @@ disruption
  
 \end_layout
 
+\begin_layout Standard
+To facilitate this analysis, we consider comparisons between three quantities
+ obtained from the models: the reproductive numbers 
+\begin_inset Formula $R^{D}$
+\end_inset
+
+ and 
+\begin_inset Formula $R^{F}$
+\end_inset
+
+, the equilibrium numbers of mosquitoes that have taken 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals 
+\begin_inset Formula $M_{i}^{D}$
+\end_inset
+
+ and 
+\begin_inset Formula $M_{i}^{F}$
+\end_inset
+
+, and the total biting pressure (bites per day) from the populations 
+\begin_inset Formula $\beta^{D}$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta^{F}$
+\end_inset
+
+ given by the following equations.
+\begin_inset Formula 
+\begin{align*}
+M_{i}^{D} & =B_{i}^{D},\\
+M_{i}^{F} & =\sum_{s=i}^{k}B_{s,i}^{k},
+\end{align*}
+
+\end_inset
+
+and
+\begin_inset Formula 
+\begin{align*}
+\beta^{D} & =\sum_{i=1}^{k}\lambda_{i}^{D}B_{i}^{D},\\
+\beta^{F} & =\sum_{i=1}^{k}\sum_{j=1}^{i}\lambda_{i,j}^{F}B_{i,j}^{F}.
+\end{align*}
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+To make numerical comparisons, we must parameterize the model to some extent.
+ Because there are many ways the models can be parameterized and we wish
+ to make comparisons among appropriately similar systems, we consider two
+ cases of assumptions for the biting rates and probabilities, as follows.
+\end_layout
+
+\begin_layout Standard
+Biting rate assumptions:
+\end_layout
+
+\begin_layout Enumerate
+All rates are equal: 
+\end_layout
+
+\begin_deeper
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula $\textrm{Both models:}$
+\end_inset
+
+ 
+\begin_inset Formula $\lambda_{i}^{D}=\lambda_{i,j}^{F}=\lambda$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Oviposition cycle durations are equal:
+\end_layout
+
+\begin_deeper
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula $\textrm{Disrupt model:}$
+\end_inset
+
+ In this case, we can only set that the average cycle duration is equal
+ 
+\begin_inset Formula $T_{i}^{D}\left(\mu\right)=\frac{1}{\lambda}$
+\end_inset
+
+, where 
+\begin_inset Formula $T_{i}^{D}\left(\mu\right)=\sigma_{i}\left(\frac{\lambda_{i}^{D}}{\lambda_{i}^{D}+\mu}\right)\frac{1}{\lambda_{i}^{D}+\mu}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\left(\frac{\lambda_{j}^{D}}{\lambda_{j}^{D}+\mu}\right)\frac{1}{\lambda_{j}^{D}+\mu}$
+\end_inset
+
+ is the cycle duration length for a mosquito that takes 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals.
+ We assume that 
+\begin_inset Formula $\mu\ll\lambda_{i}^{D}$
+\end_inset
+
+ for all 
+\begin_inset Formula $1\le i\le k$
+\end_inset
+
+ so that 
+\begin_inset Formula $T_{i}^{D}=\sigma_{i}\frac{1}{\lambda_{i}^{D}}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\frac{1}{\lambda_{j}^{D}}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+We have
+\begin_inset Formula 
+\begin{align*}
+\frac{1}{\lambda} & =\sigma_{i}\frac{1}{\lambda_{i}^{D}}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\frac{1}{\lambda_{j}^{D}}
+\end{align*}
+
+\end_inset
+
+Hence
+\begin_inset Formula 
+\begin{align*}
+T_{1} & =\sigma_{1}\frac{1}{\lambda_{1}}\\
+\lambda_{1} & =\sigma_{1}\lambda
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+T_{2} & =\sigma_{2}\frac{1}{\lambda_{2}}\left(1-\sigma_{1}\right)\frac{1}{\lambda_{1}}\\
+\frac{1}{\lambda} & =\sigma_{2}\frac{1}{\lambda_{2}}\left(1-\sigma_{1}\right)\frac{1}{\sigma_{1}\lambda}\\
+\lambda_{2} & =\sigma_{2}\left(\frac{1-\sigma_{1}}{\sigma_{1}}\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+T_{3} & =\sigma_{3}\frac{1}{\lambda_{3}}\left(1-\sigma_{2}\right)\frac{1}{\lambda_{2}}\left(1-\sigma_{1}\right)\frac{1}{\lambda_{1}}\\
+\frac{1}{\lambda} & =\sigma_{3}\frac{1}{\lambda_{3}}\left(1-\sigma_{2}\right)\frac{1}{\sigma_{2}\left(\frac{1-\sigma_{1}}{\sigma_{1}}\right)}\left(1-\sigma_{1}\right)\frac{1}{\sigma_{1}\lambda}\\
+\lambda_{3} & =\sigma_{3}\left(\frac{1-\sigma_{2}}{\sigma_{2}}\right)
+\end{align*}
+
+\end_inset
+
+and in general, 
+\begin_inset Formula $\lambda_{i+1}=\sigma_{i+1}\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\mu>0$
+\end_inset
+
+, then 
+\begin_inset Formula 
+\begin{align*}
+T_{1} & =\sigma_{1}\left(\frac{\lambda_{1}}{\lambda_{1}+\mu}\right)\frac{1}{\lambda_{1}+\mu}\\
+\left(\lambda_{1}+\mu\right)^{2} & =\lambda\sigma_{1}\lambda_{1}\\
+\lambda_{1}^{2}+\left(2\mu-\sigma_{1}\lambda\right)\lambda_{1}+\mu^{2} & =0
+\end{align*}
+
+\end_inset
+
+By Descartes' Rule of Signs, this has positive roots if and only if 
+\begin_inset Formula $\sigma_{1}\lambda>2\mu$
+\end_inset
+
+ and, in this case, there are two positive roots.
+ We leave the choice of which root to use for 
+\begin_inset Formula $\lambda_{1}$
+\end_inset
+
+ arbitrary for now.
+ The choice may be restricted by additional assumptions further along.
+\begin_inset Formula 
+\begin{align*}
+\lambda_{1} & =-\frac{1}{2}\left(2\mu-\sigma_{1}\lambda\right)\pm\frac{1}{2}\sqrt{\left(2\mu+\sigma_{1}\lambda\right)^{2}-4\mu^{2}}\\
+\lambda_{1} & =-\frac{1}{2}\left(2\mu-\sigma_{1}\lambda\right)\pm\frac{1}{2}\sqrt{\sigma_{1}\lambda\left(\sigma_{1}\lambda-4\mu\right)}
+\end{align*}
+
+\end_inset
+
+We must make the additional assumption that 
+\begin_inset Formula $\sigma_{1}\lambda>4\mu>2\mu$
+\end_inset
+
+.
+ Then we can determine 
+\begin_inset Formula $\lambda_{1}=\lambda_{1}\left(\lambda,\mu,\sigma_{1}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Now, utilizing that 
+\begin_inset Formula $T_{i}=T_{i-1}=\frac{1}{\lambda}$
+\end_inset
+
+, we obtain the equation
+\begin_inset Formula 
+\begin{align*}
+\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)\lambda_{i}^{2}+\left(2\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)-\sigma_{i}\right)\lambda_{i}+\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)\mu^{2} & =0
+\end{align*}
+
+\end_inset
+
+This equation in 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+ has (two) positive real roots only if 
+\begin_inset Formula 
+\[
+\sigma_{i}>2\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)
+\]
+
+\end_inset
+
+In particular, since 
+\begin_inset Formula $\sigma_{i}\in\left[0,1\right]$
+\end_inset
+
+, this requires that 
+\begin_inset Formula 
+\begin{align*}
+2\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right) & <1\\
+\sigma_{i-1} & <\frac{1}{2\mu+1}
+\end{align*}
+
+\end_inset
+
+Now the possibles values of 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+ are
+\begin_inset Formula 
+\begin{align*}
+\lambda_{i} & =-\frac{1}{2}\left(2\mu-\sigma_{i}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\pm\frac{1}{2}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\sqrt{\left(2\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)-\sigma_{i}\right)^{2}-4\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)^{2}\mu^{2}}\\
+\lambda_{i} & =-\frac{1}{2}\left(2\mu-\sigma_{i}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\pm\frac{1}{2}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\sqrt{\sigma_{i}^{2}-4\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)\sigma_{i}}\\
+\lambda_{i} & =-\frac{1}{2}\left(2\mu-\sigma_{i}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\pm\frac{1}{2}\sqrt{\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}\left[\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}-4\mu\right]}
+\end{align*}
+
+\end_inset
+
+Note that there is an additional assumption necessary for the roots to be
+ real:
+\begin_inset Formula 
+\[
+\sigma_{i}>4\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)
+\]
+
+\end_inset
+
+because 
+\begin_inset Formula $\sigma_{i}\in\left[0,1\right]$
+\end_inset
+
+, this requires that
+\begin_inset Formula 
+\begin{align*}
+4\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right) & <1\\
+\sigma_{i-1} & <\frac{1}{1+4\mu}<\frac{1}{1+2\mu}
+\end{align*}
+
+\end_inset
+
+There are two roots that we can choose from for the 
+\begin_inset Formula $\lambda_{i}=\lambda_{i}\left(\lambda,\mu,\sigma_{i-1},\sigma_{i}\right)$
+\end_inset
+
+.
+ We leave the choice arbitrary for now, in case further assumptions restrict
+ our choice.
+ Hence we are able to calculate the 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+ from 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ but we require the additional assumptions that
+\begin_inset Formula 
+\begin{align*}
+\sigma_{1} & >\frac{4\mu}{\lambda}\\
+\sigma_{i} & >4\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right),1<i<k\\
+\sigma_{i} & <\frac{1}{1+4\mu},1\le i<k
+\end{align*}
+
+\end_inset
+
+Note that this further implies a restriction on the values of 
+\begin_inset Formula $\mu$
+\end_inset
+
+ and 
+\begin_inset Formula $\lambda$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\frac{1}{2\mu+1} & >\frac{4\mu}{\lambda}\\
+\lambda & >4\mu\left(2\mu+1\right)
+\end{align*}
+
+\end_inset
+
+Or equivalently
+\begin_inset Formula 
+\begin{align*}
+8\mu^{2}+4\mu-\lambda & <0\\
+\mu & <\mu^{*}
+\end{align*}
+
+\end_inset
+
+ where
+\begin_inset Formula 
+\begin{align*}
+\mu^{*} & =\frac{1}{8}\left[-4+\sqrt{16+32\lambda}\right]\\
+\mu^{*} & =\frac{1}{2}\left(\sqrt{1+2\lambda}-1\right)\\
+\mu^{*} & =\frac{\lambda}{1+\sqrt{1+2\lambda}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula $\textrm{Fate model:}$
+\end_inset
+
+ 
+\begin_inset Formula $\lambda_{i,j}^{F}=i\lambda$
+\end_inset
+
+ .
+ By the linear chain trick, this gives an average cycle duration of 
+\begin_inset Formula $\frac{1}{\lambda}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Probability assumptions:
+\end_layout
+
+\begin_layout Enumerate
+There are equal numbers of mosquitoes which need to take exactly 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals to reach oviposition (when mortality is neglected i.e.
+ 
+\begin_inset Formula $\mu\ll\lambda$
+\end_inset
+
+):
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula $\textrm{Disrupt model:}$
+\end_inset
+
+ Need to come up with a way to view this case without including 
+\begin_inset Formula $\mu$
+\end_inset
+
+.
+ The proportion of mosquitoes having 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals before ovipositing should be given by
+\begin_inset Formula 
+\[
+P_{i}=\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)
+\]
+
+\end_inset
+
+Then 
+\begin_inset Formula $P_{1}=\sigma_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{i+1}=P_{i}$
+\end_inset
+
+ implies that 
+\begin_inset Formula 
+\begin{align*}
+P_{i+1} & =P_{i}\\
+\sigma_{i+1}\prod_{j=1}^{i}\left(1-\sigma_{j}\right) & =\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\\
+\sigma_{i+1}\left(1-\sigma_{i}\right) & =\sigma_{i}\\
+\sigma_{i} & =\frac{\sigma_{i+1}}{1+\sigma_{i+1}}
+\end{align*}
+
+\end_inset
+
+Since 
+\begin_inset Formula $\sigma_{k}=1$
+\end_inset
+
+ and 
+\begin_inset Formula $\frac{1}{\sigma_{i}}=1+\frac{1}{\sigma_{i+1}}$
+\end_inset
+
+, we obtain
+\begin_inset Formula 
+\begin{align*}
+\frac{1}{\sigma_{k-1}} & =1+1\\
+\frac{1}{\sigma_{k-2}} & =1+\left(1+1\right)
+\end{align*}
+
+\end_inset
+
+and, in general, 
+\begin_inset Formula $\sigma_{k-i}=\frac{1}{1+i}$
+\end_inset
+
+ or alternately 
+\begin_inset Formula $\sigma_{i}=\frac{1}{1+k-i}$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le i\le k$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula $\textrm{Fate model:}$
+\end_inset
+
+ 
+\begin_inset Formula $\kappa_{i}=\frac{1}{k}$
+\end_inset
+
+ ensures that the different types of mosquitoes are equidistributed.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+It is 
+\begin_inset Formula $x\%$
+\end_inset
+
+ less likely that a mosquito would need an additional blood meal where 
+\begin_inset Formula $\alpha=\left(1-\frac{x}{100}\right)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula $\textrm{Disrupt model:}$
+\end_inset
+
+The probability, absent mortality, that a mosquito takes exactly 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals to reach oviposition is 
+\begin_inset Formula $P_{1}=\sigma_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{i}=\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)$
+\end_inset
+
+, 
+\begin_inset Formula $1<i\le k$
+\end_inset
+
+.
+ The assumption then translates to 
+\begin_inset Formula $P_{i+1}=\alpha P_{i}$
+\end_inset
+
+, which then implies that 
+\begin_inset Formula $\sigma_{i}=\frac{\sigma_{i+1}}{\alpha+\sigma_{i+1}}$
+\end_inset
+
+.
+ Then since 
+\begin_inset Formula $\sigma_{k=1}$
+\end_inset
+
+, we obtain, using that 
+\begin_inset Formula $\frac{1}{\sigma_{i}}=\alpha\frac{1}{\sigma_{i+1}}+1$
+\end_inset
+
+,
+\begin_inset Formula 
+\begin{align*}
+\frac{1}{\sigma_{k-1}} & =\alpha+1\\
+\frac{1}{\sigma_{k-2}} & =\alpha\left(\alpha+1\right)+1\\
+\frac{1}{\sigma_{k-3}} & =\alpha\left(\alpha\left(\alpha+1\right)+1\right)+1
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula $\sigma_{k-i}=\left[\sum_{j=0}^{i}\alpha^{j}\right]^{-1}$
+\end_inset
+
+ for 
+\begin_inset Formula $0\le i<k$
+\end_inset
+
+, or alternately, 
+\begin_inset Formula $\sigma_{i}=\left[\sum_{j=0}^{k-i}\alpha^{j}\right]^{-1}$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le i\le k$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\textrm{Fate model:}$
+\end_inset
+
+ 
+\begin_inset Formula $\kappa_{i+1}=\alpha\kappa_{i}$
+\end_inset
+
+ .
+ Since 
+\begin_inset Formula $\sum_{i=1}^{k}\kappa_{i}=1$
+\end_inset
+
+, this implies that
+\begin_inset Formula 
+\begin{align*}
+\sum_{i=1}^{k}\alpha^{i-1}\kappa_{1} & =1\\
+\kappa_{1} & =\left[\sum_{i=1}^{k}\alpha^{i-1}\right]^{-1}
+\end{align*}
+
+\end_inset
+
+and 
+\begin_inset Formula $\kappa_{i}=\alpha^{i-1}/\sum_{i=1}^{k}\alpha^{i-1}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+We consider comparisons between the three quantities under the combined
+ four sets of assumptions.
+\end_layout
+
+\begin_layout Section*
+Parameterization
+\end_layout
+
+\begin_layout Standard
+Parameterization is fairly straightforward.
+ The most difficulty occurs in setting up the parameters for the Disrupt
+ model when there are equal numbers taking 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals or the (average) cycle duration lengths are equal.
+ We provide the details for those cases at the bottom.
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Parameterization summary
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="10" columns="6">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="12text%">
+<column alignment="left" valignment="top" width="20text%">
+<column alignment="left" valignment="middle" width="10text%">
+<column alignment="center" valignment="top" width="15text%">
+<column alignment="center" valignment="top" width="20text%">
+<column alignment="left" valignment="middle" width="20text%">
+<row>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Assumption set
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Model
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Parameters
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Combined
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Rate assumption
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Probability assumption
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Rates, 
+\begin_inset Formula $\lambda$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Probabilities, 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ or 
+\begin_inset Formula $\kappa$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+All rates are equal
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Equal numbers of mosquitoes which need to take exactly 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals to reach oviposition (when mortality is neglected i.e.
+ 
+\begin_inset Formula $\mu\ll\lambda$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Disrupt
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{k}=0$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\lambda_{i}^{D}=\lambda$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{i}=\frac{1}{1+k-i}$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le i\le k$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Straightforward
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fate
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sum_{i=1}^{k}\kappa_{i}=1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\lambda_{i,j}^{F}=\lambda$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula $\kappa_{i}=\frac{1}{k}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Straightforward
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+All rates are equal
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Likelihood of a mosquito needing one additional blood meal to reach oviposition
+ is reduced by a factor of 
+\begin_inset Formula $\alpha$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Disrupt
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{k}=0$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\lambda_{i}^{D}=\lambda$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{i}=1/\sum_{j=0}^{k-i}\alpha^{j}$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le i\le k$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Straightforward
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fate
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sum_{i=1}^{k}\kappa_{i}=1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\lambda_{i,j}^{F}=\lambda$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula 
+\[
+\kappa_{i+1}=\alpha\kappa_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\kappa_{i}=\alpha^{i-1}/\sum_{i=1}^{\kappa}\alpha^{i-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cycle durations are equal
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Equal numbers of mosquitoes which need to take exactly 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals to reach oviposition (when mortality is neglected i.e.
+ 
+\begin_inset Formula $\mu\ll\lambda$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Disrupt
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{k}=0$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula 
+\begin{align*}
+\lambda_{1} & =\sigma_{1}\lambda\\
+\lambda_{i+1} & =\sigma_{i+1}\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{i}=\frac{1}{1+k-i}$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le i\le k$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula 
+\begin{align*}
+\sigma_{i} & =\frac{1}{1+k-i},1\le i\le k\\
+\lambda_{1} & =\frac{\lambda}{k}\\
+\lambda_{i} & =1,1<i\le k
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fate
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sum_{i=1}^{k}\kappa_{i}=1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\lambda_{i,j}^{F}=i\lambda$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula $\kappa_{i}=\frac{1}{k}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Straightforward
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cycle durations are equal
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Likelihood of a mosquito needing one additional blood meal to reach oviposition
+ is reduced by a factor of 
+\begin_inset Formula $\alpha$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Disrupt
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{k}=0$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula 
+\begin{align*}
+\lambda_{1} & =\sigma_{1}\lambda\\
+\lambda_{i+1} & =\sigma_{i+1}\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{i}=\left[\sum_{j=0}^{k-i}\alpha^{j}\right]^{-1}$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le i\le k$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula 
+\begin{align*}
+\sigma_{i} & =1/\sum_{j=0}^{k-i}\alpha^{j},1\le i\le k\\
+\lambda_{1} & =\lambda/\sum_{j=0}^{k-1}\alpha^{j}\\
+\lambda_{i} & =\alpha,1<i\le k
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fate
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sum_{i=1}^{k}\kappa_{i}=1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\lambda_{i,j}^{F}=i\lambda$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula 
+\[
+\kappa_{i+1}=\alpha\kappa_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\kappa_{i}=\alpha^{i-1}/\sum_{i=1}^{\kappa}\alpha^{i-1}$
+\end_inset
+
+Straightforward
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We need to treat one case separately, Assumption Set 4, Disrupt Model, because
+ there is a relationship between the 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+.
+ Note that Assumption Set 3, Disrupt Model, is a special case of Assumption
+ Set 4 when 
+\begin_inset Formula $\alpha=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Recall that we have the following functional relationship between the 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+, 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, and 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ values in this case:
+\begin_inset Formula 
+\begin{align*}
+\lambda_{1} & =\sigma_{1}\lambda\\
+\lambda_{i+1} & =\sigma_{i+1}\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)
+\end{align*}
+
+\end_inset
+
+and additionally, we make use of the relation 
+\begin_inset Formula $\sigma_{i}=\frac{\sigma_{i+1}}{\alpha+\sigma_{i+1}}$
+\end_inset
+
+ or 
+\begin_inset Formula $\sigma_{i+1}=\alpha\frac{\sigma_{i}}{1-\sigma_{i}}$
+\end_inset
+
+ so that 
+\begin_inset Formula 
+\begin{align*}
+\frac{1-\sigma_{i}}{\sigma_{i}} & =\frac{\alpha}{\sigma_{i+1}}
+\end{align*}
+
+\end_inset
+
+therefore
+\begin_inset Formula 
+\begin{align*}
+\lambda_{i+1} & =\sigma_{i+1}\frac{\alpha}{\sigma_{i+1}}\\
+\lambda_{i+1} & =\alpha
+\end{align*}
+
+\end_inset
+
+Hence the full conditions are
+\begin_inset Formula 
+\begin{align*}
+\sigma_{i} & =\left[\sum_{j=0}^{k-i}\alpha^{j}\right]^{-1},1\le i\le k\\
+\lambda_{1} & =\lambda\left[\sum_{j=0}^{k-1}\alpha^{j}\right]^{-1}\\
+\lambda_{i} & =\alpha,1<i\le k
+\end{align*}
+
+\end_inset
+
+Then
+\begin_inset Formula 
+\begin{align*}
+\lambda_{i} & =-\frac{1}{2}\left(2\mu-\sigma_{i}\frac{\alpha}{\sigma_{i}}\right)\pm\frac{1}{2}\sqrt{\frac{\alpha}{\sigma_{i}}\sigma_{i}\left[\frac{\alpha}{\sigma_{i}}\sigma_{i}-4\mu\right]}\\
+\lambda_{i} & =-\frac{1}{2}\left(2\mu-\alpha\right)\pm\frac{1}{2}\sqrt{\alpha\left(\alpha-4\mu\right)}
+\end{align*}
+
+\end_inset
+
+Checking our work
+\begin_inset Formula 
+\begin{align*}
+T_{i}^{D}\left(\mu\right) & =\sigma_{i}\left(\frac{\lambda_{i}^{D}}{\lambda_{i}^{D}+\mu}\right)\frac{1}{\lambda_{i}^{D}+\mu}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\left(\frac{\lambda_{j}^{D}}{\lambda_{j}^{D}+\mu}\right)\frac{1}{\lambda_{j}^{D}+\mu}\\
+ & =\left[\sum_{j=0}^{k-i}\alpha^{j}\right]^{-1}\left(\frac{\lambda_{i}^{D}}{\lambda_{i}^{D}+\mu}\right)\frac{1}{\lambda_{i}^{D}+\mu}\prod_{j=1}^{i-1}\left(1-\left[\sum_{l=0}^{k-j}\alpha^{l}\right]^{-1}\right)\left(\frac{\lambda_{j}^{D}}{\lambda_{j}^{D}+\mu}\right)\frac{1}{\lambda_{j}^{D}+\mu}\\
+\end{align*}
+
+\end_inset
+
+Now if 
+\begin_inset Formula $\mu\approx0$
+\end_inset
+
+, then 
+\begin_inset Formula 
+\[
+\lambda_{i}=\alpha
+\]
+
+\end_inset
+
+and
+\begin_inset Formula 
+\begin{align*}
+\lambda_{1} & =\sigma_{1}\lambda\\
+\lambda_{1} & =\lambda/\sum_{j=0}^{k-1}\alpha^{j}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Summary of Results
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="10" columns="6">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="16text%">
+<column alignment="left" valignment="top" width="25text%">
+<column alignment="left" valignment="middle" width="10text%">
+<column alignment="center" valignment="top" width="12text%">
+<column alignment="center" valignment="top" width="20text%">
+<column alignment="center" valignment="top" width="12text%">
+<row>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Assumption set
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Model
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Quantities of interest
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Rate assumption
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Probability assumption
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Reproductive number
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Mosquitoes taking 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Biting pressure
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+All rates are equal
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Equal numbers taking 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Disrupt
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+All rates are equal
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+More bites is increasingly unlikely
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Disrupt
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cycle durations are equal
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Equal numbers taking 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Disrupt
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cycle durations are equal
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+More bites is increasingly unlikely
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Disrupt
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection*
 Reproductive numbers
 \end_layout
@@ -2943,7 +4359,7 @@ The comparisons here are fairly straightforward.
 The reproductive numbers of each model are given by:
 \begin_inset Formula 
 \begin{align*}
-R^{D} & =e\tau^{D}\nu_{G}^{D}\\
+R^{D} & =e\tau^{D}\nu^{D}\\
 R^{D} & =e\frac{\tau^{D}}{1-\frac{\gamma}{\gamma+\mu}\tau^{D}}
 \end{align*}
 
@@ -2974,7 +4390,7 @@ where
 \end_inset
 
 , and 
-\begin_inset Formula $\nu_{G}^{F}=\sum_{i=1}^{k}\kappa_{i}\tau_{i}\nu_{i}$
+\begin_inset Formula $\nu^{F}=\sum_{i=1}^{k}\kappa_{i}\tau_{i}\nu_{i}$
 \end_inset
 
 .
@@ -2988,7 +4404,7 @@ Equilibrium proportions
 We also wish to make two other comparisons.
  First, we want to determine the equilibrium proportion of mosquitoes that
  have taken exactly 
-\begin_inset Formula $i$
+\begin_inset Formula $i-1$
 \end_inset
 
  blood meals in a given gonotrophic cycle, which we denote 
@@ -3008,7 +4424,33 @@ In this case, it is easy to determine
 \begin_inset Formula 
 \begin{align*}
 M_{i}^{D} & =\left(B_{i}^{D}\right)^{*}\\
- & =\rho_{L}K_{L}\frac{1}{e\tau^{D}}\left(e\tau^{D}\nu_{G}^{D}-1\right)\left[\left(\frac{1}{\mu+\lambda_{i}^{D}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right)\right]
+ & =\rho_{L}K_{L}\frac{1}{e\tau^{D}}\left(e\tau^{D}\nu^{D}-1\right)\left[\left(\frac{1}{\mu+\lambda_{i}^{D}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right)\right]
+\end{align*}
+
+\end_inset
+
+Let 
+\begin_inset Formula $s=t+r$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+M_{s}^{D} & =M_{t}^{D}\\
+\rho_{L}K_{L}\frac{1}{e\tau^{D}}\left(e\tau^{D}\nu^{D}-1\right)\left[\left(\frac{1}{\mu+\lambda_{s}^{D}}\right)\prod_{j=1}^{s-1}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right)\right] & =\rho_{L}K_{L}\frac{1}{e\tau^{D}}\left(e\tau^{D}\nu^{D}-1\right)\left[\left(\frac{1}{\mu+\lambda_{t}^{D}}\right)\prod_{j=1}^{t-1}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right)\right]\\
+\left(\frac{1}{\mu+\lambda_{s}^{D}}\right)\prod_{j=1}^{s-1}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right) & =\left(\frac{1}{\mu+\lambda_{t}^{D}}\right)\prod_{j=1}^{t-1}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right)\\
+\left(\frac{1}{\mu+\lambda_{t+r}^{D}}\right)\prod_{j=1}^{t+r-1}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right) & =\left(\frac{1}{\mu+\lambda_{t}^{D}}\right)\prod_{j=1}^{t-1}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right)\\
+\left(\frac{1}{\mu+\lambda_{t+r}^{D}}\right)\prod_{j=t}^{t-1+r}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right) & =\left(\frac{1}{\mu+\lambda_{t}^{D}}\right)\\
+\prod_{j=t}^{s-1}\left(1-\sigma_{j}\right) & =\left(\frac{\mu+\lambda_{s}^{D}}{\mu+\lambda_{t}^{D}}\right)\prod_{j=t}^{s-1}\left(\frac{\mu+\lambda_{j}^{D}}{\lambda_{j}^{D}}\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+C & =K_{L}\frac{1}{e\tau^{D}}\left(e\tau^{D}\nu^{D}-1\right)\sigma_{1}\left(\frac{1}{\mu+\lambda_{1}^{D}}\right)\\
+\sigma_{1} & =\frac{C}{K_{L}\frac{1}{e\tau^{D}}\left(e\tau^{D}\nu^{D}-1\right)}\left(\mu+\lambda_{1}^{D}\right)
 \end{align*}
 
 \end_inset
@@ -3021,11 +4463,25 @@ Fate model
 \end_layout
 
 \begin_layout Standard
-This is less straightforward, but not so bad
+This is less straightforward, but not so bad.
+ We add up all the mosquitoes which have fed 
+\begin_inset Formula $i$
+\end_inset
+
+ times.
+ This can only occur for mosquitoes of type 
+\begin_inset Formula $s$
+\end_inset
+
+ where 
+\begin_inset Formula $i\le s\le k$
+\end_inset
+
+.
 \begin_inset Formula 
 \begin{align*}
 M_{i}^{F} & =\sum_{s=i}^{k}\left(B_{s,i}\right)^{*}\\
- & =\rho_{L}K_{L}\frac{1}{e\nu_{G}}\left(e\nu_{G}-1\right)\left[\sum_{s=i}^{k}\left(\kappa_{s}\nu_{s}\right)\left(\frac{1}{\lambda_{s,i}^{F}}\right)\left(\prod_{r=1}^{i}\frac{\lambda_{s,r}^{F}}{\mu+\lambda_{s,r}^{F}}\right)\right]
+ & =\rho_{L}K_{L}\frac{1}{e\nu^{D}}\left(e\nu^{D}-1\right)\left[\sum_{s=i}^{k}\left(\kappa_{s}\nu_{s}\right)\left(\frac{1}{\lambda_{s,i}^{F}}\right)\left(\prod_{r=1}^{i}\frac{\lambda_{s,r}^{F}}{\mu+\lambda_{s,r}^{F}}\right)\right]
 \end{align*}
 
 \end_inset
@@ -3070,800 +4526,6 @@ Now suppose that
 \end_inset
 
  to save some space.
-\end_layout
-
-\begin_layout Standard
-Then we can say a little more about these quantities:
-\begin_inset Formula 
-\begin{align*}
-\tau_{i}^{F} & =\xi^{i}\\
-\nu_{i}^{F} & =\frac{1}{1-q\xi^{i}}\\
-R^{F} & =e\left(\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}}\right)\\
-\tau^{D} & =\sum_{i=1}^{k}\xi^{i}\varsigma_{i}\\
-\nu_{G}^{D} & =\frac{1}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\\
-R^{D} & =e\left(\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\right)
-\end{align*}
-
-\end_inset
-
-If we want 
-\begin_inset Formula $R^{F}=R^{D}$
-\end_inset
-
-, we set powers of 
-\begin_inset Formula $\xi^{i}$
-\end_inset
-
- equal.
- 
-\begin_inset Formula 
-\begin{align*}
-R^{F} & =R^{D}\\
-e\left(\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}}\right) & =e\left(\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\right)\\
-\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}} & =\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\\
-\sum_{i=1}^{k}\kappa_{i}\xi^{i}\left(\sum_{j=0}^{\infty}q^{j}\xi^{ij}\right) & =\sum_{i=1}^{k}\xi^{i}\varsigma_{i}\left[\sum_{j=0}^{\infty}q^{j}\left(\sum_{i=1}^{k}\xi^{i}\varsigma_{i}\right)^{j}\right]\\
-\\
-\sum_{i=1}^{k}\kappa_{i}\xi^{i}\left(\sum_{j=0}^{\infty}q^{j}\xi^{ij}\right) & =\sum_{i=1}^{k}\xi^{i}\varsigma_{i}\left[\sum_{j=0}^{\infty}q^{j}\left(\varsigma_{1}\xi+\xi^{2}\varsigma_{2}+\cdots+\xi^{k-1}\varsigma_{k-1}+\xi^{k}\varsigma_{k}\right)^{j}\right]
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\xi^{1} & \kappa_{1} & = & \varsigma_{1}\\
-\\
-\xi^{2} & \kappa_{1}q+\kappa_{2} & = & \varsigma_{1}^{2}q+\varsigma_{2}\\
-\\
-\xi^{3} & \kappa_{1}q^{2}+\kappa_{2}q+\kappa_{3} & = & \varsigma_{1}q\varsigma_{2}+\varsigma_{1}q^{2}\varsigma_{1}+\varsigma_{2}q\varsigma_{1}+\varsigma_{3}\\
- &  & = & 2\varsigma_{1}\varsigma_{2}q+\varsigma_{1}^{2}q^{2}+\varsigma_{3}\\
-\\
-\xi^{4} & \kappa_{1}q^{3}+\kappa_{2}q^{2}+\kappa_{3}q+\kappa_{4} & = & \varsigma_{1}\left(q\varsigma_{3}+q^{2}\left(2\varsigma_{1}\varsigma_{2}\right)+q^{3}\varsigma_{1}\right)+\varsigma_{2}\left(q\varsigma_{2}+q^{2}\varsigma_{1}^{2}\right)+\varsigma_{3}\left(q\varsigma_{1}\right)+\varsigma_{4}\\
- &  & = & q\varsigma_{1}\left(2\varsigma_{3}+2q\varsigma_{1}\varsigma_{2}+q^{2}\varsigma_{1}\right)+q\varsigma_{2}\left(\varsigma_{2}+q\varsigma_{1}^{2}\right)+\varsigma_{4}\\
-\end{align*}
-
-\end_inset
-
-Solve for 
-\begin_inset Formula $\varsigma_{i}$
-\end_inset
-
- in terms of 
-\begin_inset Formula $\kappa_{i}$
-\end_inset
-
-, this avoids having to ensure that 
-\begin_inset Formula $\sum_{i=1}^{k}\kappa_{i}=1$
-\end_inset
-
-.
- 
-\begin_inset Formula 
-\begin{align*}
-\xi^{1} & \kappa_{1} & = & \varsigma_{1}\\
-\\
-\xi^{2} & \kappa_{1}q\left(1-\kappa_{1}\right)+\kappa_{2} & = & \varsigma_{2}\\
-\\
-\xi^{3} & \kappa_{1}q^{2}-3\kappa_{1}^{2}q^{2}+2\kappa_{1}^{3}q^{2}-2\kappa_{1}\kappa_{2}q+\kappa_{2}q+\kappa_{3} & = & \varsigma_{3}\\
-\\
-\xi^{4} & \kappa_{1}q^{3}+\kappa_{2}q^{2}+\kappa_{3}q+\kappa_{4} & = & \varsigma_{1}\left(q\varsigma_{3}+q^{2}\left(2\varsigma_{1}\varsigma_{2}\right)+q^{3}\varsigma_{1}\right)+\varsigma_{2}\left(q\varsigma_{2}+q^{2}\varsigma_{1}^{2}\right)+\varsigma_{3}\left(q\varsigma_{1}\right)+\varsigma_{4}\\
- &  & = & q\varsigma_{1}\left(2\varsigma_{3}+2q\varsigma_{1}\varsigma_{2}+q^{2}\varsigma_{1}\right)+q\varsigma_{2}\left(\varsigma_{2}+q\varsigma_{1}^{2}\right)+\varsigma_{4}\\
-\end{align*}
-
-\end_inset
-
-After the 
-\begin_inset Formula $\varsigma_{i}$
-\end_inset
-
- are obtained, we backsolve for the 
-\begin_inset Formula $\sigma_{i}$
-\end_inset
-
- from the recursive relation 
-\begin_inset Formula $\sigma_{1}=\varsigma_{1}$
-\end_inset
-
-, 
-\begin_inset Formula $\sigma_{i}=\frac{\varsigma_{i}}{1-\sum_{j=1}^{i-1}\varsigma_{j}}$
-\end_inset
-
-.
- 
-\begin_inset Formula 
-\begin{align*}
-\xi^{1} & \kappa_{1} & = & \varsigma_{1}\\
-\\
-\xi^{2} & \kappa_{2} & = & \left(\varsigma_{1}^{2}-\varsigma_{1}\right)q+\varsigma_{2}\\
-\\
-\xi^{3} & \kappa_{1}q^{2}+\kappa_{2}q+\kappa_{3} & = & 2\varsigma_{1}\varsigma_{2}q+\varsigma_{1}^{2}q^{2}+\varsigma_{3}\\
- & \kappa_{3} & = & 2\varsigma_{1}\varsigma_{2}q+\varsigma_{1}^{2}q-\varsigma_{1}q^{2}-\varsigma_{1}^{2}q+\varsigma_{1}q-\varsigma_{2}q+\varsigma_{3}\\
-\\
-\end{align*}
-
-\end_inset
-
-!!! Okay but that was to make the reproductive numbers equal.
- What we actually want are for the 
-\begin_inset Formula $M_{i}$
-\end_inset
-
- to be equal.
- Let's go back to that.
- Maybe we can use the same process
-\end_layout
-
-\begin_layout Standard
-Now
-\begin_inset Formula 
-\begin{align*}
-M_{i}^{D} & =\rho_{L}K_{L}\left(\frac{e\tau^{D}n_{G}^{D}-1}{e\tau^{D}}\right)\left[\left(\frac{1}{\mu+\lambda}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda}{\mu+\lambda}\right)\left(1-\sigma_{j}\right)\right]\\
-\\
- & =\rho_{L}K_{L}\left(\frac{1}{e\lambda}\right)\xi^{i}\left(\frac{e\sum_{i=1}^{k}\xi^{i}\varsigma_{i}n_{G}^{D}-1}{e\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\right)\left[\frac{\varsigma_{i}}{\sigma_{i}}\right]\\
-\\
- & =\rho_{L}K_{L}\left(\frac{1}{e\lambda}\right)\xi^{i}\left(\frac{\left(e-q\right)\sum_{i=1}^{k}\xi^{i}\varsigma_{i}-1}{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}\left(1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}\right)}\right)\left[\frac{\varsigma_{i}}{\sigma_{i}}\right]\\
-\\
- & =\rho_{L}K_{L}\left(\frac{1}{e\lambda}\right)\xi^{i}\left[\left(\frac{1}{\sigma_{i}}\frac{\varsigma_{i}}{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\right)\left(e\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}-1\right)\right]
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-M_{i}^{F} & =\rho_{L}K_{L}\left(\frac{e\sum_{i=1}^{k}\kappa_{i}\tau_{i}^{F}\nu_{i}^{F}-1}{e\sum_{i=1}^{k}\kappa_{i}\tau_{i}^{F}\nu_{i}^{F}}\right)\left[\left(\frac{1}{\lambda}\right)\left(\frac{\lambda}{\mu+\lambda}\right)^{i}\sum_{s=i}^{k}\left(\kappa_{s}\nu_{s}\right)\right]\\
- & =\rho_{L}K_{L}\left(\frac{1}{e\lambda}\right)\xi^{i}\left[\frac{\sum_{s=i}^{k}\left(\kappa_{s}\frac{1}{1-q\xi^{s}}\right)}{\sum_{s=1}^{k}\left(\kappa_{s}\frac{\xi^{s}}{1-q\xi^{s}}\right)}\left(e\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}}-1\right)\right]
-\end{align*}
-
-\end_inset
-
-So we require that
-\begin_inset Formula 
-\begin{align*}
-\left(\frac{1}{\sigma_{i}}\frac{\varsigma_{i}}{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\right)\left(e\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}-1\right) & =\frac{\sum_{s=i}^{k}\left(\kappa_{s}\frac{1}{1-q\xi^{s}}\right)}{\sum_{s=1}^{k}\left(\kappa_{s}\frac{\xi^{s}}{1-q\xi^{s}}\right)}\left(e\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}}-1\right)\\
-\\
-\left(\frac{\varsigma_{i}}{\sigma_{i}}\right)\left(\sum_{s=1}^{k}\kappa_{s}\frac{\xi^{s}}{1-q\xi^{s}}\right)\left(e\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}-1\right) & =\left(\sum_{i=1}^{k}\xi^{i}\varsigma_{i}\right)\left(\sum_{s=i}^{k}\kappa_{s}\frac{1}{1-q\xi^{s}}\right)\left(e\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}}-1\right)\\
-\\
-\left(\frac{\varsigma_{i}}{\sigma_{i}}\right)\left(\sum_{n=1}^{k}\xi^{n}\kappa_{n}\sum_{j=0}^{\infty}\left(q\xi^{n}\right)^{j}\right)\left(-1+e\sum_{n=1}^{k}\varsigma_{n}\xi^{n}\left(\sum_{j=0}^{\infty}\left(q\varsigma_{n}\xi^{n}\right)^{j}\right)\right) & =\left(\sum_{n=1}^{k}\xi^{n}\varsigma_{n}\right)\left(\sum_{r=0}^{k-i}\kappa_{i+r}\sum_{j=0}^{\infty}\left(q\xi^{i+r}\right)^{j}\right)\left(-1+e\sum_{n=1}^{k}\kappa_{n}\xi^{n}\sum_{j=0}^{\infty}\left(q\xi^{n}\right)^{j}\right)\\
-\\
-\left(\frac{\varsigma_{i}}{\sigma_{i}}\right)\left(\sum_{n=1}^{k}\xi^{n}\kappa_{n}\sum_{j=0}^{\infty}\left(q\xi^{n}\right)^{j}\right)\left(-1+e\sum_{n=1}^{k}\varsigma_{n}\xi^{n}\left(\sum_{j=0}^{\infty}\left(q\varsigma_{n}\xi^{n}\right)^{j}\right)\right) & =\left(\sum_{n=1}^{k}\xi^{n}\varsigma_{n}\right)\left(\sum_{r=0}^{k-i}\kappa_{i+r}\left[1+q\xi^{i+r}+q^{2}\xi^{2\left(i+r\right)}+\cdots\right]\right)\left(-1+e\sum_{n=1}^{k}\kappa_{n}\xi^{n}\sum_{j=0}^{\infty}\left(q\xi^{n}\right)^{j}\right)
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\xi^{1} &  & -\left(\frac{\varsigma_{i}}{\sigma_{i}}\kappa_{1}\right) & = & -\left(\varsigma_{1}\sum_{s=i}^{k}\kappa_{s}\right)\\
-\\
-\xi^{2} &  & \left(\frac{\varsigma_{i}}{\sigma_{i}}\right)\left[-\left(\kappa_{2}+\kappa_{1}q\right)+e\left(\kappa_{1}\varsigma_{1}\right)\right] & = & -\left(\varsigma_{2}\sum_{s=i}^{k}\kappa_{s}\right)+e\left[\varsigma_{1}\kappa_{1}\right]
-\end{align*}
-
-\end_inset
-
-for all 
-\begin_inset Formula $i$
-\end_inset
-
-.
- We can compare powers of 
-\begin_inset Formula $\xi$
-\end_inset
-
- but this could be a real pain...
-\end_layout
-
-\begin_layout Standard
-Let's start with 
-\begin_inset Formula $i=1$
-\end_inset
-
-
-\begin_inset Formula 
-\[
-\left(\frac{1}{\sigma_{1}}\frac{\varsigma_{1}}{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}\right)\left(e\frac{\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}{1-q\sum_{i=1}^{k}\xi^{i}\varsigma_{i}}-1\right)=\frac{\sum_{s=1}^{k}\left(\kappa_{s}\frac{1}{1-q\xi^{s}}\right)}{\sum_{s=1}^{k}\left(\kappa_{s}\frac{\xi^{s}}{1-q\xi^{s}}\right)}\left(e\sum_{i=1}^{k}\kappa_{i}\frac{\xi^{i}}{1-q\xi^{i}}-1\right)
-\]
-
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-We can consider several cases in which these rates may be related between
- the two models but, in general, they are incomparable.
- We will use the following notation: 
-\begin_inset Formula $\lambda^{D}=\begin{bmatrix}\lambda_{1}^{D}, & \lambda_{2}^{D}, & \cdots & \lambda_{k-1}^{D}, & \lambda_{k}^{D}\end{bmatrix}$
-\end_inset
-
- and 
-\begin_inset Formula $\lambda_{i}^{F}=\begin{bmatrix}\lambda_{i,1}^{F}, & \lambda_{i,2}^{F}, & \cdots & \lambda_{i,i-1}^{F}, & \lambda_{i,i}^{F}\end{bmatrix}$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-The first option we consider is the simplest case: 
-\begin_inset Formula $\lambda_{i}^{D}=\lambda_{i,j}^{F}=\lambda$
-\end_inset
-
- for all 
-\begin_inset Formula $1\le j\le i\le k$
-\end_inset
-
- and 
-\begin_inset Formula $\vec{\rho}^{D}=\vec{\rho}^{F}=\vec{\rho}$
-\end_inset
-
-.
- In this case
-\begin_inset Formula 
-\begin{align*}
-\tau^{D} & =\sum_{i=1}^{k}\left(\frac{\lambda_{i}^{D}}{\mu+\lambda_{i}^{D}}\right)\sigma_{i}\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}^{D}}{\mu+\lambda_{j}^{D}}\right)\left(1-\sigma_{j}\right)\\
- & =\sum_{i=1}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda}{\mu+\lambda}\right)^{i}\left(\prod_{j=1}^{i-1}\rho_{j}\right)
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\[
-\tau_{i}^{F}=\left(\frac{\lambda}{\mu+\lambda}\right)^{i}
-\]
-
-\end_inset
-
-
-\begin_inset Formula 
-\[
-R^{D}=e\frac{\sum_{i=1}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda}{\mu+\lambda}\right)^{i}\left(\prod_{j=1}^{i-1}\rho_{j}\right)}{1-\frac{\gamma}{\gamma+\mu}\left(\sum_{i=1}^{k}\left(1-\rho_{i}\right)\left(\frac{\lambda}{\mu+\lambda}\right)^{i}\left(\prod_{j=1}^{i-1}\rho_{j}\right)\right)}
-\]
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-R^{F} & =e\sum_{i=1}^{k}\frac{\rho_{i}\left(\frac{\lambda}{\mu+\lambda}\right)^{i}}{1-\frac{\gamma}{\gamma+\mu}\left(\frac{\lambda}{\mu+\lambda}\right)^{i}}
-\end{align*}
-
-\end_inset
-
-If in addition we assume that 
-\begin_inset Formula $\vec{\rho}=\left[\frac{1}{k},\frac{1}{k},\cdots,\frac{1}{k},\frac{1}{k}\right]$
-\end_inset
-
-, we obtain
-\begin_inset Formula 
-\begin{align*}
-R^{D} & =e\frac{k^{-n}\left(1-\frac{1}{k}\right)\sum_{i=1}^{k}\left(k\frac{\lambda}{\mu+\lambda}\right)^{i}}{1-\frac{\gamma}{\gamma+\mu}k^{-n}\left(1-\frac{1}{k}\right)\sum_{i=1}^{k}\left(k\frac{\lambda}{\mu+\lambda}\right)^{i}}
-\end{align*}
-
-\end_inset
-
-where 
-\begin_inset Formula $n=\frac{k\left(k+1\right)}{2}$
-\end_inset
-
-.
-\begin_inset Formula 
-\begin{align*}
-R^{F} & =e\frac{1}{k}\sum_{i=1}^{k}\frac{\left(\frac{\lambda}{\mu+\lambda}\right)^{i}}{1-\frac{\gamma}{\gamma+\mu}\left(\frac{\lambda}{\mu+\lambda}\right)^{i}}
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The next option we consider is setting 
-\begin_inset Formula $\lambda_{i,j}^{F}=\lambda_{j}^{D}$
-\end_inset
-
- for all 
-\begin_inset Formula $j\le i\le k$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-The next option we consider 
-\end_layout
-
-\begin_layout Part*
-Generalizing the model
-\end_layout
-
-\begin_layout Standard
-Following Hurtado and Kirosingh (2019), we proceed by defining the waiting
- time distributions out of compartment 
-\begin_inset Formula $X$
-\end_inset
-
- as a 
-\begin_inset Formula $k$
-\end_inset
-
-th event time distributions under a Poisson process with rate 
-\begin_inset Formula $r_{X}\left(t\right)$
-\end_inset
-
-.
- Let 
-\begin_inset Formula $\mathcal{S}_{X}^{k}\left(t,\tau\right)$
-\end_inset
-
- denote the survival function for the dwell time distribution for an individual
- that entered compartment 
-\begin_inset Formula $X$
-\end_inset
-
- at time 
-\begin_inset Formula $\tau$
-\end_inset
-
- and let 
-\begin_inset Formula $h_{X}^{k}\left(t,\tau\right)$
-\end_inset
-
- be the density function.
- These functions are related by the formula
-\begin_inset Formula 
-\begin{align*}
-h_{X}^{k}\left(t,\tau\right) & =r_{X}\left(t\right)\frac{m_{X}\left(t,\tau\right)^{k-1}}{\left(k-1\right)!}e^{-m_{X}\left(t,\tau\right)},\\
-\mathcal{S}_{X}^{k}\left(t,\tau\right) & =\sum_{j=1}^{k}\frac{h_{X}^{j}\left(t,\tau\right)}{r_{X}\left(t\right)}
-\end{align*}
-
-\end_inset
-
-where 
-\begin_inset Formula $m_{X}\left(t,\tau\right)=\int_{\tau}^{t}r_{X}\left(s\right)ds$
-\end_inset
-
- and hence 
-\begin_inset Formula $\frac{d}{dt}m_{X}\left(t,\tau\right)=r\left(t\right)$
-\end_inset
-
-.
- Now let 
-\begin_inset Formula $\mathcal{I}_{X}\left(t\right)$
-\end_inset
-
- denote the inflow rate to compartment 
-\begin_inset Formula $X$
-\end_inset
-
- at time 
-\begin_inset Formula $t$
-\end_inset
-
-.
- Then we can represent the dynamics of blood feeding and oviposition with
- the following set of integral equations.
- 
-\begin_inset Formula 
-\begin{align*}
-B\left(t\right) & =s_{0}\mathcal{S}_{B}\left(t,0\right)+\int_{0}^{t}\left[\mathcal{I}_{B}\left(\tau\right)+v_{0}h_{V}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{V}\left(s\right)h_{V}\left(\tau,s\right)ds\right]\mathcal{S}_{B}\left(t,\tau\right)d\tau\\
-V\left(t\right) & =v_{0}\mathcal{S}_{V}\left(t,0\right)+\int_{0}^{t}\left[\mathcal{I}_{V}\left(\tau\right)+s_{0}h_{B}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{B}\left(s\right)h_{B}\left(\tau,s\right)ds\right]\mathcal{S}_{V}\left(t,\tau\right)d\tau
-\end{align*}
-
-\end_inset
-
-We make the following additional assumptions:
-\end_layout
-
-\begin_layout Enumerate
-all newly recruited adults start in stage 
-\begin_inset Formula $B$
-\end_inset
-
- and this rate is given by 
-\begin_inset Formula $\rho_{L}L\left(t\right)$
-\end_inset
-
-,
-\end_layout
-
-\begin_layout Enumerate
-the only way to enter 
-\begin_inset Formula $V$
-\end_inset
-
- is after exiting stage 
-\begin_inset Formula $B$
-\end_inset
-
-, and
-\end_layout
-
-\begin_layout Enumerate
-the waiting time distribution for compartment 
-\begin_inset Formula $V$
-\end_inset
-
- is exponential with mean 
-\begin_inset Formula $\gamma$
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Standard
-This translates to the set of assumptions:
-\begin_inset Formula 
-\begin{align*}
-v_{0} & =0,\\
-\mathcal{I}_{S}\left(t\right) & =\rho_{L}L\left(t\right)+\gamma V\left(t\right),\\
-\mathcal{I}_{V}\left(t\right) & \equiv0.
-\end{align*}
-
-\end_inset
-
-Then the integral equations above reduce to the following system of equations
-\begin_inset Formula 
-\begin{align*}
-B\left(t\right) & =s_{0}\mathcal{S}_{B}\left(t,0\right)+\int_{0}^{t}\left[\rho_{L}L\left(\tau\right)+\gamma V\left(\tau\right)\right]\mathcal{S}_{B}\left(t,\tau\right)d\tau\\
-V\left(t\right) & =\int_{0}^{t}\left[s_{0}h_{B}\left(\tau,0\right)+\int_{0}^{\tau}\left[\rho_{L}L\left(s\right)+\gamma V\left(s\right)\right]h_{B}\left(\tau,s\right)ds\right]e^{-\left(t-\tau\right)/\gamma}d\tau
-\end{align*}
-
-\end_inset
-
-Can we translate this to a system of integro-differential equations?
-\begin_inset Formula 
-\begin{align*}
-B'\left(t\right) & =s_{0}\mathcal{S}'_{B}\left(t,0\right)+\left(\rho_{L}L\left(t\right)+\gamma V\left(t\right)\right)\mathcal{S}_{B}\left(t,t\right)+\int_{0}^{t}\frac{d}{dt}\left[\rho_{L}L\left(\tau\right)+\gamma V\left(\tau\right)\right]\mathcal{S}_{B}\left(t,\tau\right)d\tau\\
- & =s_{0}\mathcal{S}'_{B}\left(t,0\right)+\left(\rho_{L}L\left(t\right)+\gamma V\left(t\right)\right)\mathcal{S}_{B}\left(t,t\right)+\int_{0}^{t}\left[\rho_{L}L'\left(\tau\right)+\gamma V'\left(\tau\right)\right]\mathcal{S}_{B}\left(t,\tau\right)+\left[\rho_{L}L\left(\tau\right)+\gamma V\left(\tau\right)\right]\mathcal{S}'_{B}\left(t,\tau\right)d\tau
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-It remains to describe the distribution of the waiting time to leave the
- host seeking class, 
-\begin_inset Formula $S$
-\end_inset
-
-, which is in fact the main point of this project.
-\end_layout
-
-\begin_layout Problem
-(Erlang distributed biting rate) Suppose that individuals bite on average
- at a rate of 
-\begin_inset Formula $b$
-\end_inset
-
- and must make, on average, 
-\begin_inset Formula $k$
-\end_inset
-
- bites to reach repletion and reproduce.
- Then the dwell time distribution out of 
-\begin_inset Formula $S$
-\end_inset
-
- has an 
-\begin_inset Formula $\textrm{Erlang}\left(r,k\right)$
-\end_inset
-
- distribution with shape parameter 
-\begin_inset Formula $k$
-\end_inset
-
- and rate 
-\begin_inset Formula $r=\frac{k}{b}$
-\end_inset
-
-.
- Then
-\begin_inset Formula 
-\begin{align*}
-\mathcal{S}_{S}\left(t,\tau\right) & =\frac{1}{r}\sum_{j=1}^{k}g^{j}\left(t-\tau\right),\\
-g^{j}\left(t\right) & =r\frac{\left(rt\right)^{j-1}}{\left(j-1\right)!}e^{-rt}
-\end{align*}
-
-\end_inset
-
-Note that this distribution has mean 
-\begin_inset Formula $\mu=\frac{k}{r}=b$
-\end_inset
-
-.
- Using the Linear Chain Trick, we can convert the system of integral equations
- above to a system of ODEs.
- Let 
-\begin_inset Formula 
-\[
-S_{j}\left(t\right)=s_{0}\frac{1}{r}g^{j}\left(t\right)+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\frac{1}{r}g^{j}\left(t-\tau\right)d\tau
-\]
-
-\end_inset
-
-with 
-\begin_inset Formula $S_{1}\left(0\right)=x_{0}$
-\end_inset
-
- and 
-\begin_inset Formula $S_{j}\left(0\right)=0$
-\end_inset
-
- for 
-\begin_inset Formula $j\ge2$
-\end_inset
-
-.
- Then
-\begin_inset Formula 
-\begin{align*}
-\frac{d}{dt}S_{1}\left(t\right) & =\frac{d}{dt}\left[s_{0}\frac{1}{r}g^{1}\left(t\right)+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\frac{1}{r}g^{1}\left(t-\tau\right)d\tau\right]\\
- & =\frac{d}{dt}\left[s_{0}\frac{1}{r}re^{-rt}+\int_{0}^{t}\mathcal{\mathcal{I}_{S}}\left(\tau\right)\frac{1}{r}re^{-r\left(t-\tau\right)}d\tau\right]\\
- & =\frac{d}{dt}\left[s_{0}e^{-rt}+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)e^{-r\left(t-\tau\right)}d\tau\right]\\
- & =s_{0}\frac{d}{dt}e^{-rt}+\mathcal{\mathcal{I}_{S}}\left(t\right)e^{-r\left(t-t\right)}+\int_{0}^{t}\frac{d}{dt}\mathcal{I}_{S}\left(\tau\right)e^{-r\left(t-\tau\right)}d\tau\\
- & =-s_{0}re^{-rt}+\mathcal{\mathcal{I}_{S}}\left(t\right)-r\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)e^{-r\left(t-\tau\right)}d\tau\\
- & =\mathcal{I}_{S}\left(t\right)-r\left[s_{0}e^{-rt}-\int_{0}^{t}\mathcal{\mathcal{I}_{S}}\left(\tau\right)e^{-r\left(t-\tau\right)}d\tau\right]\\
- & =\mathcal{I}_{S}\left(t\right)-rS_{1}\left(t\right)
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\frac{d}{dt}S_{j}\left(t\right) & =s_{0}\frac{1}{r}\frac{d}{dt}g^{j}\left(t\right)+\frac{d}{dt}\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\frac{1}{r}g^{j}\left(t-\tau\right)d\tau\\
- & =s_{0}\left[g^{j-1}\left(t\right)-g^{j}\left(t\right)\right]+\mathcal{I}_{S}\left(t\right)\frac{1}{r}g^{j}\left(0\right)+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\left[g^{j-1}\left(t-\tau\right)-g^{j}\left(t-\tau\right)\right]d\tau\\
- & =s_{0}\left[g^{j-1}\left(t\right)-g^{j}\left(t\right)\right]+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\left[g^{j-1}\left(t-\tau\right)-g^{j}\left(t-\tau\right)\right]d\tau\\
- & =r\left[s_{0}\frac{1}{r}g^{j-1}\left(t\right)+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\frac{1}{r}g^{j-1}\left(t-\tau\right)d\tau\right]-r\left[s_{0}\frac{1}{r}g^{j}\left(t\right)+\int_{0}^{t}\mathcal{I}_{S}\left(\tau\right)\frac{1}{r}g^{j}\left(t-\tau\right)d\tau\right]\\
- & =rS_{j-1}\left(t\right)-rS_{j}\left(t\right)
-\end{align*}
-
-\end_inset
-
-Note additionally that 
-\begin_inset Formula 
-\begin{align*}
-\frac{d}{dt}S\left(t\right) & =\sum_{j=1}^{k}\frac{d}{dt}S_{j}\left(t\right)\\
- & =\mathcal{I}_{S}\left(t\right)-rS_{1}\left(t\right)+\sum_{j=2}^{k}\left[rS_{j-1}\left(t\right)-rS_{j}\left(t\right)\right]\\
- & =\mathcal{I}_{S}\left(t\right)-rS_{k}\left(t\right)
-\end{align*}
-
-\end_inset
-
-where we liberally used the fact that 
-\begin_inset Formula 
-\begin{align*}
-\frac{d}{dt}g^{1}\left(t\right) & =-rg^{1}\left(t\right),\\
-\frac{d}{dt}g^{j}\left(t\right) & =r\left[g^{j-1}\left(t\right)-g^{j}\left(t\right)\right]
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Problem
-Suppose, similar to above, that individual mosquitoes, on average, bite
- at a rate 
-\begin_inset Formula $b$
-\end_inset
-
- and must take 
-\begin_inset Formula $k$
-\end_inset
-
- bites to repletion.
- Additionally, assume that if an individual does not reach repletion, on
- average, within 
-\begin_inset Formula $1/\rho$
-\end_inset
-
- days, then they experience mortality.
- In this case, the dwell time distribution for 
-\begin_inset Formula $S$
-\end_inset
-
- is given by the minimum of an 
-\begin_inset Formula $\textrm{Erlang}\left(\frac{k}{b},k\right)$
-\end_inset
-
- distribution and an 
-\begin_inset Formula $\textrm{Exponential}\left(\rho\right)$
-\end_inset
-
- distribution.
- The generalized linear chain trick will give us a way to deal with this
- scenario.
- The assumption of mortality can be relaxed so that individuals which do
- not blood feed to repletion go to feed on sugar sources to prevent mortality
- and then return back to blood feed (by then requiring a full set of blood-meals
-).
- Both of these cases can be dealt with rather easily using the GLCT.
- See sections 3.5.1 and 3.5.4 from Hurtado and Kirosingh 2019.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Problem
-So far we have assumed that the time between biting events (equivalently,
- the biting rate) is constant.
- However, it is realistic to assume that the animals upon which mosquitoes
- feed i) are able to engage in behaviors to limit how often they are bitten
- and ii) may be difficult to find.
- A simple model which takes these two assumptions into account is due to
- Chitnis et al.
- (Chitnis et al., 2006).
- This model assumes that there is a theoretical maximum mosquito biting
- rate, 
-\begin_inset Formula $\sigma_{M}$
-\end_inset
-
-, and a theoretical maximum rate at which an animal will tolerate being
- bitten, 
-\begin_inset Formula $\sigma_{H}$
-\end_inset
-
-.
- Then, the actual biting rate for mosquitoes, 
-\begin_inset Formula $b$
-\end_inset
-
-, is a function of these theoretical maxima and the abundances of mosquitoes
- and hosts:
-\begin_inset Formula 
-\[
-b\left(t\right)=\sigma_{M}\left(\frac{\sigma_{H}H}{\sigma_{M}M+\sigma_{H}H}\right)
-\]
-
-\end_inset
-
-Notice this is now dependent on time through the state variables 
-\begin_inset Formula $H$
-\end_inset
-
- and 
-\begin_inset Formula $M$
-\end_inset
-
-.
- We can return to the set up of Problem 2, this time using 
-\begin_inset Formula $b$
-\end_inset
-
- as above.
- This can also be converted to a system of ODEs using the GLCT since it
- is still a Poisson process (although in this case it is inhomogeneous).
- In fact, since 
-\begin_inset Formula $b\left(t\right)$
-\end_inset
-
- is only dependent on time through the state parameters, the system of ODEs
- will remain autonomous, so equilibrium analyses will be straightforward.
-\end_layout
-
-\begin_layout Section
-Key quantities of mosquito blood-feeding
-\end_layout
-
-\begin_layout Standard
-We consider three key components to modeling mosquito blood-feeding: the
- number of feedings in a single gonotrophic cycle, the waiting time between
- feedings, and the number of gonotrophic cycles in a single lifespan.
- Each of these quantities can be considered random variables, representing
- individual variation among individuals in the population.
- 
-\end_layout
-
-\begin_layout Standard
-Let 
-\begin_inset Formula $K$
-\end_inset
-
- be the number of feedings in a single gonotrophic cycle, 
-\begin_inset Formula $\Gamma_{i}$
-\end_inset
-
- the waiting time between feeding number 
-\begin_inset Formula $i-1$
-\end_inset
-
- and 
-\begin_inset Formula $i$
-\end_inset
-
-, 
-\begin_inset Formula $G$
-\end_inset
-
- the number of gonotrophic cycles in one lifespan, 
-\begin_inset Formula $R$
-\end_inset
-
- the waiting time between oviposition and returning to host-seeking and
- blood feeding, and 
-\begin_inset Formula $\Lambda$
-\end_inset
-
- the lifespan of a mosquito.
- 
-\end_layout
-
-\begin_layout Standard
-Then the waiting time between oviposition events is given by 
-\begin_inset Formula $H=\sum_{i=1}^{K}\Gamma_{i}$
-\end_inset
-
-.
- Suppose that 
-\begin_inset Formula $E\left[K\right]=k$
-\end_inset
-
- and 
-\begin_inset Formula $E\left[\Gamma_{i}\right]=\gamma_{i}$
-\end_inset
-
-.
- If all 
-\begin_inset Formula $\gamma_{i}=\gamma$
-\end_inset
-
-, then 
-\begin_inset Formula $E\left[H\right]=k\gamma$
-\end_inset
-
- but in general we cannot say much about the mean of this distribution.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Separator plain
-\end_inset
-
-
-\end_layout
-
-\begin_layout Part
-Defensive behaviors and mosquito biting
 \end_layout
 
 \end_body

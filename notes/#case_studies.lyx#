@@ -2335,61 +2335,7 @@ Oviposition cycle durations are equal:
 \end_inset
 
 .
- 
-\end_layout
-
-\begin_layout Standard
-We have
-\begin_inset Formula 
-\begin{align*}
-\frac{1}{\lambda} & =\sigma_{i}\frac{1}{\lambda_{i}^{D}}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\frac{1}{\lambda_{j}^{D}}
-\end{align*}
-
-\end_inset
-
-Hence
-\begin_inset Formula 
-\begin{align*}
-T_{1} & =\sigma_{1}\frac{1}{\lambda_{1}}\\
-\lambda_{1} & =\sigma_{1}\lambda
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-T_{2} & =\sigma_{2}\frac{1}{\lambda_{2}}\left(1-\sigma_{1}\right)\frac{1}{\lambda_{1}}\\
-\frac{1}{\lambda} & =\sigma_{2}\frac{1}{\lambda_{2}}\left(1-\sigma_{1}\right)\frac{1}{\sigma_{1}\lambda}\\
-\lambda_{2} & =\sigma_{2}\left(\frac{1-\sigma_{1}}{\sigma_{1}}\right)
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-T_{3} & =\sigma_{3}\frac{1}{\lambda_{3}}\left(1-\sigma_{2}\right)\frac{1}{\lambda_{2}}\left(1-\sigma_{1}\right)\frac{1}{\lambda_{1}}\\
-\frac{1}{\lambda} & =\sigma_{3}\frac{1}{\lambda_{3}}\left(1-\sigma_{2}\right)\frac{1}{\sigma_{2}\left(\frac{1-\sigma_{1}}{\sigma_{1}}\right)}\left(1-\sigma_{1}\right)\frac{1}{\sigma_{1}\lambda}\\
-\lambda_{3} & =\sigma_{3}\left(\frac{1-\sigma_{2}}{\sigma_{2}}\right)
-\end{align*}
-
-\end_inset
-
-and in general, 
-\begin_inset Formula $\lambda_{i+1}=\sigma_{i+1}\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)$
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Standard
-If 
-\begin_inset Formula $\mu>0$
-\end_inset
-
-, then 
+ We have
 \begin_inset Formula 
 \begin{align*}
 T_{1} & =\sigma_{1}\left(\frac{\lambda_{1}}{\lambda_{1}+\mu}\right)\frac{1}{\lambda_{1}+\mu}\\
@@ -2412,8 +2358,8 @@ By Descartes' Rule of Signs, this has positive roots if and only if
  The choice may be restricted by additional assumptions further along.
 \begin_inset Formula 
 \begin{align*}
-\lambda_{1} & =-\frac{1}{2}\left(2\mu-\sigma_{1}\lambda\right)\pm\frac{1}{2}\sqrt{\left(2\mu+\sigma_{1}\lambda\right)^{2}-4\mu^{2}}\\
-\lambda_{1} & =-\frac{1}{2}\left(2\mu-\sigma_{1}\lambda\right)\pm\frac{1}{2}\sqrt{\sigma_{1}\lambda\left(\sigma_{1}\lambda-4\mu\right)}
+\lambda_{1} & =-\frac{1}{2}\left(2\mu-\sigma_{1}\lambda\right)+\frac{1}{2}\sqrt{\left(2\mu+\sigma_{1}\lambda\right)^{2}-4\mu^{2}}\\
+\lambda_{1} & =-\frac{1}{2}\left(2\mu-\sigma_{1}\lambda\right)+\frac{1}{2}\sqrt{\sigma_{1}\lambda\left(\sigma_{1}\lambda-4\mu\right)}
 \end{align*}
 
 \end_inset
@@ -2424,7 +2370,15 @@ We must make the additional assumption that
 
 .
  Then we can determine 
-\begin_inset Formula $\lambda_{1}=\lambda_{1}\left(\lambda,\mu,\sigma_{1}\right)$
+\begin_inset Formula $\lambda_{1}$
+\end_inset
+
+from 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{1}$
 \end_inset
 
 .
@@ -2435,9 +2389,13 @@ Now, utilizing that
 \begin_inset Formula $T_{i}=T_{i-1}=\frac{1}{\lambda}$
 \end_inset
 
-, we obtain the equation
+, we obtain
 \begin_inset Formula 
 \begin{align*}
+T_{i} & =T_{i-1}\\
+\sigma_{i}\left(\frac{\lambda_{i}^{D}}{\lambda_{i}^{D}+\mu}\right)\frac{1}{\lambda_{i}^{D}+\mu}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\left(\frac{\lambda_{j}^{D}}{\lambda_{j}^{D}+\mu}\right)\frac{1}{\lambda_{j}^{D}+\mu} & =\sigma_{i}\left(\frac{\lambda_{i-1}^{D}}{\lambda_{i-1}^{D}+\mu}\right)\frac{1}{\lambda_{i-1}^{D}+\mu}\prod_{j=1}^{i-2}\left(1-\sigma_{j}\right)\left(\frac{\lambda_{j}^{D}}{\lambda_{j}^{D}+\mu}\right)\frac{1}{\lambda_{j}^{D}+\mu}\\
+\sigma_{i}\left(\frac{\lambda_{i}^{D}}{\lambda_{i}^{D}+\mu}\right)\frac{1}{\lambda_{i}^{D}+\mu} & =\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\\
+\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)\left(\lambda_{i}^{D}+\mu\right)^{2} & =\sigma_{i}\lambda_{i}^{D}\\
 \left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)\lambda_{i}^{2}+\left(2\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)-\sigma_{i}\right)\lambda_{i}+\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)\mu^{2} & =0
 \end{align*}
 
@@ -2475,9 +2433,9 @@ Now the possibles values of
  are
 \begin_inset Formula 
 \begin{align*}
-\lambda_{i} & =-\frac{1}{2}\left(2\mu-\sigma_{i}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\pm\frac{1}{2}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\sqrt{\left(2\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)-\sigma_{i}\right)^{2}-4\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)^{2}\mu^{2}}\\
-\lambda_{i} & =-\frac{1}{2}\left(2\mu-\sigma_{i}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\pm\frac{1}{2}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\sqrt{\sigma_{i}^{2}-4\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)\sigma_{i}}\\
-\lambda_{i} & =-\frac{1}{2}\left(2\mu-\sigma_{i}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\pm\frac{1}{2}\sqrt{\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}\left[\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}-4\mu\right]}
+\lambda_{i} & =-\left(2\mu-\sigma_{i}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\pm\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\sqrt{\left(2\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)-\sigma_{i}\right)^{2}-4\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)^{2}\mu^{2}}\\
+\lambda_{i} & =-\left(2\mu-\sigma_{i}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\pm\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\sqrt{\sigma_{i}^{2}-4\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)\sigma_{i}}\\
+\lambda_{i} & =-\left(2\mu-\sigma_{i}\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\pm\sqrt{\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}\left[\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}-4\mu\right]}
 \end{align*}
 
 \end_inset
@@ -2488,19 +2446,6 @@ Note that there is an additional assumption necessary for the roots to be
 \[
 \sigma_{i}>4\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right)
 \]
-
-\end_inset
-
-because 
-\begin_inset Formula $\sigma_{i}\in\left[0,1\right]$
-\end_inset
-
-, this requires that
-\begin_inset Formula 
-\begin{align*}
-4\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right) & <1\\
-\sigma_{i-1} & <\frac{1}{1+4\mu}<\frac{1}{1+2\mu}
-\end{align*}
 
 \end_inset
 
@@ -2528,7 +2473,7 @@ There are two roots that we can choose from for the
 \begin{align*}
 \sigma_{1} & >\frac{4\mu}{\lambda}\\
 \sigma_{i} & >4\mu\left(\frac{\sigma_{i-1}}{1-\sigma_{i-1}}\right),1<i<k\\
-\sigma_{i} & <\frac{1}{1+4\mu},1\le i<k
+\sigma_{i} & <\frac{1}{2\mu+1},1\le i<k
 \end{align*}
 
 \end_inset
@@ -2572,6 +2517,49 @@ Or equivalently
 
 \end_layout
 
+\begin_layout Standard
+Now the assumption for the disrupt model is equivalent to
+\begin_inset Formula 
+\begin{align*}
+\frac{1}{\lambda} & =\sigma_{i}\frac{1}{\lambda_{i}^{D}}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\frac{1}{\lambda_{j}^{D}}\\
+\\
+T_{i+1}^{D} & =\sigma_{i+1}\left(\frac{\lambda_{i+1}^{D}}{\lambda_{i+1}^{D}+\mu}\right)\frac{1}{\lambda_{i+1}^{D}+\mu}\prod_{j=1}^{i}\left(1-\sigma_{j}\right)\left(\frac{\lambda_{j}^{D}}{\lambda_{j}^{D}+\mu}\right)\frac{1}{\lambda_{j}^{D}+\mu}\\
+ & =\sigma_{i+1}\left(\frac{\lambda_{i+1}^{D}}{\lambda_{i+1}^{D}+\mu}\right)\frac{1}{\lambda_{i+1}^{D}+\mu}\left(1-\sigma_{i}\right)\left(\frac{\lambda_{i}^{D}}{\lambda_{i}^{D}+\mu}\right)\frac{1}{\lambda_{i}^{D}+\mu}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\left(\frac{\lambda_{j}^{D}}{\lambda_{j}^{D}+\mu}\right)\frac{1}{\lambda_{j}^{D}+\mu}\\
+ & =\left[\sigma_{i+1}\left(\frac{\lambda_{i+1}^{D}}{\lambda_{i+1}^{D}+\mu}\right)\frac{1}{\lambda_{i+1}^{D}+\mu}\right]\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)T_{i}^{D}\\
+\\
+\frac{1}{\lambda} & =\left[\sigma_{i+1}\left(\frac{\lambda_{i+1}^{D}}{\lambda_{i+1}^{D}+\mu}\right)\frac{1}{\lambda_{i+1}^{D}+\mu}\right]\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)\frac{1}{\lambda}\\
+1 & =\sigma_{i+1}\left(\frac{\lambda_{i+1}^{D}}{\lambda_{i+1}^{D}+\mu}\right)\frac{1}{\lambda_{i+1}^{D}+\mu}\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)\\
+\sigma_{i+1} & =\frac{\left(\lambda_{i+1}^{D}+\mu\right)^{2}}{\lambda_{i+1}^{D}}\left(\frac{\sigma_{i}}{1-\sigma_{i}}\right)
+\end{align*}
+
+\end_inset
+
+This can be simplified a bit using the fact that 
+\begin_inset Formula $T_{i+1}^{D}=T_{i}^{D}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+\sigma_{i+1}\frac{1}{\lambda_{i+1}^{D}}\prod_{j=1}^{i}\left(1-\sigma_{j}\right)\frac{1}{\lambda_{j}^{D}} & =\sigma_{i}\frac{1}{\lambda_{i}^{D}}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\frac{1}{\lambda_{j}^{D}}\\
+\sigma_{i+1}\frac{1}{\lambda_{i+1}^{D}}\left(1-\sigma_{i}\right) & =\sigma_{i}\\
+\lambda_{i+1}^{D} & =\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)\sigma_{i+1}\\
+\lambda_{1}^{D} & =\sigma_{1}\lambda
+\end{align*}
+
+\end_inset
+
+In summary: 
+\begin_inset Formula $\lambda_{1}^{D}=\sigma_{1}\lambda$
+\end_inset
+
+ and 
+\begin_inset Formula $\lambda_{i}^{D}=\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}$
+\end_inset
+
+
+\end_layout
+
 \begin_layout Labeling
 \labelwidthstring 00.00.0000
 \begin_inset Formula $\textrm{Fate model:}$
@@ -2581,12 +2569,9 @@ Or equivalently
 \begin_inset Formula $\lambda_{i,j}^{F}=i\lambda$
 \end_inset
 
- .
- By the linear chain trick, this gives an average cycle duration of 
-\begin_inset Formula $\frac{1}{\lambda}$
-\end_inset
-
-.
+ !!! this assumption seems problematic because it doesn't take mortality
+ into account while the Disrupt model must in order to have consistent solutions
+ !!!
 \end_layout
 
 \end_deeper
@@ -2650,41 +2635,307 @@ Then
 P_{i+1} & =P_{i}\\
 \sigma_{i+1}\prod_{j=1}^{i}\left(1-\sigma_{j}\right) & =\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\\
 \sigma_{i+1}\left(1-\sigma_{i}\right) & =\sigma_{i}\\
-\sigma_{i} & =\frac{\sigma_{i+1}}{1+\sigma_{i+1}}
+\sigma_{i+1} & =\frac{\sigma_{i}}{1-\sigma_{i}}
 \end{align*}
 
 \end_inset
 
-Since 
-\begin_inset Formula $\sigma_{k}=1$
-\end_inset
 
- and 
-\begin_inset Formula $\frac{1}{\sigma_{i}}=1+\frac{1}{\sigma_{i+1}}$
-\end_inset
-
-, we obtain
 \begin_inset Formula 
 \begin{align*}
-\frac{1}{\sigma_{k-1}} & =1+1\\
-\frac{1}{\sigma_{k-2}} & =1+\left(1+1\right)
+\sigma_{k} & =\frac{\sigma_{k-1}}{1-\sigma_{k-1}}\\
+1-\sigma_{k-1} & =\sigma_{k-1}\\
+\sigma_{k-1} & =\frac{1}{2}\\
+\sigma_{k-1} & =\frac{\sigma_{k-2}}{1-\sigma_{k-2}}\\
+\frac{1}{2}\left(1-\sigma_{k-2}\right) & =\sigma_{k-2}\\
+\frac{3}{2}\sigma_{k-2} & =\frac{1}{2}\\
+\sigma_{k-2} & =\frac{1}{3}
 \end{align*}
 
 \end_inset
 
-and, in general, 
-\begin_inset Formula $\sigma_{k-i}=\frac{1}{1+i}$
-\end_inset
+ and so on...
+\end_layout
 
- or alternately 
-\begin_inset Formula $\sigma_{i}=\frac{1}{1+k-i}$
+\begin_layout Standard
+\begin_inset Formula $\left(B_{i}^{D}\right)^{*}=C$
 \end_inset
 
  for 
 \begin_inset Formula $1\le i\le k$
 \end_inset
 
+.
+ This condition is equivalent to
+\begin_inset Formula 
+\begin{align*}
+L^{*} & =\left(\frac{e\tau\nu-1}{e\tau\nu}\right)K_{L}\\
+B_{1}^{*} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L}\\
+B_{i}^{*} & =\left[\left(\frac{1}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L},1<i\le k\\
+V^{*} & =\left(\frac{1}{\gamma+\mu}\right)\rho_{L}\left(\frac{e\tau\nu-1}{e}\right)K_{L}
+\end{align*}
 
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\tau=\sum_{i=1}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\nu=\frac{1}{1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau}
+\]
+
+\end_inset
+
+From 
+\begin_inset Formula $B_{1}^{*}=C$
+\end_inset
+
+, we can solve for 
+\begin_inset Formula $\tau$
+\end_inset
+
+ in terms of fixed parameters and 
+\begin_inset Formula $\lambda_{1}$
+\end_inset
+
+as follows:
+\begin_inset Formula 
+\begin{align*}
+C & =\left(\frac{1}{\mu+\lambda_{1}}\right)\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L}\\
+C & =\left(\frac{1}{\mu+\lambda_{1}}\right)\rho_{L}\left(\frac{1}{e\tau}\right)\left(\frac{1}{1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau}\right)\left(e\tau-1+\left(\frac{\gamma}{\gamma+\mu}\right)\tau\right)K_{L}\\
+\frac{\left(\mu+\lambda_{1}\right)Ce}{\rho_{L}K_{L}} & =\left(\frac{1}{\tau}\right)\left(\frac{1}{1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau}\right)\left[\left(e+\left(\frac{\gamma}{\gamma+\mu}\right)\right)\tau-1\right]\\
+\left[\frac{\left(\mu+\lambda_{1}\right)Ce}{\rho_{L}K_{L}}\right]\tau\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau\right] & =\left(e+\left(\frac{\gamma}{\gamma+\mu}\right)\right)\tau-1\\
+-\frac{\left(\mu+\lambda_{1}\right)Ce}{\rho_{L}K_{L}}\left(\frac{\gamma}{\gamma+\mu}\right)\tau^{2}+\left[\frac{\left(\mu+\lambda_{1}\right)Ce}{\rho_{L}K_{L}}-e-\left(\frac{\gamma}{\gamma+\mu}\right)\right]\tau+1 & =0
+\end{align*}
+
+\end_inset
+
+By Descarte's Rule of signs, there is exactly one positive real root given
+ by:
+\begin_inset Formula 
+\[
+\tau=\frac{\left[\frac{\left(\mu+\lambda_{1}\right)Ce}{\rho_{L}K_{L}}-e-\left(\frac{\gamma}{\gamma+\mu}\right)\right]}{2\frac{\left(\mu+\lambda_{1}\right)Ce}{\rho_{L}K_{L}}\left(\frac{\gamma}{\gamma+\mu}\right)}+\frac{\sqrt{\Delta}}{2\frac{\left(\mu+\lambda_{1}\right)Ce}{\rho_{L}K_{L}}\left(\frac{\gamma}{\gamma+\mu}\right)}
+\]
+
+\end_inset
+
+where
+\begin_inset Formula 
+\[
+\Delta=\left[\frac{\left(\mu+\lambda_{1}\right)Ce}{\rho_{L}K_{L}}-e-\left(\frac{\gamma}{\gamma+\mu}\right)\right]^{2}+4\frac{\left(\mu+\lambda_{1}\right)Ce}{\rho_{L}K_{L}}\left(\frac{\gamma}{\gamma+\mu}\right)
+\]
+
+\end_inset
+
+We will write 
+\begin_inset Formula $\tau=\tau\left(\lambda_{1}\right)$
+\end_inset
+
+ to remind us that we need to prescribe 
+\begin_inset Formula $\lambda_{1}$
+\end_inset
+
+ in order to calculate the rest.
+ We use that 
+\begin_inset Formula $B_{i}^{*}=B_{i+1}^{*}=C$
+\end_inset
+
+ to proceed:
+\begin_inset Formula 
+\begin{align*}
+B_{i}^{*} & =B_{i+1}^{*}\\
+\left[\left(\frac{1}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L} & =\left[\left(\frac{1}{\mu+\lambda_{i+1}}\right)\prod_{j=1}^{i}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L}\\
+\left(\frac{1}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right) & =\left(\frac{1}{\mu+\lambda_{i+1}}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\left(1-\sigma_{i}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\\
+\left(\frac{1}{\mu+\lambda_{i}}\right) & =\left(\frac{1}{\mu+\lambda_{i+1}}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\left(1-\sigma_{i}\right)\\
+1 & =\left(\frac{\lambda_{i}}{\mu+\lambda_{i+1}}\right)\left(1-\sigma_{i}\right)\\
+\sigma_{i} & =\frac{\lambda_{i}-\left(\mu+\lambda_{i+1}\right)}{\lambda_{i}}\\
+\sigma_{i} & =1-\frac{\left(\mu+\lambda_{i+1}\right)}{\lambda_{i}}
+\end{align*}
+
+\end_inset
+
+To ensure that 
+\begin_inset Formula $\sigma_{i}\in\left[0,1\right]$
+\end_inset
+
+, we require that 
+\begin_inset Formula $\lambda_{i}\ge\mu+\lambda_{i+1}$
+\end_inset
+
+.
+ In particular, we cannot have that 
+\begin_inset Formula $\lambda_{i}=\lambda$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le i\le k$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\bar{\tau}^{D} & =\sum_{i=1}^{k}\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\\
+\bar{\nu}^{D} & =\frac{1}{1-\bar{\tau}^{D}}
+\end{align*}
+
+\end_inset
+
+Notice that since 
+\begin_inset Formula $\left(B_{i+1}^{D}\right)^{*}=\left(\frac{\lambda_{i}}{\lambda_{i+1}}\right)\left(1-\sigma_{i}\right)\left(B_{i}^{D}\right)^{*}$
+\end_inset
+
+, we must have that 
+\begin_inset Formula $\sigma_{i}=1-\frac{\lambda_{i+1}}{\lambda_{i}}$
+\end_inset
+
+, for all 
+\begin_inset Formula $1\le i<k$
+\end_inset
+
+.
+ This requires that 
+\begin_inset Formula $\lambda_{i}\ge\lambda_{i+1}$
+\end_inset
+
+ for all 
+\begin_inset Formula $1\le i<k$
+\end_inset
+
+.
+ If the 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+ are known, we can solve for the 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+.
+ If not, we will have to consider the conditions on both sets of parameters
+ together.
+\begin_inset Formula 
+\begin{align*}
+\left(B_{1}^{D}\right)^{*} & =\left(\frac{1}{\lambda_{1}}\right)\rho_{L}\left(\frac{e\bar{\tau}^{D}\bar{\nu}^{D}-1}{e\bar{\tau}^{D}}\right)K_{L}\\
+\left(B_{i}^{D}\right)^{*} & =\left[\left(\frac{1}{\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\bar{\tau}^{D}\bar{\nu}^{D}-1}{e\bar{\tau}^{D}}\right)K_{L},1<i\le k
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for 
+\begin_inset Formula $1<s<t\le k$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+C & =\left(\frac{1}{\lambda_{1}}\right)\rho_{L}\left(\frac{e\bar{\tau}^{D}\bar{\nu}^{D}-1}{e\bar{\tau}^{D}}\right)K_{L}\\
+e\bar{\tau}^{D}\left(\frac{1}{1-\bar{\tau}^{D}}\right)-1 & =\frac{\lambda_{1}C}{\rho_{L}K_{L}}e\bar{\tau}^{D}\\
+e\bar{\tau}^{D}-\left(1-\bar{\tau}^{D}\right) & =\frac{\lambda_{1}C}{\rho_{L}K_{L}}e\bar{\tau}^{D}\left(1-\bar{\tau}^{D}\right)\\
+\left[\frac{\lambda_{1}C}{\rho_{L}K_{L}}e\right]\left(\bar{\tau}^{D}\right)^{2}+\left[e+1-\frac{\lambda_{1}C}{\rho_{L}K_{L}}e\right]\bar{\tau}^{D}-1 & =0
+\end{align*}
+
+\end_inset
+
+which, by Descarte's Rule of Signs, has exactly one positive real root given
+ by
+\begin_inset Formula 
+\begin{align*}
+\bar{\tau}^{D} & =-\frac{\rho_{L}K_{L}}{\lambda_{1}Ce}\left[1+\left(1-\frac{\lambda_{1}C}{\rho_{L}K_{L}}\right)e\right]+\frac{\rho_{L}K_{L}}{\lambda_{1}Ce}\sqrt{\left[1+\left(1-\frac{\lambda_{1}C}{\rho_{L}K_{L}}\right)e\right]^{2}+4\left[\frac{\lambda_{1}C}{\rho_{L}K_{L}}e\right]}\\
+\bar{\tau}^{D} & =\left[-\frac{\rho_{L}K_{L}}{\lambda_{1}Ce}-\frac{\rho_{L}K_{L}}{\lambda_{1}Ce}\left(1-\frac{\lambda_{1}C}{\rho_{L}K_{L}}\right)e\right]+\sqrt{\left(\frac{\rho_{L}K_{L}}{\lambda_{1}Ce}\right)^{2}\left[1+\left(1-\frac{\lambda_{1}C}{\rho_{L}K_{L}}\right)e\right]^{2}+4\left(\frac{\rho_{L}K_{L}}{\lambda_{1}Ce}\right)^{2}\left[\frac{\lambda_{1}C}{\rho_{L}K_{L}}e\right]}\\
+\bar{\tau}^{D} & =\left[1-\left(1+\frac{1}{e}\right)\frac{\rho_{L}K_{L}}{\lambda_{1}C}\right]+\sqrt{\left[1-\left(1+\frac{1}{e}\right)\left(\frac{\rho_{L}K_{L}}{\lambda_{1}C}\right)\right]^{2}+4\left(\frac{\rho_{L}K_{L}}{\lambda_{1}Ce}\right)}
+\end{align*}
+
+\end_inset
+
+This depends only on 
+\begin_inset Formula $\lambda_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $C$
+\end_inset
+
+ and common parameters.
+ Now we know the values of 
+\begin_inset Formula $\bar{\tau}^{D}=\sum_{i=1}^{k}\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $\bar{\nu}^{D}=\frac{1}{1-\bar{\tau}^{D}}$
+\end_inset
+
+, and therefore 
+\begin_inset Formula $\left(B_{1}^{D}\right)^{*}$
+\end_inset
+
+.
+ Proceeding to calculate the remaining 
+\begin_inset Formula $\left(B_{i}^{D}\right)^{*}$
+\end_inset
+
+, we use the fact that 
+\begin_inset Formula 
+\begin{align*}
+\left(B_{i}^{D}\right)^{*} & =\left[\left(\frac{1}{\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\bar{\tau}^{D}\bar{\nu}^{D}-1}{e\bar{\tau}^{D}}\right)K_{L}\\
+\left(B_{i+1}^{D}\right)^{*} & =\left[\left(\frac{1}{\lambda_{i+1}}\right)\prod_{j=1}^{i}\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\bar{\tau}^{D}\bar{\nu}^{D}-1}{e\bar{\tau}^{D}}\right)K_{L}\\
+\left(B_{i+1}^{D}\right)^{*} & =\left[\left(\frac{\lambda_{i}}{\lambda_{i+1}}\right)\left(1-\sigma_{i}\right)\left(\frac{1}{\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\bar{\tau}^{D}\bar{\nu}^{D}-1}{e\bar{\tau}^{D}}\right)K_{L}\\
+\left(B_{i+1}^{D}\right)^{*} & =\left(\frac{\lambda_{i}}{\lambda_{i+1}}\right)\left(1-\sigma_{i}\right)\left(B_{i}^{D}\right)^{*}\\
+C & =\left(\frac{\lambda_{i}}{\lambda_{i+1}}\right)\left(1-\sigma_{i}\right)C\\
+\sigma_{i} & =1-\frac{\lambda_{i+1}}{\lambda_{i}}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\bar{\tau}^{D} & =\sum_{i=1}^{k}\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\\
+\bar{\tau}^{D} & =\sum_{i=1}^{k}\left(1-\frac{\lambda_{i+1}}{\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(1-\left(1-\frac{\lambda_{j+1}}{\lambda_{j}}\right)\right)\\
+\bar{\tau}^{D} & =\sum_{i=1}^{k}\left(\frac{\lambda_{i}-\lambda_{i+1}}{\lambda_{i}}\right)\prod_{j=1}^{i-1}\frac{\lambda_{j+1}}{\lambda_{j}}\\
+\bar{\tau}^{D} & =\frac{1}{\lambda_{1}}\sum_{i=1}^{k}\left(\lambda_{i}-\lambda_{i+1}\right)\\
+\bar{\tau}^{D} & =\frac{\left(\lambda_{1}-\lambda_{k}\right)}{\lambda_{1}}\\
+\bar{\tau}^{D} & =1-\frac{\lambda_{k}}{\lambda_{1}}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\bar{\nu}^{D} & =\frac{1}{1-\overline{\tau}^{D}}\\
+\bar{\nu}^{D} & =\frac{1}{1-\left(1-\frac{\lambda_{k}}{\lambda_{1}}\right)}\\
+\bar{\nu}^{D} & =\frac{\lambda_{1}}{\lambda_{k}}
+\end{align*}
+
+\end_inset
+
+Since 
+\begin_inset Formula $\lambda_{k}\le\lambda_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $\overline{\nu}^{D}\ge1$
+\end_inset
+
+, which is necessary for 
+\begin_inset Formula $R^{D}>1$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Labeling
@@ -2696,7 +2947,9 @@ and, in general,
 \begin_inset Formula $\kappa_{i}=\frac{1}{k}$
 \end_inset
 
- ensures that the different types of mosquitoes are equidistributed.
+!!! this assumption seems problematic because it doesn't take mortality
+ into account while the Disrupt model must in order to have consistent solutions
+ !!!
 \end_layout
 
 \end_deeper
@@ -2705,11 +2958,19 @@ It is
 \begin_inset Formula $x\%$
 \end_inset
 
- less likely that a mosquito would need an additional blood meal where 
+ less likely that a mosquito would need an additional blood meal: 
+\begin_inset Formula $B_{i+1}^{*}=\alpha B_{i}^{*}$
+\end_inset
+
+ for 
 \begin_inset Formula $\alpha=\left(1-\frac{x}{100}\right)$
 \end_inset
 
- 
+ with 
+\begin_inset Formula $x=10$
+\end_inset
+
+, initially
 \end_layout
 
 \begin_deeper
@@ -2717,70 +2978,134 @@ It is
 \begin_inset Formula $\textrm{Disrupt model:}$
 \end_inset
 
-The probability, absent mortality, that a mosquito takes exactly 
+The probability, absent mortality, that a mosquito needs 
 \begin_inset Formula $i$
 \end_inset
 
- blood meals to reach oviposition is 
+ blood meals to reach oviposition
+\begin_inset Formula 
+\[
+P_{i}=\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)
+\]
+
+\end_inset
+
+Then 
 \begin_inset Formula $P_{1}=\sigma_{1}$
 \end_inset
 
  and 
-\begin_inset Formula $P_{i}=\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)$
+\begin_inset Formula $P_{i+1}=P_{i}$
+\end_inset
+
+ implies that 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(B_{i+1}^{D}\right)^{*}=\alpha\left(B_{i}^{D}\right)^{*}$
 \end_inset
 
 , 
-\begin_inset Formula $1<i\le k$
+\begin_inset Formula $\mu\approx0$
 \end_inset
 
-.
- The assumption then translates to 
-\begin_inset Formula $P_{i+1}=\alpha P_{i}$
-\end_inset
 
-, which then implies that 
-\begin_inset Formula $\sigma_{i}=\frac{\sigma_{i+1}}{\alpha+\sigma_{i+1}}$
-\end_inset
-
-.
- Then since 
-\begin_inset Formula $\sigma_{k=1}$
-\end_inset
-
-, we obtain, using that 
-\begin_inset Formula $\frac{1}{\sigma_{i}}=\alpha\frac{1}{\sigma_{i+1}}+1$
-\end_inset
-
-,
 \begin_inset Formula 
 \begin{align*}
-\frac{1}{\sigma_{k-1}} & =\alpha+1\\
-\frac{1}{\sigma_{k-2}} & =\alpha\left(\alpha+1\right)+1\\
-\frac{1}{\sigma_{k-3}} & =\alpha\left(\alpha\left(\alpha+1\right)+1\right)+1
+L^{*} & =\left(\frac{e\tau\nu-1}{e\tau\nu}\right)K_{L}\\
+B_{1}^{*} & =\left(\frac{1}{\mu+\lambda_{1}}\right)\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L}\\
+B_{i}^{*} & =\left[\left(\frac{1}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L},1<i\le k\\
+V^{*} & =\left(\frac{1}{\gamma+\mu}\right)\rho_{L}\left(\frac{e\tau\nu-1}{e}\right)K_{L}
 \end{align*}
 
 \end_inset
 
 
-\begin_inset Formula $\sigma_{k-i}=\left[\sum_{j=0}^{i}\alpha^{j}\right]^{-1}$
+\begin_inset Formula 
+\[
+\tau=\sum_{i=1}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)
+\]
+
 \end_inset
 
- for 
-\begin_inset Formula $0\le i<k$
+
+\begin_inset Formula 
+\[
+\nu=\frac{1}{1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau}
+\]
+
 \end_inset
 
-, or alternately, 
-\begin_inset Formula $\sigma_{i}=\left[\sum_{j=0}^{k-i}\alpha^{j}\right]^{-1}$
+We make use of the only relation we have
+\begin_inset Formula 
+\begin{align*}
+\left(B_{i+1}^{D}\right)^{*} & =\alpha\left(B_{i}^{D}\right)^{*}\\
+\left[\left(\frac{1}{\mu+\lambda_{i+1}}\right)\prod_{j=1}^{i}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L} & =\alpha\left[\left(\frac{1}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L}\\
+\left(\frac{1}{\mu+\lambda_{i+1}}\right)\prod_{j=1}^{i}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right) & =\alpha\left(\frac{1}{\mu+\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\\
+\left(\frac{\lambda_{i}}{\mu+\lambda_{i+1}}\right)\left(1-\sigma_{i}\right) & =\alpha\\
+\left(\frac{\lambda_{i}}{\mu+\lambda_{i+1}}\right)\left(1-\sigma_{i}\right) & =\alpha\\
+\sigma_{i} & =1-\alpha\frac{\mu+\lambda_{i+1}}{\lambda_{i}}\\
+\sigma_{i} & =\frac{\lambda_{i}-\alpha\left(\mu+\lambda_{i+1}\right)}{\lambda_{i}}
+\end{align*}
+
 \end_inset
 
- for 
-\begin_inset Formula $1\le i\le k$
+To ensure that 
+\begin_inset Formula $\sigma_{i}\in\left[0,1\right]$
+\end_inset
+
+, we require that 
+\begin_inset Formula $\lambda_{i}\ge\alpha\left(\mu+\lambda_{i+1}\right)$
 \end_inset
 
 .
+\begin_inset Formula 
+\[
+\left(B_{i}^{D}\right)^{*}=\left[\left(\frac{1}{\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\bar{\tau}^{D}\bar{\nu}^{D}-1}{e\bar{\tau}^{D}}\right)K_{L}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left(B_{i+1}^{D}\right)^{*} & =\alpha\left(B_{i}^{D}\right)^{*}\\
+\left[\left(\frac{1}{\lambda_{i+1}}\right)\prod_{j=1}^{i}\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\bar{\tau}^{D}\bar{\nu}^{D}-1}{e\bar{\tau}^{D}}\right)K_{L} & =\alpha\left[\left(\frac{1}{\lambda_{i}}\right)\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\bar{\tau}^{D}\bar{\nu}^{D}-1}{e\bar{\tau}^{D}}\right)K_{L}\\
+\sigma_{i} & =1-\alpha\left(\frac{\lambda_{i+1}}{\lambda_{i}}\right)
+\end{align*}
+
+\end_inset
+
+This imposes a set of inequalities for the 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+ values: 
+\begin_inset Formula $\lambda_{i}\ge\alpha\lambda_{i+1}$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le i<k$
+\end_inset
+
+.
+ And specifies the values of 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ if the 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+ are known.
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
-\begin_layout Standard
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
 \begin_inset Formula $\textrm{Fate model:}$
 \end_inset
 
@@ -2788,22 +3113,63 @@ The probability, absent mortality, that a mosquito takes exactly
 \begin_inset Formula $\kappa_{i+1}=\alpha\kappa_{i}$
 \end_inset
 
- .
- Since 
-\begin_inset Formula $\sum_{i=1}^{k}\kappa_{i}=1$
-\end_inset
-
-, this implies that
+ !!! this assumption seems problematic because it doesn't take mortality
+ into account while the Disrupt model must in order to have consistent solutions
+ !!!
 \begin_inset Formula 
 \begin{align*}
-\sum_{i=1}^{k}\alpha^{i-1}\kappa_{1} & =1\\
-\kappa_{1} & =\left[\sum_{i=1}^{k}\alpha^{i-1}\right]^{-1}
+L & =K_{L}\frac{1}{e\nu}\left(e\nu-1\right),\\
+B_{i,1} & =\rho_{L}K_{L}\frac{1}{e\nu}\left(e\nu-1\right)\left(\frac{1}{\mu+\lambda_{i,1}}\kappa_{i}\nu_{i}\right),\\
+B_{i,j} & =\rho_{L}K_{L}\frac{1}{e\nu}\left(e\nu-1\right)\left(\kappa_{i}\nu_{i}\right)\left(\frac{1}{\lambda_{i,j}}\right)\left(\prod_{r=1}^{j}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right),\\
+V_{i} & =\frac{1}{\gamma+\mu}\rho_{L}K_{L}\frac{1}{e\nu}\left(e\nu-1\right)\left(\kappa_{i}\nu_{i}\tau_{i}\right).
 \end{align*}
 
 \end_inset
 
-and 
-\begin_inset Formula $\kappa_{i}=\alpha^{i-1}/\sum_{i=1}^{k}\alpha^{i-1}$
+ 
+\begin_inset Formula $\tau_{l}=\prod_{j=1}^{l}\frac{\lambda_{l,j}}{\mu+\lambda_{l,j}}$
+\end_inset
+
+ 
+\begin_inset Formula $\nu_{i}=\left[1-\frac{\gamma}{\gamma+\mu}\tau_{i}\right]^{-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Or perhaps it's more appropriate to use a mortality-dependent quantity like
+ 
+\begin_inset Formula $\left(M_{i+1}^{D}\right)^{*}=\alpha\left(M_{i}^{D}\right)^{*}$
+\end_inset
+
+ where
+\begin_inset Formula 
+\begin{align*}
+M_{i}^{*} & =\sum_{j=1}^{i}B_{i,j}^{*}\\
+M_{i}^{*} & =\rho_{L}K_{L}\frac{1}{e\nu}\left(e\nu-1\right)\sum_{j=1}^{i}\left(\kappa_{i}\nu_{i}\right)\left(\frac{1}{\lambda_{i,j}}\right)\left(\prod_{r=1}^{j}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right)\\
+M_{i}^{*} & =\rho_{L}K_{L}\frac{1}{e\nu}\left(e\nu-1\right)\left(\kappa_{i}\nu_{i}\right)\sum_{j=1}^{i}\frac{1}{\lambda_{i,j}}\left(\prod_{r=1}^{j}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\rho_{L}K_{L}\frac{1}{e\nu}\left(e\nu-1\right)\left(\kappa_{i+1}\nu_{i+1}\right)\sum_{j=1}^{i+1}\frac{1}{\lambda_{i+1,j}}\left(\prod_{r=1}^{j}\frac{\lambda_{i+1,r}}{\mu+\lambda_{i+1,r}}\right) & =\alpha\rho_{L}K_{L}\frac{1}{e\nu}\left(e\nu-1\right)\left(\kappa_{i}\nu_{i}\right)\sum_{j=1}^{i}\frac{1}{\lambda_{i,j}}\left(\prod_{r=1}^{j}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right)\\
+\left(\kappa_{i+1}\nu_{i+1}\right)\sum_{j=1}^{i+1}\frac{1}{\lambda_{i+1,j}}\left(\prod_{r=1}^{j}\frac{\lambda_{i+1,r}}{\mu+\lambda_{i+1,r}}\right) & =\alpha\left(\kappa_{i}\nu_{i}\right)\sum_{j=1}^{i}\frac{1}{\lambda_{i,j}}\left(\prod_{r=1}^{j}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right)\\
+\alpha & =\frac{\left(\kappa_{i+1}\nu_{i+1}\right)\sum_{j=1}^{i+1}\frac{1}{\lambda_{i+1,j}}\left(\prod_{r=1}^{j}\frac{\lambda_{i+1,r}}{\mu+\lambda_{i+1,r}}\right)}{\left(\kappa_{i}\nu_{i}\right)\sum_{j=1}^{i}\frac{1}{\lambda_{i,j}}\left(\prod_{r=1}^{j}\frac{\lambda_{i,r}}{\mu+\lambda_{i,r}}\right)}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\alpha & =\frac{\left(\kappa_{2}\nu_{2}\right)\sum_{j=1}^{2}\frac{1}{\lambda_{2,j}}\left(\prod_{r=1}^{j}\frac{\lambda_{2,r}}{\mu+\lambda_{2,r}}\right)}{\left(\kappa_{1}\nu_{1}\right)\frac{1}{\mu+\lambda_{1,1}}}\\
+\alpha & =\frac{\left(\kappa_{2}\nu_{2}\right)\left[\frac{1}{\lambda_{2,1}}\left(\frac{\lambda_{2,1}}{\mu+\lambda_{2,1}}\right)+\frac{1}{\lambda_{2,2}}\left(\frac{\lambda_{2,2}}{\mu+\lambda_{2,2}}\right)\left(\frac{\lambda_{2,1}}{\mu+\lambda_{2,1}}\right)\right]}{\left(\kappa_{1}\nu_{1}\right)\frac{1}{\mu+\lambda_{1,1}}}
+\end{align*}
+
 \end_inset
 
 
@@ -2842,12 +3208,12 @@ Parameterization summary
 \begin_inset Tabular
 <lyxtabular version="3" rows="10" columns="6">
 <features tabularvalignment="middle">
-<column alignment="left" valignment="top" width="12text%">
+<column alignment="center" valignment="top" width="15text%">
 <column alignment="left" valignment="top" width="20text%">
 <column alignment="left" valignment="middle" width="10text%">
-<column alignment="center" valignment="top" width="15text%">
 <column alignment="center" valignment="top" width="20text%">
-<column alignment="left" valignment="middle" width="20text%">
+<column alignment="center" valignment="top" width="20text%">
+<column alignment="left" valignment="middle" width="10text%">
 <row>
 <cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -2894,18 +3260,18 @@ Parameters
 
 \end_inset
 </cell>
-<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-Combined
+Notes
 \end_layout
 
 \end_inset
 </cell>
 </row>
 <row>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2973,7 +3339,7 @@ Probabilities,
 </cell>
 </row>
 <row>
-<cell multirow="3" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="3" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3031,12 +3397,14 @@ Disrupt
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Plain Layout
-\begin_inset Formula $\sigma_{i}=\frac{1}{1+k-i}$
-\end_inset
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula 
+\begin{align*}
+\sigma_{i} & =\frac{\sigma_{i+1}}{1+\sigma_{i+1}}\\
+\sigma_{k} & =1
+\end{align*}
 
- for 
-\begin_inset Formula $1\le i\le k$
 \end_inset
 
 
@@ -3048,14 +3416,18 @@ Disrupt
 \begin_inset Text
 
 \begin_layout Plain Layout
-Straightforward
+Implies that 
+\begin_inset Formula $\mu=\sigma_{i}=0$
+\end_inset
+
+
 \end_layout
 
 \end_inset
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3125,7 +3497,7 @@ Straightforward
 </cell>
 </row>
 <row>
-<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3180,11 +3552,19 @@ Disrupt
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\sigma_{i}=1/\sum_{j=0}^{k-i}\alpha^{j}$
+\begin_inset Formula 
+\[
+\sigma_{i}=1-\alpha\left(\frac{\mu+\lambda_{i+1}}{\lambda_{i}}\right)
+\]
+
 \end_inset
 
- for 
-\begin_inset Formula $1\le i\le k$
+Try assuming 
+\begin_inset Formula $\mu\approx0$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{k}=1$
 \end_inset
 
 
@@ -3196,14 +3576,18 @@ Disrupt
 \begin_inset Text
 
 \begin_layout Plain Layout
-Straightforward
+Requires 
+\begin_inset Formula $\lambda\ge\mu\left(\frac{\alpha}{1-\alpha}\right)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3273,14 +3657,14 @@ Fate
 \begin_inset Formula $\kappa_{i}=\alpha^{i-1}/\sum_{i=1}^{\kappa}\alpha^{i-1}$
 \end_inset
 
-
+Straightforward
 \end_layout
 
 \end_inset
 </cell>
 </row>
 <row>
-<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3328,10 +3712,17 @@ Disrupt
 
 \begin_layout Plain Layout
 \begin_inset Formula 
-\begin{align*}
-\lambda_{1} & =\sigma_{1}\lambda\\
-\lambda_{i+1} & =\sigma_{i+1}\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)
-\end{align*}
+\[
+\lambda_{i}=\lambda_{i}\left(\lambda,\mu,\sigma_{i-1},\sigma_{i}\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\mu<\mu^{*}\left(\lambda\right)
+\]
 
 \end_inset
 
@@ -3343,12 +3734,14 @@ Disrupt
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Plain Layout
-\begin_inset Formula $\sigma_{i}=\frac{1}{1+k-i}$
-\end_inset
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula 
+\begin{align*}
+\sigma_{i} & =\frac{\sigma_{i+1}}{1+\sigma_{i+1}}\\
+\sigma_{k} & =1
+\end{align*}
 
- for 
-\begin_inset Formula $1\le i\le k$
 \end_inset
 
 
@@ -3360,13 +3753,11 @@ Disrupt
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula 
-\begin{align*}
-\sigma_{i} & =\frac{1}{1+k-i},1\le i\le k\\
-\lambda_{1} & =\frac{\lambda}{k}\\
-\lambda_{i} & =1,1<i\le k
-\end{align*}
+Incompatible
+\end_layout
 
+\begin_layout Plain Layout
+\begin_inset Formula $\lambda>4\mu\left(2\mu+1\right)$
 \end_inset
 
 
@@ -3376,7 +3767,7 @@ Disrupt
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3446,7 +3837,7 @@ Straightforward
 </cell>
 </row>
 <row>
-<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3490,10 +3881,17 @@ Disrupt
 
 \begin_layout Plain Layout
 \begin_inset Formula 
-\begin{align*}
-\lambda_{1} & =\sigma_{1}\lambda\\
-\lambda_{i+1} & =\sigma_{i+1}\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)
-\end{align*}
+\[
+\lambda_{i}=\lambda_{i}\left(\lambda,\mu,\sigma_{i-1},\sigma_{i}\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\mu<\mu^{*}\left(\lambda\right)
+\]
 
 \end_inset
 
@@ -3506,11 +3904,23 @@ Disrupt
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\sigma_{i}=1/\sum_{j=0}^{k-i}\alpha^{j}$
+\begin_inset Formula 
+\[
+\sigma_{i}=1-\alpha\left(\frac{\mu+\lambda_{i+1}}{\lambda_{i}}\right)
+\]
+
 \end_inset
 
- for 
-\begin_inset Formula $1\le i\le k$
+
+\end_layout
+
+\begin_layout Plain Layout
+Try assuming 
+\begin_inset Formula $\mu\approx0$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{k}=1$
 \end_inset
 
 
@@ -3522,13 +3932,11 @@ Disrupt
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula 
-\begin{align*}
-\sigma_{i} & =1/\sum_{j=0}^{k-i}\alpha^{j},1\le i\le k\\
-\lambda_{1} & =\lambda/\sum_{j=0}^{k-1}\alpha^{j}\\
-\lambda_{i} & =\alpha,1<i\le k
-\end{align*}
+Incompatible?
+\end_layout
 
+\begin_layout Plain Layout
+\begin_inset Formula $\lambda>4\mu\left(2\mu+1\right)$
 \end_inset
 
 
@@ -3538,7 +3946,7 @@ Disrupt
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3621,129 +4029,658 @@ Straightforward
 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Section*
 \begin_inset Newpage newpage
 \end_inset
 
-
+Assumption set 1:
 \end_layout
 
 \begin_layout Standard
-We need to treat one case separately, Assumption Set 4, Disrupt Model, because
- there is a relationship between the 
-\begin_inset Formula $\lambda_{i}$
+All rates are equal and equal numbers of mosquitoes which need to take exactly
+ 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals to reach oviposition (when mortality is neglected i.e.
+ 
+\begin_inset Formula $\mu\ll\lambda$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Subsubsection*
+Disrupt model
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda_{i}^{D}=\lambda$
 \end_inset
 
  and 
-\begin_inset Formula $\sigma_{i}$
+\begin_inset Formula $\sigma_{i}=1-\frac{\lambda_{i+1}^{D}}{\lambda_{i}^{D}}$
 \end_inset
 
-.
- Note that Assumption Set 3, Disrupt Model, is a special case of Assumption
- Set 4 when 
-\begin_inset Formula $\alpha=1$
+ for 
+\begin_inset Formula $1\le i\le k$
 \end_inset
 
 .
 \end_layout
 
 \begin_layout Standard
-Recall that we have the following functional relationship between the 
-\begin_inset Formula $\lambda_{i}$
+This clearly implies that 
+\begin_inset Formula $\sigma_{i}=0$
 \end_inset
 
-, 
-\begin_inset Formula $\lambda$
+ for 
+\begin_inset Formula $1\le i\le k$
 \end_inset
 
-, and 
+.
+ This leads to a simple linear chain.
+\end_layout
+
+\begin_layout Standard
+We now need to determine the 
 \begin_inset Formula $\sigma_{i}$
 \end_inset
 
- values in this case:
+ values.
+ Define 
+\begin_inset Formula $\xi=\frac{\lambda}{\lambda+\mu}$
+\end_inset
+
+.
+ This simplifies the calculations substantially.
+ Now, in this case 
 \begin_inset Formula 
 \begin{align*}
-\lambda_{1} & =\sigma_{1}\lambda\\
-\lambda_{i+1} & =\sigma_{i+1}\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)
+\tau^{D} & =\sum_{i=1}^{k}\xi^{i}\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\\
+\nu^{D} & =\frac{1}{1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau^{D}}
 \end{align*}
 
 \end_inset
 
-and additionally, we make use of the relation 
-\begin_inset Formula $\sigma_{i}=\frac{\sigma_{i+1}}{\alpha+\sigma_{i+1}}$
-\end_inset
-
- or 
-\begin_inset Formula $\sigma_{i+1}=\alpha\frac{\sigma_{i}}{1-\sigma_{i}}$
+Let 
+\begin_inset Formula $\tau_{s}=\sum_{i=1}^{s}\xi^{i}\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)$
 \end_inset
 
  so that 
+\begin_inset Formula $\tau^{D}=\tau_{k}$
+\end_inset
+
+.
+ Note that 
+\begin_inset Formula $\tau_{k-1}=\tau_{k}-\xi^{k}\sigma_{k}\prod_{j=1}^{k-1}\left(1-\sigma_{j}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $\sigma_{k}=1$
+\end_inset
+
+.
+ Now let 
 \begin_inset Formula 
 \begin{align*}
-\frac{1-\sigma_{i}}{\sigma_{i}} & =\frac{\alpha}{\sigma_{i+1}}
+\varsigma_{i} & =\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\\
+\varsigma_{1} & =\sigma_{1}
 \end{align*}
 
 \end_inset
 
-therefore
+If we can determine the values of the 
+\begin_inset Formula $\varsigma_{i}$
+\end_inset
+
+, then we can get the values of the 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ because
 \begin_inset Formula 
 \begin{align*}
-\lambda_{i+1} & =\sigma_{i+1}\frac{\alpha}{\sigma_{i+1}}\\
-\lambda_{i+1} & =\alpha
+\varsigma_{i+1} & =\sigma_{i+1}\prod_{j=1}^{i}\left(1-\sigma_{j}\right)\\
+ & =\sigma_{i+1}\left(1-\sigma_{i}\right)\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\\
+ & =\sigma_{i+1}\frac{\left(1-\sigma_{i}\right)}{\sigma_{i}}\varsigma_{i}\\
+\frac{\varsigma_{i+1}}{\varsigma_{i}} & =\sigma_{i+1}\frac{\left(1-\sigma_{i}\right)}{\sigma_{i}}
 \end{align*}
 
 \end_inset
 
-Hence the full conditions are
+so that we can find that
 \begin_inset Formula 
-\begin{align*}
-\sigma_{i} & =\left[\sum_{j=0}^{k-i}\alpha^{j}\right]^{-1},1\le i\le k\\
-\lambda_{1} & =\lambda\left[\sum_{j=0}^{k-1}\alpha^{j}\right]^{-1}\\
-\lambda_{i} & =\alpha,1<i\le k
-\end{align*}
+\[
+\prod_{j=1}^{k-1}\left(1-\sigma_{j}\right)=\frac{\left(\tau_{k}-\tau_{k-1}\right)}{\xi^{k}}
+\]
 
 \end_inset
 
-Then
-\begin_inset Formula 
-\begin{align*}
-\lambda_{i} & =-\frac{1}{2}\left(2\mu-\sigma_{i}\frac{\alpha}{\sigma_{i}}\right)\pm\frac{1}{2}\sqrt{\frac{\alpha}{\sigma_{i}}\sigma_{i}\left[\frac{\alpha}{\sigma_{i}}\sigma_{i}-4\mu\right]}\\
-\lambda_{i} & =-\frac{1}{2}\left(2\mu-\alpha\right)\pm\frac{1}{2}\sqrt{\alpha\left(\alpha-4\mu\right)}
-\end{align*}
-
-\end_inset
-
-Checking our work
-\begin_inset Formula 
-\begin{align*}
-T_{i}^{D}\left(\mu\right) & =\sigma_{i}\left(\frac{\lambda_{i}^{D}}{\lambda_{i}^{D}+\mu}\right)\frac{1}{\lambda_{i}^{D}+\mu}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\left(\frac{\lambda_{j}^{D}}{\lambda_{j}^{D}+\mu}\right)\frac{1}{\lambda_{j}^{D}+\mu}\\
- & =\left[\sum_{j=0}^{k-i}\alpha^{j}\right]^{-1}\left(\frac{\lambda_{i}^{D}}{\lambda_{i}^{D}+\mu}\right)\frac{1}{\lambda_{i}^{D}+\mu}\prod_{j=1}^{i-1}\left(1-\left[\sum_{l=0}^{k-j}\alpha^{l}\right]^{-1}\right)\left(\frac{\lambda_{j}^{D}}{\lambda_{j}^{D}+\mu}\right)\frac{1}{\lambda_{j}^{D}+\mu}\\
-\end{align*}
-
-\end_inset
-
-Now if 
-\begin_inset Formula $\mu\approx0$
+Thus, if we knew the value of 
+\begin_inset Formula $\tau_{k-1}$
 \end_inset
 
 , then 
 \begin_inset Formula 
 \[
-\lambda_{i}=\alpha
+\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)=\frac{\left(\tau_{i}-\tau_{i-1}\right)}{\xi^{i}}
 \]
 
 \end_inset
 
-and
+ which still requires us to know the value of 
+\begin_inset Formula $\tau_{k-1}$
+\end_inset
+
+.
+ Perhaps we can obtain it from the assumption
 \begin_inset Formula 
 \begin{align*}
-\lambda_{1} & =\sigma_{1}\lambda\\
-\lambda_{1} & =\lambda/\sum_{j=0}^{k-1}\alpha^{j}
+\tau_{i} & =\tau_{i-1}+\xi^{i}\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)\\
+\frac{\left(\tau_{i}-\tau_{i-1}\right)}{\xi^{i}} & =\sigma_{i}\prod_{j=1}^{i-1}\left(1-\sigma_{j}\right)
 \end{align*}
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Now
+\begin_inset Formula 
+\begin{align*}
+C & =B_{1}^{*D}\\
+C & =\left(\frac{1}{\mu+\lambda}\right)\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L}\\
+eC\left(\mu+\lambda\right)\tau & =\rho_{L}K_{L}\left(e\tau\nu-1\right)\\
+eC\left(\mu+\lambda\right)\tau & =\rho_{L}K_{L}\left(\frac{e\tau-1+\left(\frac{\gamma}{\gamma+\mu}\right)\tau}{1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau}\right)\\
+\frac{eC\left(\mu+\lambda\right)}{\rho_{L}K_{L}}\tau\left[1-\left(\frac{\gamma}{\gamma+\mu}\right)\tau\right] & =\left[e+\left(\frac{\gamma}{\gamma+\mu}\right)\right]\tau-1\\
+-\left[\frac{eC\left(\mu+\lambda\right)}{\rho_{L}K_{L}}\left(\frac{\gamma}{\gamma+\mu}\right)\right]\tau^{2}+\left[\frac{eC\left(\mu+\lambda\right)}{\rho_{L}K_{L}}-e-\left(\frac{\gamma}{\gamma+\mu}\right)\right]\tau+1 & =0
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula $\tau=\tau_{k}$
+\end_inset
+
+ is the positive solution to this equation which is positive and unique
+ by Descartes' Rule of signs:
+\begin_inset Formula 
+\begin{align*}
+\tau & =\frac{-\left[\frac{eC\left(\mu+\lambda\right)}{\rho_{L}K_{L}}-e-\left(\frac{\gamma}{\gamma+\mu}\right)\right]+\sqrt{\left[\frac{eC\left(\mu+\lambda\right)}{\rho_{L}K_{L}}-e-\left(\frac{\gamma}{\gamma+\mu}\right)\right]^{2}+4\left[\frac{eC\left(\mu+\lambda\right)}{\rho_{L}K_{L}}\left(\frac{\gamma}{\gamma+\mu}\right)\right]}}{2\left[\frac{eC\left(\mu+\lambda\right)}{\rho_{L}K_{L}}\left(\frac{\gamma}{\gamma+\mu}\right)\right]}\\
+\tau & =-\frac{1}{2\left(\frac{\gamma}{\gamma+\mu}\right)}+\frac{1}{2\frac{C\left(\mu+\lambda\right)}{\rho_{L}K_{L}}\left(\frac{\gamma}{\gamma+\mu}\right)}+\frac{1}{2\frac{eC\left(\mu+\lambda\right)}{\rho_{L}K_{L}}}+\frac{\sqrt{\left[\frac{eC\left(\mu+\lambda\right)}{\rho_{L}K_{L}}-e-\left(\frac{\gamma}{\gamma+\mu}\right)\right]^{2}+4\left[\frac{eC\left(\mu+\lambda\right)}{\rho_{L}K_{L}}\left(\frac{\gamma}{\gamma+\mu}\right)\right]}}{2\frac{eC\left(\mu+\lambda\right)}{\rho_{L}K_{L}}\left(\frac{\gamma}{\gamma+\mu}\right)}
+\end{align*}
+
+\end_inset
+
+So we know the value of 
+\begin_inset Formula $\tau_{k}$
+\end_inset
+
+ using the 
+\begin_inset Formula $B_{1}^{*}$
+\end_inset
+
+ equation.
+ Now note that
+\begin_inset Formula 
+\begin{align*}
+B_{i+1}^{*} & =\left[\left(\frac{1}{\mu+\lambda_{i+1}}\right)\prod_{j=1}^{i}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L}\\
+B_{i+1}^{*} & =\left[\left(\frac{1}{\mu+\lambda_{i+1}}\right)\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\left(1-\sigma_{i}\right)\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)\right]\rho_{L}\left(\frac{e\tau\nu-1}{e\tau}\right)K_{L}\\
+B_{i+1}^{*} & =\left[\left(\frac{1}{\mu+\lambda_{i+1}}\right)\lambda_{i}\left(1-\sigma_{i}\right)\right]B_{i}^{*}
+\end{align*}
+
+\end_inset
+
+So for all the compartments to be equal to 
+\begin_inset Formula $C$
+\end_inset
+
+, we must have that 
+\begin_inset Formula 
+\[
+1=\left(\frac{1}{\mu+\lambda_{i+1}}\right)\lambda_{i}\left(1-\sigma_{i}\right)
+\]
+
+\end_inset
+
+for 
+\begin_inset Formula $1<i\le k$
+\end_inset
+
+.
+ But, setting 
+\begin_inset Formula $\lambda_{i}=\lambda$
+\end_inset
+
+, we would need that 
+\begin_inset Formula 
+\[
+\left(1-\sigma_{i}\right)\left(\frac{\lambda}{\mu+\lambda}\right)=1
+\]
+
+\end_inset
+
+which is impossible unless 
+\begin_inset Formula $\sigma_{i}=0$
+\end_inset
+
+ for all 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+Fate model
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda_{i,j}^{F}=\lambda$
+\end_inset
+
+ and 
+\begin_inset Formula $\kappa_{i}=\frac{1}{k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Assumption set 2:
+\end_layout
+
+\begin_layout Standard
+All rates are equal and more bites is increasingly unlikely
+\end_layout
+
+\begin_layout Subsubsection*
+Disrupt model
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda_{i}^{D}=\lambda$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{i}=1-\alpha\left(\frac{\lambda_{i+1}}{\lambda_{i}}\right)$
+\end_inset
+
+.
+ In this case, 
+\begin_inset Formula $\sigma_{i}=1-\alpha$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le i\le k$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+Fate model
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda_{i,j}^{F}=\lambda$
+\end_inset
+
+ and 
+\begin_inset Formula $\kappa_{i+1}=\alpha\kappa_{i}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+This implies that 
+\begin_inset Formula $\kappa_{i}=\alpha^{i-1}\kappa_{1}$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le i\le\kappa$
+\end_inset
+
+.
+ Now since 
+\begin_inset Formula $\sum_{i=1}^{k}\kappa_{i}=1$
+\end_inset
+
+, we obtain 
+\begin_inset Formula $\kappa_{1}=\left(\sum_{i=1}^{\kappa}\alpha^{i-1}\right)^{-1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Assumption set 3:
+\end_layout
+
+\begin_layout Standard
+Cycle durations are equal and equal numbers taking 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals
+\end_layout
+
+\begin_layout Subsubsection*
+Disrupt model
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda_{1}^{D}=\sigma_{1}\lambda$
+\end_inset
+
+ and 
+\begin_inset Formula $\lambda_{i}^{D}=\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{i}=1-\frac{\left(\mu+\lambda_{i+1}\right)}{\lambda_{i}}$
+\end_inset
+
+ Combining these relations, we obtain
+\begin_inset Formula 
+\begin{align*}
+\sigma_{i} & =1-\frac{\lambda_{i+1}^{D}}{\lambda_{i}^{D}}\\
+\sigma_{i} & =1-\frac{\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)\sigma_{i+1}}{\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}}\\
+\sigma_{i} & =\frac{\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}-\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)\sigma_{i+1}}{\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}}\\
+\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}^{2} & =\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}-\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)\sigma_{i+1}\\
+\left(1-\sigma_{i-1}\right)\sigma_{i}^{3} & =\left(1-\sigma_{i-1}\right)\sigma_{i}^{2}-\left(1-\sigma_{i}\right)\sigma_{i-1}\sigma_{i+1}\\
+\left(1-\sigma_{i}\right)\sigma_{i-1}\sigma_{i+1} & =\left(1-\sigma_{i-1}\right)\sigma_{i}^{2}\left(1-\sigma_{i}\right)\\
+\sigma_{i+1} & =\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}^{2}\\
+\\
+\end{align*}
+
+\end_inset
+
+Now since 
+\begin_inset Formula $\sigma_{k}=0$
+\end_inset
+
+, we obtain
+\begin_inset Formula 
+\begin{align*}
+\sigma_{k} & =\left(\frac{1-\sigma_{k-2}}{\sigma_{k-2}}\right)\sigma_{k-1}^{2}\\
+0 & =\left(\frac{1-\sigma_{k-2}}{\sigma_{k-2}}\right)\sigma_{k-1}^{2}
+\end{align*}
+
+\end_inset
+
+So either 
+\begin_inset Formula $\sigma_{k-1}=0$
+\end_inset
+
+ or 
+\begin_inset Formula $\sigma_{k-2}=1$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\sigma_{k-1}=0$
+\end_inset
+
+, then repeating the same argument, we have 
+\begin_inset Formula $\sigma_{k-2}=0$
+\end_inset
+
+ or 
+\begin_inset Formula $\sigma_{k-3}=1$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The case where 
+\begin_inset Formula $\sigma_{k-2}=1$
+\end_inset
+
+ is uninteresting because then the cycle never proceeds to stages 
+\begin_inset Formula $k-1$
+\end_inset
+
+ and 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ Hence we must have that 
+\begin_inset Formula $\sigma_{i}=0$
+\end_inset
+
+ for all 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+\sigma_{k-2} & =\left(\frac{1-\sigma_{k-4}}{\sigma_{k-4}}\right)\sigma_{k-3}^{2}\\
+1 & =\left(\frac{1-\sigma_{k-4}}{\sigma_{k-4}}\right)\sigma_{k-3}^{2}
+\end{align*}
+
+\end_inset
+
+gives 
+\begin_inset Formula $\sigma_{k-3}$
+\end_inset
+
+ in terms of 
+\begin_inset Formula $\sigma_{k-4}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula $T_{i}^{D}=\frac{1}{\lambda}$
+\end_inset
+
+, where 
+\begin_inset Formula $T_{i}^{D}=\sigma_{i}\left(\frac{\lambda_{i}^{D}}{\lambda_{i}^{D}+\mu}\right)\frac{1}{\lambda_{i}^{D}+\mu}\sum_{j=1}^{i-1}\left(1-\sigma_{j}\right)\left(\frac{\lambda_{j}^{D}}{\lambda_{j}^{D}+\mu}\right)\frac{1}{\lambda_{j}^{D}+\mu}$
+\end_inset
+
+ is the cycle duration length for a mosquito that takes 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals.
+ The assumption for the disrupt model, is then equivalent to
+\begin_inset Formula 
+\begin{align*}
+\sigma_{1} & =\frac{1}{\lambda}\frac{\left(\mu+\lambda_{1}^{D}\right)^{2}}{\lambda_{1}^{D}}\\
+\sigma_{i} & =\frac{\left(\mu+\lambda_{i}^{D}\right)^{2}}{\lambda_{i}^{D}},1<i\le k
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula $\left(B_{i}^{D}\right)^{*}=C$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le i\le k$
+\end_inset
+
+.
+ This condition is equivalent to
+\begin_inset Formula 
+\begin{align*}
+\sigma_{1} & =\frac{C}{K_{L}\frac{1}{e\tau^{D}}\left(e\tau^{D}\nu^{D}-1\right)}\left(\mu+\lambda_{1}^{D}\right)\\
+\prod_{j=t}^{s-1}\left(1-\sigma_{j}\right) & =\left(\frac{\mu+\lambda_{s}^{D}}{\mu+\lambda_{t}^{D}}\right)\prod_{j=t}^{s-1}\left(\frac{\mu+\lambda_{j}^{D}}{\lambda_{j}^{D}}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Fate model
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda_{i,j}^{F}=i\lambda$
+\end_inset
+
+ and 
+\begin_inset Formula $\kappa_{i}=\frac{1}{k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Assumption set 4:
+\end_layout
+
+\begin_layout Standard
+Cycle durations are equal and more bites is increasingly unlikely
+\end_layout
+
+\begin_layout Subsubsection*
+Disrupt model
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda_{1}^{D}=\sigma_{1}\lambda$
+\end_inset
+
+, 
+\begin_inset Formula $\lambda_{i}^{D}=\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}$
+\end_inset
+
+, and 
+\begin_inset Formula $\sigma_{i}=1-\alpha\left(\frac{\lambda_{i+1}^{D}}{\lambda_{i}^{D}}\right)$
+\end_inset
+
+.
+ Combining these assumptions:
+\begin_inset Formula 
+\begin{align*}
+\sigma_{i} & =1-\alpha\left(\frac{\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)\sigma_{i+1}}{\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}}\right)\\
+\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}^{2} & =\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}-\alpha\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)\sigma_{i+1}\\
+\alpha\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)\sigma_{i+1} & =\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}-\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}^{2}\\
+\alpha\left(\frac{1-\sigma_{i}}{\sigma_{i}}\right)\sigma_{i+1} & =\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}\left(1-\sigma_{i}\right)\\
+\sigma_{i+1} & =\frac{1}{\alpha}\left(\frac{1-\sigma_{i-1}}{\sigma_{i-1}}\right)\sigma_{i}^{2}\\
+\\
+\\
+\\
+\end{align*}
+
+\end_inset
+
+Using the fact that 
+\begin_inset Formula $\sigma_{k}=0$
+\end_inset
+
+, we obtain the exact same problem as for Assumption set 3:
+\begin_inset Formula 
+\begin{align*}
+\sigma_{k} & =\frac{1}{\alpha}\left(\frac{1-\sigma_{k-2}}{\sigma_{k-2}}\right)\sigma_{k-1}^{2}\\
+0 & =\frac{1}{\alpha}\left(\frac{1-\sigma_{k-2}}{\sigma_{k-2}}\right)\sigma_{k-1}^{2}
+\end{align*}
+
+\end_inset
+
+and either 
+\begin_inset Formula $\sigma_{k-1}=0$
+\end_inset
+
+ or 
+\begin_inset Formula $\sigma_{k-2}=1$
+\end_inset
+
+.
+ We need to go back to the drawing board here or re-incorporate the assumption
+ that 
+\begin_inset Formula $\mu>0$
+\end_inset
+
+ in order to proceed.
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula $T_{i}^{D}=\frac{1}{\lambda}$
+\end_inset
+
+, where 
+\begin_inset Formula $T_{i}^{D}=\sigma_{i}\left(\frac{\lambda_{i}^{D}}{\lambda_{i}^{D}+\mu}\right)\frac{1}{\lambda_{i}^{D}+\mu}\sum_{j=1}^{i-1}\left(1-\sigma_{j}\right)\left(\frac{\lambda_{j}^{D}}{\lambda_{j}^{D}+\mu}\right)\frac{1}{\lambda_{j}^{D}+\mu}$
+\end_inset
+
+ is the cycle duration length for a mosquito that takes 
+\begin_inset Formula $i$
+\end_inset
+
+ blood meals.
+ The assumption for the disrupt model, is then equivalent to
+\begin_inset Formula 
+\begin{align*}
+\sigma_{1} & =\frac{1}{\lambda}\frac{\left(\mu+\lambda_{1}^{D}\right)^{2}}{\lambda_{1}^{D}}\\
+\sigma_{i} & =\frac{\left(\mu+\lambda_{i}^{D}\right)^{2}}{\lambda_{i}^{D}},1<i\le k
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula $\sigma_{i}=\sigma^{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Fate model
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\lambda_{i,j}^{F}=i\lambda$
+\end_inset
+
+ and 
+\begin_inset Formula $\kappa_{i+1}=\alpha\kappa_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This implies that 
+\begin_inset Formula $\kappa_{i}=\alpha^{i-1}\kappa_{1}$
+\end_inset
+
+ for 
+\begin_inset Formula $1\le i\le\kappa$
+\end_inset
+
+.
+ Now since 
+\begin_inset Formula $\sum_{i=1}^{k}\kappa_{i}=1$
+\end_inset
+
+, we obtain 
+\begin_inset Formula $\kappa_{1}=\left(\sum_{i=1}^{\kappa}\alpha^{i-1}\right)^{-1}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
