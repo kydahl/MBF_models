@@ -220,7 +220,7 @@ Henceforth, I will refer to the total adult female mosquito population as
  into several compartments representing the varying (generalized) stages
  of the mosquito gonotrophic (reproductive) cycle.
  The first stage, 
-\begin_inset Formula $S$
+\begin_inset Formula $B$
 \end_inset
 
 , includes mosquitoes actively seeking a blood meal.
@@ -232,7 +232,7 @@ Henceforth, I will refer to the total adult female mosquito population as
 .
  After egg-laying, these individuals then begin seeking another blood meal
  and return to 
-\begin_inset Formula $S$
+\begin_inset Formula $B$
 \end_inset
 
 .
@@ -269,8 +269,9 @@ the density function for that distribution, and
  can be given by the integral equations:
 \begin_inset Formula 
 \begin{align*}
-S\left(t\right) & =s_{0}\mathcal{S}_{S}\left(t,0\right)+\int_{0}^{t}\left[\mathcal{I}_{S}\left(\tau\right)+v_{0}h_{V}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{V}\left(s\right)h_{V}\left(\tau,s\right)ds\right]\mathcal{S}_{S}\left(t,\tau\right)d\tau\\
-V\left(t\right) & =v_{0}\mathcal{S}_{V}\left(t,0\right)+\int_{0}^{t}\left[\mathcal{I}_{V}\left(\tau\right)+s_{0}h_{S}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{S}\left(s\right)h_{S}\left(\tau,s\right)ds\right]\mathcal{S}_{V}\left(t,\tau\right)d\tau
+L\left(t\right) & =l_{0}\mathcal{S}_{L}\left(t,0\right)+\int_{0}^{t}\left[\mathcal{I}_{L}\left(\tau\right)+l_{0}h_{L}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{V}\left(s\right)g_{V}\left(\tau,s\right)ds\right]\mathcal{S}_{L}\left(t,\tau\right)d\tau\\
+B\left(t\right) & =b_{0}\mathcal{S}_{B}\left(t,0\right)+\int_{0}^{t}\left[\mathcal{I}_{B}\left(\tau\right)+v_{0}h_{V}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{V}\left(s\right)h_{V}\left(\tau,s\right)ds\right]\mathcal{S}_{B}\left(t,\tau\right)d\tau\\
+V\left(t\right) & =v_{0}\mathcal{S}_{V}\left(t,0\right)+\int_{0}^{t}\left[\mathcal{I}_{V}\left(\tau\right)+b_{0}h_{B}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{B}\left(s\right)h_{B}\left(\tau,s\right)ds\right]\mathcal{S}_{V}\left(t,\tau\right)d\tau
 \end{align*}
 
 \end_inset
@@ -333,7 +334,7 @@ This translates to the equations
 \begin_inset Formula 
 \begin{align*}
 v_{0} & =0,\\
-\mathcal{I}_{S}\left(t\right) & =\rho_{L}L\left(t\right)+\gamma V\left(t\right),\\
+\mathcal{I}_{B}\left(t\right) & =\lambda L\left(t\right)+\gamma V\left(t\right),\\
 \mathcal{I}_{V}\left(t\right) & =0.
 \end{align*}
 
@@ -342,8 +343,18 @@ v_{0} & =0,\\
 Hence we arrive at the following system of equations
 \begin_inset Formula 
 \begin{align*}
-S\left(t\right) & =s_{0}\mathcal{S}_{S}\left(t,0\right)+\int_{0}^{t}\left[\rho_{L}L\left(\tau\right)+\gamma V\left(\tau\right)\right]\mathcal{S}_{S}\left(t,\tau\right)d\tau\\
+B\left(t\right) & =b_{0}\mathcal{S}_{b}\left(t,0\right)+\int_{0}^{t}\left[\rho_{L}L\left(\tau\right)+\gamma V\left(\tau\right)\right]\mathcal{S}_{B}\left(t,\tau\right)d\tau\\
 V\left(t\right) & =\int_{0}^{t}\left[s_{0}h_{S}\left(\tau,0\right)+\int_{0}^{\tau}\left[\rho_{L}L\left(s\right)+\gamma V\left(s\right)\right]h_{S}\left(\tau,s\right)ds\right]e^{-\left(t-\tau\right)/\gamma}d\tau
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+L\left(t\right) & =l_{0}\mathcal{S}_{L}\left(t,0\right)+\int_{0}^{t}\left[\mathcal{I}_{L}\left(\tau\right)+l_{0}h_{L}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{V}\left(s\right)g_{V}\left(\tau,s\right)ds\right]\mathcal{S}_{L}\left(t,\tau\right)d\tau\\
+B\left(t\right) & =b_{0}\mathcal{S}_{B}\left(t,0\right)+\int_{0}^{t}\left[\lambda L\left(t\right)+\gamma V\left(t\right)\right]\mathcal{S}_{B}\left(t,\tau\right)d\tau\\
+V\left(t\right) & =\int_{0}^{t}\left[b_{0}h_{B}\left(\tau,0\right)+\int_{0}^{\tau}\mathcal{I}_{B}\left(s\right)h_{B}\left(\tau,s\right)ds\right]\mathcal{S}_{V}\left(t,\tau\right)d\tau
 \end{align*}
 
 \end_inset
@@ -624,16 +635,34 @@ Let
 \end_inset
 
  the lifespan of a mosquito.
- Then the waiting time between oviposition events is given by 
-\begin_inset Formula $H=\sum_{i=1}^{K}\Gamma_{i}$
-\end_inset
-
-.
  
 \end_layout
 
 \begin_layout Standard
+Then the waiting time between oviposition events is given by 
+\begin_inset Formula $H=\sum_{i=1}^{K}\Gamma_{i}$
+\end_inset
 
+.
+ Suppose that 
+\begin_inset Formula $E\left[K\right]=k$
+\end_inset
+
+ and 
+\begin_inset Formula $E\left[\Gamma_{i}\right]=\gamma_{i}$
+\end_inset
+
+.
+ If all 
+\begin_inset Formula $\gamma_{i}=\gamma$
+\end_inset
+
+, then 
+\begin_inset Formula $E\left[H\right]=k\gamma$
+\end_inset
+
+ but in general we cannot say much about the mean of this distribution.
+ 
 \end_layout
 
 \begin_layout Standard
