@@ -284,7 +284,7 @@ where the matrix
 
 .
  The function 
-\begin_inset Formula $\phi\left(V,L\right)$
+\begin_inset Formula $\varphi\left(V,L\right)$
 \end_inset
 
  is the recruitment rate of new aquatic-stage mosquitoes.
@@ -320,10 +320,18 @@ and
 \end_layout
 
 \begin_layout Enumerate
-\begin_inset Formula $\phi\left(0,L\right)=0$
+\begin_inset Formula $\varphi$
 \end_inset
 
- and 
+ is linear in 
+\begin_inset Formula $V$
+\end_inset
+
+, 
+\begin_inset Formula $\varphi\left(0,L\right)=0$
+\end_inset
+
+, and 
 \begin_inset Formula $\lim_{L\to0^{+}}\frac{\partial}{\partial V}\varphi\left(L,V\right)>0$
 \end_inset
 
@@ -331,16 +339,11 @@ and
 \end_layout
 
 \begin_layout Enumerate
-There exists 
-\begin_inset Formula $L^{*}$
+\begin_inset Formula $\bar{\varphi}\left(L\right)=\frac{\varphi\left(V,L\right)}{V}$
 \end_inset
 
- such that 
-\begin_inset Formula $\varphi\left(V,L^{*}\right)=\left(\rho_{L}+\mu_{L}\right)L^{*}$
-\end_inset
-
- for all 
-\begin_inset Formula $V>0$
+ is surjective over 
+\begin_inset Formula $\mathbb{R}$
 \end_inset
 
 .
@@ -352,6 +355,16 @@ Another simple function that satisfies these properties is
 \end_inset
 
 .
+ Note that assumption 2 precludes the use of 
+\begin_inset Formula $\varphi\left(V,L\right)=c$
+\end_inset
+
+ for any constant 
+\begin_inset Formula $c$
+\end_inset
+
+.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -748,124 +761,152 @@ is an equilibrium.
 
 \begin_layout Standard
 Let 
-\begin_inset Formula $\pi\left(\boldsymbol{B}\right)=-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}$
+\begin_inset Formula $r=r\left(\boldsymbol{B}\right)=-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}$
 \end_inset
 
  and note that 
-\begin_inset Formula $\pi\left(\boldsymbol{B}\right)\ge0\in\mathbb{R}$
+\begin_inset Formula $r\ge0\in\mathbb{R}$
 \end_inset
 
 .
  Let
-\begin_inset Formula $V^{*}=\frac{1}{\gamma+\mu}\pi\left(\boldsymbol{B}\right)$
+\begin_inset Formula $V^{*}=V^{*}\left(r\right)=\frac{1}{\gamma+\mu}r$
 \end_inset
 
  and 
-\begin_inset Formula $L^{*}\left(\boldsymbol{B}\right)=L^{*}\left(V^{*}\right)$
+\begin_inset Formula $L^{*}\left(r\right)$
 \end_inset
 
  be such that 
-\begin_inset Formula $\varphi\left(V^{*},L^{*}\left(V^{*}\right)\right)=\left(\rho_{L}+\mu_{L}\right)L^{*}\left(V^{*}\right)$
+\begin_inset Formula $\varphi\left(V^{*},L^{*}\left(r\right)\right)=\left(\rho_{L}+\mu_{L}\right)L^{*}\left(r\right)$
 \end_inset
 
 , which exists by assumption 3 above.
  Then
 \begin_inset Formula 
 \begin{align*}
-\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}L^{*}\left(\boldsymbol{B}\right)+\gamma V^{*}\left(\boldsymbol{B}\right)\right)\vec{\alpha}\\
-\boldsymbol{B} & =\left[\rho_{L}L^{*}\left(\boldsymbol{B}\right)+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\right]\left(\mu I-A^{T}\right)^{-1}\vec{\alpha}
+\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}L^{*}\left(r\right)+\frac{\gamma}{\gamma+\mu}r\right)\alpha\\
+\boldsymbol{B} & =\left(\rho_{L}L^{*}\left(r\right)+\frac{\gamma}{\gamma+\mu}r\right)\left(\mu I-A^{T}\right)^{-1}\alpha\\
+r & =\left(\rho_{L}L^{*}\left(r\right)+\frac{\gamma}{\gamma+\mu}r\right)\tau\\
+L^{*}\left(r\right) & =\frac{1}{\rho_{L}\tau}\left(1-\frac{\gamma}{\gamma+\mu}\tau\right)r\\
+\varphi\left(V^{*},L^{*}\left(r\right)\right) & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\frac{\gamma}{\gamma+\mu}\tau\right)r\\
+\left[\frac{\varphi\left(V^{*},L^{*}\left(r\right)\right)}{V^{*}\left(r\right)}\right]V^{*}\left(r\right) & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\frac{\gamma}{\gamma+\mu}\tau\right)r\\
+\bar{\varphi}\left(r\right)\frac{1}{\gamma+\mu}r & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\frac{\gamma}{\gamma+\mu}\tau\right)r\\
+\bar{\varphi}\left(r\right) & =\left(\gamma+\mu\right)\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\frac{\gamma}{\gamma+\mu}\tau\right)
 \end{align*}
 
 \end_inset
 
-
-\begin_inset Formula $\mu I-A^{T}$
-\end_inset
-
- is invertible because 
-\begin_inset Formula $\mu>0$
+where 
+\begin_inset Formula $\tau=\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha$
 \end_inset
 
  and 
-\begin_inset Formula $A$
+\begin_inset Formula $\bar{\varphi}\left(r\right)=\frac{\varphi\left(V^{*},L^{*}\left(r\right)\right)}{V^{*}\left(r\right)}$
 \end_inset
 
- is the transient rate matrix of a phase type distribution and hence the
- eigenvalues of 
-\begin_inset Formula $A^{T}$
+.
+ By the surjectivity of 
+\begin_inset Formula $\bar{\varphi}$
 \end_inset
 
- must all have negative real part (Bladt and Nielsen 2017, Corollary 3.1.15).
+, there exists at least one 
+\begin_inset Formula $r$
+\end_inset
+
+ solving the above equation as long as 
+\begin_inset Formula $\frac{\gamma}{\gamma+\mu}\tau<1$
+\end_inset
+
+.
  In fact, 
+\begin_inset Formula $\tau$
+\end_inset
+
+ is a probability which can be seen because every entry of 
+\begin_inset Formula $\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}$
+\end_inset
+
+ is in 
+\begin_inset Formula $\left[0,1\right]$
+\end_inset
+
+ [!!! REMAINS TO BE SHOWN.
+ The entries of 
+\begin_inset Formula $\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}$
+\end_inset
+
+ give the probabilities of going from transient state 
+\begin_inset Formula $B_{i}$
+\end_inset
+
+ to 
+\begin_inset Formula $V$
+\end_inset
+
+.].
+ 
+\end_layout
+
+\begin_layout Standard
+For each such 
+\begin_inset Formula $r$
+\end_inset
+
+, we obtain a solution to 
+\begin_inset Formula $\boldsymbol{B}=\left(\rho_{L}L^{*}\left(r\right)+\frac{1}{\gamma+\mu}r\right)\left(\mu I-A^{T}\right)^{-1}\alpha$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Note that since 
 \begin_inset Formula $A-\mu I$
 \end_inset
 
- is itself a transient rate matrix for a phase-type distribution as it is
- the minimum of two phase-type distributions (the other being exponential
- with rate 
+ is a transient rate matrix for a phase-type distribution (it is the minimum
+ of two phase-type distributions, the other being exponential with rate
+ 
 \begin_inset Formula $\mu$
 \end_inset
 
-).
- Hence the eigenvalues of 
+), the eigenvalues of 
 \begin_inset Formula $A^{T}-\mu I$
 \end_inset
 
  must all have negative real part.
- Subsequently, the eigenvalues of 
+ Therefore, 
 \begin_inset Formula $\mu I-A^{T}$
 \end_inset
 
- must all have positive real part.
+ is an M-matrix and inverse-positive so that 
+\begin_inset Formula $\left(\mu I-A^{T}\right)^{-1}\alpha$
+\end_inset
+
+ is a positive vector and the equation 
+\begin_inset Formula $\boldsymbol{B}=\left(\rho_{L}L^{*}\left(r\right)+\frac{\gamma}{\gamma+\mu}r\right)\left(\mu I-A^{T}\right)^{-1}\alpha$
+\end_inset
+
+ gives biologically plausible values of 
+\begin_inset Formula $\boldsymbol{B}$
+\end_inset
+
+ (i.e.
  
-\end_layout
-
-\begin_layout Standard
-Now since 
-\begin_inset Formula $\rho_{L}L^{*}\left(\boldsymbol{B}\right)+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\ge0$
+\begin_inset Formula $B_{i}\ge0$
 \end_inset
 
-, in order for 
-\begin_inset Formula $\boldsymbol{B}^{*}$
+ for 
+\begin_inset Formula $1\le i\le n$
 \end_inset
 
- to be biologically plausible we must also have that 
-\begin_inset Formula $v=\left(\mu I-A^{T}\right)^{-1}\vec{\alpha}$
-\end_inset
-
- has all non-negative entries.
- [It is not clear at this point whether 
-\begin_inset Formula $v$
-\end_inset
-
- has this property.
- In the notation of Bladt and Nielsen, want to show that 
-\begin_inset Formula $v=\left(T^{T}\right)^{-1}\pi\ge0$
-\end_inset
-
-].
-\end_layout
-
-\begin_layout Standard
-Let 
-\begin_inset Formula $\boldsymbol{B}^{*}$
-\end_inset
-
- be a non-zero solution to 
-\begin_inset Formula $\boldsymbol{B}=\left[\rho_{L}L^{*}\left(\boldsymbol{B}\right)+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\right]\left(\mu I-A^{T}\right)^{-1}\vec{\alpha}$
-\end_inset
-
-.
- Then 
-\begin_inset Formula $\left(L^{*},\boldsymbol{B}^{*},V^{*}\right)$
-\end_inset
-
- is a positive equilibrium of the system.
+).
  
 \end_layout
 
 \begin_layout Subsection*
-General reproductive numbers and stability of equilibria
+General reproductive numbers and stability of the extinction equilibrium
 \end_layout
 
 \begin_layout Standard
@@ -1251,17 +1292,23 @@ Thus the eigenvalues of
 \begin{align*}
 R & =\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\phi_{V}\frac{1}{\zeta}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha\\
  & =\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha\left(\frac{\phi_{V}}{\gamma+\mu}\right)\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\right)\left(\frac{1}{1-\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha}\right)\\
+ & =\left[\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha\right]\times\left(\frac{\phi_{V}}{\gamma+\mu}\right)\times\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\right)\times\left(\frac{1}{1-\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha}\right)\\
  & =\text{Pr\left(\text{survive to oviposition}\right)}\times\text{eggs produced while ovipositing}\times\text{proportion surviving to reach biting stages}\\
  & \times\text{average number of complete cycles}
 \end{align*}
 
 \end_inset
 
-Note that a key quantity here is 
-\begin_inset Formula $w=\boldsymbol{1}^{T}A^{T}\left(\mu I-A^{T}\right)^{-1}\alpha$
+where 
+\begin_inset Formula $\phi_{L}=\frac{\partial\phi}{\partial L}\left(0,0\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $\phi_{V}=\frac{\partial\phi}{\partial V}\left(0,0\right)$
 \end_inset
 
 .
+ 
 \end_layout
 
 \begin_layout Section*
@@ -1404,22 +1451,22 @@ Now, since
 \end_inset
 
 (where here 
-\begin_inset Formula $\rho_{k}=0$
+\begin_inset Formula $\sigma_{k}=0$
 \end_inset
 
 ), we obtain 
-\begin_inset Formula $-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}=\varrho\left(\mu+\lambda_{1}\right)B_{1}$
+\begin_inset Formula $-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}=\tau\left(\mu+\lambda_{1}\right)B_{1}$
 \end_inset
 
  where we have defined 
 \begin_inset Formula 
 \[
-\tau=\sum_{i=1}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right)
+\tau=\sum_{i=1}^{k}\left(\frac{\lambda_{i}}{\mu+\lambda_{i}}\right)\sigma_{i}\prod_{j=1}^{i-1}\left(\frac{\lambda_{j}}{\mu+\lambda_{j}}\right)\left(1-\sigma_{j}\right),
 \]
 
 \end_inset
 
-, which represents the total probability of a newly-emerged mosquito surviving
+which represents the total probability of a newly-emerged mosquito surviving
  to reach the oviposition stage.
 \end_layout
 
