@@ -284,7 +284,7 @@ where the matrix
 
 .
  The function 
-\begin_inset Formula $\phi\left(V,L\right)$
+\begin_inset Formula $\varphi\left(V,L\right)$
 \end_inset
 
  is the recruitment rate of new aquatic-stage mosquitoes.
@@ -761,7 +761,7 @@ is an equilibrium.
 
 \begin_layout Standard
 Let 
-\begin_inset Formula $r=r\left(\boldsymbol{B}\right)=-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}$
+\begin_inset Formula $r=-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}$
 \end_inset
 
  and note that 
@@ -769,30 +769,39 @@ Let
 \end_inset
 
 .
- Let
-\begin_inset Formula $V^{*}=V^{*}\left(r\right)=\frac{1}{\gamma+\mu}r$
+ We obtain 
+\begin_inset Formula $V^{*}=\frac{1}{\gamma+\mu}r$
 \end_inset
 
- and 
-\begin_inset Formula $L^{*}\left(r\right)$
+ and, by assumption 3 above, there exists 
+\begin_inset Formula $L^{*}$
 \end_inset
 
- be such that 
-\begin_inset Formula $\varphi\left(V^{*},L^{*}\left(r\right)\right)=\left(\rho_{L}+\mu_{L}\right)L^{*}\left(r\right)$
+ such that 
+\begin_inset Formula $\varphi\left(V^{*},L^{*}\right)=\left(\rho_{L}+\mu_{L}\right)L^{*}$
 \end_inset
 
-, which exists by assumption 3 above.
+.
  Then
 \begin_inset Formula 
 \begin{align*}
-\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}L^{*}\left(r\right)+\frac{\gamma}{\gamma+\mu}r\right)\alpha\\
-\boldsymbol{B} & =\left(\rho_{L}L^{*}\left(r\right)+\frac{\gamma}{\gamma+\mu}r\right)\left(\mu I-A^{T}\right)^{-1}\alpha\\
-r & =\left(\rho_{L}L^{*}\left(r\right)+\frac{\gamma}{\gamma+\mu}r\right)\tau\\
-L^{*}\left(r\right) & =\frac{1}{\rho_{L}\tau}\left(1-\frac{\gamma}{\gamma+\mu}\tau\right)r\\
-\varphi\left(V^{*},L^{*}\left(r\right)\right) & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\frac{\gamma}{\gamma+\mu}\tau\right)r\\
-\left[\frac{\varphi\left(V^{*},L^{*}\left(r\right)\right)}{V^{*}\left(r\right)}\right]V^{*}\left(r\right) & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\frac{\gamma}{\gamma+\mu}\tau\right)r\\
-\bar{\varphi}\left(r\right)\frac{1}{\gamma+\mu}r & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\frac{\gamma}{\gamma+\mu}\tau\right)r\\
-\bar{\varphi}\left(r\right) & =\left(\gamma+\mu\right)\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\frac{\gamma}{\gamma+\mu}\tau\right)
+\boldsymbol{B} & =\left(\rho_{L}L^{*}+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\right)\left(\mu I-A^{T}\right)^{-1}\vec{\alpha}\\
+-\boldsymbol{1}^{T}A^{T}\boldsymbol{B} & =\left(\rho_{L}L^{*}+\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\vec{\alpha}\\
+r & =\tau\rho_{L}L^{*}+\tau\frac{\gamma}{\gamma+\mu}r\\
+\rho_{L}L^{*} & =\frac{r}{\tau}\left(1-\tau\frac{\gamma}{\gamma+\mu}\right)\\
+\bar{\varphi}\left(L^{*}\right) & =\left[\tau\frac{1}{\gamma+\mu}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\left(1-\tau\frac{\gamma}{\gamma+\mu}\right)^{-1}\right]^{-1}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\rho_{L}L^{*} & =\frac{r}{\tau}\left(1-\tau\frac{\gamma}{\gamma+\mu}\right)\\
+\frac{1}{\rho_{L}+\mu_{L}}\varphi\left(V^{*},L^{*}\right) & =\frac{1}{\rho_{L}}\frac{r}{\tau}\left(1-\tau\frac{\gamma}{\gamma+\mu}\right)\\
+\varphi\left(V^{*},L^{*}\right) & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{r}{\tau}\left(1-\tau\frac{\gamma}{\gamma+\mu}\right)\\
+\bar{\varphi}\left(L^{*}\right) & =\frac{\gamma+\mu}{r}\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{r}{\tau}\left(1-\tau\frac{\gamma}{\gamma+\mu}\right)\\
+\bar{\varphi}\left(L^{*}\right) & =\left[\frac{1}{\gamma+\mu}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\tau\left(1-\tau\frac{\gamma}{\gamma+\mu}\right)^{-1}\right]^{-1}
 \end{align*}
 
 \end_inset
@@ -802,7 +811,7 @@ where
 \end_inset
 
  and 
-\begin_inset Formula $\bar{\varphi}\left(r\right)=\frac{\varphi\left(V^{*},L^{*}\left(r\right)\right)}{V^{*}\left(r\right)}$
+\begin_inset Formula $\bar{\varphi}\left(L^{*}\right)=\frac{\varphi\left(V^{*},L^{*}\right)}{V^{*}}$
 \end_inset
 
 .
@@ -990,11 +999,11 @@ V=\mathcal{V}_{x}\left(0,0,0\right) & =\begin{bmatrix}\left(\rho_{L}+\mu_{L}\rig
 \end_inset
 
 where 
-\begin_inset Formula $\phi_{L}=\frac{\partial\phi}{\partial L}\left(0,0\right)$
+\begin_inset Formula $\phi_{L}=\frac{\partial\varphi}{\partial L}\left(0,0\right)$
 \end_inset
 
  and 
-\begin_inset Formula $\phi_{V}=\frac{\partial\phi}{\partial V}\left(0,0\right)$
+\begin_inset Formula $\phi_{V}=\frac{\partial\varphi}{\partial V}\left(0,0\right)$
 \end_inset
 
 .
@@ -1293,6 +1302,7 @@ Thus the eigenvalues of
 R & =\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\phi_{V}\frac{1}{\zeta}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha\\
  & =\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha\left(\frac{\phi_{V}}{\gamma+\mu}\right)\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\right)\left(\frac{1}{1-\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha}\right)\\
  & =\left[\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha\right]\times\left(\frac{\phi_{V}}{\gamma+\mu}\right)\times\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\right)\times\left(\frac{1}{1-\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha}\right)\\
+ & =\tau\times\left(\frac{\phi_{V}}{\gamma+\mu}\right)\times\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\right)\times\left(\frac{1}{1-\tau\frac{\gamma}{\gamma+\mu}}\right)\\
  & =\text{Pr\left(\text{survive to oviposition}\right)}\times\text{eggs produced while ovipositing}\times\text{proportion surviving to reach biting stages}\\
  & \times\text{average number of complete cycles}
 \end{align*}
@@ -1300,15 +1310,79 @@ R & =\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\phi_{V}\frac{
 \end_inset
 
 where 
-\begin_inset Formula $\phi_{L}=\frac{\partial\phi}{\partial L}\left(0,0\right)$
+\begin_inset Formula $\phi_{L}=\frac{\partial\varphi}{\partial L}\left(0,0\right)$
 \end_inset
 
  and 
-\begin_inset Formula $\phi_{V}=\frac{\partial\phi}{\partial V}\left(0,0\right)$
+\begin_inset Formula $\phi_{V}=\frac{\partial\varphi}{\partial V}\left(0,0\right)$
 \end_inset
 
 .
  
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\varphi\left(V,L\right)$
+\end_inset
+
+=
+\begin_inset Formula $\phi V\left(1-\frac{L}{K_{L}}\right)$
+\end_inset
+
+, then 
+\begin_inset Formula $\phi_{L}=0$
+\end_inset
+
+ and 
+\begin_inset Formula $\phi_{V}=\phi$
+\end_inset
+
+ so that 
+\begin_inset Formula $R=\tau\left(\frac{\phi}{\gamma+\mu}\right)\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\left(\frac{1}{1-\tau\frac{\gamma}{\gamma+\mu}}\right)$
+\end_inset
+
+ and 
+\begin_inset Formula 
+\begin{align*}
+\phi\left(1-\frac{L}{K_{L}}\right) & =\left[\frac{1}{\gamma+\mu}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\tau\left(1-\tau\frac{\gamma}{\gamma+\mu}\right)^{-1}\right]^{-1}\\
+\left(1-\frac{L}{K_{L}}\right) & =\frac{1}{R}\\
+L & =\frac{K_{L}}{R}\left(R-1\right)
+\end{align*}
+
+\end_inset
+
+If 
+\begin_inset Formula $\varphi\left(V,L\right)$
+\end_inset
+
+=
+\begin_inset Formula $\phi V$
+\end_inset
+
+, then 
+\begin_inset Formula $\phi_{L}=0$
+\end_inset
+
+ and 
+\begin_inset Formula $\phi_{V}=\phi$
+\end_inset
+
+ so that 
+\begin_inset Formula $R=\tau\left(\frac{\phi}{\gamma+\mu}\right)\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\left(\frac{1}{1-\tau\frac{\gamma}{\gamma+\mu}}\right)$
+\end_inset
+
+ and 
+\begin_inset Formula 
+\begin{align*}
+\phi & =\left[\frac{1}{\gamma+\mu}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\tau\left(1-\tau\frac{\gamma}{\gamma+\mu}\right)^{-1}\right]^{-1}\\
+\left(1-\frac{L}{K_{L}}\right) & =\frac{1}{R}\\
+L & =\frac{K_{L}}{R}\left(R-1\right)
+\end{align*}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section*
