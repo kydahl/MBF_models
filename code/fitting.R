@@ -212,11 +212,3 @@ all.moments(rPH(1000, set_PH), order.max = 5)
 
 # 3. Return to 1 with updated alpha and A
 
-# Visualizations ----
-
-# Histograms
-hist_plots <- sample_data %>% 
-  pivot_longer(cols = Out_time:time_G) %>% 
-  ggplot(aes(x = value)) +
-  geom_histogram() +
-  facet_wrap(~name, scales = "free", nrow = 1)
