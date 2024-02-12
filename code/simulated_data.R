@@ -20,7 +20,7 @@ MaxTime = 30 * DayToMin # maximum time spent blood feeding is maximum lifespan
 
 # Questing
 pQ = 1
-lQ = 1/(2*DayToMin) # 2 days average questing duration
+lQ = 1/(1*DayToMin) # 2 days average questing duration
 
 # Landing
 pL = 0.75
@@ -35,13 +35,13 @@ pG = 0.75
 lG = 1/1 # 1 minutes
 
 # Fleeing
-f = 1/2
+f = 0.8
 
 # Maximum number of partial blood meals
 MaxPartial = 5
 
 # Total number of iterates
-NumIter = 1E2
+NumIter = 1E4
 
 # Simulated data Algorithm ----
 
@@ -191,6 +191,9 @@ for (Iter in 1:NumIter) {
   data_df <- rbind(data_df, new_row)
   
 }
+
+data_df <- data_df %>% mutate(out_days = Out_time / 1440)
+write_csv(data_df, "data/sample_data.csv")
 
 # Simulate data directly from phase type distribution ----
 
