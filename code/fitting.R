@@ -35,7 +35,7 @@ set_A = matrix(c(
 set_alpha = c(0.9, 0.1, 0) # initial probability vector
 
 # Get 100 random samples from the distribution
-direct_samps = ph_sampler(set_alpha, set_A, 100)
+direct_samps = ph_sampler(set_alpha, set_A, 1000)
 
 # Fitting distributions ----
 # Fitting is done through the "EM algorithm"
@@ -55,7 +55,7 @@ NumSamples = length(Y)
 
 # Define initial estimates for alpha and A corresponding to different sub-models
 
-p = 16
+p = 3
 matrix_dimension = p
 
 # Toy values for now:
@@ -81,7 +81,10 @@ make_fake_initial <- function(matrix_dimension) {
 
 initial_params <- make_fake_initial(p)
 A <- t(initial_params$A) # Matrix(rnorm(p^2,0), nrow = p) #set_A #
-alpha <- initial_params$alpha # set_alpha + abs(rnorm(1, 0) / 100)
+
+alpha = rep(0, p) 
+alpha[1] = 1
+# alpha <- initial_params$alpha # set_alpha + abs(rnorm(1, 0) / 100)
 # alpha <- alpha / sum(alpha)
 t_vec <- initial_params$t # -rowSums(A)
 
@@ -121,7 +124,7 @@ while (keep_running) {
   EB = EZ = ENi = rep(0, p)
   EN = Matrix(rep(0, p^2), ncol = p)
   
-  for (k in 1:length(Y)) {
+  for (k in 1:length(Y)) { # this can be parallelized
     y_val = Y[k]
     bigMat = expm(
       rbind(cbind(A * y_val, t_vec %*% t(alpha) * y_val),
@@ -134,11 +137,19 @@ while (keep_running) {
     # expAy[1:p,1:p,k] = temp_expAy
     # J[1:p,1:p,k] = temp_J
     
+    # a_y = t(alpha) %*% temp_expAy
+    # b_y = temp_expAy %*% t_vec
+    # c_y = 
+    # 
     denom = as.double(t(alpha) %*% temp_expAy %*% t_vec)
+    
     Bi_numerators = alpha * diag(1,p) %*% temp_expAy %*% t_vec
     EB = EB + (Bi_numerators / denom)
+    
     EZ = EZ + (diag(temp_J) / denom)
+    
     ENi = ENi + (t(alpha) %*% temp_expAy %*% diag(1, p) * t(t_vec) / denom)
+    
     EN = EN + (A * t(temp_J) / denom)
   }
   
@@ -146,7 +157,7 @@ while (keep_running) {
   
   alpha_hat = EB / NumSamples
   
-  tij_hat = EN / EZ
+  tij_hat = t(EN) / EZ
   
   ti_hat = ENi / EZ
   
@@ -154,7 +165,7 @@ while (keep_running) {
   
   A_hat = (tij_hat-diag(diag(tij_hat))) + diag(as.vector(tii_hat))
   
-  t_hat = - A_hat %*% t(t(rep(1, p)))
+  t_hat = - A_hat %*% rep(1, p)
   
   # Check to see if likelihood is within the chosen tolerance
   B_part = t(EB) %*% replace(log(alpha_hat), alpha_hat == 0, 0)
@@ -166,7 +177,7 @@ while (keep_running) {
   print(Eell_new)
   
   if (Eell_new > Eell_max) {Eell_max = Eell_new}
-  tolCheck = abs(Eell_new - Eell) < tolerance | Eell_new > Eell_max
+  tolCheck = abs(Eell_new - Eell) < tolerance & Eell_new > Eell_max
   
   if (tolCheck & runCount > 1000) {
     keep_running = FALSE
@@ -204,7 +215,7 @@ summary(fit_PH)
 
 summary(set_PH)
 
-all.moments(rPH(1000, fit_PH), order.max = 5)
+all.moments(rphtype(100, fit_PH$init_probs, fit_PH$subint_mat), order.max = 5)
 
 all.moments(rPH(1000, set_PH), order.max = 5)
 
