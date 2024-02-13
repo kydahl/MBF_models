@@ -3801,10 +3801,230 @@ We take a stab at computing endemic equilibria of the system
 
 \begin_inset Formula 
 \begin{align*}
-\left(\mu I-A^{T}\right)\boldsymbol{E} & =\left(\gamma E_{V}\right)\vec{\alpha}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}-\eta\boldsymbol{E}\\
-\left(\mu I-A^{T}\right)\boldsymbol{I} & =\left(\gamma I_{V}\right)\vec{\alpha}+\eta\boldsymbol{E}\\
+\left[\left(\eta+\mu\right)I-A^{T}\right]\boldsymbol{E} & =\left(\gamma E_{V}\right)\vec{\alpha}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+\left[\mu I-A^{T}\right]\boldsymbol{I}-\eta\boldsymbol{E} & =\left(\gamma I_{V}\right)\vec{\alpha}\\
 \left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{E}\right) & =-\left(\eta+\gamma+\mu\right)E_{V}\\
 \left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{I}\right) & =\eta E_{V}-\left(\gamma+\mu\right)I_{V}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left[\left(\eta+\mu\right)I-A^{T}\right]\boldsymbol{E}+\left[\mu I-A^{T}\right]\boldsymbol{I}-\eta\boldsymbol{E} & =\left(\gamma E_{V}\right)\vec{\alpha}+\left(\gamma I_{V}\right)\vec{\alpha}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+\left[\mu I-A^{T}\right]\left(\boldsymbol{E}+\boldsymbol{I}\right) & =\gamma\left(E_{V}+I_{V}\right)\vec{\alpha}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+\boldsymbol{1}^{T}A^{T}\left(\boldsymbol{E}+\boldsymbol{I}\right) & =\left(\gamma+\mu\right)\left(E_{V}+I_{V}\right)\\
+\left[\mu I-A^{T}\right]\left(\boldsymbol{E}+\boldsymbol{I}\right) & =\left(\frac{\gamma}{\gamma+\mu}\right)\boldsymbol{1}^{T}A^{T}\left(\boldsymbol{E}+\boldsymbol{I}\right)\vec{\alpha}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+\left[\mu I-A^{T}\right]\left(\boldsymbol{B}^{*}-\boldsymbol{S}\right) & =\left(\frac{\gamma}{\gamma+\mu}\right)\boldsymbol{1}^{T}A^{T}\left(\boldsymbol{B}^{*}-\boldsymbol{S}\right)\vec{\alpha}-\boldsymbol{\varPhi}_{V}\left(\boldsymbol{B}^{*}-\boldsymbol{S}\right)+\boldsymbol{\varPhi}_{V}\boldsymbol{B}^{*}\\
+\\
+\\
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left[\left(\eta+\mu\right)I-A^{T}\right]\boldsymbol{E} & =\left(\gamma E_{V}\right)\vec{\alpha}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+\left[\mu I-A^{T}\right]\boldsymbol{I} & =\left(\gamma I_{V}\right)\vec{\alpha}+\eta\boldsymbol{E}\\
+\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{E}\right) & =-\left(\eta+\gamma+\mu\right)E_{V}\\
+\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{I}\right) & =\eta E_{V}-\left(\gamma+\mu\right)I_{V}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+-\boldsymbol{1}^{T}A^{T}\boldsymbol{E} & =\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\vec{\alpha}\left(\gamma E_{V}\right)+\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+-\boldsymbol{1}^{T}A^{T}\boldsymbol{E} & =\left(\gamma E_{V}\right)+\boldsymbol{1}^{T}\boldsymbol{\varPhi}_{V}\boldsymbol{S}-\left(\eta+\mu\right)\boldsymbol{1}^{T}\boldsymbol{E}\\
+-\boldsymbol{1}^{T}A^{T}\boldsymbol{E} & =-\left(\eta+\gamma+\mu\right)E_{V}\\
+\\
+\\
+\\
+-\left(\eta+\gamma+\mu\right)E_{V} & =\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\vec{\alpha}\left(\gamma E_{V}\right)+\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+-\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S} & =\left(\eta+\gamma+\mu\right)\left[1+\frac{\gamma}{\eta+\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\vec{\alpha}\right]E_{V}\\
+\end{align*}
+
+\end_inset
+
+So we have 
+\begin_inset Formula $E_{V}=f\left(\boldsymbol{S}\right)$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+-\boldsymbol{1}^{T}A^{T}\boldsymbol{I} & =\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\left(\gamma I_{V}\right)+\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\boldsymbol{E}\\
+-\boldsymbol{1}^{T}A^{T}\boldsymbol{I} & =\left(\gamma I_{V}\right)+\eta\boldsymbol{1}^{T}\boldsymbol{E}-\mu\boldsymbol{1}^{T}\boldsymbol{I}\\
+-\boldsymbol{1}^{T}A^{T}\boldsymbol{I} & =\eta E_{V}-\left(\gamma+\mu\right)I_{V}\\
+\\
+\left(\gamma+\mu\right)I_{V}+\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{I}\right) & =\eta E_{V}\\
+\left(\gamma+\mu\right)I_{V}+\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\left(\gamma I_{V}\right)+\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\boldsymbol{E} & =\eta E_{V}\\
+\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V}+\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\left\{ \vec{\alpha}\gamma E_{V}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\right\}  & =\eta E_{V}\\
+\\
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V}=\eta E_{V}-\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\left\{ \vec{\alpha}\gamma E_{V}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\right\} 
+\]
+
+\end_inset
+
+which gives us 
+\begin_inset Formula $I_{V}=I_{V}\left(\boldsymbol{S}\right)$
+\end_inset
+
+.
+ Now we can use 
+\begin_inset Formula $\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\boldsymbol{B}^{*}-\boldsymbol{S}\right)=-\left(\gamma+\mu\right)\left(E_{V}\left(\boldsymbol{S}\right)+I_{V}\left(\boldsymbol{S}\right)\right)$
+\end_inset
+
+ to solve for 
+\begin_inset Formula $\boldsymbol{S}$
+\end_inset
+
+ possibly (though we might be working recursively.
+ Let's write out the functions
+\begin_inset Formula 
+\begin{align*}
+E_{V} & =\frac{1}{\eta+\gamma+\mu}\left[1+\frac{\gamma}{\eta+\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\vec{\alpha}\right]^{-1}\left(\boldsymbol{1}^{T}A^{T}\right)\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+E_{V} & =\vec{c}_{E_{V}}\boldsymbol{\varPhi}_{V}\boldsymbol{S}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V} & =\eta E_{V}-\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\left\{ \vec{\alpha}\gamma E_{V}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\right\} \\
+\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V} & =\eta\left\{ \left[1-\gamma\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\vec{\alpha}\right]\vec{c}_{E_{V}}-\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\right\} \boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V} & =\eta\left\{ \left[1-\gamma\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\vec{\alpha}\right]\vec{c}_{E_{V}}-\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\right\} \boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+I_{V} & =\left(\frac{\gamma+\mu}{\gamma}\right)\eta\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]^{-1}\left\{ \left[1-\gamma\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\vec{\alpha}\right]\vec{c}_{E_{V}}-\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\right\} \boldsymbol{\varPhi}_{V}\boldsymbol{S}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\boldsymbol{E}=\left(\gamma E_{V}\right)\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\vec{\alpha}+\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+-\boldsymbol{1}^{T}A^{T}\left[\mu I-A^{T}\right]\boldsymbol{I}=\left(\gamma I_{V}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\vec{\alpha}+\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\boldsymbol{E}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\boldsymbol{B}^{*}-\boldsymbol{S}\right) & =\left(\gamma E_{V}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\boldsymbol{\varPhi}_{V}^{-1}\vec{\alpha}-\left(-\boldsymbol{1}^{T}A^{T}\right)\boldsymbol{\varPhi}_{V}^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]\boldsymbol{E}+\left(-\boldsymbol{1}^{T}A^{T}\right)\boldsymbol{B}^{*}\\
+\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\boldsymbol{B}^{*}-\boldsymbol{S}\right) & =\gamma\left(E_{V}+I_{V}\right)+\boldsymbol{1}^{T}\boldsymbol{\varPhi}_{V}\boldsymbol{S}-\mu\boldsymbol{1}^{T}\left(\boldsymbol{B}^{*}-\boldsymbol{S}\right)\\
+\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\boldsymbol{B}^{*}-\boldsymbol{S}\right) & =-\left(\gamma+\mu\right)\left(E_{V}+I_{V}\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\\
+\\
+\\
+\\
+\\
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\boldsymbol{E} & =\gamma E_{V}\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\vec{\alpha}+\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+\boldsymbol{I} & =\left(\gamma I_{V}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}+\eta\left(\gamma E_{V}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\vec{\alpha}+\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{E}\right) & =-\left(\eta+\gamma+\mu\right)E_{V}\\
+\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{I}\right) & =\eta E_{V}-\left(\gamma+\mu\right)I_{V}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{E}\right) & =\gamma E_{V}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\vec{\alpha}+\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{I}\right) & =\left(\gamma I_{V}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}+\eta\left(\gamma E_{V}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\vec{\alpha}+\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{E}\right) & =-\left(\eta+\gamma+\mu\right)E_{V}\\
+\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{I}\right) & =\eta E_{V}-\left(\gamma+\mu\right)I_{V}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+-\boldsymbol{1}^{T}A^{T}\left(\boldsymbol{E}+\boldsymbol{I}\right) & =-\left(\gamma+\mu\right)\left(E_{V}+I_{V}\right)\\
+\\
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+-\boldsymbol{1}^{T}A^{T}\left(\boldsymbol{E}+\boldsymbol{I}\right)=\left\{ \gamma E_{V}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\vec{\alpha}+\left(\gamma I_{V}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}+\eta\left(\gamma E_{V}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\vec{\alpha}\right\} +\left\{ \left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}+\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\right\} \boldsymbol{\varPhi}_{V}\boldsymbol{S}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left(\gamma I_{V}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}+\eta\left(\gamma E_{V}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\vec{\alpha}+\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S} & =\eta E_{V}-\left(\gamma+\mu\right)I_{V}\\
+\left\{ \eta\gamma\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\vec{\alpha}-\left(-\boldsymbol{1}^{T}A^{T}\right)\left\{ 1+\left(\frac{\gamma}{\eta+\gamma+\mu}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\vec{\alpha}\right\} \left(\eta+\gamma+\mu\right)-\eta\right\} E_{V} & =\left\{ -\left(\gamma+\mu\right)-\left(\gamma\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right\} I_{V}\\
+\left\{ \eta\gamma\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\vec{\alpha}-\left(-\boldsymbol{1}^{T}A^{T}\right)\left\{ 1+\left(\frac{\gamma}{\eta+\gamma+\mu}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\left(\mu+\eta\right)I-A^{T}\right]^{-1}\vec{\alpha}\right\} \left(\eta+\gamma+\mu\right)-\eta\right\} E_{V} & =\left\{ -\left(\gamma+\mu\right)-\left(\gamma\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right\} I_{V}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\boldsymbol{E}+\boldsymbol{I}\right)=\left(\gamma E_{V}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\left(\mu+\eta\right)I-A^{T}\right)^{-1}\vec{\alpha}+\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\left(\mu+\eta\right)I-A^{T}\right)^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S}+\left(\gamma I_{V}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\vec{\alpha}+\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\boldsymbol{E}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\left(\mu+\eta\right)I-A^{T}\right)^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S}=-\left[1+\frac{\gamma}{\eta+\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\left(\mu+\eta\right)I-A^{T}\right)^{-1}\vec{\alpha}\right]\left(\eta+\gamma+\mu\right)E_{V}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left(\gamma I_{V}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\vec{\alpha}+\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\boldsymbol{E} & =\eta E_{V}-\left(\gamma+\mu\right)I_{V}\\
+\left(\left(\mu+\eta\right)I-A^{T}\right)^{-1}\boldsymbol{\varPhi}_{V}\boldsymbol{S} & =\eta E_{V}-\left(\gamma+\mu\right)I_{V}-\left(\gamma I_{V}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\vec{\alpha}-\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\left(\gamma E_{V}\right)\left(\left(\mu+\eta\right)I-A^{T}\right)^{-1}\vec{\alpha}
 \end{align*}
 
 \end_inset
