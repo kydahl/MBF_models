@@ -1,7 +1,7 @@
 # Fitting phase type distributions to data
 # Fit (structured) phase type distributions to simulated mosquito blood-feeding 
 # data using the matrixdist package
-# Initiated: February 2024
+# Initialized: February 2024
 
 # Load libraries and define helper functions ----
 library(matrixdist)
