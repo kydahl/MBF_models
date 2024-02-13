@@ -3861,9 +3861,18 @@ So we have
 -\boldsymbol{1}^{T}A^{T}\boldsymbol{I} & =\eta E_{V}-\left(\gamma+\mu\right)I_{V}\\
 \\
 \left(\gamma+\mu\right)I_{V}+\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{I}\right) & =\eta E_{V}\\
-\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V}+\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\left\{ \left(\gamma E_{V}\right)\vec{\alpha}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\right\}  & =\eta E_{V}\\
-\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V} & =\eta E_{V}-\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\left\{ \left(\gamma E_{V}\right)\vec{\alpha}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\right\} \\
+\left(\gamma+\mu\right)I_{V}+\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\left(\gamma I_{V}\right)+\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\boldsymbol{E} & =\eta E_{V}\\
+\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V}+\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\left\{ \vec{\alpha}\gamma E_{V}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\right\}  & =\eta E_{V}\\
+\\
 \end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V}=\eta E_{V}-\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\left\{ \vec{\alpha}\gamma E_{V}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\right\} 
+\]
 
 \end_inset
 
@@ -3893,8 +3902,10 @@ E_{V} & =\vec{c}_{E_{V}}\boldsymbol{\varPhi}_{V}\boldsymbol{S}
 
 \begin_inset Formula 
 \begin{align*}
-\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V} & =\eta E_{V}-\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\left\{ \left(\gamma E_{V}\right)\vec{\alpha}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\right\} \\
-I_{V} & =\left(\frac{\gamma+\mu}{\gamma}\right)\eta\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]^{-1}\left\{ \vec{c}_{E_{V}}-\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\right\} \boldsymbol{\varPhi}_{V}\boldsymbol{S}-\eta\left(\frac{\gamma+\mu}{\gamma}\right)\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]^{-1}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\left(\gamma\vec{c}_{E_{V}}\boldsymbol{\varPhi}_{V}\boldsymbol{S}\right)\vec{\alpha}
+\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V} & =\eta E_{V}-\eta\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\left\{ \vec{\alpha}\gamma E_{V}+\boldsymbol{\varPhi}_{V}\boldsymbol{S}\right\} \\
+\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V} & =\eta\left\{ \left[1-\gamma\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\vec{\alpha}\right]\vec{c}_{E_{V}}-\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\right\} \boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]\left(\frac{\gamma}{\gamma+\mu}\right)I_{V} & =\eta\left\{ \left[1-\gamma\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\vec{\alpha}\right]\vec{c}_{E_{V}}-\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\right\} \boldsymbol{\varPhi}_{V}\boldsymbol{S}\\
+I_{V} & =\left(\frac{\gamma+\mu}{\gamma}\right)\eta\left[1+\frac{1}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\vec{\alpha}\right]^{-1}\left\{ \left[1-\gamma\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\vec{\alpha}\right]\vec{c}_{E_{V}}-\left(-\boldsymbol{1}^{T}A^{T}\right)\left[\mu I-A^{T}\right]^{-1}\left[\left(\eta+\mu\right)I-A^{T}\right]^{-1}\right\} \boldsymbol{\varPhi}_{V}\boldsymbol{S}
 \end{align*}
 
 \end_inset
