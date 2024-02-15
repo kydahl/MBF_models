@@ -1,225 +1,270 @@
 # Fitting phase type distributions to data
 # Fit (structured) phase type distributions to simulated mosquito blood-feeding 
-# data
-# Initiated: February 2024
+# data using the matrixdist package
+# Initialized: February 2024
 
-# Packages ----
+# Load libraries and define helper functions ----
+library(matrixdist)
 library(tidyverse)
-library(progress)
 library(matlib) # for a bunch of matrix operations
-library(moments) # to calculate moments of distributions
-library(Matrix) # to calculate matrix exponentials
-library(expm) # to calculate matrix exponentials more efficiently and accurately
+library(cowplot)
 library(PhaseTypeR) # to create and simulate phase type distributions
+library(PhaseType) # to fit structured phase type distributions
 
-# Helper functions ----
-# Function: sample from a set phase type distribution (alpha, A)
-ph_sampler <- function(alpha, A, numSamps) {
-  ph = PH(A, alpha)
-  samples = rPH(numSamps, ph)
-}
+# Helper function: Get the number of parameters for a phase-type distribution of a given class and dimension
+param_count_func <- function(class, dimension) {
+  p = dimension
+  out <- case_when(
+    class == "general" ~ p^2 + p,
+    class == "coxian" ~ max(1, 2*p - 2),
+    class == "hyperexponential" ~ 2*p,
+    class == "gcoxian" ~ 3*p - 2,
+    class == "gerlang" ~ p
+  )
+} 
 
-# Function: make unit basis vectors
-make_basis <- function(basis, dimension) {t(t(replace(numeric(dimension), basis, 1)))}
-
-
-# Load data ----
+# Get data ----
+# Simulated data set
 simulated_data = read_csv("data/sample_data.csv")
 
-# For testing: set a specific phase type distribution
-# subintensity matrix
-set_A = matrix(c(
-  -1.5, 0, 0,
-  1.5, -1, 0,
-  0, 1, -0.5), ncol = 3) 
-set_alpha = c(0.9, 0.1, 0) # initial probability vector
+simulated_outs = sample(simulated_data$Out_time/1440, 100)
 
-# Get 100 random samples from the distribution
-direct_samps = ph_sampler(set_alpha, set_A, 1000)
+# # Data set from fixed Generalized Coxian distribution
+# set_A = matrix(c(
+#   -1.5, 0, 0,
+#   1.5, -1, 0,
+#   0, 1, -0.5), ncol = 3) 
+# set_alpha = c(0.9, 0.1, 0) # initial probability vector
+# ph = PH(set_A, set_alpha)
+# 
+# # Get 100 random samples from the distribution
+# direct_samps = rPH(100, ph)
 
-# Fitting distributions ----
-# Fitting is done through the "EM algorithm"
+# Define initial distributions for fitting ----
 
-# Choose data for fitting:
-# Set up sample vector
-Y = direct_samps #sample_data$Out_time/1440 # change units to days
-NumSamples = length(Y)
-
-
-# 0. Initialize estimates alpha and A
-
-# Initial estimates of alpha and A are determined by the model being considered
-# because if any entry of alpha or A is set to zero, it will remain zero 
-# at all points in the algorithm. Note also that implicit in this definition
-# is the dimension 'p' of the phase type distribution
-
-# Define initial estimates for alpha and A corresponding to different sub-models
-
-p = 3
-matrix_dimension = p
-
-# Toy values for now:
-make_fake_initial <- function(matrix_dimension) {
-  # Create a p x p matrix such that t = - A * 1 has all positive entries
-  p = matrix_dimension
-  if (p == 1) {new_A = -rexp(1, rate = 1)
-  } else {
-    temp_A = matrix(rexp(p^2, rate = 1), ncol = p)
-    offdiag_A = temp_A - diag(diag(temp_A))
-    diag_A = -diag(rexp(p, rate = 1))- diag(as.vector(offdiag_A %*% t(t(rep(1, p)))))
+# Function: fitting function 
+init_func <- function(data, dist_class, dist_dimension, n_runs) {
+  # Fits a phase-type distribution of class = dist_class and 
+  # dimension = dist_dimension to the data
+  
+  # Runs the fitting process n_runs times with different initial conditions to
+  # try to avoid getting stuck in local minima
+  fits = list()
+  temp_logLik = double()
+  
+  for (run_num in 1:n_runs) {
+    temp_ph = ph(structure = dist_class, dimension = dist_dimension)
     
-    new_A = diag_A + offdiag_A
-  }
-  
-  t_vec = - new_A %*% t(t(rep(1, p)))
-  
-  temp_alpha = runif(p)
-  alpha =temp_alpha / sum(temp_alpha)
-  
-  out <- list(A = new_A, alpha = alpha, t = t_vec)
-}
-
-initial_params <- make_fake_initial(p)
-A <- t(initial_params$A) # Matrix(rnorm(p^2,0), nrow = p) #set_A #
-
-alpha = rep(0, p) 
-alpha[1] = 1
-# alpha <- initial_params$alpha # set_alpha + abs(rnorm(1, 0) / 100)
-# alpha <- alpha / sum(alpha)
-t_vec <- initial_params$t # -rowSums(A)
-
-# EM algorithm parameters
-tolerance = 1e-6
-Eell = -Inf
-Eell_max = -Inf
-tolCheck = tolerance + 1
-keep_running = TRUE
-runCount = 0
-tracker <- data.frame(run_num = as.integer(), loglikelihood = as.double(), 
-                      best = as.double(), mat_diff = as.double(), alpha_diff = as.double())
-# Initialize arrays
-Init_1_array <- rep(NA, NumSamples)
-Init_2_array <- array(rep(NA, p * NumSamples), c(p, NumSamples))
-Init_3_array <- array(rep(NA, p * p * NumSamples), c(p, p, NumSamples))
-
-# Set to true if there's a set phase type distribution for testing (alpha, A)
-testing = FALSE
-
-# Run EM algorithm
-while (keep_running) {
-  runCount = runCount + 1
-  # 1. Calculate the expected values of sufficient statistics given observations 
-  
-  # Calculate the matrices exp(Ay) and J
-  
-  # Initialize arrays
-  # expAy <- Init_3_array
-  # J <- Init_3_array
-  # denoms <- Init_1_array
-  # temp_EB <- Init_2_array
-  # temp_EZ <- Init_2_array
-  # temp_ENi <- Init_2_array
-  # temp_EN <- Init_3_array
-  
-  EB = EZ = ENi = rep(0, p)
-  EN = Matrix(rep(0, p^2), ncol = p)
-  
-  for (k in 1:length(Y)) { # this can be parallelized
-    y_val = Y[k]
-    bigMat = expm(
-      rbind(cbind(A * y_val, t_vec %*% t(alpha) * y_val),
-            cbind(0 * A, A * y_val)),
-      do.sparseMsg = FALSE
+    # KD: using capture.output to suppress output from "fit"
+    capture.output(
+      temp_fit <- fit(temp_ph, y = data, stepsEM = 1500), 
+      file = nullfile()
     )
-    temp_expAy = bigMat[1:p,1:p]
-    temp_J = bigMat[1:p,(p+1):(2*p)]
-    
-    # expAy[1:p,1:p,k] = temp_expAy
-    # J[1:p,1:p,k] = temp_J
-    
-    # a_y = t(alpha) %*% temp_expAy
-    # b_y = temp_expAy %*% t_vec
-    # c_y = 
-    # 
-    denom = as.double(t(alpha) %*% temp_expAy %*% t_vec)
-    
-    Bi_numerators = alpha * diag(1,p) %*% temp_expAy %*% t_vec
-    EB = EB + (Bi_numerators / denom)
-    
-    EZ = EZ + (diag(temp_J) / denom)
-    
-    ENi = ENi + (t(alpha) %*% temp_expAy %*% diag(1, p) * t(t_vec) / denom)
-    
-    EN = EN + (A * t(temp_J) / denom)
+    fits[[run_num]] = temp_fit
+    temp_logLik[run_num] = temp_fit@fit$logLik
+    temp_param_count = param_count_func(dist_class, dist_dimension)
+    temp_AIC = 2 * temp_param_count - 2 * temp_logLik
   }
   
-  # 2. Update initial estimates alpha and A
+  final_fit = fits[temp_logLik == max(temp_logLik)][[1]]
   
-  alpha_hat = EB / NumSamples
-  
-  tij_hat = t(EN) / EZ
-  
-  ti_hat = ENi / EZ
-  
-  tii_hat = - ti_hat - rowSums(tij_hat-diag(diag(tij_hat)))
-  
-  A_hat = (tij_hat-diag(diag(tij_hat))) + diag(as.vector(tii_hat))
-  
-  t_hat = - A_hat %*% rep(1, p)
-  
-  # Check to see if likelihood is within the chosen tolerance
-  B_part = t(EB) %*% replace(log(alpha_hat), alpha_hat == 0, 0)
-  Nij_part = sum((EN - diag(diag(EN))) * log(A_hat - diag(diag(A_hat))), na.rm = TRUE)
-  Ni_part = ENi %*% t(log(replace(ti_hat, ti_hat <= 0, .Machine$double.eps)))
-  Z_part = sum(diag(EZ) %*% A_hat)
-  
-  Eell_new = as.double(B_part + Nij_part + Ni_part - Z_part)
-  print(Eell_new)
-  
-  if (Eell_new > Eell_max) {Eell_max = Eell_new}
-  tolCheck = abs(Eell_new - Eell) < tolerance & Eell_new > Eell_max
-  
-  if (tolCheck & runCount > 1000) {
-    keep_running = FALSE
-  } else {
-    if (any(is.nan(A_hat))) {
-      print("Getting NaNs...")
-      break
-    }
-    Eell = Eell_new
-    A = A_hat
-    alpha = alpha_hat
-    t_vec = t_hat
-    # t_vec = replace(t_hat, t_hat < 0, .Machine$double.eps) # in case we get numerical errors making these values negative
-  }
-  
-  print(runCount)
-  # # Sys.sleep(.01)
-  if (testing) {
-    # Compare actual matrix to one set for testing
-    mat_norm = norm(A - set_A)
-    alpha_norm = norm(Matrix(alpha_hat - set_alpha))
-    tracker <- add_row(tracker, run_num = runCount, loglikelihood = Eell, best = Eell_max, 
-                       mat_diff = mat_norm, alpha_diff = alpha_norm)
-  } else {
-    tracker <- add_row(tracker, run_num = runCount, loglikelihood = Eell, best = Eell_max, 
-                       mat_diff = NA, alpha_diff = NA)
-  }
 }
 
-# Compare fit and set PH ----
-fit_PH = PH(matrix(as.numeric(A_hat), ncol = p), matrix(alpha_hat))
-set_PH = PH(set_A, set_alpha)
 
-summary(fit_PH)
 
-summary(set_PH)
+dimensions = seq(1, 5)
+classes = c("general", "coxian", "hyperexponential", "gcoxian", "gerlang")
 
-all.moments(rphtype(100, fit_PH$init_probs, fit_PH$subint_mat), order.max = 5)
+data_sets = c("CTMC") #, "direct")
 
-all.moments(rPH(1000, set_PH), order.max = 5)
+# Fit the data ----
 
-# Compare moments
+# # Estimate the AIC for each structure and dimension
+# AIC_df = data.frame(class = as.character(), dimension = as.integer(), data_set = as.character(),
+#                     logLik = as.double(), param_count = as.integer(), AIC = as.double())
+# 
+# fit_df = tibble(class = as.character(), dimension = as.integer(), data_set = as.character(),
+#                 logLik = as.double(), AIC = as.double(), A = list(), alpha = list())
+# 
+# for (dimension in dimensions) {
+#   for (class in classes) {
+#     for (data_set in data_sets) {
+#       if (data_set == "CTMC") {
+#         out_times = simulated_outs
+#       } else {
+#         out_times = direct_samps
+#       }
+#       print(paste0("Fitting PH distribution:"))
+#       print(paste0("Structure: ", class))
+#       print(paste0("Dimension: ", dimension))
+#       print(paste0("Data set: ", data_set ))
+#       
+#       # Get fitted alpha and A of given class and dimension
+#       # Use 10 different initial conditions to ensure we're not stuck in 
+#       # a local minimum
+#       temp_fit <-init_func(out_times, class, dimension, 10)
+#       
+#       temp_logLik = temp_fit@fit$logLik
+#       
+#       print(paste0("Likelihood = ", temp_logLik ))
+#       temp_param_count = param_count_func(class, dimension)
+#       temp_AIC = 2 * temp_param_count - 2 * temp_logLik
+#       
+#       AIC_df = add_row(AIC_df, 
+#                        class = class, dimension = dimension, data_set = data_set,
+#                        logLik = temp_logLik, param_count = temp_param_count, 
+#                        AIC = temp_AIC)
+#       
+#       fit_df = add_row(fit_df, class = class, dimension = dimension,
+#                        data_set = data_set, logLik = temp_logLik,
+#                        AIC = temp_AIC, A = list(temp_fit@pars$S), 
+#                        alpha = list(temp_fit@pars$alpha))
+#     }
+#   }
+# }
 
-# 3. Return to 1 with updated alpha and A
+# Set up data to analyze
+dimensions = seq(1, 5)
+# The three structures we consider for now are:
+# 1) Empirical: the general phase distribution, which best fits the data
+# 2) Phenomenological: Coxian - equivalent to our "disruption" model or an approximation of the mechanistic model
+# 3) Mechanistic: assumes a certain form given below
+classes = c("general", "coxian") #, "mechanistic") # "hyperexponential", "gcoxian", "gerlang")
+
+total_sample_size = length(simulated_data$Out_time)
+num_samples = 100
+sample_size = 100
+
+full_df <- expand_grid(dimension = dimensions, class = classes)
+
+out_df = tibble(class = as.character(), dimension = as.integer(), data_set = as.integer(),
+                # logLik = as.double(), AIC = as.double(), 
+                A = list(), alpha = list())
+
+
+for (i in 1:num_samples) {
+  
+  data_sample = sample(simulated_data$out_days, sample_size)
+  
+  for (j in 1:dim(full_df)[1]) {
+    dist_class = full_df$class[j]
+    dist_dimension = full_df$dimension[j]
+    print(paste0("Fitting PH distribution:"))
+    print(paste0("Structure: ", dist_class))
+    print(paste0("Dimension: ", dist_dimension))
+    print(paste0("Data set: ", i, " out of ", num_samples))
+    
+    temp_fit <- init_func(data_sample, dist_class, dist_dimension, 10)
+    
+    # print(paste0("Likelihood = ", temp_logLik ))
+    # temp_param_count = param_count_func(class, dimension)
+    # temp_AIC = 2 * temp_param_count - 2 * temp_logLik
+    
+    out_df = add_row(out_df, class = dist_class, dimension = dist_dimension,
+                     data_set = i, 
+                     # logLik = temp_logLik, AIC = temp_AIC, 
+                     A = list(temp_fit@pars$S), alpha = list(temp_fit@pars$alpha))
+  }
+  
+}
+
+
+write_csv(out_df, "data/fit_dists.csv")
+
+# Deal with the mechanistic fit separately
+# We'll make use of the PhaseType package which makes it easier to generate
+# random phase-type subintensity matrices of a given structure
+
+mech_mat_test = matrix(c(
+  0,"R","R",0,
+  "F",0,0,0,
+  "F",0,0,0,
+  0,"F","F",0
+),4)
+
+# Define the structure of the phase-type generator
+mech_mat = matrix(c(
+  0,  "L1","P1", "G1", 0,
+  "Q",0,   "P2", "G2", 0,
+  0,  "L2",0,    0,    0,
+  0,  0,   "P3", 0,    0,
+  0,  0,   0,    0,    0
+),5)
+# Gamma priors for shape hyperparameters of model parameters
+nu <- list(
+  "Q" = 1,
+  "L1" = 1, "L2" = 1,
+  "P1" = 1, "P2" = 1, "P3" = 1,
+  "G1" = 1, "G2" = 1
+  )
+# Gamma priors for reciprocal scale hyperparamters of model parameters
+zeta <- c(
+  "Q" = 1,
+  "L1" = 1, "L2" = 1,
+  "P1" = 1, "P2" = 1, "P3" = 1,
+  "G1" = 1, "G2" = 1
+)
+
+# alpha is fixed 
+alpha = c(1,0,0,0)
+
+# perform N MCMC iterations to fit data structured phase-type distribution to data "x"
+N = 1
+res <- phtMCMC2(x, mech_mat, alpha, nu, zeta, N)
+
+# Next steps:
+# For each sampled data set (indexed by "data_set" in the data frame), we 
+# calculate R0 (using "repnum_func" from get_outputs.R). We then will have 
+# obtained distributions of R0 across the data sets. 
+# Then 
+
+
+AIC_compare_plot <- AIC_df %>% 
+  mutate(actual_dim = ifelse(data_set == "direct", 3, 12)) %>% 
+  group_by(data_set) %>% 
+  mutate(min_AIC = min(AIC)) %>% 
+  mutate(delta_AIC = abs(AIC - min_AIC)) %>% 
+  # mutate(low_AIC = min_AIC - 2) %>% 
+  # mutate(high_AIC = min_AIC + 2) %>% 
+  ggplot() +
+  geom_point(aes(x = dimension, y = delta_AIC, color = class)) +
+  geom_line(aes(x = dimension, y = delta_AIC, color = class)) +
+  geom_ribbon(aes(x = dimension, ymin = 0, ymax = 2), alpha = 0.3) +
+  # geom_hline(aes(yintercept =min_AIC)) +
+  geom_vline(aes(xintercept = actual_dim)) +
+  scale_x_continuous(breaks = dimensions, expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  ggtitle("Comparing AIC") +
+  facet_wrap( ~ data_set, nrow = 2, scales = "free") +
+  theme_cowplot() +
+  coord_cartesian(xlim = range(dimensions), y = c(0, 100))
+
+logLik_compare_plot <- AIC_df %>% 
+  mutate(actual_dim = ifelse(data_set == "direct", 3, 12)) %>% 
+  ggplot() +
+  geom_point(aes(x = dimension, y = logLik, color = class)) +
+  geom_line(aes(x = dimension, y = logLik, color = class)) +
+  geom_vline(aes(xintercept = actual_dim)) +
+  scale_x_continuous(breaks = dimensions) +
+  ggtitle("Comparing logLikelihood") +
+  facet_wrap( ~ data_set, nrow = 2, scales = "free") +
+  theme_cowplot()
+
+# Can we get confidence intervals around each of the parameters?
+# Not from this method since the EM algorithm will always give the same results
+# Could try boot-strapping or methods like that
+
+# To get initial probability vector alpha
+alpha = coef(ph_fit)$alpha
+
+# To get subintensity matrix A
+A = coef(ph_fit)$S
+
+# To get logLikelihood
+# ph_fit@fit$logLik
+
+
+# Visualizations ----
+
+# QQ plots to assess fit visually
 
