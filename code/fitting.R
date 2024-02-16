@@ -1,6 +1,6 @@
 # Fitting phase type distributions to data
 # Fit (structured) phase type distributions to simulated mosquito blood-feeding 
-# data using the matrixdist package
+# data using the matrixdist, PhaseTypeR, and PhaseType packages
 # Initialized: February 2024
 
 # Load libraries and define helper functions ----
@@ -10,6 +10,7 @@ library(matlib) # for a bunch of matrix operations
 library(cowplot)
 library(PhaseTypeR) # to create and simulate phase type distributions
 library(PhaseType) # to fit structured phase type distributions
+# library("PhaseType", lib.loc="C:/Users/kydah/Documents/GitHub")
 
 # Helper function: Get the number of parameters for a phase-type distribution of a given class and dimension
 param_count_func <- function(class, dimension) {
@@ -143,9 +144,9 @@ out_df = tibble(class = as.character(), dimension = as.integer(), data_set = as.
 
 
 for (i in 1:num_samples) {
-  
+
   data_sample = sample(simulated_data$out_days, sample_size)
-  
+
   for (j in 1:dim(full_df)[1]) {
     dist_class = full_df$class[j]
     dist_dimension = full_df$dimension[j]
@@ -153,34 +154,28 @@ for (i in 1:num_samples) {
     print(paste0("Structure: ", dist_class))
     print(paste0("Dimension: ", dist_dimension))
     print(paste0("Data set: ", i, " out of ", num_samples))
-    
+
     temp_fit <- init_func(data_sample, dist_class, dist_dimension, 10)
-    
+
     # print(paste0("Likelihood = ", temp_logLik ))
     # temp_param_count = param_count_func(class, dimension)
     # temp_AIC = 2 * temp_param_count - 2 * temp_logLik
-    
+
     out_df = add_row(out_df, class = dist_class, dimension = dist_dimension,
-                     data_set = i, 
-                     # logLik = temp_logLik, AIC = temp_AIC, 
+                     data_set = i,
+                     # logLik = temp_logLik, AIC = temp_AIC,
                      A = list(temp_fit@pars$S), alpha = list(temp_fit@pars$alpha))
   }
-  
+
 }
 
 
-write_csv(out_df, "data/fit_dists.csv")
+write_rds(out_df, "data/fit_dists.rds")
 
 # Deal with the mechanistic fit separately
 # We'll make use of the PhaseType package which makes it easier to generate
 # random phase-type subintensity matrices of a given structure
 
-mech_mat_test = matrix(c(
-  0,"R","R",0,
-  "F",0,0,0,
-  "F",0,0,0,
-  0,"F","F",0
-),4)
 
 # Define the structure of the phase-type generator
 mech_mat = matrix(c(
@@ -188,83 +183,148 @@ mech_mat = matrix(c(
   "Q",0,   "P2", "G2", 0,
   0,  "L2",0,    0,    0,
   0,  0,   "P3", 0,    0,
-  0,  0,   0,    0,    0
+  0,  0,   0,    "G3",    0
 ),5)
 # Gamma priors for shape hyperparameters of model parameters
 nu <- list(
   "Q" = 1,
   "L1" = 1, "L2" = 1,
   "P1" = 1, "P2" = 1, "P3" = 1,
-  "G1" = 1, "G2" = 1
-  )
-# Gamma priors for reciprocal scale hyperparamters of model parameters
-zeta <- c(
-  "Q" = 1,
-  "L1" = 1, "L2" = 1,
-  "P1" = 1, "P2" = 1, "P3" = 1,
-  "G1" = 1, "G2" = 1
+  "G1" = 1, "G2" = 1, "G3" = 1
 )
+# Gamma priors for reciprocal scale hyperparameters of model parameters
+zeta <- c(
+  "Q" = 2880,
+  "L1" = 80, "L2" = 40,
+  "P1" = 40, "P2" = 40, "P3" = 20,
+  "G1" = 8, "G2" = 8, "G3" = 8/3
+)
+
+
+
+# Get mean values of each parameter for now
+
+# Helper function: Put output of phtMCMC2 in matrix form following our bespoke mechanistic matrix form
+mech_mat_func <- function(in_mat, stat_func) {
+  # in_mat should be of the form of the output of res$samples[i,]
+  
+  stat_mat <- in_mat %>% 
+    as.data.frame() %>% 
+    reshape2::melt() %>% 
+    group_by(variable) %>% 
+    summarise(mean = stat_func(value)) %>% 
+    pivot_wider(names_from = variable, values_from = mean)
+  
+  G_mat = matrix(c(
+    0,  stat_mat$L1, stat_mat$P1, stat_mat$G1, 0,
+    stat_mat$Q,0,   stat_mat$P2, stat_mat$G2, 0,
+    0,  stat_mat$L2,0,    0,    0,
+    0,  0,   stat_mat$P3, 0,    0,
+    0,  0,   0,    stat_mat$G3,    0
+  ),5)
+  row_sums = rowSums(G_mat)
+  
+  temp_mat = G_mat - diag(row_sums)
+  
+  # remove absorbing state row and column
+  mat_dim = dim(temp_mat)[1]
+  
+  A_mat = temp_mat[1:(mat_dim-1), 1:(mat_dim-1)]
+  
+  out_mat = t(A_mat)
+}
+
 
 # alpha is fixed 
 alpha = c(1,0,0,0)
 
-# perform N MCMC iterations to fit data structured phase-type distribution to data "x"
-N = 1
-res <- phtMCMC2(x, mech_mat, alpha, nu, zeta, N)
+# # perform N MCMC iterations to fit data structured phase-type distribution to data "x"
+# data_sample = sample(simulated_data$Out_time, sample_size)
+# res <- phtMCMC2(data_sample, mech_mat, alpha, nu, zeta, n = 100, method = "DCS")
+
+out_df = tibble(class = as.character(), dimension = as.integer(), data_set = as.integer(),
+                # logLik = as.double(), AIC = as.double(), 
+                A = list(), alpha = list())
+for (i in 1:num_samples) {
+  
+  data_sample = sample(simulated_data$Out_time, sample_size)
+  print(paste0("Fitting PH distribution:"))
+  print(paste0("Data set: ", i, " out of ", num_samples))
+  capture.output(
+    res <- phtMCMC2(data_sample, mech_mat, alpha, nu, zeta, n = 100, 
+                    method = "DCS", silent = TRUE), 
+    file = nullfile()
+  )
+  
+  # Put matrix on scale of days instead of minutes
+  DayToMin = 1440
+  out_mat <- mech_mat_func(res$samples, median) * DayToMin
+  
+  # print(paste0("Likelihood = ", temp_logLik ))
+  # temp_param_count = param_count_func(class, dimension)
+  # temp_AIC = 2 * temp_param_count - 2 * temp_logLik
+  
+  out_df = add_row(out_df, class = "Mechanistic", dimension = 4,
+                   data_set = i,
+                   # logLik = temp_logLik, AIC = temp_AIC,
+                   A = list(out_mat), alpha = list(alpha))
+}
+
+write_rds(out_df, "data/mech_dists.rds")
 
 # Next steps:
 # For each sampled data set (indexed by "data_set" in the data frame), we 
 # calculate R0 (using "repnum_func" from get_outputs.R). We then will have 
 # obtained distributions of R0 across the data sets. 
 # Then 
-
-
-AIC_compare_plot <- AIC_df %>% 
-  mutate(actual_dim = ifelse(data_set == "direct", 3, 12)) %>% 
-  group_by(data_set) %>% 
-  mutate(min_AIC = min(AIC)) %>% 
-  mutate(delta_AIC = abs(AIC - min_AIC)) %>% 
-  # mutate(low_AIC = min_AIC - 2) %>% 
-  # mutate(high_AIC = min_AIC + 2) %>% 
-  ggplot() +
-  geom_point(aes(x = dimension, y = delta_AIC, color = class)) +
-  geom_line(aes(x = dimension, y = delta_AIC, color = class)) +
-  geom_ribbon(aes(x = dimension, ymin = 0, ymax = 2), alpha = 0.3) +
-  # geom_hline(aes(yintercept =min_AIC)) +
-  geom_vline(aes(xintercept = actual_dim)) +
-  scale_x_continuous(breaks = dimensions, expand = c(0,0)) +
-  scale_y_continuous(expand = c(0,0)) +
-  ggtitle("Comparing AIC") +
-  facet_wrap( ~ data_set, nrow = 2, scales = "free") +
-  theme_cowplot() +
-  coord_cartesian(xlim = range(dimensions), y = c(0, 100))
-
-logLik_compare_plot <- AIC_df %>% 
-  mutate(actual_dim = ifelse(data_set == "direct", 3, 12)) %>% 
-  ggplot() +
-  geom_point(aes(x = dimension, y = logLik, color = class)) +
-  geom_line(aes(x = dimension, y = logLik, color = class)) +
-  geom_vline(aes(xintercept = actual_dim)) +
-  scale_x_continuous(breaks = dimensions) +
-  ggtitle("Comparing logLikelihood") +
-  facet_wrap( ~ data_set, nrow = 2, scales = "free") +
-  theme_cowplot()
-
-# Can we get confidence intervals around each of the parameters?
-# Not from this method since the EM algorithm will always give the same results
-# Could try boot-strapping or methods like that
-
-# To get initial probability vector alpha
-alpha = coef(ph_fit)$alpha
-
-# To get subintensity matrix A
-A = coef(ph_fit)$S
-
-# To get logLikelihood
-# ph_fit@fit$logLik
-
-
-# Visualizations ----
-
-# QQ plots to assess fit visually
-
+# 
+# 
+# AIC_compare_plot <- AIC_df %>% 
+#   mutate(actual_dim = ifelse(data_set == "direct", 3, 12)) %>% 
+#   group_by(data_set) %>% 
+#   mutate(min_AIC = min(AIC)) %>% 
+#   mutate(delta_AIC = abs(AIC - min_AIC)) %>% 
+#   # mutate(low_AIC = min_AIC - 2) %>% 
+#   # mutate(high_AIC = min_AIC + 2) %>% 
+#   ggplot() +
+#   geom_point(aes(x = dimension, y = delta_AIC, color = class)) +
+#   geom_line(aes(x = dimension, y = delta_AIC, color = class)) +
+#   geom_ribbon(aes(x = dimension, ymin = 0, ymax = 2), alpha = 0.3) +
+#   # geom_hline(aes(yintercept =min_AIC)) +
+#   geom_vline(aes(xintercept = actual_dim)) +
+#   scale_x_continuous(breaks = dimensions, expand = c(0,0)) +
+#   scale_y_continuous(expand = c(0,0)) +
+#   ggtitle("Comparing AIC") +
+#   facet_wrap( ~ data_set, nrow = 2, scales = "free") +
+#   theme_cowplot() +
+#   coord_cartesian(xlim = range(dimensions), y = c(0, 100))
+# 
+# logLik_compare_plot <- AIC_df %>% 
+#   mutate(actual_dim = ifelse(data_set == "direct", 3, 12)) %>% 
+#   ggplot() +
+#   geom_point(aes(x = dimension, y = logLik, color = class)) +
+#   geom_line(aes(x = dimension, y = logLik, color = class)) +
+#   geom_vline(aes(xintercept = actual_dim)) +
+#   scale_x_continuous(breaks = dimensions) +
+#   ggtitle("Comparing logLikelihood") +
+#   facet_wrap( ~ data_set, nrow = 2, scales = "free") +
+#   theme_cowplot()
+# 
+# # Can we get confidence intervals around each of the parameters?
+# # Not from this method since the EM algorithm will always give the same results
+# # Could try boot-strapping or methods like that
+# 
+# # To get initial probability vector alpha
+# alpha = coef(ph_fit)$alpha
+# 
+# # To get subintensity matrix A
+# A = coef(ph_fit)$S
+# 
+# # To get logLikelihood
+# # ph_fit@fit$logLik
+# 
+# 
+# # Visualizations ----
+# 
+# # QQ plots to assess fit visually
+# 

@@ -3830,7 +3830,28 @@ We take a stab at computing endemic equilibria of the system.
 \end_inset
 
  where in the left-hand side we don't use epidemiological terms.
- With this relation between 
+ An intermediate step here is to solve for 
+\begin_inset Formula $I_{H}$
+\end_inset
+
+ in terms of 
+\begin_inset Formula $i=\boldsymbol{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{I}$
+\end_inset
+
+ which then allows us to calculate 
+\begin_inset Formula $i$
+\end_inset
+
+ using 
+\begin_inset Formula $\left(\varPhi_{H}S_{H}\right)=\left(\varPhi_{H}\right)\left(S_{H}\right)$
+\end_inset
+
+.
+ Once 
+\begin_inset Formula $i$
+\end_inset
+
+ is known, we can go on to find a relation between 
 \begin_inset Formula $I_{H}$
 \end_inset
 
@@ -3838,7 +3859,11 @@ We take a stab at computing endemic equilibria of the system.
 \begin_inset Formula $\boldsymbol{I}$
 \end_inset
 
- obtained, we can consider either of the equations 
+ (and 
+\begin_inset Formula $i$
+\end_inset
+
+) obtained, we can consider either of the equations 
 \begin_inset Formula $\left(\boldsymbol{\varPhi}_{V}\boldsymbol{S}\right)=\left(\boldsymbol{\varPhi}_{V}\right)\boldsymbol{S}$
 \end_inset
 

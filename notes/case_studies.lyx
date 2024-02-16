@@ -782,6 +782,16 @@ is an equilibrium.
 \end_inset
 
 
+\begin_inset Formula 
+\begin{align*}
+0 & =\varphi\left(V,L\right)-\left(\rho_{L}+\mu_{L}\right)L\\
+\left(\mu I-A^{T}\right)\boldsymbol{B} & =\left(\rho_{L}L+\gamma V\right)\vec{\alpha}\\
+\left(\mu+\gamma\right)V & =\left(-\boldsymbol{1}^{T}A^{T}\boldsymbol{B}\right)
+\end{align*}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard

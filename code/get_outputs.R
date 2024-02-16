@@ -45,7 +45,7 @@ aquatic_params = tibble(rhoL = rhoL_vals, muL = muL_vals, varPhi = varPhi_vals,
                         KL = KL_vals, type = types)
 
 # Adult stage parameter set
-mu_vals = seq(1/31, 1/21, length.out = 10)
+mu_vals = 1/21 #seq(1/31, 1/21, length.out = 10)
 gamma_vals = c(1/2)
 
 adult_params = tibble(
@@ -53,43 +53,92 @@ adult_params = tibble(
   gamma = gamma_vals)
 
 # Matrix parameters
-# Define some A and alpha sets for testing for now. These will be loaded in separately later
-test_A2 = matrix(c(-2,1,1,-2), 2, 2)
-test_alpha2 = matrix(c(1,0), 2, 1)
+# # Define some A and alpha sets for testing for now. These will be loaded in separately later
+# test_A2 = matrix(c(-2,1,1,-2), 2, 2)
+# test_alpha2 = matrix(c(1,0), 2, 1)
+# 
+# A_dim = 3
+# test_A3 = matrix(c(-3,2,0,1,-3,1,0,1,-3), 3, 3)
+# test_alpha3 = matrix(c(1,0,0), 3, 1)
+# 
+# 
+# mats = list(test_A2, test_A3)
+# alphas = list(test_alpha2, test_alpha3)
+# dims = c(2,3)
+# 
+# bite_params <- tibble(A = mats, alpha = alphas, dims = dims, class = NA, data_set = NA)
 
-A_dim = 3
-test_A3 = matrix(c(-3,2,0,1,-3,1,0,1,-3), 3, 3)
-test_alpha3 = matrix(c(1,0,0), 3, 1)
-
-
-
-
-mats = list(test_A2, test_A3)
-alphas = list(test_alpha2, test_alpha3)
-dims = c(2,3)
-
-bite_params <- tibble(A = mats, alpha = alphas, dims = dims)
 
 # Epidemiological parameters
 # !!! For testing for now. Need to set them later
-betaH = list(diag(1,2),diag(1,3))
-eta = 1
-betaV = list(diag(1,2),diag(1,3))
+# betaH = list(diag(1,2),diag(1,3))
+# eta = 1
+# betaV = list(diag(1,2),diag(1,3))
+# 
+# Lambda_2 = diag(c(-t(rep(1,2)) %*% test_A2), 2, 2)
+# Lambda_3 = diag(c(-t(rep(1,3)) %*% test_A3), 3, 3)
+# 
+# LambdaH = list(Lambda_2, Lambda_3)
+# LambdaV = list(Lambda_2, Lambda_3)
 
-Lambda_2 = diag(c(-t(rep(1,2)) %*% test_A2), 2, 2)
-Lambda_3 = diag(c(-t(rep(1,3)) %*% test_A3), 3, 3)
+epi_setup_func <- function(dimension, A_mat) {
+  
+  eta = 1/3 # !!! Temporary. Will be varied in sensitivity analysis later
+  if (dimension == 1) {
+    betaH = 1
+    betaV = 1
+    Lambda = -A_mat
+  } else {
+    
+    Lambda_vec = -diag(A_mat)
+    betaH_vec = rep(0, dimension)
+    # !!! Temporary: assume transmission to host in "fastest" stage
+    # betaH_vec[Lambda_vec[1:(dimension-1)] == max(Lambda_vec[1:(dimension-1)])] = 1
+    
+    
+    betaH_vec[1:(dimension - 1)] = 1 
+    betaH = diag(betaH_vec)
+    betaV_vec = rep(0, dimension)
+    # !!! Temporary: assume transmission occurs only when mosquitoes are going to oviposition at a substantial rate
+    betaV_vec[-colSums(A_mat)>1E-3] = 1 
+    # betaV_vec[dimension] = 1
+    betaV = diag(betaV_vec)
+  
+  # !!! Assume that contact rates are the same as "successful" transition rates through the blood feeding stages
+  Lambda = diag(-diag(A_mat))
+  
+  # Lambda= diag(c(-t(matrix(rep(1, dimension), ncol = 1)) %*% t(A_mat)), dimension, dimension)
+  }
+  LambdaH = Lambda
+  LambdaV = Lambda
+  
+  out <- tibble(betaH = list(betaH), betaV = list(betaV), eta, 
+                LambdaH = list(LambdaH), LambdaV = list(LambdaV))
+}
 
-LambdaH = list(Lambda_2, Lambda_3)
-LambdaV = list(Lambda_2, Lambda_3)
+temp_df <- select(bite_params, c(dimension, A, class, data_set)) 
+epi_params = tibble(dimension = as.integer(), A = list(), class = as.character(), data_set = as.integer(),
+                    betaH = list(), betaV = list(), eta = as.double(), LambdaH = list(), LambdaV = list())
+
+for (i in 1:dim(temp_df)[1]) {
+  cur_dim = temp_df$dimension[i]
+  cur_A = temp_df$A[i][[1]]
+  cur_class = temp_df$class[i]
+  cur_dataset = temp_df$data_set[i]
+  epi_row = epi_setup_func(cur_dim, cur_A)
+  
+  epi_params <- add_row(epi_params, class = cur_class, data_set = cur_dataset, dimension = cur_dim, A = list(cur_A), epi_row)
+}
+
 
 # Host parameters
 gammaH = 1/7
 muH = 1/(365 * 65)
-KH = 10^6
+KH = 10^4
 
-epi_params = tibble(betaH, eta, betaV, LambdaH, LambdaV, gammaH, muH, KH, dims)
+# epi_params = tibble(betaH, eta, betaV, LambdaH, LambdaV, gammaH, muH, KH, dims)
 
-mat_params = right_join(bite_params, epi_params, by = "dims")
+mat_params = right_join(bite_params, epi_params, by = c("dimension", "class", "A", "data_set"))
 
 # Combine all data
 full_df <- expand_grid(aquatic_params, adult_params, mat_params)
@@ -215,7 +264,7 @@ full_df <- expand_grid(aquatic_params, adult_params, mat_params)
 eq_func <- function(in_df) {
   # Get dimensions
   num_rows = dim(in_df)[1]
-  max_A_dims = max(in_df$dims)
+  max_A_dims = max(in_df$dimension)
   
   # Initialize arrays
   init_vec = rep(NA, num_rows)
@@ -234,14 +283,15 @@ eq_func <- function(in_df) {
     # environment for convenient reference
     parms = in_df[i,]
     cheap_assign(parms, environment())
-    
+    A = t(A)
+    alpha = matrix(alpha, ncol = 1)
     p = dim(A)[1]
     
     # Calculate tau, nu, and theta
     diag_mu = diag(mu, p)
     ones_vec = matrix(rep(1, p), ncol = 1)
-    first_prod = -1 %*% t(ones_vec) %*% A
-    second_prod = inv(diag_mu - t(A))
+    first_prod = -1 %*% t(ones_vec) %*% t(A)
+    second_prod = if (p == 1){(diag_mu- t(A))^(-1)} else {inv(diag_mu - t(A))}
     tau[i] = as.double(first_prod %*% second_prod %*% alpha)
     nu[i] = (1 - tau[i] * (gamma / (gamma + mu)))^(-1)
     theta[i] = tau[i] * nu[i]
@@ -267,7 +317,7 @@ eq_func <- function(in_df) {
     if (R[i] < (1 - .Machine$double.eps)) {
       L_star[i] = 0
       V_star[i] = 0
-      B_star[i,1:dims] = rep(0, dims)
+      B_star[i,1:dimension] = rep(0, dimension)
     } else {
       L_star[i] = case_when(
         type == "logistic" ~ KL * (R[i] - 1) / (R[i]),
@@ -282,12 +332,12 @@ eq_func <- function(in_df) {
       
       V_star[i] = L_star[i] * (rhoL + muL) / bar_phi 
       
-      B_star[i,1:dims] = (rhoL * L_star[i] + gamma * V_star[i]) * second_prod %*% alpha
+      B_star[i,1:dimension] = (rhoL * L_star[i] + gamma * V_star[i]) * second_prod %*% alpha
     }
     
   }
   
-  B_star_colnames = purrr::map_chr(1:max(in_df$dims), ~paste0("B", .x,"_star"))
+  B_star_colnames = purrr::map_chr(1:max(in_df$dimension), ~paste0("B", .x,"_star"))
   colnames(B_star) = B_star_colnames
   
   # Add calculated column values in
@@ -295,11 +345,46 @@ eq_func <- function(in_df) {
     mutate(B_star = rowSums(across(B1_star:B3_star), na.rm = TRUE))
 }
 
+# Function: vectorial capacity
+veccap_func <- function(in_df) {
+  # Get dimensions
+  num_rows = dim(in_df)[1]
+  max_A_dims = max(in_df$dimension)
+  
+  # Initialize arrays
+  init_vec = rep(NA, num_rows)
+  veccap = init_vec
+  
+  
+  out_df = cbind(in_df, veccap)
+  
+  # Calculate equilibrium quantities
+  for (i in 1:num_rows) {
+    # Load in parameter values from the dataframe and assign them in the 
+    # environment for convenient reference
+    parms = in_df[i,]
+    cheap_assign(parms, environment())
+    # A = t(A)
+    alpha = matrix(alpha, ncol = 1)
+    p = dim(A)[1]
+    
+    # Get equilibrium B values
+    B_star_colnames = purrr::map_chr(1:max(in_df$dimension), ~paste0("B", .x,"_star"))
+    B_star = matrix(unlist(parms[B_star_colnames[1:p]], p, 1))
+    
+    veccap[i] = sum(betaH %*%LambdaH %*% B_star)
+    
+  }
+  
+  # Add calculated column values in
+  calc_df = cbind(in_df, veccap)
+}
+
 # Function: reproduction numbers and endemic equilibria
 repnum_func <- function(in_df) {
   # Get dimensions
   num_rows = dim(in_df)[1]
-  max_A_dims = max(in_df$dims)
+  max_A_dims = max(in_df$dimension)
   
   # Initialize arrays
   init_vec = rep(NA, num_rows)
@@ -314,13 +399,15 @@ repnum_func <- function(in_df) {
     # environment for convenient reference
     parms = in_df[i,]
     cheap_assign(parms, environment())
+    # A = t(A)
+    alpha = matrix(alpha, ncol = 1)
     p = dim(A)[1]
     
     # Get equilibrium B values
-    B_star_colnames = purrr::map_chr(1:max(in_df$dims), ~paste0("B", .x,"_star"))
+    B_star_colnames = purrr::map_chr(1:max(in_df$dimension), ~paste0("B", .x,"_star"))
     B_star = matrix(unlist(parms[B_star_colnames[1:p]], p, 1))
     
-    # Calculate tau, nu, and theta
+    # Calculate intermediate quantities
     ones_vec = matrix(rep(1, p), ncol = 1)
     
     r_mat = alpha %*% t(ones_vec) %*% t(A)
@@ -330,17 +417,15 @@ repnum_func <- function(in_df) {
     second_prod = eta * diag(1, p) - (eta / (eta + gamma + mu)) * (gamma / (gamma + mu)) * r_mat
     
     third_quot =  (eta + mu) * diag(1, p) - t(A) + (gamma / (eta + gamma + mu)) * r_mat
-    third_prod = inv(third_quot)
+    third_prod = if (p == 1) { 1 / third_quot} else {inv(third_quot)}
     
     fourth_quot =  mu * diag(1, p) - t(A) + (gamma / (gamma + mu)) * r_mat
-    fourth_prod = inv(fourth_quot)
+    fourth_prod = if (p == 1) {1 / fourth_quot} else {inv(fourth_quot)}
     
     last_prod = betaV %*% LambdaV %*% B_star / (KH * (gammaH + muH))
     
     
-    R0[i] = first_prod %*% second_prod %*% third_prod %*% fourth_prod %*% last_prod
-    
-    
+    R0[i] = sqrt(first_prod %*% second_prod %*% third_prod %*% fourth_prod %*% last_prod)
     
   }
   
@@ -349,11 +434,11 @@ repnum_func <- function(in_df) {
 }
 
 # Calculations ----
-calc_df = eq_func(full_df)
-
-in_df = calc_df
-
-out_df = repnum_func(in_df)
+# calc_df = eq_func(full_df)
+# 
+# in_df = calc_df
+# 
+# out_df = repnum_func(in_df)
 
 # Visualizations ----
 
