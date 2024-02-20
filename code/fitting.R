@@ -183,18 +183,18 @@ mech_mat = matrix(c(
   "Q",0,   "P2", "G2", 0,
   0,  "L2",0,    0,    0,
   0,  0,   "P3", 0,    0,
-  0,  0,   0,    "G3",    0
+  0,  0,   0,    "G3", 0
 ),5)
 # Gamma priors for shape hyperparameters of model parameters
 nu <- list(
-  "Q" = 1,
+   "Q" = 1,
   "L1" = 1, "L2" = 1,
   "P1" = 1, "P2" = 1, "P3" = 1,
   "G1" = 1, "G2" = 1, "G3" = 1
 )
 # Gamma priors for reciprocal scale hyperparameters of model parameters
 zeta <- c(
-  "Q" = 2880,
+   "Q" = 2880,
   "L1" = 80, "L2" = 40,
   "P1" = 40, "P2" = 40, "P3" = 20,
   "G1" = 8, "G2" = 8, "G3" = 8/3

@@ -185,6 +185,7 @@ plot_df <- out_df %>%
   # filter(R0 > 0) %>% 
   # filter(R0 < 100) %>%
   select(A, alpha, dimension, class_label, R, tau, R0, B_star, veccap) 
+
 veccap_compare_plot <- plot_df %>% 
   ggplot(aes(x = class_label, y = veccap)) +
   # geom_boxplot() +
