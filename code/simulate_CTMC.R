@@ -20,25 +20,25 @@ MaxTime = 30 * DayToMin # maximum time spent blood feeding is maximum lifespan
 
 # Questing
 pQ = 1
-lQ = 1/(1*DayToMin) # 2 days average questing duration
+lQ = 1/(1*DayToMin) # 1 days average questing duration
 
 # Landing
-pL = 0.75
-lL = 1/10 # 10 minutes
+pL = 0.7
+lL = 0.1 # 10 minutes
 
 # Probing
-pP = 0.75
-lP = 1/5 # 5 minutes
+pP = 0.8
+lP = 0.2 # 5 minutes
 
 # Ingesting
-pG = 0.75
-lG = 1/1 # 1 minutes
+pG = 0.9 #0.75
+lG = 1 # 1 minutes
 
 # Fleeing
-f = 1/2
+f = 0.66
 
 # Maximum number of partial blood meals
-MaxPartial = 5
+MaxPartial = 50
 
 # Total number of iterates
 NumIter = 1E5

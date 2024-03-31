@@ -1,18 +1,29 @@
-# Fitting phase type distributions to data
+############# Fitting phase type distributions to data #########################
 # Fit (structured) phase type distributions to simulated mosquito blood-feeding 
 # data using the matrixdist, PhaseTypeR, and PhaseType packages
 # Initialized: February 2024
 
-# Load libraries and define helper functions ----
+# Outline of script: 
+# 0) Load libraries, necessary functions, and data
+# 1) Set up data sets
+# 2) Set up structured matrices for fitting
+# 3) Fit matrices to the data
+# 4) Transform matrix entries to model parameters
+# 5) Create visualizations of parameter and model fits
+# ---------------------------------------------------------------------------- #
+
+# 0) Load libraries, necessary functions, and data ------------------------
 library(matrixdist)
 library(tidyverse)
 library(matlib) # for a bunch of matrix operations
 library(cowplot)
 library(PhaseTypeR) # to create and simulate phase type distributions
 library(PhaseType) # to fit structured phase type distributions
-# library("PhaseType", lib.loc="C:/Users/kydah/Documents/GitHub")
+library(mapfit) # alternative way to fit phase type distributions
+library(reshape2)
 
-# Helper function: Get the number of parameters for a phase-type distribution of a given class and dimension
+# Function: Get the number of parameters for a phase-type distribution of
+#           a given class and dimension
 param_count_func <- function(class, dimension) {
   p = dimension
   out <- case_when(
@@ -20,30 +31,25 @@ param_count_func <- function(class, dimension) {
     class == "coxian" ~ max(1, 2*p - 2),
     class == "hyperexponential" ~ 2*p,
     class == "gcoxian" ~ 3*p - 2,
-    class == "gerlang" ~ p
+    class == "gerlang" ~ p,
+    class == "mechanistic" ~ 9 * p / 4 # 9 parameters per 4x4 motif. p must be a multiple of 4
   )
 } 
 
-# Get data ----
-# Simulated data set
-simulated_data = read_csv("data/sample_data.csv")
+# Function: calculate the likelihood of phase type parameters given  data
+likelihood_func <- function(parameters, data) {}
 
-simulated_outs = sample(simulated_data$Out_time/1440, 100)
+# Function: put together likelihood and AIC for each model and data set
+model_selection_func <- function(model_class, dimension, parameters, data) {
+  #       temp_fit <-init_func(out_times, class, dimension, 10)
+  #       
+  #       temp_logLik = temp_fit@fit$logLik
+  #       
+  #       temp_param_count = param_count_func(class, dimension)
+  #       temp_AIC = 2 * temp_param_count - 2 * temp_logLik
+}
 
-# # Data set from fixed Generalized Coxian distribution
-# set_A = matrix(c(
-#   -1.5, 0, 0,
-#   1.5, -1, 0,
-#   0, 1, -0.5), ncol = 3) 
-# set_alpha = c(0.9, 0.1, 0) # initial probability vector
-# ph = PH(set_A, set_alpha)
-# 
-# # Get 100 random samples from the distribution
-# direct_samps = rPH(100, ph)
-
-# Define initial distributions for fitting ----
-
-# Function: fitting function 
+# OLD Function: initialize parameters for a structured phase-type distribution then fit to data 
 init_func <- function(data, dist_class, dist_dimension, n_runs) {
   # Fits a phase-type distribution of class = dist_class and 
   # dimension = dist_dimension to the data
@@ -71,106 +77,99 @@ init_func <- function(data, dist_class, dist_dimension, n_runs) {
   
 }
 
+# Function: Plot phtMCMC outputs nicely (from PhaseType package)
+plot.phtMCMC <- function(x, ...) {
+  # Get chain info
+  StartEndThin <- attr(x$samples, "mcpar")
+  
+  # Trace plots
+  print(
+    ggplot(melt(as.data.frame(x$samples[seq(StartEndThin[1], StartEndThin[2], StartEndThin[3]),]), id.vars = NULL)) +
+      geom_line(aes_string(x = "1:length(value)", y = "value")) +
+      geom_smooth(aes_string(x = "1:length(value)", y = "value"), method = "glm") +
+      #geom_hline(aes(yintercept = value), data = truth, colour = "red", linetype = "dashed") +
+      facet_wrap(~variable, scales = "free") +
+      #theme_grey(base_family = "serif", base_size = 11) +
+      ggtitle("Parameter Traces") + #, plot.title = theme_text(size = 14, face = "bold", family = "serif")) +
+      xlab("Iteration") + ylab("Parameter Value")
+  )
+  
+  # Marginal posterior densities
+  print(
+    ggplot() +
+      geom_density(aes_string(x = "value"), melt(as.data.frame(x$samples[seq(StartEndThin[1], StartEndThin[2], StartEndThin[3]),]), id.vars = NULL)) +
+      #geom_vline(aes(xintercept = value), data = truth, colour = "red") +
+      facet_wrap(~variable, scales = "free") +
+      #theme_grey(base_family = "serif", base_size = 11) +
+      ggtitle("Marginal Posterior Densities") + #, plot.title = theme_text(size = 14, face = "bold", family = "serif")) +
+      xlab("Parameter Value") + ylab("Density")
+  )
+}
 
+
+# 1) Set up data sets with increasing levels of data ----------------------
+
+# TODO: 
+# [] Determine appropriate levels to use
+# [] Figure out how to set up submatrices to fit to lower levels of data
+# []
+
+#### Get data ----
+# Simulated data set
+simulated_data = read_csv("data/sample_data_continuous.csv")
+total_sample_size = length(simulated_data$Out_time)
+sample_size = 100
+
+
+
+# 2) Set up structured matrices for fitting -------------------------------
+
+# TODO: 
+# [] Define each distribution type and its structure in comments
+# [] Determine reasonable uninformed priors to use for each type
+# [] Write function that creates a structured matrix of the given type
+# [] 
+
+### Empirical distribution matrix ----
+
+# alpha is fixed 
+test_data = simulated_data %>% 
+  mutate(not_Q = time_G+time_L+time_P+time_G) %>%  select(not_Q)
+test_data = test_data$not_Q[1:100]
+num_states = 4
+alpha = rep(0, num_states); alpha[num_states] = 1
+nu <- rep(1, num_states^2)#rep(1/mean(test_data), num_states)
+# Gamma prior: reciprocal scale hyperparameters (one per matrix row)
+zeta <- rep(1, num_states)
+res <- phtMCMC(test_data, states = num_states, alpha, nu, zeta, n = 100, method = "DCS")
+plot.phtMCMC(res)
+
+wsample <- rweibull(n=100, shape=2, scale=1)
+
+## PH fitting for general PH
+(result_gen <- phfit.point(ph=mapfit::ph(4), x=test_data))
+# Canonical form 1: mixture of Erlangs with alpha = 0,0,...,1
+(result_cf1 <- phfit.point(ph=mapfit::cf1(4), x=test_data))
+(result_erlang <- phfit.point(ph=mapfit::herlang(5), x=test_data))
+
+# Using matrixdist #
+# Make a ph distribution
+# matrixdist::ph()
+# Fit a ph distribution
+# matrixdist::fit(ph(), data)
 
 dimensions = seq(1, 5)
 classes = c("general", "coxian", "hyperexponential", "gcoxian", "gerlang")
 
-data_sets = c("CTMC") #, "direct")
-
-# Fit the data ----
-
-# # Estimate the AIC for each structure and dimension
-# AIC_df = data.frame(class = as.character(), dimension = as.integer(), data_set = as.character(),
-#                     logLik = as.double(), param_count = as.integer(), AIC = as.double())
-# 
-# fit_df = tibble(class = as.character(), dimension = as.integer(), data_set = as.character(),
-#                 logLik = as.double(), AIC = as.double(), A = list(), alpha = list())
-# 
-# for (dimension in dimensions) {
-#   for (class in classes) {
-#     for (data_set in data_sets) {
-#       if (data_set == "CTMC") {
-#         out_times = simulated_outs
-#       } else {
-#         out_times = direct_samps
-#       }
-#       print(paste0("Fitting PH distribution:"))
-#       print(paste0("Structure: ", class))
-#       print(paste0("Dimension: ", dimension))
-#       print(paste0("Data set: ", data_set ))
-#       
-#       # Get fitted alpha and A of given class and dimension
-#       # Use 10 different initial conditions to ensure we're not stuck in 
-#       # a local minimum
-#       temp_fit <-init_func(out_times, class, dimension, 10)
-#       
-#       temp_logLik = temp_fit@fit$logLik
-#       
-#       print(paste0("Likelihood = ", temp_logLik ))
-#       temp_param_count = param_count_func(class, dimension)
-#       temp_AIC = 2 * temp_param_count - 2 * temp_logLik
-#       
-#       AIC_df = add_row(AIC_df, 
-#                        class = class, dimension = dimension, data_set = data_set,
-#                        logLik = temp_logLik, param_count = temp_param_count, 
-#                        AIC = temp_AIC)
-#       
-#       fit_df = add_row(fit_df, class = class, dimension = dimension,
-#                        data_set = data_set, logLik = temp_logLik,
-#                        AIC = temp_AIC, A = list(temp_fit@pars$S), 
-#                        alpha = list(temp_fit@pars$alpha))
-#     }
-#   }
-# }
-
-# Set up data to analyze
-dimensions = seq(1, 5)
 # The three structures we consider for now are:
-# 1) Empirical: the general phase distribution, which best fits the data
+# 1) Empirical: the general phase distribution, which best fits the data 
 # 2) Phenomenological: Coxian - equivalent to our "disruption" model or an approximation of the mechanistic model
 # 3) Mechanistic: assumes a certain form given below
 classes = c("general", "coxian") #, "mechanistic") # "hyperexponential", "gcoxian", "gerlang")
 
-total_sample_size = length(simulated_data$Out_time)
-num_samples = 100
-sample_size = 100
-
-full_df <- expand_grid(dimension = dimensions, class = classes)
-
-out_df = tibble(class = as.character(), dimension = as.integer(), data_set = as.integer(),
-                # logLik = as.double(), AIC = as.double(), 
-                A = list(), alpha = list())
-
-
-for (i in 1:num_samples) {
-
-  data_sample = sample(simulated_data$out_days, sample_size)
-
-  for (j in 1:dim(full_df)[1]) {
-    dist_class = full_df$class[j]
-    dist_dimension = full_df$dimension[j]
-    print(paste0("Fitting PH distribution:"))
-    print(paste0("Structure: ", dist_class))
-    print(paste0("Dimension: ", dist_dimension))
-    print(paste0("Data set: ", i, " out of ", num_samples))
-
-    temp_fit <- init_func(data_sample, dist_class, dist_dimension, 10)
-
-    # print(paste0("Likelihood = ", temp_logLik ))
-    # temp_param_count = param_count_func(class, dimension)
-    # temp_AIC = 2 * temp_param_count - 2 * temp_logLik
-
-    out_df = add_row(out_df, class = dist_class, dimension = dist_dimension,
-                     data_set = i,
-                     # logLik = temp_logLik, AIC = temp_AIC,
-                     A = list(temp_fit@pars$S), alpha = list(temp_fit@pars$alpha))
-  }
-
-}
-
-
 write_rds(out_df, "data/fit_dists.rds")
+
+# MCMC fitting
 
 # Deal with the mechanistic fit separately
 # We'll make use of the PhaseType package which makes it easier to generate
@@ -186,23 +185,82 @@ mech_mat = matrix(c(
   0,  0,   0,    "G3", 0
 ),5)
 # Gamma priors for shape hyperparameters of model parameters
+nu_ref = 0.01
 nu <- list(
-   "Q" = 1,
-  "L1" = 1, "L2" = 1,
-  "P1" = 1, "P2" = 1, "P3" = 1,
-  "G1" = 1, "G2" = 1, "G3" = 1
+  "Q" = nu_ref,
+  "L1" = nu_ref, "L2" = nu_ref,
+  "P1" = nu_ref, "P2" = nu_ref, "P3" = nu_ref,
+  "G1" = nu_ref, "G2" = nu_ref, "G3" = nu_ref
 )
 # Gamma priors for reciprocal scale hyperparameters of model parameters
 zeta <- c(
-   "Q" = 2880,
-  "L1" = 80, "L2" = 40,
-  "P1" = 40, "P2" = 40, "P3" = 20,
-  "G1" = 8, "G2" = 8, "G3" = 8/3
+  "Q" = 1440/nu_ref,
+  "L1" = (0.66 * 0.25 * 0.1)^(-1)/nu_ref, "L2" = (0.75 * 0.1)^(-1)/nu_ref,
+  "P1" = (0.66 * 0.25 * 0.2)^(-1)/nu_ref, "P2" = (0.34 * 0.25 * 0.2)^(-1)/nu_ref, "P3" = (0.75 * 0.2)^(-1)/nu_ref,
+  "G1" = (0.66 * 0.75 * 1)^(-1)/nu_ref, "G2" = (0.34 * 0.75 * 1)^(-1)/nu_ref, "G3" = (0.25 * 1)^(-1)/nu_ref
+  # "Q" = 2880,
+  # "L1" = 80, "L2" = 40,
+  # "P1" = 40, "P2" = 40, "P3" = 20,
+  # "G1" = 8, "G2" = 8, "G3" = 8/3
 )
 
+# 3) Fit matrices to the data ---------------------------------------------
+
+# TODO: 
+# [] Set up general fitting function that deals with possible errors from phtMCMC2
+# [] Keep track of likelihood and AIC of each fit
+# [] Decide: how to fix dimensions
+
+# # perform N MCMC iterations to fit data structured phase-type distribution to data "x"
+# data_sample = sample(simulated_data$Out_time, sample_size)
+# res <- phtMCMC2(data_sample, mech_mat, alpha, nu, zeta, n = 100, method = "DCS")
+
+out_df = tibble(class = as.character(), dimension = as.integer(), data_set = as.integer(),
+                # logLik = as.double(), AIC = as.double(), 
+                A = list(), alpha = list())
+for (i in 1:num_samples) {
+  
+  data_sample = sample(simulated_data$Out_time, 1000)
+  print(paste0("Fitting PH distribution:"))
+  print(paste0("Data set: ", i, " out of ", num_samples))
+  capture.output(
+    res <- phtMCMC2(simulated_data$Out_time, mech_mat, alpha, nu, zeta, n = 1000, 
+                    method = "DCS", silent = FALSE), 
+    file = nullfile()
+  )
+  
+  # Put matrix on scale of days instead of minutes
+  DayToMin = 1440
+  out_mat <- mech_mat_func(res$samples, median) * DayToMin
+  
+  # print(paste0("Likelihood = ", temp_logLik ))
+  # temp_param_count = param_count_func(class, dimension)
+  # temp_AIC = 2 * temp_param_count - 2 * temp_logLik
+  
+  out_df = add_row(out_df, class = "Mechanistic", dimension = 4,
+                   data_set = i,
+                   # logLik = temp_logLik, AIC = temp_AIC,
+                   A = list(out_mat), alpha = list(alpha))
+}
+
+write_rds(out_df, "data/mech_dists.rds")
+
+# 
+# Can we get confidence intervals around each of the parameters?
+# Not from this method since the EM algorithm will always give the same results
+# Could try boot-strapping or methods like that
+
+# To get initial probability vector alpha
+alpha = coef(ph_fit)$alpha
+
+# To get subintensity matrix A
+A = coef(ph_fit)$S
+
+# To get logLikelihood
+# ph_fit@fit$logLik
 
 
-# Get mean values of each parameter for now
+# 4) Transform matrix entries to parameters -------------------------------
 
 # Helper function: Put output of phtMCMC2 in matrix form following our bespoke mechanistic matrix form
 mech_mat_func <- function(in_mat, stat_func) {
@@ -235,50 +293,116 @@ mech_mat_func <- function(in_mat, stat_func) {
 }
 
 
-# alpha is fixed 
-alpha = c(1,0,0,0)
 
-# # perform N MCMC iterations to fit data structured phase-type distribution to data "x"
-# data_sample = sample(simulated_data$Out_time, sample_size)
-# res <- phtMCMC2(data_sample, mech_mat, alpha, nu, zeta, n = 100, method = "DCS")
+# 5) Create visualizations of model fits ----------------------------------
 
-out_df = tibble(class = as.character(), dimension = as.integer(), data_set = as.integer(),
-                # logLik = as.double(), AIC = as.double(), 
-                A = list(), alpha = list())
-for (i in 1:num_samples) {
+# QQ plots to assess fit visually
+
+
+# Figure XXX: Posterior distributions of fitted parameters
+
+plot_parm_dists_func <- function(param_set) {
+  dists_plot <- parms %>% 
+    ggplot(aes(x = value)) + 
+    geom_histogram() +
+    geom_density() +
+    facet_wrap(~name, scales = "free") +
+    theme_cowplot()
   
-  data_sample = sample(simulated_data$Out_time, sample_size)
-  print(paste0("Fitting PH distribution:"))
-  print(paste0("Data set: ", i, " out of ", num_samples))
-  capture.output(
-    res <- phtMCMC2(data_sample, mech_mat, alpha, nu, zeta, n = 100, 
-                    method = "DCS", silent = TRUE), 
-    file = nullfile()
-  )
-  
-  # Put matrix on scale of days instead of minutes
-  DayToMin = 1440
-  out_mat <- mech_mat_func(res$samples, median) * DayToMin
-  
-  # print(paste0("Likelihood = ", temp_logLik ))
-  # temp_param_count = param_count_func(class, dimension)
-  # temp_AIC = 2 * temp_param_count - 2 * temp_logLik
-  
-  out_df = add_row(out_df, class = "Mechanistic", dimension = 4,
-                   data_set = i,
-                   # logLik = temp_logLik, AIC = temp_AIC,
-                   A = list(out_mat), alpha = list(alpha))
 }
 
-write_rds(out_df, "data/mech_dists.rds")
+# Parameter set to play with
+sample_size = 100
+res <- phtMCMC2(sample(simulated_data$Out_time, sample_size),
+                mech_mat, alpha, nu, zeta, n = 1000)
 
-# Next steps:
-# For each sampled data set (indexed by "data_set" in the data frame), we 
-# calculate R0 (using "repnum_func" from get_outputs.R). We then will have 
-# obtained distributions of R0 across the data sets. 
-# Then 
-# 
-# 
+# Function: Empirical model set up for input to fitting algorithm
+emp_mat_func <- function(dimension) {
+  dim <- 5
+  dirpi <- rep(0, dim)
+  dirpi[1] <-  1
+  # Gamma prior: shape hyperparameters (one per matrix element, columnwise)
+  nu <- rep(1, dim^2)
+  # Gamma prior: reciprocal scale hyperparameters (one per matrix row)
+  zeta <- rep(100, dim)
+  
+}
+
+# Function: Phenomenological model set up for input to fitting algorithm 
+
+# Define dimension of model to fit
+
+res <- phtMCMC(sample(simulated_data$Out_time, sample_size) / 1440, 
+               dim, dirpi, nu, zeta, 1000, mhit=10)
+
+# Function: get mechanistic parameters from transient rate matrix
+mech_parm_func <- function(param_set) {
+  out_df <- param_set %>% 
+    mutate(
+      lG = G1 + G2 + G3, 
+      pG = G3 / lG,
+      f = G1 / (G1 + G2),
+      lP = P1 + P2 + P3,
+      pP = P3 / lP,
+      lL = (L1 + f * L2) / f,
+      pL = (f * L2) / (L1 + f * L2),
+      lQ = Q
+    ) %>% 
+    select(lG:lQ)
+}
+
+
+# Actual distributions data was sampled from, in form for plot
+# KD: This was done incorrectly because the original samples weren't all gamma distributed like this
+# all_dist_data <- data.frame(n = 1:sample_size)
+# for (variable in actual_dists$name) {
+#   temp_nu = filter(actual_dists, name == variable)$nu
+#   temp_zeta = filter(actual_dists, name == variable)$zeta
+#   dist_data <-
+#     rgamma(
+#       n = sample_size,
+#       shape = temp_nu, 
+#       scale = temp_zeta
+#     )
+#   temp_df <- data.frame(variable = dist_data / 1440) # put on same time scale as parameters
+#   names(temp_df)[names(temp_df) == "variable"] <- variable
+#   
+#   all_dist_data <- cbind(all_dist_data, temp_df)
+#   
+# }
+# all_dist_plot <- pivot_longer(select(all_dist_data, -n), cols = everything())
+
+
+# Put parameters in workable form
+parms <- mech_parm_func(as.data.frame(res$samples)) %>%
+  pivot_longer(everything())
+
+# parms <- as.data.frame(res$samples) %>% 
+#   pivot_longer(everything())
+
+correct_vals_quote_unquote <- data.frame(
+  lG = 1, 
+  pG = 0.25,
+  f = 0.66,
+  lP = 0.2, 
+  pP = 0.75, 
+  lL = 0.1,
+  pL = 0.75,
+  lQ = 1/1440
+) %>% pivot_longer(everything())
+
+dists_plot <- parms %>% 
+  ggplot(aes(x = value)) + 
+  geom_histogram() +
+  geom_density() +
+  geom_vline(data = correct_vals_quote_unquote, aes(xintercept = value),
+             color = "blue") +
+  # geom_density(data = all_dist_plot, color = "darkgray", linetype = "dashed") +
+  facet_wrap(~name, scales = "free")
+
+
+dists_plot
+
 # AIC_compare_plot <- AIC_df %>% 
 #   mutate(actual_dim = ifelse(data_set == "direct", 3, 12)) %>% 
 #   group_by(data_set) %>% 
@@ -309,22 +433,3 @@ write_rds(out_df, "data/mech_dists.rds")
 #   ggtitle("Comparing logLikelihood") +
 #   facet_wrap( ~ data_set, nrow = 2, scales = "free") +
 #   theme_cowplot()
-# 
-# # Can we get confidence intervals around each of the parameters?
-# # Not from this method since the EM algorithm will always give the same results
-# # Could try boot-strapping or methods like that
-# 
-# # To get initial probability vector alpha
-# alpha = coef(ph_fit)$alpha
-# 
-# # To get subintensity matrix A
-# A = coef(ph_fit)$S
-# 
-# # To get logLikelihood
-# # ph_fit@fit$logLik
-# 
-# 
-# # Visualizations ----
-# 
-# # QQ plots to assess fit visually
-# 

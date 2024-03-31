@@ -142,6 +142,113 @@ n and aquatic stages at the rate
 , we obtain the following system of equations
 \begin_inset Formula 
 \begin{align*}
+\frac{d}{dt}Q & =\left\{ \left(\rho_{A}A+\gamma V\right)+f\left[\left(1-p_{L}\right)\lambda_{L}L+\left(1-p_{P}\right)\lambda_{P}P\right]\right\} -\lambda_{Q}Q-\mu Q\\
+\frac{d}{dt}L & =\left\{ \lambda_{Q}Q+\left(1-f\right)\left[\left(1-p_{L}\right)\lambda_{L}L+\left(1-p_{P}\right)\lambda_{P}P+\left(1-p_{G}\right)\lambda_{G}G_{1}\right]\right\} -p_{L}\lambda_{L}L-f\left(1-p_{L}\right)\lambda_{L}L-\mu L_{1}\\
+\frac{d}{dt}P & =p_{L}\lambda_{L}L-f\left(1-p_{P}\right)\lambda_{P}P-\left(1-f\right)\left(1-p_{P}\right)\lambda_{P}P_{1}-p_{P}\lambda_{P}P_{1}-\mu P_{1}\\
+\frac{d}{dt}G & =p_{p}\lambda_{p}P_{1}-\left(1-f\right)\left(1-p_{g}\right)\lambda_{g}G_{1}-f\left(1-p_{g}\right)\lambda_{g}G_{1}-p_{g}\lambda_{g}G_{1}-\mu G_{1}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+A & =\begin{bmatrix}-\lambda_{Q} & \lambda_{Q} & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
+\end{bmatrix}\\
+\bar{G} & =\begin{bmatrix}0 & \lambda_{Q} & 0 & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & 0 & p_{L}\lambda_{L} & 0 & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & 0 & p_{p}\lambda_{P} & 0\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & 0 & p_{G}\lambda_{G}\\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}\\
+\bar{G} & =\begin{bmatrix}0 & Q & 0 & 0 & 0\\
+L1 & 0 & L2 & 0 & 0\\
+P1 & P2 & 0 & P3 & 0\\
+G1 & G2 & 0 & 0 & G3\\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+G_{1} & =f\left(1-p_{G}\right)\lambda_{G}\\
+G_{2} & =\left(1-f\right)\left(1-p_{G}\right)\lambda_{G}\\
+G_{3} & =p_{G}\lambda_{G}\\
+P_{1} & =f\left(1-p_{P}\right)\lambda_{P}\\
+P_{2} & =\left(1-f\right)\left(1-p_{P}\right)\lambda_{P}\\
+P_{3} & =p_{P}\lambda_{P}\\
+L_{1} & =f\left(1-p_{L}\right)\lambda_{L}\\
+L_{2} & =p_{L}\lambda_{L}\\
+Q & =\lambda_{Q}
+\end{align*}
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{align*}
+\lambda_{G} & =G1+G2+G3\\
+p_{G} & =\frac{G3}{G1+G2+G3}\\
+G1 & =f\left(1-p_{G}\right)\lambda_{G}=f\left(\frac{G1+G2}{G1+G2+G3}\right)\left(G1+G2+G3\right)\\
+f & =\frac{G1}{G1+G2}\\
+\lambda_{P} & =P1+P2+P3\\
+p_{P} & =\frac{P3}{P1+P2+P3}\\
+\left[f\left(1-p_{L}\right)+p_{L}\right]\lambda_{L} & =L1+L2\\
+p_{L}\lambda_{L} & =L2\\
+f\left(1-p_{L}\right)\lambda_{L} & =L1\\
+f\lambda_{L} & =L1+fL2\\
+\lambda_{L} & =\frac{L1+fL2}{f}\\
+p_{L} & =\frac{fL2}{L1+fL2}\\
+\lambda_{Q} & =Q
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\lambda_{G} & =G3\\
+p_{G} & =1-\left(\frac{G1+G2}{G3}\right)\\
+f & =\frac{G1}{G1+G2}\\
+\lambda_{P} & =P1+P2+P3\\
+p_{P} & =\frac{P3}{P1+P2+P3}\\
+\lambda_{L} & =\frac{L1+fL2}{f}\\
+p_{L} & =\frac{fL2}{L1+fL2}\\
+\lambda_{Q} & =Q
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+A\boldsymbol{1} & =\begin{bmatrix}-\lambda_{Q} & \lambda_{Q} & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & \left(1-f\right)\left(1-p_{L}\right)\lambda_{L}-\lambda_{L} & p_{L}\lambda_{L} & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
+\end{bmatrix}\begin{bmatrix}1\\
+1\\
+1\\
+1
+\end{bmatrix}\\
+ & =\begin{bmatrix}0\\
+0\\
+0\\
+-p_{G}\lambda_{G}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
 \frac{d}{dt}Q_{1} & =\left\{ \left(\rho_{A}A+\gamma V\right)+f\left[\left(1-p_{L}\right)\lambda_{L}L_{1}+\left(1-p_{P}\right)\lambda_{P}P_{1}\right]\right\} -\lambda_{Q}Q_{1}-\mu Q_{1}\\
 \frac{d}{dt}L_{1} & =\left\{ \lambda_{Q}Q_{1}+\left(1-f\right)\left[\left(1-p_{L}\right)\lambda_{L}L_{1}+\left(1-p_{P}\right)\lambda_{P}P_{1}+\left(1-p_{G}\right)\lambda_{G}G_{1}\right]\right\} -p_{l}\lambda_{l}L_{1}-f\left(1-p_{l}\right)\lambda_{l}L_{1}-\mu L_{1}\\
 \frac{d}{dt}P_{1} & =p_{l}\lambda_{l}L_{1}-f\left(1-p_{p}\right)\lambda_{p}P_{1}-\left(1-f\right)\left(1-p_{p}\right)\lambda_{p}P_{1}-p_{p}\lambda_{p}P_{1}-\mu P_{1}\\
