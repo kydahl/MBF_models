@@ -293,6 +293,93 @@ where
 \end_layout
 
 \begin_layout Section*
+Ignoring questing
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+A & =\begin{bmatrix}-\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
+\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+\left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
+\end{bmatrix}\\
+\bar{G} & =\begin{bmatrix}0 & p_{L}\lambda_{L} & 0 & 0\\
+\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & 0 & p_{p}\lambda_{P} & 0\\
+\left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & 0 & p_{G}\lambda_{G}\\
+0 & 0 & 0 & 0
+\end{bmatrix}\\
+\bar{G} & =\begin{bmatrix}0 & L2 & 0 & 0\\
+P2 & 0 & P3 & 0\\
+G2 & 0 & 0 & G3\\
+0 & 0 & 0 & 0
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{align*}
+L2 & =p_{L}\lambda_{L}\\
+s_{L} & =-\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L}\\
+s_{L} & =\left[\left(1-f\right)\left(1-p_{L}\right)-1\right]\frac{1}{p_{L}}L2\\
+\\
+\\
+\\
+G2+G3 & =\left[\left(1-f\right)\left(1-p_{G}\right)+p_{G}\right]\lambda_{G}\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\lambda_{G} & =G3\\
+p_{G} & =1-\left(\frac{G1+G2}{G3}\right)\\
+f & =\frac{G1}{G1+G2}\\
+\lambda_{P} & =P1+P2+P3\\
+p_{P} & =\frac{P3}{P1+P2+P3}\\
+\lambda_{L} & =\frac{L1+fL2}{f}\\
+p_{L} & =\frac{fL2}{L1+fL2}\\
+\lambda_{Q} & =Q
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+A\boldsymbol{1} & =\begin{bmatrix}-\lambda_{Q} & \lambda_{Q} & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & \left(1-f\right)\left(1-p_{L}\right)\lambda_{L}-\lambda_{L} & p_{L}\lambda_{L} & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
+\end{bmatrix}\begin{bmatrix}1\\
+1\\
+1\\
+1
+\end{bmatrix}\\
+ & =\begin{bmatrix}0\\
+0\\
+0\\
+-p_{G}\lambda_{G}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
 Approximation
 \end_layout
 
