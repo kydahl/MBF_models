@@ -293,49 +293,64 @@ where
 \end_layout
 
 \begin_layout Section*
-Ignoring questing
+Ignoring the questing stage
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
-A & =\begin{bmatrix}-\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
+\tilde{A} & =\begin{bmatrix}a_{11} & a_{12} & a_{13}\\
+a_{21} & a_{22} & a_{23}\\
+a_{31} & a_{32} & a_{33}
+\end{bmatrix}\\
+\lambda_{p} & =-a_{22}\\
+p_{P} & =a_{23}/\lambda_{P}\\
+f & =1-\frac{a_{21}}{\left(1-p_{P}\right)\lambda_{P}}\\
+\left(1-p_{L}\right)\lambda_{L} & =-\frac{\left(a_{11}+a_{12}\right)}{f}\\
+\lambda_{L} & =-\frac{\left(a_{11}+a_{12}\right)}{f}+a_{12}\\
+p_{L} & =a_{12}/\lambda_{L}\\
+\lambda_{G} & =-a_{33}\\
+p_{G} & =1-\frac{a_{31}}{\left(1-f\right)\lambda_{G}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\tilde{A} & =\begin{bmatrix}-\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
 \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
 \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
 \end{bmatrix}\\
-\bar{G} & =\begin{bmatrix}0 & p_{L}\lambda_{L} & 0 & 0\\
-\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & 0 & p_{p}\lambda_{P} & 0\\
-\left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & 0 & p_{G}\lambda_{G}\\
+\bar{G} & =\begin{bmatrix}0 & p_{L}\lambda_{L} & 0 & f\left(1-p_{L}\right)\lambda_{L}\\
+\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & 0 & p_{p}\lambda_{P} & f\left(1-p_{P}\right)\lambda_{P}\\
+\left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & 0 & p_{G}\lambda_{G}+f\left(1-p_{G}\right)\lambda_{G}\\
 0 & 0 & 0 & 0
 \end{bmatrix}\\
-\bar{G} & =\begin{bmatrix}0 & L2 & 0 & 0\\
-P2 & 0 & P3 & 0\\
-G2 & 0 & 0 & G3\\
+\bar{G} & =\begin{bmatrix}0 & L1 & 0 & L2\\
+P1 & 0 & P2 & P3\\
+G1 & 0 & 0 & G2\\
 0 & 0 & 0 & 0
 \end{bmatrix}
 \end{align*}
 
 \end_inset
 
+The sum of the rows should be the negative of the diagonal elements of 
+\begin_inset Formula $\tilde{A}$
+\end_inset
+
  
 \begin_inset Formula 
 \begin{align*}
-L2 & =p_{L}\lambda_{L}\\
-s_{L} & =-\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L}\\
-s_{L} & =\left[\left(1-f\right)\left(1-p_{L}\right)-1\right]\frac{1}{p_{L}}L2\\
-\\
-\\
-\\
-G2+G3 & =\left[\left(1-f\right)\left(1-p_{G}\right)+p_{G}\right]\lambda_{G}\\
-\\
-\\
-\\
-\\
-\\
-\\
-\\
-\\
-\\
+L1+L2 & =p_{L}\lambda_{L}+f\left(1-p_{L}\right)\lambda_{L}\\
+L1+L2 & =\left[1-\left(1-f\right)\left(1-p_{L}\right)\right]\lambda_{L}\\
+P1+P2+P3 & =\lambda_{P}\\
+G1+G2 & =\lambda_{G}\\
+P1+P3 & =\\
 \end{align*}
 
 \end_inset
@@ -343,15 +358,26 @@ G2+G3 & =\left[\left(1-f\right)\left(1-p_{G}\right)+p_{G}\right]\lambda_{G}\\
 
 \begin_inset Formula 
 \begin{align*}
-\lambda_{G} & =G3\\
-p_{G} & =1-\left(\frac{G1+G2}{G3}\right)\\
-f & =\frac{G1}{G1+G2}\\
 \lambda_{P} & =P1+P2+P3\\
-p_{P} & =\frac{P3}{P1+P2+P3}\\
-\lambda_{L} & =\frac{L1+fL2}{f}\\
-p_{L} & =\frac{fL2}{L1+fL2}\\
-\lambda_{Q} & =Q
+\lambda_{G} & =G1+G2\\
+p_{P} & =\frac{P2}{P1+P2+P3}\\
+f & =\frac{P3}{\left(1-p_{P}\right)\lambda_{P}}\\
+p_{G} & =1-\frac{G1}{\left(1-f\right)\lambda_{G}}\\
+\lambda_{L} & =\frac{L2}{f}+L1\\
+p_{L} & =\frac{L1}{\lambda_{L}}
 \end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\tilde{G}=\begin{bmatrix}0 & P1 & G1 & 0\\
+L1 & 0 & 0 & 0\\
+0 & P2 & 0 & 0\\
+L2 & P3 & G2 & 0
+\end{bmatrix}
+\]
 
 \end_inset
 

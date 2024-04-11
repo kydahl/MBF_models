@@ -215,14 +215,30 @@ hist_plots <- data_df %>%
 # Simulate data directly from phase type distribution ----
 
 # Define phase type distribution
+# Landing
+pL = 0.7
+lL = 0.1 # 10 minutes
+
+# Probing
+pP = 0.8
+lP = 0.2 # 5 minutes
+
+# Ingesting
+pG = 0.9 #0.75
+lG = 1 # 1 minutes
+
+# Fleeing
+f = 0.66
 
 # subintensity matrix
 set_A = matrix(c(
-  -1.5, 0, 0,
-  1.5, -1, 0,
-  0, 1, -0.5), ncol = 3) 
-set_alpha = c(0.9, 0.1, 0) # initial probability vector
+  (-1 + (1 - f) * (1- pL)) * lL, pL * lL, 0,
+  (1 - f) * (1 - pP) * lP, -lP, pP * lP,
+  (1 - f) * (1 - pG) * lG, 0, -lG), ncol = 3, byrow = TRUE) 
+set_alpha = c(1, 0, 0) # initial probability vector
 ph = PH(set_A, set_alpha)
 
 # Get 100 random samples from the distribution
-direct_samps = rPH(1000, ph)
+direct_samps = rphtype(1000, set_alpha, set_A)
+
+write_csv(data.frame(direct_samps), "data/direct_samples.csv")
