@@ -349,8 +349,7 @@ The sum of the rows should be the negative of the diagonal elements of
 L1+L2 & =p_{L}\lambda_{L}+f\left(1-p_{L}\right)\lambda_{L}\\
 L1+L2 & =\left[1-\left(1-f\right)\left(1-p_{L}\right)\right]\lambda_{L}\\
 P1+P2+P3 & =\lambda_{P}\\
-G1+G2 & =\lambda_{G}\\
-P1+P3 & =\\
+G1+G2 & =\lambda_{G}
 \end{align*}
 
 \end_inset
@@ -362,6 +361,7 @@ P1+P3 & =\\
 \lambda_{G} & =G1+G2\\
 p_{P} & =\frac{P2}{P1+P2+P3}\\
 f & =\frac{P3}{\left(1-p_{P}\right)\lambda_{P}}\\
+\left(1-f\right)p_{G} & =\left(1-f\right)-\frac{G1}{\lambda_{G}}\\
 p_{G} & =1-\frac{G1}{\left(1-f\right)\lambda_{G}}\\
 \lambda_{L} & =\frac{L2}{f}+L1\\
 p_{L} & =\frac{L1}{\lambda_{L}}

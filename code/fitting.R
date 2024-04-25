@@ -6,10 +6,9 @@
 # Outline of script: 
 # 0) Load libraries, necessary functions, and data
 # 1) Set up data sets
-# 2) Set up structured matrices for fitting
-# 3) Fit matrices to the data
-# 4) Transform matrix entries to model parameters
-# 5) Create visualizations of parameter and model fits
+# 2) Fit matrices to the data
+# 3) Transform matrix entries to model parameters
+# 4) Create visualizations of parameter and model fits
 # ---------------------------------------------------------------------------- #
 
 # 0) Load libraries, necessary functions, and data ------------------------
@@ -23,185 +22,7 @@ library(mapfit) # alternative way to fit phase type distributions
 library(reshape2)
 library(Matrix)
 library(corrplot)
-
-# Function: Get the number of parameters for a phase-type distribution of
-#           a given class and dimension
-param_count_func <- function(class, dimension) {
-  p = dimension
-  out <- case_when(
-    class == "general" ~ p^2 + p,
-    class == "coxian" ~ max(1, 2*p - 2),
-    class == "hyperexponential" ~ 2*p,
-    class == "gcoxian" ~ 3*p - 2,
-    class == "gerlang" ~ p,
-    class == "mechanistic" ~ 9 * p / 4 # 9 parameters per 4x4 motif. p must be a multiple of 4
-  )
-} 
-
-# Function: calculate the likelihood of phase type parameters given  data
-likelihood_func <- function(parameters, data) {}
-
-# Function: put together likelihood and AIC for each model and data set
-model_selection_func <- function(model_class, dimension, parameters, data) {
-  #       temp_fit <-init_func(out_times, class, dimension, 10)
-  #       
-  #       temp_logLik = temp_fit@fit$logLik
-  #       
-  #       temp_param_count = param_count_func(class, dimension)
-  #       temp_AIC = 2 * temp_param_count - 2 * temp_logLik
-}
-
-# OLD Function: initialize parameters for a structured phase-type distribution then fit to data 
-init_func <- function(data, dist_class, dist_dimension, n_runs) {
-  # Fits a phase-type distribution of class = dist_class and 
-  # dimension = dist_dimension to the data
-  
-  # Runs the fitting process n_runs times with different initial conditions to
-  # try to avoid getting stuck in local minima
-  fits = list()
-  temp_logLik = double()
-  
-  for (run_num in 1:n_runs) {
-    temp_ph = ph(structure = dist_class, dimension = dist_dimension)
-    
-    # KD: using capture.output to suppress output from "fit"
-    capture.output(
-      temp_fit <- fit(temp_ph, y = data, stepsEM = 1500), 
-      file = nullfile()
-    )
-    fits[[run_num]] = temp_fit
-    temp_logLik[run_num] = temp_fit@fit$logLik
-    temp_param_count = param_count_func(dist_class, dist_dimension)
-    temp_AIC = 2 * temp_param_count - 2 * temp_logLik
-  }
-  
-  final_fit = fits[temp_logLik == max(temp_logLik)][[1]]
-  
-}
-
-# Function: Plot phtMCMC outputs nicely (from PhaseType package)
-plot.phtMCMC <- function(x, ...) {
-  # Get chain info
-  StartEndThin <- attr(x$samples, "mcpar")
-  
-  # Trace plots
-  print(
-    ggplot(melt(as.data.frame(x$samples[seq(StartEndThin[1], StartEndThin[2], StartEndThin[3]),]), id.vars = NULL)) +
-      geom_line(aes_string(x = "1:length(value)", y = "value")) +
-      geom_smooth(aes_string(x = "1:length(value)", y = "value"), method = "glm") +
-      #geom_hline(aes(yintercept = value), data = truth, colour = "red", linetype = "dashed") +
-      facet_wrap(~variable, scales = "free") +
-      #theme_grey(base_family = "serif", base_size = 11) +
-      ggtitle("Parameter Traces") + #, plot.title = theme_text(size = 14, face = "bold", family = "serif")) +
-      xlab("Iteration") + ylab("Parameter Value")
-  )
-  
-  # Marginal posterior densities
-  print(
-    ggplot() +
-      geom_density(aes_string(x = "value"), melt(as.data.frame(x$samples[seq(StartEndThin[1], StartEndThin[2], StartEndThin[3]),]), id.vars = NULL)) +
-      #geom_vline(aes(xintercept = value), data = truth, colour = "red") +
-      facet_wrap(~variable, scales = "free") +
-      #theme_grey(base_family = "serif", base_size = 11) +
-      ggtitle("Marginal Posterior Densities") + #, plot.title = theme_text(size = 14, face = "bold", family = "serif")) +
-      xlab("Parameter Value") + ylab("Density")
-  )
-}
-
-# Function: set up uninformed priors for each parameter of the PH distribution
-uninf_priors_func <- function(mean, variance, dimension) {
-  shape_k = mean^2 / variance
-  scale_theta = variance / mean
-  
-  nu <- rep(shape_k, dimension^2) #rep(1/mean(test_data), num_states)
-  # Gamma prior: reciprocal scale hyperparameters (one per matrix row)
-  zeta <- rep(scale_theta, dimension)
-  
-  out <- data.frame(nu = nu, zeta = zeta)
-  return(out)
-}
-
-# Function: reshape phtMCMC/2 output to matrix form
-reshape_phtMCMC <- function(res, PH_type) {
-  
-  # Get median values from the parameter posterior distributions
-  medians <- as.data.frame(res$samples) %>% 
-    summarise(across(everything(), median)) %>% 
-    as.double()
-  
-  dimension <- case_when(
-    PH_type == "Empirical" ~ sqrt(length(medians)),
-    PH_type == "Phenomenological" ~ length(medians)/2,
-    PH_type == "Mechanistic" ~ 3
-  )
-  
-  if (dimension > 1) {
-    PH_mat <- Matrix(data = 0, nrow = dimension, ncol = dimension)
-    med_seq = seq(1,dimension^2, by = dimension)
-    
-    if (PH_type == "Mechanistic") {
-      PH_mat[1,1] = -(medians[3] + medians[4]) # -(L1 + L2)
-      PH_mat[1,2] = medians[3]
-      
-      PH_mat[2,1] = medians[5]
-      PH_mat[2,2] = -(medians[5] + medians[6] + medians[7]) # P1 + P2 + P3
-      PH_mat[2,3] = medians[6]
-      
-      PH_mat[3,1] = medians[1]
-      PH_mat[3,3] = -(medians[1] + medians[2])# G1 + G2
-      PH_mat = as.matrix(PH_mat)
-    } else {
-      out_rates <- medians[med_seq]
-      off_diags <- medians[-med_seq]
-      positions <- expand.grid(col = seq(1, dimension), row = seq(1, dimension)) %>% 
-        filter(row != col)
-      
-      # Fill in the off-diagonal entries
-      for (index in 1:dim(positions)[1]) {
-        row = positions$row[index]
-        col = positions$col[index]
-        PH_mat[row, col] = off_diags[index]
-      }
-      
-      # Fill in the diagonal entries
-      
-      
-      PH_mat <- t(matrix(as.numeric(PH_mat), nrow = dimension, ncol = dimension, byrow = TRUE))
-      
-      diags <- -out_rates - rowSums(PH_mat, na.rm = TRUE)
-      PH_mat[cbind(seq(1:dimension), seq(1:dimension))] <- diags
-    }
-    
-  } else {
-    PH_mat <- as.matrix(-medians,1,1)
-  }
-  
-  return(PH_mat)
-  
-}
-
-# Function: Calculate expected likelihood of PH distribution parameters to data
-PHlikelihood <- function(data, PH_mat) {
-  
-  dimension = dim(PH_mat)[1]
-  
-  alpha = matrix(rep(0, dimension), nrow = 1); alpha[1] = 1
-  
-  out_rates = -PH_mat %*% matrix(rep(1, dimension), nrow = dimension, ncol = 1)
-  
-  # N = number of observations
-  # y_1,...,N = data
-  # pi = alpha
-  # T = the sub-intensity matrix, out_mat
-  # t = -T*e, the row sums of out_mat
-  Lik = 1
-  for (i in 1:length(data)) {
-    Lik = alpha %*% expm(PH_mat * data[i]) %*% out_rates
-  }
-  logLik = log(Lik)
-  
-  return(logLik[1])
-}
+library(GGally)
 
 # 1) Set up data sets with increasing levels of data ----------------------
 
@@ -212,19 +33,17 @@ PHlikelihood <- function(data, PH_mat) {
 
 #### Get data ----
 # Simulated data set
-simulated_data = read_csv("data/direct_samples.csv") #("data/noQ_data_continuous.csv") # "data/sample_data_continuous.csv") # 
+simulated_data = read_csv("data/direct_samples.csv") 
+# simulated_data = read_csv("data/noQ_data_continuous.csv")
 # total_sample_size = length(simulated_data$Out_time)
 sample_size = 100
 
-test_data = simulated_data$direct_samps
+test_data = simulated_data$direct_samps[1:sample_size]
 
 # test_data = simulated_data$Out_time[1:100]
 
-# test_data = simulated_data %>% 
-#   mutate(not_Q = time_G+time_L+time_P+time_G) %>%  select(not_Q)
-# test_data = test_data$not_Q[1:100]
 
-# 2) Set up structured matrices for fitting -------------------------------
+# 2) Fit matrices to the data ---------------------------------------------
 
 # TODO: 
 # [] Define each distribution type and its structure in comments
@@ -232,8 +51,12 @@ test_data = simulated_data$direct_samps
 # [] Write function that creates a structured matrix of the given type
 # [] 
 
+# TODO: 
+# [] Set up general fitting function that deals with possible errors from phtMCMC2
+# [] Keep track of likelihood and AIC of each fit
+# [] Decide: how to fix dimensions
 
-### Empirical distribution matrix ----
+## Empirical ----
 
 # Run through a range of PH orders and select best fit based on AIC
 max_order = 6
@@ -258,10 +81,13 @@ for (PH_order in 1:max_order) {
                  beta = alpha, 
                  nu = nu, zeta = zeta, 
                  n = num_samples,
-                 mhit = 100)
+                 mhit = 1000)
   
   # Reshape output to a manageable matrix
-  out_mat = reshape_phtMCMC(res, "Empirical")
+  medians <- as.data.frame(res$samples) %>% 
+    summarise(across(everything(), median)) %>% 
+    as.double()
+  out_mat = reshape_phtMCMC(medians, "Empirical")
   out_mats[[PH_order]] = out_mat
   
   # # Visually inspect the parameter distributions
@@ -283,14 +109,161 @@ for (PH_order in 1:max_order) {
 best_order = filter(AIC_table, AIC == min(AIC))$order
 best_PH = out_mats[[best_order]]
 
-# PH Parameters Profile likelihood analysis ----
+
+## Phenomenological [NYI] ----
+
+# NYI
+
+## Mechanistic  ----
+
+# Define the structure of the phase-type generator
+mech_mat = matrix(c(
+  0,    "P1", "G1", 0,
+  "L1",    0,    0, 0,
+  0,    "P2",    0, 0,
+  "L2", "P3", "G2", 0
+), 4)
+# Gamma priors for shape hyperparameters of model parameters
+nu_ref = 0.5
+nu <- c(
+  "L1" = nu_ref, "L2" = nu_ref,
+  "P1" = nu_ref, "P2" = nu_ref, "P3" = nu_ref,
+  "G1" = nu_ref, "G2" = nu_ref
+)
+# Gamma priors for reciprocal scale hyperparameters of model parameters
+## Use informed priors from known underlying parameters
+# Landing
+pL = 0.7
+lL = 0.1 # 10 minutes
+# Probing
+pP = 0.8
+lP = 0.2 # 5 minutes
+# Ingesting
+pG = 0.9 #0.75
+lG = 1 # 1 minutes
+# Fleeing
+f = 0.66
+zeta <- c(
+  "L1" = (pL * lL)^(-1)/nu_ref, "L2" = (f*(1-pL)*lL)^(-1)/nu_ref,
+  "P1" = ((1 - f) * (1 - pP) * lP)^(-1)/nu_ref, "P2" = (pP * lP)^(-1)/nu_ref, "P3" = (f * (1 - pP) * lP)^(-1)/nu_ref,
+  "G1" = ((1 - f) * (1 - pG) * lG)^(-1)/nu_ref, "G2" = (pG * lG + f * (1 - pG) * lG)^(-1)/nu_ref
+)
+
+# alpha is always set to (1,0,0)
+alpha = rep(0, 3); alpha[1] = 1
+
+num_samples = 1000
+
+# Get the fitted matrix entry samples
+mech_res <- phtMCMC2(test_data, 
+                     TT = mech_mat, 
+                     beta = alpha, 
+                     nu = nu, zeta = zeta, 
+                     n = num_samples,
+                     method = "MHRS",
+                     mhit = 100000)
+
+
+
+# 3) Transform matrix entries to parameters -------------------------------
+
+## Empirical ----
+
+## Mechanistic ----
+
+# Make list of actual parameters used to simulate process
+actual_mech_parms <- tibble(
+  p_L = pL, lambda_L = lL, p_P = pP, lambda_P = lP, p_G = pG, lambda_G = lG,
+  f = f) %>% 
+  pivot_longer(everything())
+
+
+# Make matrix of actual values used to simulate process
+actual_mech_mat = matrix(c(
+  (-1 + (1 - f) * (1- pL)) * lL, pL * lL, 0,
+  (1 - f) * (1 - pP) * lP, -lP, pP * lP,
+  (1 - f) * (1 - pG) * lG, 0, -lG), ncol = 3, byrow = TRUE) %>% 
+  melt() %>% rename(row_index = Var1, col_index = Var2)
+
+# Reshape samples into matrices and mechanistic parameters
+mech_mat_df <- tibble(iterate = as.integer(), row_index = as.integer(), 
+                      col_index = as.integer(), value = as.double(), 
+                      logLik = as.double())
+
+mech_params_df <- tibble(iterate = as.integer(), lambda_L = as.double(), 
+                         p_L = as.double(), lambda_P = as.double(), 
+                         p_P = as.double(), lambda_G = as.double(), 
+                         p_G = as.double(), f = as.double(), logLik = as.double())
+
+for (i in 1:dim(mech_res$samples)[1]) {
+  PH_mat = reshape_phtMCMC(mech_res$samples[i,], "Mechanistic")
+  logLik = PHlikelihood(test_data, PH_mat)
+  
+  # Collect entries of PH matrices
+  for (row in 1:3) {
+    for (col in 1:3) {
+      # Replace numeric zeros with actual zeros in mechanistic matrix
+      value = case_when(
+        row == 1 & col == 3 ~ 0,
+        row == 3 & col == 2 ~ 0,
+        TRUE ~ PH_mat[row, col]
+      )
+      mech_mat_df <- add_row(mech_mat_df, 
+                             iterate = i, row_index = row, 
+                             col_index = col, value = PH_mat[row, col],
+                             logLik = logLik)
+    }
+  }
+  
+  if (!any(apply(abs(PH_mat[, 1:nrow(PH_mat)]) <= sqrt(.Machine$double.eps), 
+                 1, all))) {
+    # Collect mechanistic parameters
+    lP_fit = -PH_mat[2, 2]
+    pP_fit = PH_mat[2,3] / lP_fit
+    temp0 = (PH_mat[2,1] / ((1 - pP_fit) * lP_fit))
+    f_fit = 1 - (PH_mat[2,1] / ((1 - pP_fit) * lP_fit))
+    
+    temp1 = - PH_mat[1,1] - PH_mat[1,2]
+    temp2 = temp1 / f_fit
+    lL_fit = temp2 + PH_mat[1,2]
+    pL_fit = PH_mat[1,2] / lL_fit
+    
+    lG_fit = -PH_mat[3, 3]
+    pG_fit = max(0, 1 - (PH_mat[3,1] / ((1 - f_fit) * lG_fit)))
+    
+    mech_params_df <- add_row(mech_params_df, 
+                              iterate = i, lambda_L = lL_fit, p_L = pL_fit, 
+                              lambda_P = lP_fit, p_P = pP_fit, lambda_G = lG_fit, 
+                              p_G = pG_fit, f = f_fit)
+  }
+  
+}
+
+# Add loglikelihood back in to params dataframe
+mech_params_df <- right_join(mech_params_df, select(mech_mat_df, iterate, logLik), 
+                             by = "iterate")
+
+# # Visually inspect the parameter distributions
+plot.phtMCMC(mech_res) # posterior densities should be roughly unimodal
+corrplot(cor(mech_res$samples)) # there should be no strong correlations among parameters
+# Check that largest real part of all eigenvalues is negative
+if (any(Re(eigen(out_mat)$values)>0)) {print("Eigenvalue problem")}
+if (length(out_mat) == 1) {if (-out_mat<0) {print("out-rates problem")}}
+if (length(out_mat) != 1) {if (any(inv(-out_mat)<0)) {print("out-rates problem")}}
+
+
+# 4) Create visualizations of model fits ----------------------------------
+
+# Empirical distribution matrix ----
+
+#### Profile likelihood analyses ----
 matrix_index <- expand.grid(row = 1:best_order, col = 1:best_order)
 
 PLA_df <- tibble(row_index = as.integer(), col_index = as.integer(), 
                  status = as.character(),
                  value = as.double(), likelihood = as.double())
 for (iter in 1:nrow(matrix_index)) {
-  print(paste0("Iteration #", iter))
+  print(paste0("Iteration #", iter, " / ", nrow(matrix_index)))
   # Isolate one parameter (matrix element)
   row_index = matrix_index$row[iter]
   col_index = matrix_index$col[iter]
@@ -350,7 +323,7 @@ PLA_plot
 
 ggsave("figures/full_emp_PLA_plot.pdf", PLA_plot, width = 16, height = 9)
 
-# RowSums Parameters Profile likelihood analysis ----
+## RowSums Parameters Profile likelihood analysis ##
 rowsum_PLA_df <- tibble(row_index = as.integer(), status = as.character(),
                         value = as.double(), likelihood = as.double())
 for (iter in 1:best_order) {
@@ -404,102 +377,79 @@ rowsum_PLA_plot <- rowsum_PLA_df %>% ggplot(aes(x = value, y = likelihood)) +
 
 ggsave("figures/full_emp_rowsum_PLA_plot.pdf", rowsum_PLA_plot, width = 16, height = 9)
 
-### Phenomenological distribution matrix ----
 
+# Mechanistic distribution ----
+mech_params_plot_df <- mech_params_df %>%
+  pivot_longer(cols = -c(iterate, logLik))
 
-
-### Mechanistic distribution matrix ----
-
-# Define the structure of the phase-type generator
-mech_mat = matrix(c(
-  0,    "P1", "G1", 0,
-  "L1",    0,    0, 0,
-  0,    "P2",    0, 0,
-  "L2", "P3", "G2", 0
-), 4)
-# Gamma priors for shape hyperparameters of model parameters
-nu_ref = 0.5
-nu <- c(
-  "L1" = nu_ref, "L2" = nu_ref,
-  "P1" = nu_ref, "P2" = nu_ref, "P3" = nu_ref,
-  "G1" = nu_ref, "G2" = nu_ref
-)
-# Gamma priors for reciprocal scale hyperparameters of model parameters
-## Use informed priors from known underlying parameters
-# Landing
-pL = 0.7
-lL = 0.1 # 10 minutes
-# Probing
-pP = 0.8
-lP = 0.2 # 5 minutes
-# Ingesting
-pG = 0.9 #0.75
-lG = 1 # 1 minutes
-# Fleeing
-f = 0.66
-zeta <- c(
-  "L1" = (pL * lL)^(-1)/nu_ref, "L2" = (f*(1-pL)*lL)^(-1)/nu_ref,
-  "P1" = ((1 - f) * (1 - pP) * lP)^(-1)/nu_ref, "P2" = (pP * lP)^(-1)/nu_ref, "P3" = (f * (1 - pP) * lP)^(-1)/nu_ref,
-  "G1" = ((1 - f) * (1 - pG) * lG)^(-1)/nu_ref, "G2" = (pG * lG + f * (1 - pG) * lG)^(-1)/nu_ref
+#### Parameter distributions plot ----
+shift_legend(mech_params_plot_df %>% 
+               ggplot(aes(x = value)) +
+               geom_histogram() +
+               # Add mean line
+               geom_vline(data = group_by(mech_params_plot_df, name) %>% 
+                            summarise(value = mean(value)),
+                          aes(xintercept = value, color = "blue"),
+                          linewidth = 1) +
+               # Add median line
+               geom_vline(data = group_by(mech_params_plot_df, name) %>% 
+                            summarise(value = median(value)),
+                          aes(xintercept = value, color = "orange"),
+                          linewidth = 1) +
+               # Add actual value line
+               geom_vline(data = actual_mech_parms, aes(xintercept = value, color = "green"),
+                          linewidth = 1) +
+               facet_wrap(~name, scales = "free") +
+               scale_color_manual("Type",
+                                  breaks = c("green"="green", "blue"="blue", "orange"="orange"), 
+                                  values = c("green"="green", "blue"="blue", "orange"="orange"), 
+                                  labels = c("actual", "mean", "median")) +
+               theme_cowplot(12) +
+               theme(legend.direction = "horizontal")
 )
 
-# alpha is always set to (1,0,0)
-alpha = rep(0, 3); alpha[1] = 1
+#### Parameter correlations plot ----
+mech_params_df %>% 
+  select(-c(iterate)) %>% 
+  cor() %>% 
+  corrplot(., type = "lower")
 
-num_samples = 1000
-res <- phtMCMC2(test_data, 
-                TT = mech_mat, 
-                beta = alpha, 
-                nu = nu, zeta = zeta, 
-                n = num_samples,
-                method = "MHRS",
-                mhit = 100)
+### Parameter scatter plots ----
+mech_params_df %>% 
+  filter(lambda_L < 300) %>% 
+  select(-c(iterate)) %>% 
+  ggpairs(aes()) +
+  theme_cowplot(11)
 
-# Reshape output to a manageable matrix
-out_mat = reshape_phtMCMC(res, "Mechanistic")
+#### Parameter PLA plot ----
+# # Use the sample with the highest loglikelihood
+# chosen_sample = filter(mech_mat_df, logLik == max(logLik)) %>%
+#   select(-c(iterate, logLik))
 
-# # Visually inspect the parameter distributions
-plot.phtMCMC(res) # posterior densities should be roughly unimodal
-corrplot(cor(res$samples)) # there should be no strong correlations among parameters
-# Check that largest real part of all eigenvalues is negative
-if (any(Re(eigen(out_mat)$values)>0)) {print("Eigenvalue problem")}
-if (length(out_mat) == 1) {if (-out_mat<0) {print("out-rates problem")}}
-if (length(out_mat) != 1) {if (any(inv(-out_mat)<0)) {print("out-rates problem")}}
+# Use the mean values across samples with the highest loglikelihood
+chosen_sample = mech_params_df %>%
+  right_join(select(mech_mat_df, iterate, logLik), by = "iterate") %>% 
+  filter(logLik == max(logLik)) %>% 
+  unique()
 
+# Transform sample into a matrix
+out_parms = select(chosen_sample, -iterate)
 
-# Calculate log likelihood
-logLik = PHlikelihood(test_data, out_mat)
-num_parms = 3^2
-AIC = 2 * num_parms - 2 * logLik
+# Get actual values and their likelihood
+actual_logLik = actual_mech_mat %>% 
+  pivot_wider(names_from = col_index, values_from = value) %>% 
+  select(-c(row_index)) %>% 
+  as.matrix() %>% 
+  PHlikelihood(test_data, .)
+actual_mech_mat_wlik <- mutate(actual_mech_mat, likelihood = actual_logLik)
 
-# Recover underlying parameters
-
-lP_fit = -out_mat[2, 2]
-pP_fit = out_mat[2,3] / lP_fit
-f_fit = 1 - (out_mat[2,1] / ((1 - pP_fit) * lP_fit))
-
-temp1 = - out_mat[1,1] - out_mat[1,2]
-temp2 = temp1 / f_fit
-lL_fit = temp2 + out_mat[1,2]
-pL_fit = out_mat[1,2] / lL_fit
-
-lG_fit = -out_mat[3, 3]
-pG_fit = 1 - (out_mat[3,1] / ((1 - f_fit) * lG_fit))
-
-params = tibble(variables = rep(c("lambda_L", "p_L", "lambda_P", "p_P", "lambda_G", "p_G", "f"),2),
-                type = c(rep("base", 7), rep("fit", 7)), 
-                value = c(lL, pL, lP, pP, lG, pG, f, lL_fit, pL_fit, lP_fit, pP_fit, lG_fit, pG_fit, f_fit)) %>% 
-  pivot_wider(names_from = type) %>% 
-  mutate(error = (fit-base) / base)
-
-matrix_index <- expand.grid(row = 1:3, col = 1:3)
-
-PLA_df <- tibble(row_index = as.integer(), col_index = as.integer(), 
+PLA_df <- tibble(parameter = as.character(), 
                  status = as.character(),
                  value = as.double(), likelihood = as.double())
 
-for (iter in 1:nrow(matrix_index)) {
+for (iter in 1:ncol(out_parms)) {
   print(paste0("Iteration #", iter))
+  parameter = colnames(out_parms)[iter]
   # Isolate one parameter (matrix element)
   row_index = matrix_index$row[iter]
   col_index = matrix_index$col[iter]
@@ -508,20 +458,22 @@ for (iter in 1:nrow(matrix_index)) {
   # Determine the maximum amount of variation allowable in the element
   # Must ensure that row sums remain negative
   # Then set range to explore for the element (+/- variation, cutoff if necessary)
-  var_mag = 100
-  if (row_index == col_index) {
-    # Diagonal entries must remain negative
-    min_val = -1440 # Set so that durations don't exceed a day
-    max_val = -sum(out_mat[row_index, -col_index])
-    min_perturb = max(min_val, var_mag * el_val)
-    max_perturb = min(max_val, - var_mag * el_val)
-  } else {
-    # All other entries must be positive
-    min_val = 0
-    max_val = -sum(out_mat[row_index, -col_index])
-    min_perturb = max(min_val, -var_mag * el_val)
-    max_perturb = min(max_val, var_mag * el_val)
-  }
+  var_mag = 2
+  min_perturb = -abs(var_mag * el_val)
+  max_perturb = abs(var_mag * el_val)
+  # if (row_index == col_index) {
+  #   # Diagonal entries must remain negative
+  #   min_val = -1440 # Set so that durations don't exceed a day
+  #   max_val = -sum(out_mat[row_index, -col_index])
+  #   min_perturb = max(min_val, var_mag * el_val)
+  #   max_perturb = min(max_val, - var_mag * el_val)
+  # } else {
+  #   # All other entries must be positive
+  #   min_val = 0
+  #   max_val = -sum(out_mat[row_index, -col_index])
+  #   min_perturb = max(min_val, -var_mag * el_val)
+  #   max_perturb = min(max_val, var_mag * el_val)
+  # }
   
   # Set up sequence of values for perturbations
   perturb_resolution = 100
@@ -541,17 +493,31 @@ for (iter in 1:nrow(matrix_index)) {
     PLA_df <- add_row(PLA_df, status = status,
                       row_index = row_index, col_index = col_index,
                       value = perturb_seq[j], likelihood = logLik)
-    
   }
   
 }
 
 # Visually inspect the likelihood profiles
-likelihood_cutoff = log(0.95 * exp(max(PLA_df$likelihood)))
+likelihood_cutoff = log(0.95 * exp(max(PLA_df$likelihood, na.rm = TRUE)))
 
-PLA_plot <- PLA_df %>% ggplot(aes(x = value, y = likelihood)) +
+max_likelihood_set = PLA_df %>% 
+  select(-status) %>% 
+  group_by(row_index, col_index) %>% 
+  # filter(value = value)
+  filter(likelihood == max(likelihood, na.rm = TRUE)) %>% 
+  unique()
+
+PLA_plot <- PLA_df %>% 
+  filter(-likelihood < -1.005 * likelihood_cutoff) %>% 
+  ggplot(aes(x = value, y = likelihood)) +
   geom_line() +
+  # Add dot showing baseline values
   geom_point(data = filter(PLA_df, status == "base"), color = "blue") +
+  # Add dot showing maximum likelihood values
+  geom_point(data = max_likelihood_set, color = "orange") +
+  # Add dot showing actual underyling value
+  geom_point(data = actual_mech_mat_wlik, color = "green") +
+  # geom_vline(data = actual_mech_mat_wlik, aes(xintercept = value), color = "green") +
   geom_hline(yintercept = likelihood_cutoff, color = "red") +
   facet_wrap(vars(row_index, col_index), nrow = 3, ncol = 3, 
              labeller = label_both, scales = "free_x")
@@ -559,7 +525,159 @@ PLA_plot
 
 ggsave("figures/full_mech_PLA_plot.pdf", PLA_plot, width = 16, height = 9)
 
-# RowSums Parameters Profile likelihood analysis ----
+# Summary statistics for mechanistic parameter posterior distributions
+mech_params_summary <- group_by(mech_params_plot_df, name) %>% 
+  summarise(mean = mean(value),
+            median = median(value))
+
+#### Matrix element distribution plots ----
+mech_mat_plot_df <- mech_mat_df %>% 
+  mutate(row_label = paste0("row = ", row_index),
+         col_label = paste0("column = ", col_index))
+
+mech_mat_plot_df %>% ggplot(aes(x = value)) +
+  geom_histogram() +
+  # Actual values
+  geom_vline(actual_mech_mat %>% 
+               mutate(row_label = paste0("row = ", row_index),
+                      col_label = paste0("column = ", col_index)), 
+             mapping = aes(xintercept = value, color = "green")) +
+  # Add mean line
+  geom_vline(data = group_by(mech_mat_plot_df, row_label, col_label) %>% 
+               summarise(value = mean(value)),
+             aes(xintercept = value, color = "blue"),
+             linewidth = 1) +
+  # Add median line
+  geom_vline(data = group_by(mech_mat_plot_df, row_label, col_label) %>% 
+               summarise(value = median(value)),
+             aes(xintercept = value, color = "orange"),
+             linewidth = 1) +
+  facet_wrap(row_label ~ col_label, scales = "free") +
+  scale_color_manual("Type",
+                     breaks = c("green"="green", "blue"="blue", "orange"="orange"), 
+                     values = c("green"="green", "blue"="blue", "orange"="orange"), 
+                     labels = c("actual", "mean", "median")) +
+  theme_cowplot(12) 
+
+#### Matrix elements correlations plot ----
+mech_mat_df %>% 
+  # select(-c(iterate)) %>% 
+  unite(entry, row_index:col_index) %>% 
+  pivot_wider(names_from = entry, values_from = value) %>% 
+  select(-c(`3_2`, `1_3`)) %>% 
+  cor() %>% 
+  corrplot(., type = "lower")
+
+#### Matrix PLA plot ----
+# # Use the sample with the highest loglikelihood
+# chosen_sample = filter(mech_mat_df, logLik == max(logLik)) %>%
+#   select(-c(iterate, logLik))
+
+# Use the mean values across samples with the highest loglikelihood
+chosen_sample = mech_mat_df %>%
+  group_by(row_index, col_index) %>%
+  summarise(value = mean(value)) %>%
+  ungroup()
+
+
+# Transform sample into a matrix
+out_mat = chosen_sample %>% 
+  pivot_wider(names_from = col_index, values_from = value) %>% 
+  select(-c(row_index)) %>% 
+  as.matrix()
+
+# Get actual values and their likelihood
+actual_logLik = actual_mech_mat %>% 
+  pivot_wider(names_from = col_index, values_from = value) %>% 
+  select(-c(row_index)) %>% 
+  as.matrix() %>% 
+  PHlikelihood(test_data, .)
+actual_mech_mat_wlik <- mutate(actual_mech_mat, likelihood = actual_logLik)
+
+matrix_index <- expand.grid(row = 1:3, col = 1:3)
+
+PLA_df <- tibble(row_index = as.integer(), col_index = as.integer(), 
+                 status = as.character(),
+                 value = as.double(), likelihood = as.double())
+
+for (iter in 1:nrow(matrix_index)) {
+  print(paste0("Iteration #", iter))
+  # Isolate one parameter (matrix element)
+  row_index = matrix_index$row[iter]
+  col_index = matrix_index$col[iter]
+  el_val = out_mat[row_index, col_index]
+  
+  # Determine the maximum amount of variation allowable in the element
+  # Must ensure that row sums remain negative
+  # Then set range to explore for the element (+/- variation, cutoff if necessary)
+  var_mag = 2
+  min_perturb = -abs(var_mag * el_val)
+  max_perturb = abs(var_mag * el_val)
+  # if (row_index == col_index) {
+  #   # Diagonal entries must remain negative
+  #   min_val = -1440 # Set so that durations don't exceed a day
+  #   max_val = -sum(out_mat[row_index, -col_index])
+  #   min_perturb = max(min_val, var_mag * el_val)
+  #   max_perturb = min(max_val, - var_mag * el_val)
+  # } else {
+  #   # All other entries must be positive
+  #   min_val = 0
+  #   max_val = -sum(out_mat[row_index, -col_index])
+  #   min_perturb = max(min_val, -var_mag * el_val)
+  #   max_perturb = min(max_val, var_mag * el_val)
+  # }
+  
+  # Set up sequence of values for perturbations
+  perturb_resolution = 100
+  perturb_seq = c(el_val, seq(min_perturb, max_perturb, length.out = perturb_resolution))
+  
+  # Calculate (expected) likelihood of the data for perturbed values of the matrix element
+  for (j in 1:perturb_resolution) {
+    status = ifelse(j == 1, "base", "perturbed")
+    temp_mat = out_mat
+    temp_mat[row_index, col_index] = perturb_seq[j]
+    
+    # Calculate likelihood
+    logLik = PHlikelihood(test_data, temp_mat)
+    
+    # Put together data
+    
+    PLA_df <- add_row(PLA_df, status = status,
+                      row_index = row_index, col_index = col_index,
+                      value = perturb_seq[j], likelihood = logLik)
+  }
+  
+}
+
+# Visually inspect the likelihood profiles
+likelihood_cutoff = log(0.95 * exp(max(PLA_df$likelihood, na.rm = TRUE)))
+
+max_likelihood_set = PLA_df %>% 
+  select(-status) %>% 
+  group_by(row_index, col_index) %>% 
+  # filter(value = value)
+  filter(likelihood == max(likelihood, na.rm = TRUE)) %>% 
+  unique()
+
+PLA_plot <- PLA_df %>% 
+  filter(-likelihood < -1.005 * likelihood_cutoff) %>% 
+  ggplot(aes(x = value, y = likelihood)) +
+  geom_line() +
+  # Add dot showing baseline values
+  geom_point(data = filter(PLA_df, status == "base"), color = "blue") +
+  # Add dot showing maximum likelihood values
+  geom_point(data = max_likelihood_set, color = "orange") +
+  # Add dot showing actual underyling value
+  geom_point(data = actual_mech_mat_wlik, color = "green") +
+  # geom_vline(data = actual_mech_mat_wlik, aes(xintercept = value), color = "green") +
+  geom_hline(yintercept = likelihood_cutoff, color = "red") +
+  facet_wrap(vars(row_index, col_index), nrow = 3, ncol = 3, 
+             labeller = label_both, scales = "free_x")
+PLA_plot  
+
+ggsave("figures/full_mech_PLA_plot.pdf", PLA_plot, width = 16, height = 9)
+
+#### RowSums Parameters Profile likelihood analysis ----
 rowsum_PLA_df <- tibble(row_index = as.integer(), status = as.character(),
                         value = as.double(), likelihood = as.double())
 for (iter in 1:best_order) {
@@ -571,14 +689,14 @@ for (iter in 1:best_order) {
   # Determine the maximum amount of variation allowable in the element
   # Must ensure that row sums remain negative
   # Then set range to explore for the element (+/- variation, cutoff if necessary)
-  var_mag = 100
+  var_mag = 10
   # row_sum = -sum(out_mat[row_index, ])
   
   min_perturb = -3
   max_perturb = 3
   
   # Set up sequence of values for perturbations
-  perturb_resolution = 1000
+  perturb_resolution = 100
   perturb_seq = c(1, 10^seq(min_perturb, max_perturb, length.out = perturb_resolution))
   
   # Calculate (expected) likelihood of the data for perturbed values of the matrix element
@@ -613,98 +731,6 @@ rowsum_PLA_plot <- rowsum_PLA_df %>% ggplot(aes(x = value, y = likelihood)) +
 
 ggsave("figures/full_mech_rowsum_PLA_plot.pdf", rowsum_PLA_plot, width = 16, height = 9)
 
-
-# 3) Fit matrices to the data ---------------------------------------------
-
-# TODO: 
-# [] Set up general fitting function that deals with possible errors from phtMCMC2
-# [] Keep track of likelihood and AIC of each fit
-# [] Decide: how to fix dimensions
-
-# # perform N MCMC iterations to fit data structured phase-type distribution to data "x"
-# data_sample = sample(simulated_data$Out_time, sample_size)
-# res <- phtMCMC2(data_sample, mech_mat, alpha, nu, zeta, n = 100, method = "DCS")
-
-out_df = tibble(class = as.character(), dimension = as.integer(), data_set = as.integer(),
-                # logLik = as.double(), AIC = as.double(), 
-                A = list(), alpha = list())
-for (i in 1:num_samples) {
-  
-  data_sample = sample(simulated_data$Out_time, 1000)
-  print(paste0("Fitting PH distribution:"))
-  print(paste0("Data set: ", i, " out of ", num_samples))
-  capture.output(
-    res <- phtMCMC2(simulated_data$Out_time, mech_mat, alpha, nu, zeta, n = 1000, 
-                    method = "DCS", silent = FALSE), 
-    file = nullfile()
-  )
-  
-  # Put matrix on scale of days instead of minutes
-  DayToMin = 1440
-  out_mat <- mech_mat_func(res$samples, median) * DayToMin
-  
-  # print(paste0("Likelihood = ", temp_logLik ))
-  # temp_param_count = param_count_func(class, dimension)
-  # temp_AIC = 2 * temp_param_count - 2 * temp_logLik
-  
-  out_df = add_row(out_df, class = "Mechanistic", dimension = 4,
-                   data_set = i,
-                   # logLik = temp_logLik, AIC = temp_AIC,
-                   A = list(out_mat), alpha = list(alpha))
-}
-
-write_rds(out_df, "data/mech_dists.rds")
-
-# 
-# Can we get confidence intervals around each of the parameters?
-# Not from this method since the EM algorithm will always give the same results
-# Could try boot-strapping or methods like that
-
-# To get initial probability vector alpha
-alpha = coef(ph_fit)$alpha
-
-# To get subintensity matrix A
-A = coef(ph_fit)$S
-
-# To get logLikelihood
-# ph_fit@fit$logLik
-
-
-# 4) Transform matrix entries to parameters -------------------------------
-
-# Helper function: Put output of phtMCMC2 in matrix form following our bespoke mechanistic matrix form
-mech_mat_func <- function(in_mat, stat_func) {
-  # in_mat should be of the form of the output of res$samples[i,]
-  
-  stat_mat <- in_mat %>% 
-    as.data.frame() %>% 
-    reshape2::melt() %>% 
-    group_by(variable) %>% 
-    summarise(mean = stat_func(value)) %>% 
-    pivot_wider(names_from = variable, values_from = mean)
-  
-  G_mat = matrix(c(
-    0,  stat_mat$L1, stat_mat$P1, stat_mat$G1, 0,
-    stat_mat$Q,0,   stat_mat$P2, stat_mat$G2, 0,
-    0,  stat_mat$L2,0,    0,    0,
-    0,  0,   stat_mat$P3, 0,    0,
-    0,  0,   0,    stat_mat$G3,    0
-  ),5)
-  row_sums = rowSums(G_mat)
-  
-  temp_mat = G_mat - diag(row_sums)
-  
-  # remove absorbing state row and column
-  mat_dim = dim(temp_mat)[1]
-  
-  A_mat = temp_mat[1:(mat_dim-1), 1:(mat_dim-1)]
-  
-  out_mat = t(A_mat)
-}
-
-
-
-# 5) Create visualizations of model fits ----------------------------------
 
 # QQ plots to assess fit visually
 
