@@ -23,6 +23,9 @@ library(reshape2)
 library(Matrix)
 library(corrplot)
 library(GGally)
+library(lhs) # easy Latin Hypercube sampling
+
+source("code/utilities.R")
 
 # 1) Set up data sets with increasing levels of data ----------------------
 
@@ -161,7 +164,7 @@ mech_res <- phtMCMC2(test_data,
                      nu = nu, zeta = zeta, 
                      n = num_samples,
                      method = "MHRS",
-                     mhit = 100000)
+                     mhit = 1000)
 
 
 
@@ -179,10 +182,9 @@ actual_mech_parms <- tibble(
 
 
 # Make matrix of actual values used to simulate process
-actual_mech_mat = matrix(c(
-  (-1 + (1 - f) * (1- pL)) * lL, pL * lL, 0,
-  (1 - f) * (1 - pP) * lP, -lP, pP * lP,
-  (1 - f) * (1 - pG) * lG, 0, -lG), ncol = 3, byrow = TRUE) %>% 
+actual_mech_mat = mech_params_to_mat(tibble(
+  p_L = pL, lambda_L = lL, p_P = pP, lambda_P = lP, p_G = pG, lambda_G = lG,
+  f = f) )%>% 
   melt() %>% rename(row_index = Var1, col_index = Var2)
 
 # Reshape samples into matrices and mechanistic parameters
@@ -193,7 +195,8 @@ mech_mat_df <- tibble(iterate = as.integer(), row_index = as.integer(),
 mech_params_df <- tibble(iterate = as.integer(), lambda_L = as.double(), 
                          p_L = as.double(), lambda_P = as.double(), 
                          p_P = as.double(), lambda_G = as.double(), 
-                         p_G = as.double(), f = as.double(), logLik = as.double())
+                         p_G = as.double(), f = as.double(), 
+                         logLik = as.double())
 
 for (i in 1:dim(mech_res$samples)[1]) {
   PH_mat = reshape_phtMCMC(mech_res$samples[i,], "Mechanistic")
@@ -218,38 +221,33 @@ for (i in 1:dim(mech_res$samples)[1]) {
   if (!any(apply(abs(PH_mat[, 1:nrow(PH_mat)]) <= sqrt(.Machine$double.eps), 
                  1, all))) {
     # Collect mechanistic parameters
-    lP_fit = -PH_mat[2, 2]
-    pP_fit = PH_mat[2,3] / lP_fit
-    temp0 = (PH_mat[2,1] / ((1 - pP_fit) * lP_fit))
-    f_fit = 1 - (PH_mat[2,1] / ((1 - pP_fit) * lP_fit))
-    
-    temp1 = - PH_mat[1,1] - PH_mat[1,2]
-    temp2 = temp1 / f_fit
-    lL_fit = temp2 + PH_mat[1,2]
-    pL_fit = PH_mat[1,2] / lL_fit
-    
-    lG_fit = -PH_mat[3, 3]
-    pG_fit = max(0, 1 - (PH_mat[3,1] / ((1 - f_fit) * lG_fit)))
-    
+    out_params = mech_mat_to_params(PH_mat)
     mech_params_df <- add_row(mech_params_df, 
-                              iterate = i, lambda_L = lL_fit, p_L = pL_fit, 
-                              lambda_P = lP_fit, p_P = pP_fit, lambda_G = lG_fit, 
-                              p_G = pG_fit, f = f_fit)
+                              iterate = i, out_params, logLik = logLik)
   }
   
 }
 
-# Add loglikelihood back in to params dataframe
-mech_params_df <- right_join(mech_params_df, select(mech_mat_df, iterate, logLik), 
-                             by = "iterate")
-
 # # Visually inspect the parameter distributions
-plot.phtMCMC(mech_res) # posterior densities should be roughly unimodal
-corrplot(cor(mech_res$samples)) # there should be no strong correlations among parameters
-# Check that largest real part of all eigenvalues is negative
-if (any(Re(eigen(out_mat)$values)>0)) {print("Eigenvalue problem")}
-if (length(out_mat) == 1) {if (-out_mat<0) {print("out-rates problem")}}
-if (length(out_mat) != 1) {if (any(inv(-out_mat)<0)) {print("out-rates problem")}}
+# plot.phtMCMC(mech_res) # posterior densities should be roughly unimodal
+# corrplot(cor(mech_res$samples)) # there should be no strong correlations among parameters
+# # Check that largest real part of all eigenvalues is negative
+# if (any(Re(eigen(out_mat)$values)>0)) {print("Eigenvalue problem")}
+# if (length(out_mat) == 1) {if (-out_mat<0) {print("out-rates problem")}}
+# if (length(out_mat) != 1) {if (any(inv(-out_mat)<0)) {print("out-rates problem")}}
+
+#### Calculate R and R0 for each sample ----
+R0_df <- tibble(iterate = as.integer(), R = as.double(), R0 = as.double())
+
+for (i in 1:dim(mech_res$samples)[1]) {
+  print(i)
+  PH_mat = mech_params_to_mat(mech_params_df[i,])
+  
+  Rs = R0_calc(c(), PH_mat, "Mechanistic")
+  R0_df <- add_row(R0_df, iterate = i, Rs)
+  
+}
+
 
 
 # 4) Create visualizations of model fits ----------------------------------
@@ -529,6 +527,124 @@ ggsave("figures/full_mech_PLA_plot.pdf", PLA_plot, width = 16, height = 9)
 mech_params_summary <- group_by(mech_params_plot_df, name) %>% 
   summarise(mean = mean(value),
             median = median(value))
+
+#### R0 sensitivity plots ----
+
+
+# Posterior R0 PRCC distribution calculations
+sens_res = 100
+sens_range = 0.75
+num_params = length(select(mech_params_df,lambda_L:f)) + 1
+
+R0_PRCC_df = tibble(iterate = as.integer(),rowname = as.character(), 
+                    R0 = as.double(), R = as.double())
+
+# Filter to only feasible parameter sets
+param_sets = mech_params_df %>% 
+  left_join(R0_df, by = "iterate") %>% 
+  filter(R0 > 0, R > 0) 
+
+for (i in 1:dim(param_sets)[1]) {
+  print(paste0("# ", i, " out of ", dim(param_sets)[1]))
+  
+  # Set up parameter set variation
+  param_set = param_sets[i,] %>% 
+    select(-c(logLik,R, R0)) %>% 
+    mutate(dummy = runif(1))
+  
+  LHS_mat = randomLHS(sens_res, num_params)
+  
+  transformed_LHS_mat <- matrix(nrow = nrow(LHS_mat), ncol = ncol(LHS_mat))
+  for (j in 1:num_params) {
+    transformed_LHS_mat[,j] = qunif(LHS_mat[,j], 
+                                    min = (1 - sens_range) * param_set[j + 1][[1]], 
+                                    max = (1 + sens_range) * param_set[j + 1][[1]])
+  }
+  sens_params = as_tibble(transformed_LHS_mat)
+  names(sens_params) = colnames(param_set[2:(num_params+1)])
+  
+  R0_sensitivity_df = data.frame(sens_params[0,],
+                                 R0 = as.double(), R = as.double())
+  
+  for (k in 1:sens_res) {
+    PH_mat = mech_params_to_mat(sens_params[k,])
+    
+    Rs = R0_calc(PH_mat, "Mechanistic")
+    R0_sensitivity_df <- add_row(R0_sensitivity_df, sens_params[k,], Rs)
+    
+  }
+  
+  temp <- R0_sensitivity_df %>% 
+    filter(R0 > 0, R > 0) %>% 
+    cor(method = "spearman") %>% 
+    as.data.frame() %>% 
+    select(R0, R) %>% 
+    rownames_to_column() %>% 
+    filter(!(rowname %in% c("R0", "R"))) %>% 
+    mutate(iterate = param_set$iterate)
+  
+  R0_PRCC_df <- add_row(R0_PRCC_df, temp)
+}
+
+library(ggbeeswarm)
+
+R0_PRCC_dist_plot <- R0_PRCC_df %>% 
+  select(-iterate) %>% 
+  ggplot(aes(x = as.factor(rowname), y = R0)) +
+  geom_quasirandom(alpha = 0.66, stroke = 0, color = "lightblue", shape = 16) +
+  geom_violin(color = "blue", fill = NA) +
+  geom_hline(aes(yintercept = 0), color = "red") +
+  scale_x_discrete("Parameter") +
+  scale_y_continuous("R0 PRCC value") +
+  theme_cowplot()
+
+Rep_PRCC_dist_plot <- R0_PRCC_df %>% 
+  select(-iterate) %>% 
+  ggplot(aes(x = as.factor(rowname), y = R)) +
+  geom_quasirandom(alpha = 0.66, stroke = 0, color = "lightblue", shape = 16) +
+  geom_violin(color = "blue", fill = NA) +
+  geom_hline(aes(yintercept = 0), color = "red") +
+  scale_x_discrete("Parameter") +
+  scale_y_continuous("Mosq. pop. RepNum PRCC value") +
+  theme_cowplot()
+
+
+
+
+best_params <- filter(mech_params_df, logLik == max(logLik)) %>% 
+  left_join(R0_df, by = "iterate")
+
+
+
+
+
+
+
+
+
+
+R0_sensitivity_scatterplot <- R0_sensitivity_df %>% 
+  # right_join(mech_params_df, by = "iterate") %>%
+  pivot_longer(cols = -c(id, R0, R)) %>% 
+  # filter(R0 > 0, R > 0) %>% 
+  ggplot(aes(x = value, y = R0)) +
+  geom_point() +
+  facet_wrap(~ name, scales = "free")
+R0_sensitivity_scatterplot
+
+R0_PRCC_df <- select(R0_sensitivity_df, -id) %>% 
+  cor(method = "spearman") %>% 
+  as.data.frame() %>% 
+  select(R0) %>% 
+  rownames_to_column() %>% 
+  filter(!(rowname %in% c("R0", "R")))
+
+R0_PRCC_plot <- R0_PRCC_df %>% 
+  ggplot(aes(x = as.factor(rowname), y = R0)) +
+  geom_col() +
+  scale_x_discrete("Parameter") +
+  scale_y_continuous("R0 PRCC") +
+  theme_cowplot()
 
 #### Matrix element distribution plots ----
 mech_mat_plot_df <- mech_mat_df %>% 

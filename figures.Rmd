@@ -207,18 +207,18 @@ ggsave("figures/veccap_compare.png", plot = veccap_compare_plot,
 
 ```{r R0_t_tests}
 
-test_data = select(plot_df, class, R0) %>% 
-  filter(class != "Mechanistic")
-t.test(R0~class, var.equal = T, data = test_data)
+test_data = select(plot_df, class_label, R0) %>% 
+  filter(class_label != "Mechanistic")
+t.test(R0~class_label, var.equal = T, data = test_data)
 
-test_data = select(plot_df, class, R0) %>% 
-  filter(class != "coxian")
-t.test(R0~class, var.equal = T, data = test_data)
+test_data = select(plot_df, class_label, R0) %>% 
+  filter(class_label != "Phenomenological")
+t.test(R0~class_label, var.equal = T, data = test_data)
 
 
-test_data = select(plot_df, class, R0) %>% 
-  filter(class != "general")
-t.test(R0~class, var.equal = T, data = test_data)
+test_data = select(plot_df, class_label, R0) %>% 
+  filter(class_label != "Empirical")
+t.test(R0~class_label, var.equal = T, data = test_data)
 
 ```
 

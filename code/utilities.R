@@ -60,6 +60,41 @@ PHlikelihood <- function(data, PH_mat) {
   return(Lik[1])
 }
 
+# Function: transform mechanistic parameters to mechanistic matrix
+mech_params_to_mat <- function(PH_params){
+  with(as.list(PH_params), {
+    
+    # subintensity matrix
+    PH_mat = matrix(c(
+      (-1 + (1 - f) * (1- p_L)) * lambda_L, p_L * lambda_L, 0,
+      (1 - f) * (1 - p_P) * lambda_P, -lambda_P, p_P * lambda_P,
+      (1 - f) * (1 - p_G) * lambda_G, 0, -lambda_G), ncol = 3, byrow = TRUE) 
+  })
+}
+
+
+# Function: transform mechanistic matrix to mechanistic parameters
+mech_mat_to_params <- function(PH_mat){
+  # Collect mechanistic parameters
+  lP_fit = -PH_mat[2, 2]
+  pP_fit = PH_mat[2,3] / lP_fit
+  temp0 = (PH_mat[2,1] / ((1 - pP_fit) * lP_fit))
+  f_fit = 1 - (PH_mat[2,1] / ((1 - pP_fit) * lP_fit))
+  
+  temp1 = - PH_mat[1,1] - PH_mat[1,2]
+  temp2 = temp1 / f_fit
+  lL_fit = temp2 + PH_mat[1,2]
+  pL_fit = PH_mat[1,2] / lL_fit
+  
+  lG_fit = -PH_mat[3, 3]
+  pG_fit = max(0, 1 - (PH_mat[3,1] / ((1 - f_fit) * lG_fit)))
+  
+  mech_params = tibble(lambda_L = lL_fit, p_L = pL_fit, 
+                       lambda_P = lP_fit, p_P = pP_fit, lambda_G = lG_fit, 
+                       p_G = pG_fit, f = f_fit)
+}
+
+
 # Function: put together likelihood and AIC for each model and data set
 model_selection_func <- function(data, PH_mat, class, order) {
   logLik <- PHlikelihood(data, PH_mat)
@@ -202,12 +237,13 @@ get_beta_func <- function(PH_mat, PH_type, epi_parms) {
   if (PH_type == "Mechanistic") {
     # Mechanistic
     # epi_parms = betaP, betaG
+    PH_params = mech_mat_to_params(PH_mat)
     zero_mat = matrix(rep(0, (order + 1)^2), nrow = order + 1, ncol = order + 1)
     betaH = zero_mat; betaV = zero_mat; LambdaH = zero_mat; LambdaV = zero_mat
     betaH[3,3] = epi_parms$betaP
     betaV[4,4] = epi_parms$betaG
     LambdaH[3,3] = -PH_mat[2,2]
-    LambdaV[4,4] = -PH_mat[3,3]  
+    LambdaV[4,4] = -PH_mat[3,3]
   } else if (PH_type == "Empirical") {
     # Empirical
     # epi_parms = betaH = betaV = 1
@@ -230,41 +266,31 @@ get_beta_func <- function(PH_mat, PH_type, epi_parms) {
 
 
 # Quantity of interest calculators ----
-R0_calc <- function(params, PH_mat, PH_type) {
-  with(as.list(params), {
+R0_calc <- function(PH_mat, PH_type, parameters, provide_params = NULL) {
+  with(as.list(parameters), {
     
     if (PH_type == "Mechanistic") {
       
+      if (!is.null(provide_params)) {
+        lambdaL = provide_params$lambda_L
+        pL = provide_params$p_L
+        lambdaP = provide_params$lambda_P
+        pP = provide_params$p_P
+        lambdaG = provide_params$lambda_G
+        pG = provide_params$p_G
+        f = provide_params$f
+      } else {
       
-      # !!! temporary values for testing
-      eta = 1/(3 * 1440) #1/1
-      mu = 1/(14 * 1440)
-      gamma = 1/(3 * 1440)
-      gammaH = 1/(4 * 1440)
-      muH = 1/(365 * 65 * 1440)
-      KH = 10^4
+      PH_params = mech_mat_to_params(PH_mat)
       
-      KL = 300
-      rhoL = 1/(12 * 1440)
-      muL = 1/(20 * 1440)
-      varPhi = 3 / 1440
-      
-      iterate_choice = 884
-      test_mat = filter(mech_mat_df, iterate == iterate_choice) %>% 
-        pivot_wider(names_from = col_index, values_from = value) %>% 
-        select(-c(row_index, logLik, iterate)) %>% 
-        as.matrix()
-      test_parms = mech_params_df[1,]
-      PH_mat = test_mat
-      
-      lambdaL = mech_params_df[iterate_choice,]$lambda_L
-      pL = mech_params_df[iterate_choice,]$p_L
-      lambdaP = mech_params_df[iterate_choice,]$lambda_P
-      pP = mech_params_df[iterate_choice,]$p_P
-      lambdaG = mech_params_df[iterate_choice,]$lambda_G
-      pG = mech_params_df[iterate_choice,]$p_G
-      f = mech_params_df[iterate_choice,]$f
-      
+      lambdaL = PH_params$lambda_L
+      pL = PH_params$p_L
+      lambdaP = PH_params$lambda_P
+      pP = PH_params$p_P
+      lambdaG = PH_params$lambda_G
+      pG = PH_params$p_G
+      f = PH_params$f
+      }
       order = dim(PH_mat)[1]
       A = matrix(0, ncol = order+1, nrow = order+1)
       # !!! do this step separately later
@@ -278,6 +304,7 @@ R0_calc <- function(params, PH_mat, PH_type) {
       one_vec = matrix(rep(1, order + 1), nrow = 1)
       
       # Set up transmission matrices: beta and Lambda
+      epi_parms = select(parameters, betaH, betaV, betaP, betaG)
       betas = get_beta_func(PH_mat, PH_type, epi_parms)
       betaH = betas$betaH
       betaV = betas$betaV
@@ -300,8 +327,8 @@ R0_calc <- function(params, PH_mat, PH_type) {
       Q = inv(M3) %*% M2 %*% inv(M1)
       
       R0 = as.double(one_vec %*% betaH %*% LambdaH %*% Q %*% betaV %*% LambdaV %*% B_star / ((gammaH + muH) * KH))
-      (R0)
       
+      return(tibble(R = R, R0 = R0))
     }
   })
 }
