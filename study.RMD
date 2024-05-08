@@ -35,7 +35,11 @@ library(actuar) # to create and simulate phase type distributions
 library(knitr) # to make nice tables
 library(latex2exp) # to display TeX
 library(printr) # to display TeX nicely
-library(ggbeeswarm)
+library(ggbeeswarm) # make "beeswarm" distribution figures
+library(data.table)
+library(progressr) # Progress bars
+library(doFuture) # Faster parallel processing
+
 
 # Plot settings ----
 
@@ -136,69 +140,6 @@ kable(select(nice_parameter_table, -name) %>%  relocate(Symbol, Description, Val
 ```
 
 
-
-```{r base-R0-PRCC}
-# Posterior R0 PRCC distribution calculations
-sens_res = 1000
-sens_range = 0.75
-num_params = dim(param_table)[1] + 1
-
-R0_PRCC_df = tibble(rowname = as.character(), 
-                    R0 = as.double(), R = as.double())
-
-# Set up parameter set variation
-param_set = param_table %>% select(name, value) %>% pivot_wider() %>% 
-  mutate(dummy = runif(1))
-
-LHS_mat = randomLHS(sens_res, num_params)
-transformed_LHS_mat <- matrix(nrow = nrow(LHS_mat), ncol = ncol(LHS_mat))
-
-for (j in 1:num_params) {
-  
-  if (colnames(param_set[j]) %in% c("f", "p_L", "p_P", "p_G")) {
-    max_val = min(1,  (1 + sens_range) * param_set[j][[1]])
-  }
-  
-  transformed_LHS_mat[,j] = qunif(LHS_mat[,j], 
-                                  min = (1 - sens_range) * param_set[j][[1]], 
-                                  max = max_val)
-}
-
-sens_params = as_tibble(transformed_LHS_mat)
-names(sens_params) = colnames(param_set[1:(num_params)])
-sens_params <- filter(sens_params, f < 1, p_P <1, p_G < 1, p_L < 1)
-
-R0_sensitivity_df = data.frame(sens_params[0,],
-                               R0 = as.double(), R = as.double())
-
-for (k in 1:dim(sens_params)[1]) {
-  PH_mat = mech_params_to_mat(sens_params[k,])
-  
-  Rs = R0_calc(PH_mat, "Mechanistic", parameters)
-  R0_sensitivity_df <- add_row(R0_sensitivity_df, sens_params[k,], Rs)
-  
-}
-
-# Calculate PRCCs
-R0_PRCC_df <- R0_sensitivity_df %>% 
-  filter(R0 > 0, R > 0) %>% 
-  cor(method = "spearman") %>% 
-  as.data.frame() %>% 
-  select(R0, R) %>% 
-  rownames_to_column() %>% 
-  rename(name = rowname, PRCC_R0 = R0, PRCC_R = R) %>% 
-  filter(!(name %in% c("R0", "R")))
-
-ggplot(R0_PRCC_df) +
-  geom_col(aes(x = name, y = PRCC_R0)) +
-  ggtitle("Baseline PRCC results") +
-  scale_x_discrete("") + 
-  scale_y_continuous("R0 PRCC values", limits = c(-1,1)) +
-  theme_cowplot()
-
-```
-
-
 # Parameter estimation
 
 ## Simulated data set
@@ -265,7 +206,7 @@ For each model class, we use an expectation-maximization algorithm that uses Mar
 
 ### Empirical model
 
-```{r empirical-fitting}
+```{r empirical-fitting, message=FALSE, warning=FALSE}
 
 redo_fitting = 0
 
@@ -278,8 +219,8 @@ if (redo_fitting) {
   num_samples = 1000
   
   emp_mats_df <- tibble(iterate = as.integer(), order = as.integer(), 
-                          row_index = as.integer(), col_index = as.integer(), 
-                          value = as.double(), logLik = as.double())
+                        row_index = as.integer(), col_index = as.integer(), 
+                        value = as.double(), logLik = as.double())
   
   for (PH_order in orders) {
     print(paste0("PH Order: ", PH_order, " out of ", length(orders)))
@@ -299,7 +240,7 @@ if (redo_fitting) {
                    beta = alpha,
                    nu = nu, zeta = zeta,
                    n = num_samples,
-                   mhit = 1000)
+                   mhit = 10000)
     
     for (i in 1:dim(res$samples)[1]) {
       PH_mat = reshape_phtMCMC(res$samples[i,], "Empirical")
@@ -314,7 +255,7 @@ if (redo_fitting) {
       
       # Collect mechanistic parameters
       emp_mats_df <- add_row(emp_mats_df, order = PH_order,
-                               iterate = i, PH_mat_df, logLik = logLik)
+                             iterate = i, PH_mat_df, logLik = logLik)
       
     }
     
@@ -399,11 +340,11 @@ Now considering the mechanistic model. We will make direct comparisons between t
 First, we look at how the waiting time statistics compare.
 
 
-``` {r mech-fit, echo = FALSE, results = 'hide'} 
+```{r mech-fit, message=FALSE, warning=FALSE}
 
 if (redo_fitting) {
   PH_order = 3
-  num_samples = 1000
+  num_samples = 2000
   
   # Define the structure of the phase-type generator
   mech_mat = matrix(c(
@@ -457,27 +398,42 @@ if (redo_fitting) {
                                p_G = rep(0, num_samples), f = rep(0, num_samples), 
                                logLik = rep(0, num_samples))
   
-  for (i in 1:dim(mech_res$samples)[1]) {
-    print(i)
-    PH_mat = reshape_phtMCMC(mech_res$samples[i,], "Mechanistic")
-    logLik = PHlikelihood(test_data, PH_mat)
-    
-    if (!any(apply(abs(PH_mat[, 1:nrow(PH_mat)]) <= sqrt(.Machine$double.eps), 
-                   1, all))) {
-      # Collect mechanistic parameters
-      out_params = mech_mat_to_params(PH_mat)
-      mech_params_df[i, colnames(mech_params_df) := list(i, out_params, logLik)]
-      # mech_params_df[i,9]= logLik
-      
-      # mech_params_df <- add_row(mech_params_df, 
-      #                           iterate = i, out_params, logLik = logLik)
-    }
-    
+  # Initialize parallel processing
+  plan(multisession, workers = 10, gc = FALSE)
+  # # Set up progress bar
+  # handlers(global = TRUE)
+  # handlers("cli")
+  # Create temporary function to create table
+  temp_func = function(indices) {
+    # p = progressor(along = indices)
+    mech_params_df = foreach(
+      i = indices,
+      .inorder = FALSE,
+      .combine = "rbind") %dofuture% {
+        # # Iterate progress bar
+        # p(sprintf("i=%g", i))
+        
+        # Get phase-type matric from MCMC result
+        PH_mat = reshape_phtMCMC(mech_res$samples[i,], "Mechanistic")
+        # Calculate likelihood of PH parameters
+        logLik = PHlikelihood(test_data, PH_mat)
+        # Transform matrix to mechanistic parameters
+        out_params = mech_mat_to_params(PH_mat)
+        # Return data
+        data.table(iterate = i, out_params, logLik = logLik)
+      }
   }
-  write_csv(mech_params_df, "./data/empirical_fits.csv")
+  # Return to sequential processing
+  mech_params_df = temp_func(1:dim(mech_res$samples)[1]) %>% 
+    filter(lambda_L < 60)
+  mech_params_df = mech_params_df[1:min(1000, dim(mech_params_df)[1]),]
+  
+  plan(sequential)
+  
+  write_csv(mech_params_df, "./data/mechanistic_fits.csv")
   
 } else {
-  mech_params_df <- read_csv("./data/empirical_fits.csv")
+  mech_params_df <- read_csv("./data/mechanistic_fits.csv")
 }
 
 ```
@@ -486,7 +442,6 @@ if (redo_fitting) {
 
 compare_res = 1000000
 
-library(FNN)
 # Function: calculate Kullback-Liebler Divergence of two estimated kernel densities
 KL_func <- function(x,y) {
   
@@ -495,7 +450,7 @@ KL_func <- function(x,y) {
   y.dens = density(y, from = -1000, to = 1000, n = compare_res)$y
   y.dens = y.dens/sum(y.dens)
   
-  return(as.double(KL(rbind(x.dens, y.dens), unit = 'log')))
+  return(as.double(philentropy::KL(rbind(x.dens, y.dens), unit = 'log')))
   
 }
 
@@ -518,11 +473,9 @@ best_mat = best_fit %>%
 temp_alpha = rep(0, dim(best_mat)[1]); temp_alpha[1] = 1
 best_emp_times = rphtype(compare_res, temp_alpha, best_mat)
 
-exp_mat = filter(emp_params_df, order == 1) %>% 
+exp_mat = filter(emp_mats_df, order == 1) %>% 
   filter(logLik == max(logLik)) %>% 
-  select(-iterate, -logLik, -order) %>% 
-  pivot_wider(names_from = col_index) %>% 
-  select(-row_index) %>% 
+  select(value) %>% 
   as.matrix()
 
 exp_times = rphtype(compare_res, c(1), exp_mat)
@@ -539,8 +492,6 @@ KL_divs = tibble(dist = c("mech", "best_emp", "exp")) %>%
     dist == "exp" ~ KL_func(direct_times, exp_times)
   )) %>% 
   pivot_wider(names_from = dist, values_from = KL_div)
-
-
 
 color_labs = c("Baseline", 
                paste0("Mechanistic fit (", round(KL_divs$mech,3), ")"),
@@ -577,37 +528,37 @@ ggplot() +
 
 
 ```{r mech-stats-compare-plot}
-stats_compare_df <- tibble(order = as.integer(), mean = as.double(), 
-                           median = as.double(), sd = as.double(), 
-                           quantile_05 = as.double(), quantile_95 = as.double()) 
-
-for (i in 1:dim(mech_res$samples)[1]) {
-  out_mat = reshape_phtMCMC(mech_res$samples[i,], "Mechanistic")
-  order_times = rphtype(1000, alpha, out_mat)
-  stats_compare_df <- add_row(stats_compare_df, order = PH_order, 
-                              mean = mean(order_times), 
-                              median = median(order_times), 
-                              sd = sd(order_times), 
-                              quantile_05 = quantile(order_times, 0.05), 
-                              quantile_95 = quantile(order_times, 0.95)
-  )
-}
-
-# Plot a comparison of the statistics
-stats_compare_df %>% 
-  pivot_longer(cols = -order) %>% 
-  filter(value < 60) %>% # filter out ridiculously high values exceeding an hour
-  ggplot(aes(x = order, y = value)) +
-  geom_quasirandom(alpha = 0.3, stroke = 0, shape = 16, size = 1) +
-  # Add lines showing the value from the simulated data
-  geom_hline(data = simul_stats, aes(yintercept = value), color = 'blue') +
-  facet_wrap( ~ name, scales = "free") +
-  scale_x_continuous("Order of the phase-type distribution", breaks = c(1,3,5)) +
-  scale_y_continuous("Minutes")
+# stats_compare_df <- tibble(order = as.integer(), mean = as.double(), 
+#                            median = as.double(), sd = as.double(), 
+#                            quantile_05 = as.double(), quantile_95 = as.double()) 
+# 
+# for (i in 1:dim(mech_res$samples)[1]) {
+#   out_mat = reshape_phtMCMC(mech_res$samples[i,], "Mechanistic")
+#   order_times = rphtype(1000, alpha, out_mat)
+#   stats_compare_df <- add_row(stats_compare_df, order = PH_order, 
+#                               mean = mean(order_times), 
+#                               median = median(order_times), 
+#                               sd = sd(order_times), 
+#                               quantile_05 = quantile(order_times, 0.05), 
+#                               quantile_95 = quantile(order_times, 0.95)
+#   )
+# }
+# 
+# # Plot a comparison of the statistics
+# stats_compare_df %>% 
+#   pivot_longer(cols = -order) %>% 
+#   filter(value < 60) %>% # filter out ridiculously high values exceeding an hour
+#   ggplot(aes(x = order, y = value)) +
+#   geom_quasirandom(alpha = 0.3, stroke = 0, shape = 16, size = 1) +
+#   # Add lines showing the value from the simulated data
+#   geom_hline(data = simul_stats, aes(yintercept = value), color = 'blue') +
+#   facet_wrap( ~ name, scales = "free") +
+#   scale_x_continuous("Order of the phase-type distribution", breaks = c(1,3,5)) +
+#   scale_y_continuous("Minutes")
 
 ```
 
-```{r mech-params}
+```{r actual-params, message=FALSE, warning=FALSE}
 # Make list of actual parameters used to simulate process
 actual_mech_parms <- tibble(
   p_L = pL, lambda_L = lL, p_P = pP, lambda_P = lP, p_G = pG, lambda_G = lG,
@@ -621,46 +572,6 @@ actual_mech_mat = mech_params_to_mat(tibble(
   f = f) )%>% 
   melt() %>% rename(row_index = Var1, col_index = Var2)
 
-# Reshape samples into matrices and mechanistic parameters
-mech_mat_df <- tibble(iterate = as.integer(), row_index = as.integer(), 
-                      col_index = as.integer(), value = as.double(), 
-                      logLik = as.double())
-
-mech_params_df <- tibble(iterate = as.integer(), lambda_L = as.double(), 
-                         p_L = as.double(), lambda_P = as.double(), 
-                         p_P = as.double(), lambda_G = as.double(), 
-                         p_G = as.double(), f = as.double(), 
-                         logLik = as.double())
-
-for (i in 1:dim(mech_res$samples)[1]) {
-  PH_mat = reshape_phtMCMC(mech_res$samples[i,], "Mechanistic")
-  logLik = PHlikelihood(test_data, PH_mat)
-  
-  # Collect entries of PH matrices
-  for (row in 1:3) {
-    for (col in 1:3) {
-      # Replace numeric zeros with actual zeros in mechanistic matrix
-      value = case_when(
-        row == 1 & col == 3 ~ 0,
-        row == 3 & col == 2 ~ 0,
-        TRUE ~ PH_mat[row, col]
-      )
-      mech_mat_df <- add_row(mech_mat_df, 
-                             iterate = i, row_index = row, 
-                             col_index = col, value = PH_mat[row, col],
-                             logLik = logLik)
-    }
-  }
-  
-  if (!any(apply(abs(PH_mat[, 1:nrow(PH_mat)]) <= sqrt(.Machine$double.eps), 
-                 1, all))) {
-    # Collect mechanistic parameters
-    out_params = mech_mat_to_params(PH_mat)
-    mech_params_df <- add_row(mech_params_df, 
-                              iterate = i, out_params, logLik = logLik)
-  }
-  
-}
 ```
 
 Distributions of the mechanistic parameters compared to the those used in the simulations.
@@ -691,8 +602,9 @@ shift_legend(mech_params_plot_df %>%
                scale_color_manual("Type",
                                   breaks = c("green"="green", "blue"="blue", "orange"="orange"), 
                                   values = c("green"="green", "blue"="blue", "orange"="orange"), 
-                                  labels = c("actual", "mean", "median")) +
-               theme(legend.direction = "horizontal")
+                                  labels = c("actual value", "mean fitted value", "median fitted value")) +
+               theme(legend.direction = "vertical") +
+               theme_minimal_grid()
 )
 ```
 
@@ -722,95 +634,13 @@ Here we study how the blood-feeding parameters affect transmission via the basic
 # Calculate R0 values
 R0_df <- tibble(iterate = as.integer(), R = as.double(), R0 = as.double())
 
-for (i in 1:dim(mech_res$samples)[1]) {
+for (i in 1:dim(mech_params_df)[1]) {
   PH_mat = mech_params_to_mat(mech_params_df[i,])
   
-  Rs = R0_calc(PH_mat, "Mechanistic", parameters)
+  Rs = R0_calc(PH_mat, "Mechanistic", parameters, provide_params = mech_params_df[i,])
   R0_df <- add_row(R0_df, iterate = i, Rs)
   
 }
-```
-
-```{r R0-PRCCs, message=FALSE, warning=FALSE, include=FALSE}
-# Calculate PRCCs of R0 to mechanistic parameters
-# Posterior R0 PRCC distribution calculations
-sens_res = 100
-sens_range = 0.75
-num_params = length(select(mech_params_df,lambda_L:f)) + 1
-
-R0_PRCC_df = tibble(iterate = as.integer(),rowname = as.character(), 
-                    R0 = as.double(), R = as.double())
-
-# Filter to only feasible parameter sets
-param_sets = mech_params_df %>% 
-  left_join(R0_df, by = "iterate") %>% 
-  filter(R0 > 0, R > 0) 
-
-for (i in 1:dim(param_sets)[1]) {
-  # print(paste0("# ", i, " out of ", dim(param_sets)[1]))
-  
-  # Set up parameter set variation
-  param_set = param_sets[i,] %>% 
-    select(-c(logLik,R, R0)) %>% 
-    mutate(dummy = runif(1))
-  
-  LHS_mat = randomLHS(sens_res, num_params)
-  
-  transformed_LHS_mat <- matrix(nrow = nrow(LHS_mat), ncol = ncol(LHS_mat))
-  for (j in 1:num_params) {
-    transformed_LHS_mat[,j] = qunif(LHS_mat[,j], 
-                                    min = (1 - sens_range) * param_set[j + 1][[1]], 
-                                    max = (1 + sens_range) * param_set[j + 1][[1]])
-  }
-  sens_params = as_tibble(transformed_LHS_mat)
-  names(sens_params) = colnames(param_set[2:(num_params+1)])
-  
-  R0_sensitivity_df = data.frame(sens_params[0,],
-                                 R0 = as.double(), R = as.double())
-  
-  for (k in 1:sens_res) {
-    PH_mat = mech_params_to_mat(sens_params[k,])
-    
-    Rs = R0_calc(PH_mat, "Mechanistic", parameters)
-    R0_sensitivity_df <- add_row(R0_sensitivity_df, sens_params[k,], Rs)
-    
-  }
-  
-  temp <- R0_sensitivity_df %>% 
-    filter(R0 > 0, R > 0) %>% 
-    cor(method = "spearman") %>% 
-    as.data.frame() %>% 
-    select(R0, R) %>% 
-    rownames_to_column() %>% 
-    filter(!(rowname %in% c("R0", "R"))) %>% 
-    mutate(iterate = param_set$iterate)
-  
-  R0_PRCC_df <- add_row(R0_PRCC_df, temp)
-}
-
-
-```
-
-```{r R0-PRCC-dist-plot}
-R0_PRCC_df %>% 
-  select(-iterate) %>% 
-  ggplot(aes(x = as.factor(rowname), y = R0)) +
-  geom_quasirandom(alpha = 0.66, stroke = 0, color = "lightblue", shape = 16) +
-  geom_violin(color = "blue", fill = NA) +
-  geom_hline(aes(yintercept = 0), color = "red") +
-  scale_x_discrete("Parameter") +
-  scale_y_continuous("R0 PRCC value")
-```
-
-```{r RepNum-PRCC-dist-plot}
-R0_PRCC_df %>% 
-  select(-iterate) %>% 
-  ggplot(aes(x = as.factor(rowname), y = R)) +
-  geom_quasirandom(alpha = 0.66, stroke = 0, color = "lightblue", shape = 16) +
-  geom_violin(color = "blue", fill = NA) +
-  geom_hline(aes(yintercept = 0), color = "red") +
-  scale_x_discrete("Parameter") +
-  scale_y_continuous("Mosq. pop. RepNum PRCC value")
 ```
 
 ## Sensitivity analysis with base and fitted parameters
@@ -823,11 +653,14 @@ R0_PRCC_df %>%
 
 # Posterior R0 PRCC distribution calculations
 
-# 
+#
 mu = 1 / (21 * 1440)
 eta = 1 / (6 * 1440)
-lambdaQ = 1 / ((1/3) * 1440) # questing takes on average one third of a day
+# !!! this is explicit in the R0 calculation function lambdaQ = 1 / ((1/3) * 1440) # questing takes on average one third of a day
 gamma = 1/(3 * 1440) # rate of return from oviposition to blood-feeding (3 days) - resting - laying - resting
+parameters = tibble(
+  eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms, lambdaQ = lambdaQ
+)
 
 # Set up parameter set variation
 param_set = param_table %>% select(name, value) %>% pivot_wider()
@@ -853,78 +686,139 @@ for (j in 1:num_params) {
 }
 
 colnames(full_param_set) = colnames(param_set)
-# full_param_set <- mutate(full_param_set, type = "vary") %>% 
+# full_param_set <- mutate(full_param_set, type = "vary") %>%
 #   rbind(mutate(param_set, type = "baseline"))
 
-R0_sensitivity_df <- tibble(R0 = as.double(), R = as.double(), 
-                            p_L = as.double(), lambda_L = as.double(), p_P = as.double(), 
-                            lambda_P = as.double(), p_G = as.double(), f = as.double(), 
+R0_sensitivity_df <- tibble(R0 = as.double(), R = as.double(),
+                            p_L = as.double(), lambda_L = as.double(), p_P = as.double(),
+                            lambda_P = as.double(), p_G = as.double(), f = as.double(),
                             variable_parm = as.character())
 # Calculate R0 across varied baseline parameters
 for (j in 1:num_params) {
   for (i in 1:num_vary) {
-    parameters = param_set
-    parameters[j] = full_param_set[i,j]
-    PH_mat = mech_params_to_mat(parameters)
-    Rs = R0_calc(PH_mat, "Mechanistic", epi_parms, provide_params = parameters)
-    R0_sensitivity_df <- rbind(R0_sensitivity_df, 
-                               tibble(Rs, parameters, variable_parm = colnames(parameters)[j]))
+    vary_params = param_set
+    vary_params[j] = full_param_set[i,j]
+    PH_mat = mech_params_to_mat(vary_params)
+    Rs = R0_calc(PH_mat, "Mechanistic", parameters, provide_params = vary_params)
+    R0_sensitivity_df <- rbind(R0_sensitivity_df,
+                               tibble(Rs, vary_params, variable_parm = colnames(vary_params)[j]))
   }
 }
 
-test = R0_sensitivity_df %>% 
-  pivot_longer(cols = -c(R0, R, variable_parm)) %>% 
+test = R0_sensitivity_df %>%
+  pivot_longer(cols = -c(R0, R, variable_parm)) %>%
   filter(variable_parm == name) %>% select(-variable_parm)
 
-# Calculate R0 across fitted parameter sets
-# Calculate R0 values
-mech_R0_df <- tibble(R = as.double(), R0 = as.double(),
-                     p_L = as.double(), lambda_L = as.double(), p_P = as.double(), 
-                     lambda_P = as.double(), p_G = as.double(), f = as.double())
+# # Calculate R0 across fitted parameter sets
+# # Calculate R0 values
+# mech_R0_df <- tibble(R = as.double(), R0 = as.double(),
+#                      p_L = as.double(), lambda_L = as.double(), p_P = as.double(),
+#                      lambda_P = as.double(), p_G = as.double(), f = as.double())
+#
+# for (i in 1:dim(mech_res$samples)[1]) {
+#   PH_mat = mech_params_to_mat(mech_params_df[i,])
+#
+#   Rs = R0_calc(PH_mat, "Mechanistic", parameters, provide_params = mech_params_df[i,])
+#   mech_R0_df <- rbind(mech_R0_df,
+#                       tibble(Rs, select(mech_params_df[i,], lambda_L:f)))
+# }
+#
+# test2 <- mech_R0_df %>%
+#   filter(between(lambda_L, range(R0_sensitivity_df$lambda_L)[1], range(R0_sensitivity_df$lambda_L)[2])) %>%
+#   filter(R > 0, R0 > 0) %>%
+#   pivot_longer(cols = -c(R0, R)) %>%
+#   filter(between(R0, range(test$R0)[1], range(test$R0)[2]))
 
-for (i in 1:dim(mech_res$samples)[1]) {
-  PH_mat = mech_params_to_mat(mech_params_df[i,])
-  
-  Rs = R0_calc(PH_mat, "Mechanistic", epi_parms)
-  mech_R0_df <- rbind(mech_R0_df,
-                      tibble(Rs, select(mech_params_df[i,], lambda_L:f)))
-}
+base_Rs = R0_calc(mech_params_to_mat(param_set), "Mechanistic", parameters, provide_params = param_set)
 
-test2 <- mech_R0_df %>% 
-  filter(between(lambda_L, range(R0_sensitivity_df$lambda_L)[1], range(R0_sensitivity_df$lambda_L)[2])) %>% 
-  filter(R > 0, R0 > 0) %>% 
-  pivot_longer(cols = -c(R0, R)) %>% 
-  filter(between(R0, range(test$R0)[1], range(test$R0)[2]))
-
-base_Rs = R0_calc(mech_params_to_mat(param_set), "Mechanistic", epi_parms)
-
-base_points = cbind(base_Rs, param_set) %>% 
+base_points = cbind(base_Rs, param_set) %>%
   pivot_longer(cols = -c(R0, R))
 
-R0_mono_plot <- test %>% 
+R0_mono_plot <- test %>%
   ggplot(aes(x = value, y = R0)) +
   geom_line(lwd = 1) +
   # geom_point(data = test2, aes(color = "mech"), alpha = 0.3) +
   geom_point(data = base_points, aes(color = "actual"), size = 3) +
   scale_color_manual("Type",
-                     breaks = c("actual"="green", "mech"="blue"), 
-                     values = c("actual"="green", "mech"="blue"), 
+                     breaks = c("actual"="green", "mech"="blue"),
+                     values = c("actual"="green", "mech"="blue"),
                      labels = c("actual", "mech")) +
   facet_wrap(~name, scales = "free") +
   ggtitle("Variation of R0 with respect to biting rate parameters") +
   theme_minimal_grid()
+R0_mono_plot
 
-Rs_mono_plot <- test %>% 
+Rs_mono_plot <- test %>%
   ggplot(aes(x = value, y = R)) +
   geom_line(lwd = 1) +
   # geom_point(data = test2, color = "blue", alpha = 0.3) +
   facet_wrap(~name, scales = "free") +
   theme_minimal_grid()
+Rs_mono_plot
+```
+
+```{r base-R0-PRCC, message=FALSE, warning=FALSE}
+# Posterior R0 PRCC distribution calculations
+sens_res = 10000
+sens_range = 0.75
+num_params = dim(param_table)[1] + 1
+
+R0_PRCC_df = tibble(rowname = as.character(), 
+                    R0 = as.double(), R = as.double())
+
+# Set up parameter set variation
+param_set = param_table %>% select(name, value) %>% pivot_wider() %>% 
+  mutate(dummy = runif(1))
+
+LHS_mat = randomLHS(sens_res, num_params)
+transformed_LHS_mat <- matrix(nrow = nrow(LHS_mat), ncol = ncol(LHS_mat))
+
+for (j in 1:num_params) {
+  
+  if (colnames(param_set[j]) %in% c("f", "p_L", "p_P", "p_G")) {
+    max_val = min(1,  (1 + sens_range) * param_set[j][[1]])
+  }
+  
+  transformed_LHS_mat[,j] = qunif(LHS_mat[,j], 
+                                  min = (1 - sens_range) * param_set[j][[1]], 
+                                  max = max_val)
+}
+
+sens_params = as_tibble(transformed_LHS_mat)
+names(sens_params) = colnames(param_set[1:(num_params)])
+sens_params <- filter(sens_params, f < 1, p_P <1, p_G < 1, p_L < 1)
+
+R0_sensitivity_df = data.frame(sens_params[0,],
+                               R0 = as.double(), R = as.double())
+
+for (k in 1:dim(sens_params)[1]) {
+  PH_mat = mech_params_to_mat(sens_params[k,])
+  
+  Rs = R0_calc(PH_mat, "Mechanistic", parameters, provide_params = sens_params[k,])
+  R0_sensitivity_df <- add_row(R0_sensitivity_df, sens_params[k,], Rs)
+  
+}
+
+# Calculate PRCCs
+R0_PRCC_df <- R0_sensitivity_df %>% 
+  filter(R0 > 0, R > 0) %>% 
+  cor(method = "spearman") %>% 
+  as.data.frame() %>% 
+  select(R0, R) %>% 
+  rownames_to_column() %>% 
+  rename(name = rowname, PRCC_R0 = R0, PRCC_R = R) %>% 
+  filter(!(name %in% c("R0", "R")))
+
+ggplot(R0_PRCC_df) +
+  geom_col(aes(x = name, y = PRCC_R0)) +
+  ggtitle("Baseline PRCC results") +
+  scale_x_discrete("") + 
+  scale_y_continuous("R0 PRCC values", limits = c(-1,1)) +
+  theme_minimal_hgrid()
 
 ```
 
-
-```{r R0-PRCCs-EIPratio}
+```{r R0-PRCCs-func, message=FALSE, warning=FALSE}
 
 # Plot R0 - biting rate parameter PRCCs as the ratio of EIP and lifespan is varied
 
@@ -932,118 +826,150 @@ Rs_mono_plot <- test %>%
 # - one set of bars for fixed lifespan and varied EIP
 # - one set of bars for fixed EIP and varied lifespan
 
+R0_PRCC_func <- function(vary_parameters) {
+  # my_multisession = tweak(multisession, workers = (floor(availableCores()/2)-2))
+  # plan(list(my_multisession,my_multisession))
 
+  plan(multisession, workers = availableCores())
+  indices = 1:dim(vary_parameters)[1]
+  
+  # Set up progress bar
+  handlers(global = TRUE)
+  handlers("cli")
+  p = progressor(along = 1:dim(sens_params)[1])
+  
+  sens_res = 100000
+  sens_range = 1
+  num_params = dim(param_table)[1] + 1
+  param_set = param_table %>% select(name, value) %>% pivot_wider() %>%
+    mutate(dummy = runif(1))
+  LHS_mat = randomLHS(sens_res, num_params)
+  transformed_LHS_mat <- matrix(nrow = nrow(LHS_mat), ncol = ncol(LHS_mat))
+  # Set up parameter set variation
+  
+  for (j in 1:num_params) {
+    
+    if (colnames(param_set[j]) %in% c("f", "p_L", "p_P", "p_G")) {
+      max_val = min(1,  (1 + sens_range) * param_set[j][[1]])
+    }
+    
+    transformed_LHS_mat[,j] = qunif(LHS_mat[,j],
+                                    min = (1 - sens_range) * param_set[j][[1]],
+                                    max = max_val)
+  }
+  
+  sens_params = as_tibble(transformed_LHS_mat)
+  names(sens_params) = colnames(param_set[1:(num_params)])
+  
+  R0_sensitivity_df = data.frame(sens_params[0,],
+                                 R0 = as.double(), R = as.double())
+  
+  foreach(
+    i = indices,
+    # .inorder = FALSE,
+    .combine = "rbind") %do% {
+      
+      R0_sensitivity_df = foreach(
+        k = 1:dim(sens_params)[1],
+        .combine = "rbind") %dofuture% {
+          # Iterate progress bar
+          p(sprintf("i=%g", k))
+          PH_mat = mech_params_to_mat(sens_params[k,])
+          Rs = R0_calc(PH_mat, "Mechanistic", vary_parameters[i,], provide_params = sens_params[k,])
+          data.table(sens_params[k,], Rs)
+        }
+      
+      # # Visual check for monotonicity
+      # mono_R0_plot <- R0_sensitivity_df %>%
+      #   filter(R > 1) %>%
+      #   pivot_longer(cols = -c(R0,R)) %>%
+      #   ggplot(aes(x = value, y = log(R0))) +
+      #   geom_point(alpha = 0.1) +
+      #   facet_wrap( ~ name, scales = "free") +
+      #   theme_minimal_grid()
+      
+      temp = R0_sensitivity_df %>%
+        # Remove infeasible parameter sets
+        filter(R > 0) %>%
+        # Replace R0 with 0 when mosquito population is inviable
+        # mutate(R0 = ifelse(R < 1, 0 , R0)) %>%
+        cor(method = "spearman") %>%
+        as.data.frame() %>%
+        select(R0, R) %>%
+        rownames_to_column() %>%
+        rename(name = rowname, PRCC_R0 = R0, PRCC_R = R) %>%
+        filter(!(name %in% c("R0", "R")))
+      temp2 = cbind(temp, vary_parameters[i,])
+    }
+}
+
+R0_PRCC_df = data.table(name = as.character(), PRCC_R0 = as.double(), PRCC_R = as.double())
+
+library(doFuture)
+PRCC_var_test = foreach(i = 1:10,
+                        .combine = "rbind") %do% {
+                          print(i)
+                          test = R0_PRCC_func(parameters)
+                          plan(sequential)
+                          test
+                        }
+
+write_csv(PRCC_var_test, "./data/PRCC_variance_test.csv")
 
 # 
 
 ```
 
+<!-- ```{r R0-mech-PRCCs, message=FALSE, warning=FALSE, include=FALSE} -->
+<!-- # Calculate PRCCs of R0 to mechanistic parameters -->
+<!-- # Posterior R0 PRCC distribution calculations -->
+<!-- library(doFuture) # Faster parallel processing -->
+<!-- R0_PRCC_mech = R0_PRCC_func(mech_params_df) -->
+
+<!-- ``` -->
+
+<!-- ```{r R0-PRCC-mech-dist-plot} -->
+<!-- R0_PRCC_mech %>%  -->
+<!--   select(-iterate) %>%  -->
+<!--   ggplot(aes(x = as.factor(rowname), y = R0)) + -->
+<!--   geom_quasirandom(alpha = 0.66, stroke = 0, color = "lightblue", shape = 16) + -->
+<!--   geom_violin(color = "blue", fill = NA) + -->
+<!--   geom_hline(aes(yintercept = 0), color = "red") + -->
+<!--   scale_x_discrete("Parameter") + -->
+<!--   scale_y_continuous("R0 PRCC values across fitted mechanistic parameters") -->
+<!-- ``` -->
+
+<!-- ```{r RepNum-PRCC-mech-dist-plot} -->
+<!-- R0_PRCC_mech %>%  -->
+<!--   select(-iterate) %>%  -->
+<!--   ggplot(aes(x = as.factor(rowname), y = R)) + -->
+<!--   geom_quasirandom(alpha = 0.66, stroke = 0, color = "lightblue", shape = 16) + -->
+<!--   geom_violin(color = "blue", fill = NA) + -->
+<!--   geom_hline(aes(yintercept = 0), color = "red") + -->
+<!--   scale_x_discrete("Parameter") + -->
+<!--   scale_y_continuous("Mosq. pop. RepNum PRCC values across fitted mechanistic parameters") -->
+<!-- ``` -->
 
 The global sensitivity of $R_0$ to the biting rate parameters does not change when the extrinsic incubation period is increased.
-```{r R0-PRCC-vary-EIP}
+```{r R0-PRCC-vary-EIP, message=FALSE, warning=FALSE}
 parameters = tibble(
   eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms, lambdaQ = lambdaQ
 )
 vary_parameters <- select(parameters, -eta) %>%
-  # cross_join(tibble(mu = 1/(1440 * seq(1, 70, length.out = 100))))
-  cross_join(tibble(eta = 1/(1440 * seq(1, 42, length.out = 21))))
+  cross_join(tibble(eta = 1/(1440 * seq(1, 7, length.out = 42))))
 
-
-
-R0_PRCC_df = tibble(name = as.character(), eta = as.double(),
-                    PRCC_R0 = as.double(), PRCC_R = as.double())
-
-library(doParallel)
-library(progress)
-# Start new cluster for doParallel
-cluster_size <- parallel::detectCores() - 1
-my.cluster <- snow::makeCluster(cluster_size, type = "SOCK")
-# Register cluster for doParallel
-doSNOW::registerDoSNOW(cl = my.cluster)
-
-# Set up progress bar
-pb <- progress_bar$new(
-  format = ":spin progress = :percent [:bar] elapsed: :elapsed | eta: :eta",
-  total = dim(vary_parameters)[1],
-  width = 100
-)
-progress <- function(n) {
-  pb$tick()
-}
-opts <- list(progress = progress)
-
-
-R0_PRCC_df <- foreach(
-  i = 1:dim(vary_parameters)[1],
-  .inorder = FALSE,
-  .combine = "rbind",
-  .packages = c("tidyverse", "foreach", "lhs", "matlib"),
-  .options.snow = opts) %dopar% {
-    sens_res = 10000
-    sens_range = 1
-    num_params = dim(param_table)[1] + 1
-    
-    # Set up parameter set variation
-    param_set = param_table %>% select(name, value) %>% pivot_wider() %>%
-      mutate(dummy = runif(1))
-    
-    LHS_mat = randomLHS(sens_res, num_params)
-    transformed_LHS_mat <- matrix(nrow = nrow(LHS_mat), ncol = ncol(LHS_mat))
-    
-    for (j in 1:num_params) {
-      
-      if (colnames(param_set[j]) %in% c("f", "p_L", "p_P", "p_G")) {
-        max_val = min(1,  (1 + sens_range) * param_set[j][[1]])
-      }
-      
-      transformed_LHS_mat[,j] = qunif(LHS_mat[,j],
-                                      min = (1 - sens_range) * param_set[j][[1]],
-                                      max = max_val)
-    }
-    
-    sens_params = as_tibble(transformed_LHS_mat)
-    names(sens_params) = colnames(param_set[1:(num_params)])
-    sens_params <- filter(sens_params, f < 1, p_P < 1, p_G < 1, p_L < 1)
-    
-    R0_sensitivity_df = data.frame(sens_params[0,],
-                                   R0 = as.double(), R = as.double())
-    
-    for (k in 1:dim(sens_params)[1]) {
-      PH_mat = mech_params_to_mat(sens_params[k,])
-      Rs = R0_calc(PH_mat, "Mechanistic", vary_parameters[i,])
-      R0_sensitivity_df <- add_row(R0_sensitivity_df, sens_params[k,], Rs)
-    }
-    
-    # # Visual check for monotonicity
-    # mono_R0_plot <- R0_sensitivity_df %>%
-    #   # filter(R > 1, R0 > 0, R0 < 100) %>% 
-    #   pivot_longer(cols = -c(R0,R)) %>% 
-    #   ggplot(aes(x = value, y = log(R0))) +
-    #   geom_point(alpha = 0.1) +
-    #   facet_wrap( ~ name, scales = "free") +
-    #   theme_minimal_grid()
-    
-    temp <- R0_sensitivity_df %>%
-      # Remove infeasible parameter sets
-      # filter(R > 0) %>%
-      # Replace R0 with 0 when mosquito population is inviable
-      # mutate(R0 = ifelse(R < 1, 0 , R0)) %>%
-      cor(method = "spearman") %>%
-      as.data.frame() %>%
-      select(R0, R) %>%
-      rownames_to_column() %>%
-      rename(name = rowname, PRCC_R0 = R0, PRCC_R = R) %>%
-      filter(!(name %in% c("R0", "R"))) %>%
-      mutate(eta = vary_parameters[i,]$eta)
-    
-    temp
-  }
+gc()
+library(doFuture) # Faster parallel processing
+R0_PRCC_df = R0_PRCC_func(vary_parameters) %>% 
+  select(name, PRCC_R0, PRCC_R, eta)
+plan(sequential)
+gc()
 
 R0_PRCC_df %>%
   mutate(EIP = 1 / (1440 * eta)) %>%
   ggplot() +
-  geom_point(aes(x = EIP, y = PRCC_R), alpha = 0.3) +
-  geom_line(aes(x = EIP, y = PRCC_R)) +
+  geom_point(aes(x = EIP, y = PRCC_R0), alpha = 0.3) +
+  geom_line(aes(x = EIP, y = PRCC_R0)) +
   geom_hline(aes(yintercept = 0), color = "red") +
   facet_grid(cols = vars(name), scales = "free") +
   scale_x_continuous("Extrinsic incubation period (days)", expand = c(0,0)) +
@@ -1054,101 +980,17 @@ R0_PRCC_df %>%
 ```
 Similarly, changing the lifespan of the mosquito also does not impact the global sensitivity of $R_0$ to the biting rate parameters.
 ```{r R0-PRCC-vary-mu, message=FALSE, warning=FALSE}
-parameters = tibble(
-  eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms, lambdaQ = lambdaQ
-)
+parameters = tibble(eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, 
+                    muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, 
+                    varPhi = varPhi, epi_parms, lambdaQ = lambdaQ)
+
+gc()
 vary_parameters <- select(parameters, -mu) %>%
   cross_join(tibble(mu = 1/(1440 * seq(6, 60, length.out = 60-6+1))))
-
-
-
-R0_PRCC_df = tibble(name = as.character(), eta = as.double(),
-                    PRCC_R0 = as.double(), PRCC_R = as.double())
-
-library(doParallel)
-library(progress)
-# Start new cluster for doParallel
-cluster_size <- parallel::detectCores() - 1
-my.cluster <- snow::makeCluster(cluster_size, type = "SOCK")
-# Register cluster for doParallel
-doSNOW::registerDoSNOW(cl = my.cluster)
-
-# Set up progress bar
-pb <- progress_bar$new(
-  format = ":spin progress = :percent [:bar] elapsed: :elapsed | eta: :eta",
-  total = dim(vary_parameters)[1],
-  width = 100
-)
-progress <- function(n) {
-  pb$tick()
-}
-opts <- list(progress = progress)
-sens_res = 10000
-num_params = dim(param_table)[1] + 1
-sens_range = 1
-
-
-R0_PRCC_df <- foreach(
-  i = 1:dim(vary_parameters)[1],
-  .inorder = FALSE,
-  .combine = "rbind",
-  .packages = c("tidyverse", "foreach", "lhs", "matlib"),
-  .options.snow = opts) %dopar% {
-    LHS_mat = randomLHS(sens_res, num_params)
-    transformed_LHS_mat <- matrix(nrow = nrow(LHS_mat), ncol = ncol(LHS_mat))
-    # Set up parameter set variation
-    param_set = param_table %>% select(name, value) %>% pivot_wider() %>%
-      mutate(dummy = runif(1))
-    
-    for (j in 1:num_params) {
-      if (colnames(param_set[j]) %in% c("f", "p_L", "p_P", "p_G")) {
-        max_val = min(1,  (1 + sens_range) * param_set[j][[1]])
-      }
-      transformed_LHS_mat[,j] = qunif(LHS_mat[,j],
-                                      min = (1 - sens_range) * param_set[j][[1]],
-                                      max = max_val)
-    }
-    
-    
-    sens_params = as_tibble(transformed_LHS_mat)
-    names(sens_params) = colnames(param_set[1:(num_params)])
-    sens_params <- filter(sens_params, f < 1, p_P < 1, p_G < 1, p_L < 1)
-    
-    
-    R0_sensitivity_df = data.frame(sens_params[0,],
-                                   R0 = as.double(), R = as.double())
-    for (k in 1:dim(sens_params)[1]) {
-      PH_mat = mech_params_to_mat(sens_params[k,])
-      Rs = R0_calc(PH_mat, "Mechanistic", vary_parameters[i,])
-      R0_sensitivity_df <- add_row(R0_sensitivity_df, sens_params[k,], Rs)
-      # tibble(sens_params[k,], Rs)
-    }
-    
-    # # Visual check for monotonicity
-    # mono_R0_plot <- R0_sensitivity_df %>%
-    #   filter(R > 1) %>%
-    #   mutate_each(funs(dense_rank(-.))) %>% # comment this out to get un-ranked monotonicity plot
-    #   pivot_longer(cols = -c(R0,R)) %>%
-    #   ggplot(aes(x = value, y = log(R0))) +
-    #   geom_point(alpha = 0.1) +
-    #   facet_wrap( ~ name, scales = "free") +
-    #   theme_minimal_grid()
-    
-    temp <- R0_sensitivity_df %>%
-      # Remove infeasible parameter sets
-      filter(R > 0) %>%
-      # Replace R0 with 0 when mosquito population is inviable
-      mutate(R0 = ifelse(R < 1, 0 , R0)) %>%
-      cor(method = "spearman") %>%
-      as.data.frame() %>%
-      select(R0, R) %>%
-      rownames_to_column() %>%
-      rename(name = rowname, PRCC_R0 = R0, PRCC_R = R) %>%
-      filter(!(name %in% c("R0", "R"))) %>%
-      mutate(mu = vary_parameters[i,]$mu)
-    
-    temp
-  }
+library(doFuture) # Faster parallel processing
+R0_PRCC_df = R0_PRCC_func(vary_parameters)
+plan(sequential)
+gc()
 
 R0_PRCC_df %>%
   mutate(lf = 1/(1440 * mu)) %>%

@@ -268,7 +268,7 @@ get_beta_func <- function(PH_mat, PH_type, epi_parms) {
 # Quantity of interest calculators ----
 R0_calc <- function(PH_mat, PH_type, parameters, provide_params = NULL) {
   with(as.list(parameters), {
-    
+    lambdaQ = 1 / ((1/3) * 1440) # questing takes on average one third of a day
     if (PH_type == "Mechanistic") {
       
       if (!is.null(provide_params)) {
