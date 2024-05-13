@@ -266,9 +266,10 @@ get_beta_func <- function(PH_mat, PH_type, epi_parms) {
 
 
 # Quantity of interest calculators ----
-R0_calc <- function(PH_mat, PH_type, parameters, provide_params = NULL) {
+R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_params = NULL) {
   with(as.list(parameters), {
-    lambdaQ = 1 / ((1/3) * 1440) # questing takes on average one third of a day
+    lambdaQ = parameters$lambdaQ
+    # lambdaQ = 1 / ((1/3) * 1440) # questing takes on average one third of a day
     if (PH_type == "Mechanistic") {
       
       if (!is.null(provide_params)) {
@@ -279,6 +280,10 @@ R0_calc <- function(PH_mat, PH_type, parameters, provide_params = NULL) {
         lambdaG = provide_params$lambda_G
         pG = provide_params$p_G
         f = provide_params$f
+        
+        PH_mat = mech_params_to_mat(
+          list(lambda_L = lambdaL, p_L = pL, lambda_P = lambdaP, p_P = pP, 
+               lambda_G = lambdaG, p_G = pG, f = f))
       } else {
       
       PH_params = mech_mat_to_params(PH_mat)
@@ -291,7 +296,7 @@ R0_calc <- function(PH_mat, PH_type, parameters, provide_params = NULL) {
       pG = PH_params$p_G
       f = PH_params$f
       }
-      order = dim(PH_mat)[1]
+      order = 3#dim(PH_mat)[1]
       A = matrix(0, ncol = order+1, nrow = order+1)
       # !!! do this step separately later
       A[2:(order+1), 2:(order+1)] = PH_mat
@@ -322,7 +327,6 @@ R0_calc <- function(PH_mat, PH_type, parameters, provide_params = NULL) {
       R = tau * (varPhi / (gamma + mu)) * (rhoL / ( rhoL + muL)) * (1 - tau * gamma / (gamma + mu))^-1
       # Stable distribution of feeding classes
       B_star = KL * ((R-1)/R) * (rhoL + muL) * (1/varPhi) * (R + varPhi * (rhoL/(rhoL + muL))) * inv(mu * diag(order + 1) - t(A)) %*% alpha
-      # B_star = 1 * KH * B_star / (sum(B_star))
       
       Q = inv(M3) %*% M2 %*% inv(M1)
       

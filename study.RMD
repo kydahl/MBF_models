@@ -39,7 +39,8 @@ library(ggbeeswarm) # make "beeswarm" distribution figures
 library(data.table)
 library(progressr) # Progress bars
 library(doFuture) # Faster parallel processing
-
+library(philentropy)
+library(cols4all) # Colorblind-friendly palettes for ggplot
 
 # Plot settings ----
 
@@ -160,7 +161,7 @@ set_alpha = c(1, 0, 0) # initial probability vector
 ph = PH(set_A, set_alpha)
 
 # Get 100 random samples from the distribution
-direct_samps = rphtype(1000, set_alpha, set_A)
+direct_samps = rphtype(10000, set_alpha, set_A)
 
 # write_csv(data.frame(direct_samps), "data/direct_samples.csv")
 
@@ -168,7 +169,7 @@ direct_samps = rphtype(1000, set_alpha, set_A)
 # simulated_data = read_csv("data/direct_samples.csv") 
 # simulated_data = read_csv("data/noQ_data_continuous.csv")
 # total_sample_size = length(simulated_data$Out_time)
-sample_size = 1000
+sample_size = 10000
 
 test_data = direct_samps[1:sample_size]
 ```
@@ -216,7 +217,7 @@ if (redo_fitting) {
   out_mats = lapply(rep(orders, 1000), function(x) matrix(NA, x, x))
   AIC_table = tibble(order = as.integer(), logLik = as.double(), AIC = as.integer())
   
-  num_samples = 1000
+  num_samples = 10000
   
   emp_mats_df <- tibble(iterate = as.integer(), order = as.integer(), 
                         row_index = as.integer(), col_index = as.integer(), 
@@ -344,7 +345,7 @@ First, we look at how the waiting time statistics compare.
 
 if (redo_fitting) {
   PH_order = 3
-  num_samples = 2000
+  num_samples = 12000
   
   # Define the structure of the phase-type generator
   mech_mat = matrix(c(
@@ -426,7 +427,7 @@ if (redo_fitting) {
   # Return to sequential processing
   mech_params_df = temp_func(1:dim(mech_res$samples)[1]) %>% 
     filter(lambda_L < 60)
-  mech_params_df = mech_params_df[1:min(1000, dim(mech_params_df)[1]),]
+  mech_params_df = mech_params_df[1:min(10000, dim(mech_params_df)[1]),]
   
   plan(sequential)
   
@@ -454,7 +455,7 @@ KL_func <- function(x,y) {
   
 }
 
-# Get 1000 random samples from the distribution
+# Get random samples from the distribution
 direct_times = rphtype(compare_res, set_alpha, set_A)
 
 # # Empirical
@@ -668,7 +669,7 @@ param_set = param_table %>% select(name, value) %>% pivot_wider()
 sens_range = 1
 num_vary = 100
 num_params = 7
-full_param_set = data.frame(matrix(rep(0,num_vary, num_params), num_vary, num_params))
+full_param_set = data.frame(matrix(rep(0, num_vary, num_params), num_vary, num_params))
 
 for (j in 1:num_params) {
   
@@ -757,67 +758,6 @@ Rs_mono_plot <- test %>%
 Rs_mono_plot
 ```
 
-```{r base-R0-PRCC, message=FALSE, warning=FALSE}
-# Posterior R0 PRCC distribution calculations
-sens_res = 10000
-sens_range = 0.75
-num_params = dim(param_table)[1] + 1
-
-R0_PRCC_df = tibble(rowname = as.character(), 
-                    R0 = as.double(), R = as.double())
-
-# Set up parameter set variation
-param_set = param_table %>% select(name, value) %>% pivot_wider() %>% 
-  mutate(dummy = runif(1))
-
-LHS_mat = randomLHS(sens_res, num_params)
-transformed_LHS_mat <- matrix(nrow = nrow(LHS_mat), ncol = ncol(LHS_mat))
-
-for (j in 1:num_params) {
-  
-  if (colnames(param_set[j]) %in% c("f", "p_L", "p_P", "p_G")) {
-    max_val = min(1,  (1 + sens_range) * param_set[j][[1]])
-  }
-  
-  transformed_LHS_mat[,j] = qunif(LHS_mat[,j], 
-                                  min = (1 - sens_range) * param_set[j][[1]], 
-                                  max = max_val)
-}
-
-sens_params = as_tibble(transformed_LHS_mat)
-names(sens_params) = colnames(param_set[1:(num_params)])
-sens_params <- filter(sens_params, f < 1, p_P <1, p_G < 1, p_L < 1)
-
-R0_sensitivity_df = data.frame(sens_params[0,],
-                               R0 = as.double(), R = as.double())
-
-for (k in 1:dim(sens_params)[1]) {
-  PH_mat = mech_params_to_mat(sens_params[k,])
-  
-  Rs = R0_calc(PH_mat, "Mechanistic", parameters, provide_params = sens_params[k,])
-  R0_sensitivity_df <- add_row(R0_sensitivity_df, sens_params[k,], Rs)
-  
-}
-
-# Calculate PRCCs
-R0_PRCC_df <- R0_sensitivity_df %>% 
-  filter(R0 > 0, R > 0) %>% 
-  cor(method = "spearman") %>% 
-  as.data.frame() %>% 
-  select(R0, R) %>% 
-  rownames_to_column() %>% 
-  rename(name = rowname, PRCC_R0 = R0, PRCC_R = R) %>% 
-  filter(!(name %in% c("R0", "R")))
-
-ggplot(R0_PRCC_df) +
-  geom_col(aes(x = name, y = PRCC_R0)) +
-  ggtitle("Baseline PRCC results") +
-  scale_x_discrete("") + 
-  scale_y_continuous("R0 PRCC values", limits = c(-1,1)) +
-  theme_minimal_hgrid()
-
-```
-
 ```{r R0-PRCCs-func, message=FALSE, warning=FALSE}
 
 # Plot R0 - biting rate parameter PRCCs as the ratio of EIP and lifespan is varied
@@ -826,19 +766,8 @@ ggplot(R0_PRCC_df) +
 # - one set of bars for fixed lifespan and varied EIP
 # - one set of bars for fixed EIP and varied lifespan
 
-R0_PRCC_func <- function(vary_parameters) {
-  # my_multisession = tweak(multisession, workers = (floor(availableCores()/2)-2))
-  # plan(list(my_multisession,my_multisession))
-
-  plan(multisession, workers = availableCores())
-  indices = 1:dim(vary_parameters)[1]
-  
-  # Set up progress bar
-  handlers(global = TRUE)
-  handlers("cli")
-  p = progressor(along = 1:dim(sens_params)[1])
-  
-  sens_res = 100000
+R0_PRCC_func <- function(vary_parameters, progress_bool = FALSE) {
+  sens_res = 10000
   sens_range = 1
   num_params = dim(param_table)[1] + 1
   param_set = param_table %>% select(name, value) %>% pivot_wider() %>%
@@ -864,29 +793,37 @@ R0_PRCC_func <- function(vary_parameters) {
   R0_sensitivity_df = data.frame(sens_params[0,],
                                  R0 = as.double(), R = as.double())
   
-  foreach(
-    i = indices,
+  my_multisession = tweak(multisession, workers = availableCores())
+  plan(list(my_multisession, sequential))
+  plan(multisession, workers = availableCores())
+  parameter_indices = 1:dim(vary_parameters)[1]
+  LHS_indices = 1:dim(sens_params)[1]
+  
+  if (progress_bool == TRUE) {
+    # Set up progress bar
+    progressr::handlers(global = TRUE)
+    progressr::handlers("cli")
+    progress_length = length(parameter_indices)
+    progress_chunk = 1#if_else(progress_length < 10, 1, 10)
+    p = progressor(along = 1:(progress_length / progress_chunk))
+  }
+  
+  out = foreach(
+    i = parameter_indices,
     # .inorder = FALSE,
-    .combine = "rbind") %do% {
+    .combine = "rbind") %dofuture% {
+      # Iterate progress bar
+      if (progress_bool == TRUE) {
+        if (i %% progress_chunk == 0) p(sprintf("i=%g", parameter_indices[i]))
+      }
       
       R0_sensitivity_df = foreach(
-        k = 1:dim(sens_params)[1],
+        k = LHS_indices,
         .combine = "rbind") %dofuture% {
-          # Iterate progress bar
-          p(sprintf("i=%g", k))
-          PH_mat = mech_params_to_mat(sens_params[k,])
-          Rs = R0_calc(PH_mat, "Mechanistic", vary_parameters[i,], provide_params = sens_params[k,])
+          # PH_mat = mech_params_to_mat(sens_params[k,])
+          Rs = R0_calc(PH_mat = NULL, "Mechanistic", vary_parameters[i,], provide_params = sens_params[k,])
           data.table(sens_params[k,], Rs)
         }
-      
-      # # Visual check for monotonicity
-      # mono_R0_plot <- R0_sensitivity_df %>%
-      #   filter(R > 1) %>%
-      #   pivot_longer(cols = -c(R0,R)) %>%
-      #   ggplot(aes(x = value, y = log(R0))) +
-      #   geom_point(alpha = 0.1) +
-      #   facet_wrap( ~ name, scales = "free") +
-      #   theme_minimal_grid()
       
       temp = R0_sensitivity_df %>%
         # Remove infeasible parameter sets
@@ -901,22 +838,146 @@ R0_PRCC_func <- function(vary_parameters) {
         filter(!(name %in% c("R0", "R")))
       temp2 = cbind(temp, vary_parameters[i,])
     }
+  plan(sequential)
+  return(out)
 }
 
 R0_PRCC_df = data.table(name = as.character(), PRCC_R0 = as.double(), PRCC_R = as.double())
+```
 
-library(doFuture)
-PRCC_var_test = foreach(i = 1:10,
-                        .combine = "rbind") %do% {
-                          print(i)
-                          test = R0_PRCC_func(parameters)
-                          plan(sequential)
-                          test
-                        }
+```{r PRCC-calculations, message=FALSE, warning=FALSE}
 
-write_csv(PRCC_var_test, "./data/PRCC_variance_test.csv")
+PRCC_calc = TRUE
 
-# 
+if (PRCC_calc) {
+  
+  # Test whether R0 is monotonic for each biting rate parameter over the LHS samples
+  sens_res = 10000
+  sens_range = 1
+  num_params = dim(param_table)[1] + 1
+  param_set = param_table %>% select(name, value) %>% pivot_wider() %>%
+    mutate(dummy = runif(1))
+  LHS_mat = randomLHS(sens_res, num_params)
+  transformed_LHS_mat <- matrix(nrow = nrow(LHS_mat), ncol = ncol(LHS_mat))
+  # Set up parameter set variation
+  for (j in 1:num_params) {
+    if (colnames(param_set[j]) %in% c("f", "p_L", "p_P", "p_G")) {
+      max_val = min(1,  (1 + sens_range) * param_set[j][[1]])
+    }
+    transformed_LHS_mat[,j] = qunif(LHS_mat[,j],
+                                    min = (1 - sens_range) * param_set[j][[1]],
+                                    max = max_val)
+  }
+  
+  sens_params = as_tibble(transformed_LHS_mat)
+  names(sens_params) = colnames(param_set[1:(num_params)])
+  
+  R0_sensitivity_df = data.frame(sens_params[0,],
+                                 R0 = as.double(), R = as.double())
+  parameter_indices = 1:dim(parameters)[1]
+  LHS_indices = 1:dim(sens_params)[1]
+  
+  mono_R0_df = foreach(
+    k = LHS_indices,
+    .combine = "rbind") %do% {
+      # PH_mat = mech_params_to_mat(sens_params[k,])
+      Rs = R0_calc(PH_mat = NULL, "Mechanistic", parameters, provide_params = sens_params[k,])
+      data.table(sens_params[k,], Rs)
+    }
+  
+  write_rds(mono_R0_df, "./data/mono_R0_vals.rds")
+  
+  # Test whether there is detectable variation in PRCC values
+  # If there is, then need to increase the resolution of the Latin Hypercube sampling
+  print("Calculating variation in PRCC values")
+  rep_params = parameters
+  for (i in 1:100) {rep_params = rbind(rep_params, parameters)}
+  
+  PRCC_var_test = R0_PRCC_func(rep_params, progress_bool = TRUE) %>% 
+    mutate(iterate = row_number())
+  
+  write_rds(PRCC_var_test, "./data/PRCC_variance_test.rds")
+  
+  # Calculate PRCCs as EIP is varied
+  print("Calculating PRCCs as EIP is varied")
+  parameters = tibble(
+    eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms, lambdaQ = lambdaQ
+  )
+  vary_parameters <- select(parameters, -eta) %>%
+    cross_join(tibble(eta = 1/(1440 * seq(1, 28, length.out = 28))))
+  
+  
+  R0_PRCC_df_EIP = R0_PRCC_func(vary_parameters, progress_bool = TRUE) %>% 
+    select(name, PRCC_R0, PRCC_R, eta)
+  gc(verbose = FALSE)
+  
+  write_rds(R0_PRCC_df_EIP, "./data/vary_EIP_PRCC_vals.rds")
+  
+  # Calculate PRCCs as lifespan is varied
+  print("Calculating PRCCs as lifespan is varied")
+  parameters = tibble(eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, 
+                      muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, 
+                      varPhi = varPhi, epi_parms, lambdaQ = lambdaQ)
+  
+  vary_parameters <- select(parameters, -mu) %>%
+    cross_join(tibble(mu = 1/(1440 * seq(1, 60, length.out = 2 * 60))))
+  R0_PRCC_df_mu = R0_PRCC_func(vary_parameters, progress_bool = TRUE)
+  gc(verbose = FALSE)
+  
+  write_rds(R0_PRCC_df_mu, "./data/vary_lf_PRCC_vals.rds")
+  
+  # Calculate PRCCs as questing duration is varied
+  print("Calculating PRCCs as questing duration is varied")
+  parameters = tibble(eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, 
+                      muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, 
+                      varPhi = varPhi, epi_parms, lambdaQ = lambdaQ)
+  
+  vary_parameters <- select(parameters, -lambdaQ) %>%
+    cross_join(tibble(lambdaQ = 1/(1440 * seq(1/60, 60, length.out = 2 * 60))))
+  
+  R0_PRCC_df_lambdaQ = R0_PRCC_func(vary_parameters, progress_bool = TRUE)
+  gc(verbose = FALSE)
+  
+  write_rds(R0_PRCC_df_lambdaQ, "./data/vary_lambdaQ_PRCC_vals.rds")
+}
+
+```
+
+```{r R0-mono-check, message=FALSE, warning=FALSE}
+# Visual check for monotonicity
+read_rds("./data/mono_R0_vals.rds") %>%
+  filter(R > 1) %>%
+  pivot_longer(cols = -c(R0,R)) %>%
+  ggplot(aes(x = value, y = log(R0))) +
+  geom_point(alpha = 0.1) +
+  facet_wrap( ~ name, scales = "free") +
+  theme_minimal_grid()
+```
+
+```{r PRCC_var_test, message=FALSE, warning=FALSE}
+# Plot multiple PRCC estimates to assess variability and whether LHS resolution should be increased
+
+read_rds("./data/PRCC_variance_test.rds") %>%
+  select(name, PRCC_R0, iterate) %>%
+  # pivot_wider(names_from = name, values_from = PRCC_R0) %>%
+  ggplot(aes(x = name, y = PRCC_R0)) +
+  geom_violin() +
+  geom_beeswarm(alpha = 0.3) +
+  geom_hline(yintercept = 0) +
+  theme_minimal_grid()
+
+```
+
+```{r base-R0-PRCC, message=FALSE, warning=FALSE}
+# Plot baseline PRCC values
+read_rds("./data/PRCC_variance_test.rds") %>% 
+  filter(iterate == 1) %>% 
+  ggplot() +
+  geom_col(aes(x = name, y = PRCC_R0)) +
+  ggtitle("Baseline PRCC results") +
+  scale_x_discrete("") + 
+  scale_y_continuous("R0 PRCC values") + #, limits = c(-1,1)) +
+  theme_minimal_hgrid(10)
 
 ```
 
@@ -952,60 +1013,64 @@ write_csv(PRCC_var_test, "./data/PRCC_variance_test.csv")
 
 The global sensitivity of $R_0$ to the biting rate parameters does not change when the extrinsic incubation period is increased.
 ```{r R0-PRCC-vary-EIP, message=FALSE, warning=FALSE}
-parameters = tibble(
-  eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms, lambdaQ = lambdaQ
-)
-vary_parameters <- select(parameters, -eta) %>%
-  cross_join(tibble(eta = 1/(1440 * seq(1, 7, length.out = 42))))
 
-gc()
-library(doFuture) # Faster parallel processing
-R0_PRCC_df = R0_PRCC_func(vary_parameters) %>% 
-  select(name, PRCC_R0, PRCC_R, eta)
-plan(sequential)
-gc()
-
-R0_PRCC_df %>%
+read_rds("./data/vary_EIP_PRCC_vals.rds") %>%
   mutate(EIP = 1 / (1440 * eta)) %>%
-  ggplot() +
-  geom_point(aes(x = EIP, y = PRCC_R0), alpha = 0.3) +
-  geom_line(aes(x = EIP, y = PRCC_R0)) +
+  ggplot(aes(x = EIP, y = PRCC_R0, color = name)) +
+  # geom_point(alpha = 0.3) +
+  geom_line(lwd = 1) +
   geom_hline(aes(yintercept = 0), color = "red") +
-  facet_grid(cols = vars(name), scales = "free") +
+  scale_color_manual("Parameter",
+                     values = rev(c(c4a("miscs.okabe", 7),"black")),
+                     breaks = rev(c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
+  )+
   scale_x_continuous("Extrinsic incubation period (days)", expand = c(0,0)) +
-  scale_y_continuous("R0 PRCC value", limits = c(-1,1), expand = c(0,0)) +
+  scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) +
   ggtitle("R0 PRCCs as EIP is varied") +
+  theme(axis.ticks.x = element_text(size = 6)) +
   theme_minimal_grid()
 
 ```
 Similarly, changing the lifespan of the mosquito also does not impact the global sensitivity of $R_0$ to the biting rate parameters.
 ```{r R0-PRCC-vary-mu, message=FALSE, warning=FALSE}
-parameters = tibble(eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, 
-                    muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, 
-                    varPhi = varPhi, epi_parms, lambdaQ = lambdaQ)
 
-gc()
-vary_parameters <- select(parameters, -mu) %>%
-  cross_join(tibble(mu = 1/(1440 * seq(6, 60, length.out = 60-6+1))))
-library(doFuture) # Faster parallel processing
-R0_PRCC_df = R0_PRCC_func(vary_parameters)
-plan(sequential)
-gc()
-
-R0_PRCC_df %>%
+read_rds("./data/vary_lf_PRCC_vals.rds") %>%
   mutate(lf = 1/(1440 * mu)) %>%
-  ggplot() +
-  geom_point(aes(x = lf, y = PRCC_R0), alpha = 0.3) +
-  geom_line(aes(x = lf, y = PRCC_R0)) +
+  ggplot(aes(x = lf, y = PRCC_R0, color = name)) +
+  # geom_point(alpha = 0.3) +
+  geom_line(lwd = 1) +
   geom_hline(aes(yintercept = 0), color = "red") +
-  facet_grid(cols = vars(name), scales = "free") +
+  scale_color_manual("Parameter",
+                     values = rev(c(c4a("miscs.okabe", 7),"black")),
+                     breaks = rev(c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
+  )+
   scale_x_continuous("Mosquito lifespan (days)", expand = c(0,0)) +
-  scale_y_continuous("R0 PRCC value", limits = c(-1,1), expand = c(0,0)) +
+  scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) +
   ggtitle("R0 PRCCs as mosquito lifespan is varied") +
+  theme(axis.ticks.x = element_text(size = 6)) +
   theme_minimal_grid()
 
 ```
+Let's see what happens when we increase the questing time
+```{r R0-PRCC-vary-lambdaQ, message=FALSE, warning=FALSE}
 
+read_rds("./data/vary_lambdaQ_PRCC_vals.rds") %>%
+  mutate(dQ = 1/(1440 * lambdaQ)) %>%
+  ggplot(aes(x = dQ, y = PRCC_R0, color = name)) +
+  # geom_point(alpha = 0.3) +
+  geom_line(lwd = 1) +
+  geom_hline(aes(yintercept = 0), color = "red") +
+  scale_color_manual("Parameter",
+                     values = rev(c(c4a("miscs.okabe", 7),"black")),
+                     breaks = rev(c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
+  )+
+  scale_x_continuous("Mosquito questing duration (days)", expand = c(0,0)) +
+  scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) +
+  ggtitle("R0 PRCCs as mosquito questing duration is varied") +
+  theme(axis.ticks.x = element_text(size = 6)) +
+  theme_minimal_grid()
+
+```
 
 
 
