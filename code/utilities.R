@@ -244,12 +244,17 @@ get_beta_func <- function(PH_mat, PH_type, epi_parms) {
     betaV[4,4] = epi_parms$betaG
     LambdaH[3,3] = -PH_mat[2,2]
     LambdaV[4,4] = -PH_mat[3,3]
-  } else if (PH_type == "Empirical") {
+  } else if (PH_type %in% c("Empirical", "Exponential")) {
     # Empirical
+    if (order == 1) {
+      betaH = 1
+      LambdaH = -PH_mat
+    } else {
+      betaH = diag(order+1)
+      LambdaH = diag(c(0, -rowSums(PH_mat)))
+    }
     # epi_parms = betaH = betaV = 1
-    betaH = diag(order)
     betaV = betaH
-    LambdaH = diag(-rowSums(PH_mat))
     LambdaV = LambdaH
   } else if (PH_type == "Phenomenological") {
     # Phenomenological 
@@ -268,53 +273,94 @@ get_beta_func <- function(PH_mat, PH_type, epi_parms) {
 # Quantity of interest calculators ----
 R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_params = NULL) {
   with(as.list(parameters), {
+    
     lambdaQ = parameters$lambdaQ
     # lambdaQ = 1 / ((1/3) * 1440) # questing takes on average one third of a day
-    if (PH_type == "Mechanistic") {
-      
-      if (!is.null(provide_params)) {
-        lambdaL = provide_params$lambda_L
-        pL = provide_params$p_L
-        lambdaP = provide_params$lambda_P
-        pP = provide_params$p_P
-        lambdaG = provide_params$lambda_G
-        pG = provide_params$p_G
-        f = provide_params$f
-        
-        PH_mat = mech_params_to_mat(
-          list(lambda_L = lambdaL, p_L = pL, lambda_P = lambdaP, p_P = pP, 
-               lambda_G = lambdaG, p_G = pG, f = f))
-      } else {
-      
-      PH_params = mech_mat_to_params(PH_mat)
-      
-      lambdaL = PH_params$lambda_L
-      pL = PH_params$p_L
-      lambdaP = PH_params$lambda_P
-      pP = PH_params$p_P
-      lambdaG = PH_params$lambda_G
-      pG = PH_params$p_G
-      f = PH_params$f
-      }
-      order = 3#dim(PH_mat)[1]
-      A = matrix(0, ncol = order+1, nrow = order+1)
-      # !!! do this step separately later
-      A[2:(order+1), 2:(order+1)] = PH_mat
-      A[1,1] = -lambdaQ; A[1,2] = lambdaQ
-      A[2,1] = -rowSums(PH_mat)[1] # f * (1 - pL) * lambdaL # 
-      A[3,1] = -rowSums(PH_mat)[2] # f * (1 - pP) * lambdaP # -rowSums(PH_mat)[2]
-      A[4,1] = f * (1 - pG) * lambdaG # -rowSums(PH_mat)[3]
-      
-      alpha = matrix(rep(0, order + 1), ncol = 1); alpha[1] = 1
-      one_vec = matrix(rep(1, order + 1), nrow = 1)
-      
-      # Set up transmission matrices: beta and Lambda
+    if (PH_type == "Exponential") {
+      order = 1
+      A = as.double(PH_mat)
+      b = -A
       epi_parms = select(parameters, betaH, betaV, betaP, betaG)
       betas = get_beta_func(PH_mat, PH_type, epi_parms)
       betaH = betas$betaH
       betaV = betas$betaV
-      LambdaH = betas$LambdaH
-      LambdaV = betas$LambdaV
+      LambdaH = as.double(betas$LambdaH)
+      LambdaV = as.double(betas$LambdaV)
+      one_vec = matrix(rep(1, order + 1), nrow = 1)
+      tau = b / (mu +b)
+      
+      # Reproductive number
+      R = tau * (varPhi / (gamma + mu)) * (rhoL / ( rhoL + muL)) * (1 - tau * gamma / (gamma + mu))^-1
+      B_star = KL * ((R-1)/R) * (rhoL + muL) * (1/varPhi) * (R + varPhi * (rhoL/(rhoL + muL))) * (1/(mu+b))
+      
+      
+      R0 = betaH * LambdaH * (eta+mu + b - b * (gamma / (eta + gamma + mu)))^(-1) * (eta + b * (eta/(eta+gamma+mu)) * (gamma / (gamma+mu))) + (mu + b - b * (gamma/(gamma+mu)))^(-1) * betaV * LambdaV * B_star / (KH * (gammaH+muH))
+      
+    } else {
+      if (PH_type == "Mechanistic") {
+        order = 3
+        # If parameters are provided, use those
+        if (!is.null(provide_params)) {
+          lambdaL = provide_params$lambda_L
+          pL = provide_params$p_L
+          lambdaP = provide_params$lambda_P
+          pP = provide_params$p_P
+          lambdaG = provide_params$lambda_G
+          pG = provide_params$p_G
+          f = provide_params$f
+          
+          PH_mat = mech_params_to_mat(
+            list(lambda_L = lambdaL, p_L = pL, lambda_P = lambdaP, p_P = pP, 
+                 lambda_G = lambdaG, p_G = pG, f = f))
+          # Set up transmission matrices: beta and Lambda
+          epi_parms = select(parameters, betaH, betaV, betaP, betaG)
+          betas = get_beta_func(PH_mat, PH_type, epi_parms)
+          betaH = betas$betaH
+          betaV = betas$betaV
+          LambdaH = betas$LambdaH
+          LambdaV = betas$LambdaV
+          
+          A = matrix(0, ncol = order+1, nrow = order+1)
+          # !!! do this step separately later
+          A[2:(order+1), 2:(order+1)] = PH_mat
+          A[1,1] = -lambdaQ; A[1,2] = lambdaQ
+          A[2,1] = -rowSums(PH_mat)[1] # f * (1 - pL) * lambdaL # 
+          A[3,1] = -rowSums(PH_mat)[2] # f * (1 - pP) * lambdaP # -rowSums(PH_mat)[2]
+          A[4,1] = f * (1 - pG) * lambdaG # -rowSums(PH_mat)[3]
+          
+          # Otherwise calculate the parameters from matrix entries
+        } else {
+          PH_params = mech_mat_to_params(PH_mat)
+          
+          lambdaL = PH_params$lambda_L
+          pL = PH_params$p_L
+          lambdaP = PH_params$lambda_P
+          pP = PH_params$p_P
+          lambdaG = PH_params$lambda_G
+          pG = PH_params$p_G
+          f = PH_params$f
+        }
+        
+      } else if (PH_type == "Empirical") {
+        order = dim(PH_mat)[1]
+        # Set up transmission matrices: beta and Lambda
+        epi_parms = select(parameters, betaH, betaV, betaP, betaG)
+        betas = get_beta_func(PH_mat, PH_type, epi_parms)
+        betaH = betas$betaH
+        betaV = betas$betaV
+        LambdaH = betas$LambdaH
+        LambdaV = betas$LambdaV
+        
+        A = matrix(0, ncol = order+1, nrow = order+1)
+        A[2:(order+1), 2:(order+1)] = PH_mat
+        A[1,1] = -lambdaQ; A[1,2] = lambdaQ
+        A[2,1] = -rowSums(PH_mat)[1] # f * (1 - pL) * lambdaL # 
+        A[3,1] = -rowSums(PH_mat)[2] # f * (1 - pP) * lambdaP # -rowSums(PH_mat)[2]
+      }
+      
+      alpha = matrix(rep(0, order + 1), ncol = 1); alpha[1] = 1
+      one_vec = matrix(rep(1, order + 1), nrow = 1)
+      
       
       spec_mat = alpha %*% one_vec %*% t(A)
       M1 = (eta + mu) * diag(order + 1) - t(A) + (gamma / (eta + gamma + mu)) * spec_mat
@@ -330,9 +376,10 @@ R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_
       
       Q = inv(M3) %*% M2 %*% inv(M1)
       
-      R0 = as.double(one_vec %*% betaH %*% LambdaH %*% Q %*% betaV %*% LambdaV %*% B_star / ((gammaH + muH) * KH))
+      R0 = as.double(one_vec %*% betaH %*% LambdaH %*% Q %*% betaV %*% LambdaV %*% B_star / ((gammaH + muH) * KH)) 
       
-      return(tibble(R = R, R0 = R0))
     }
+    return(tibble(R = R, R0 = R0))
   })
 }
+

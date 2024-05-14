@@ -91,7 +91,7 @@
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
@@ -101,14 +101,13 @@
 
 \title{Multiple blood-feeding modeling study}
 \author{Kyle J.-M. Dahlin, Michael Robert, Lauren Childs}
-\date{May 08, 2024}
+\date{May 13, 2024}
 
 \begin{document}
 \maketitle
 
-\hypertarget{sensitivity-analysis-of-the-base-model}{%
 \subsection{Sensitivity analysis of the base
-model}\label{sensitivity-analysis-of-the-base-model}}
+model}\label{sensitivity-analysis-of-the-base-model}
 
 We assume the following parameter values for the biting parameters
 
@@ -165,11 +164,9 @@ Symbol & Description & Value \\
 \(\lambda_Q\) & Questing rate & 2.0833e-03 \\
 \end{longtable}
 
-\hypertarget{parameter-estimation}{%
-\section{Parameter estimation}\label{parameter-estimation}}
+\section{Parameter estimation}\label{parameter-estimation}
 
-\hypertarget{simulated-data-set}{%
-\subsection{Simulated data set}\label{simulated-data-set}}
+\subsection{Simulated data set}\label{simulated-data-set}
 
 We simulate a set of measurements of the time it takes for a single
 mosquito seeking a blood meal on a specific host to no longer seek a
@@ -192,8 +189,8 @@ A = \begin{bmatrix}-\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} 
 \] and initial vector \(\alpha = \left(1,0,0\right)\).
 
 This distribution takes the following approximate shape and has a mean
-of 17.0784746 minutes and standard deviation of 14.0151679 minutes. The
-5\% and 95\% quantiles are at 2.1875221 minutes and 43.9577527 minutes,
+of 16.8149793 minutes and standard deviation of 13.2789815 minutes. The
+5\% and 95\% quantiles are at 2.1959238 minutes and 42.73141 minutes,
 respectively.
 
 \includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/plot-simulation-1}
@@ -201,9 +198,8 @@ We will use this simulated data set as a proxy for real data that might
 be collected to study the effects of multiple blood-feeding on
 transmission.
 
-\hypertarget{fitting-phase-type-distributions}{%
 \subsection{Fitting phase-type
-distributions}\label{fitting-phase-type-distributions}}
+distributions}\label{fitting-phase-type-distributions}
 
 We first need to estimate the parameters of the model from the available
 data. Because we are not certain of appropriate way to model the
@@ -227,38 +223,16 @@ the parameter values. This means that we obtain posterior distributions
 for each of the parameters (or equivalently the matrix elements of
 \(A\)).
 
-\hypertarget{empirical-model}{%
-\subsubsection{Empirical model}\label{empirical-model}}
-
-\begin{verbatim}
-## Rows: 35000 Columns: 6
-## -- Column specification --------------------------------------------------------
-## Delimiter: ","
-## dbl (6): iterate, order, row_index, col_index, value, logLik
-## 
-## i Use `spec()` to retrieve the full column specification for this data.
-## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
-\end{verbatim}
+\subsubsection{Empirical model}\label{empirical-model}
 
 We can compare the waiting time distributions derived from these models
 with our simulated data.
 
-\hypertarget{mechanistic-model}{%
-\subsubsection{Mechanistic model}\label{mechanistic-model}}
+\subsubsection{Mechanistic model}\label{mechanistic-model}
 
 Now considering the mechanistic model. We will make direct comparisons
 between this model, the simulated data, and the empirical model. First,
 we look at how the waiting time statistics compare.
-
-\begin{verbatim}
-## Rows: 1000 Columns: 9
-## -- Column specification --------------------------------------------------------
-## Delimiter: ","
-## dbl (9): iterate, lambda_L, p_L, lambda_P, p_P, lambda_G, p_G, f, logLik
-## 
-## i Use `spec()` to retrieve the full column specification for this data.
-## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
-\end{verbatim}
 
 \includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/compare-dists-1}
 
@@ -281,73 +255,34 @@ Scatter plots showing associations among mechanistic parameters
 
 \includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/mech-params-scatter-plot-1}
 
-\hypertarget{blood-feeding-and-transmission}{%
 \subsection{Blood-feeding and
-transmission}\label{blood-feeding-and-transmission}}
+transmission}\label{blood-feeding-and-transmission}
 
 Here we study how the blood-feeding parameters affect transmission via
 the basic reproduction number.
 
-\hypertarget{sensitivity-analysis-with-base-and-fitted-parameters}{%
 \subsection{Sensitivity analysis with base and fitted
-parameters}\label{sensitivity-analysis-with-base-and-fitted-parameters}}
+parameters}\label{sensitivity-analysis-with-base-and-fitted-parameters}
 
 \includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-monotonicity-plots-1}
 \includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-monotonicity-plots-2}
+
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-mono-check-1}
+
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/PRCC_var_test-1}
 
 \includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/base-R0-PRCC-1}
 
 The global sensitivity of \(R_0\) to the biting rate parameters does not
 change when the extrinsic incubation period is increased.
 
-\begin{longtable}[]{@{}lrrrrrr@{}}
-\toprule\noalign{}
-& used & (Mb) & gc trigger & (Mb) & max used & (Mb) \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Ncells & 2757194 & 147.3 & 5739105 & 306.6 & 5739105 & 306.6 \\
-Vcells & 9234007 & 70.5 & 34666160 & 264.5 & 43332700 & 330.7 \\
-\end{longtable}
-
-\begin{longtable}[]{@{}lrrrrrr@{}}
-\toprule\noalign{}
-& used & (Mb) & gc trigger & (Mb) & max used & (Mb) \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Ncells & 2839809 & 151.7 & 5739105 & 306.6 & 5739105 & 306.6 \\
-Vcells & 9416879 & 71.9 & 34666160 & 264.5 & 43332700 & 330.7 \\
-\end{longtable}
-
 \includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-PRCC-vary-EIP-1}
 Similarly, changing the lifespan of the mosquito also does not impact
 the global sensitivity of \(R_0\) to the biting rate parameters.
 
-\begin{longtable}[]{@{}lrrrrrr@{}}
-\toprule\noalign{}
-& used & (Mb) & gc trigger & (Mb) & max used & (Mb) \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Ncells & 2838256 & 151.6 & 5739105 & 306.6 & 5739105 & 306.6 \\
-Vcells & 9413945 & 71.9 & 34666160 & 264.5 & 43332700 & 330.7 \\
-\end{longtable}
-
-\begin{longtable}[]{@{}lrrrrrr@{}}
-\toprule\noalign{}
-& used & (Mb) & gc trigger & (Mb) & max used & (Mb) \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Ncells & 2843885 & 151.9 & 5739105 & 306.6 & 5739105 & 306.6 \\
-Vcells & 9434088 & 72.0 & 34666160 & 264.5 & 43332700 & 330.7 \\
-\end{longtable}
-
 \includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-PRCC-vary-mu-1}
+Let's see what happens when we increase the questing time
+
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-PRCC-vary-lambdaQ-1}
 
 \end{document}
