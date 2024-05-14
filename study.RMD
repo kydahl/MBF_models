@@ -182,7 +182,7 @@ direct_samps = rphtype(10000, set_alpha, set_A)
 # simulated_data = read_csv("data/direct_samples.csv") 
 # simulated_data = read_csv("data/noQ_data_continuous.csv")
 # total_sample_size = length(simulated_data$Out_time)
-sample_size = 10000
+sample_size = 100000
 
 test_data = direct_samps[1:sample_size]
 ```
@@ -522,7 +522,7 @@ if (PRCC_calc) {
                       varPhi = varPhi, epi_parms, lambdaQ = lambdaQ)
   
   vary_parameters <- select(parameters, -lambdaQ) %>%
-    cross_join(tibble(lambdaQ = 1/(1440 * seq(1/60, 10, length.out = 2 * 60))))
+    cross_join(tibble(lambdaQ = 1/(1440 * seq(1/60, 10, length.out = 4 * 60))))
   
   R0_PRCC_df_lambdaQ = R0_PRCC_func(vary_parameters, progress_bool = TRUE)
   gc(verbose = FALSE)
@@ -640,8 +640,7 @@ read_rds("./data/vary_lambdaQ_PRCC_vals.rds") %>%
                      values = rev(c(c4a("miscs.okabe", 7),"black")),
                      breaks = rev(c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
   )+
-  scale_x_continuous("Mosquito questing duration (days)", expand = c(0,0), 
-                     trans = 'log10') +
+  scale_x_continuous("Mosquito questing duration (days)", expand = c(0,0)) +
   scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) +
   ggtitle("R0 PRCCs as mosquito questing duration is varied") +
   theme(axis.ticks.x = element_text(size = 6)) +
@@ -664,7 +663,7 @@ For each model class, we use an expectation-maximization algorithm that uses Mar
 
 ```{r empirical-fitting, message=FALSE, warning=FALSE, echo = FALSE}
 
-redo_fitting = 0
+redo_fitting = FALSE
 
 if (redo_fitting) {
   
