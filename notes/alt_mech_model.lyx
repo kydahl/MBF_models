@@ -158,13 +158,48 @@ f\left(1-p_{L}\right)\lambda_{L} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\ri
 f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
 f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
 \end{bmatrix}\\
+ & =\begin{bmatrix}A_{11} & A_{12} & 0 & 0\\
+A_{21} & A_{22} & A_{23} & 0\\
+A_{31} & A_{32} & A_{33} & A_{34}\\
+A_{41} & A_{42} & 0 & A_{44}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\lambda_{Q} & =-A_{11}\\
+\lambda_{G} & =-A_{44}\\
+\lambda_{P} & =-A_{33}\\
+f & =\frac{A_{31}}{\left(1-p_{p}\right)\lambda_{P}}=\frac{A_{41}}{\left(1-p_{G}\right)\lambda_{G}}\\
+p_{G} & =1-\frac{A_{41}+A_{42}}{\lambda_{G}}\\
+p_{P} & =\frac{A_{34}}{\lambda_{P}}\\
+\lambda_{L} & =\frac{A_{21}}{f}+A_{23}\\
+\\
+\\
+\\
+\\
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+A & =\begin{bmatrix}-\lambda_{Q} & \lambda_{Q} & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
+\end{bmatrix}\\
 \bar{G} & =\begin{bmatrix}0 & \lambda_{Q} & 0 & 0 & 0\\
 f\left(1-p_{L}\right)\lambda_{L} & 0 & p_{L}\lambda_{L} & 0 & 0\\
 f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & 0 & p_{p}\lambda_{P} & 0\\
 f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & 0 & p_{G}\lambda_{G}\\
 0 & 0 & 0 & 0 & 0
 \end{bmatrix}\\
-\bar{G} & =\begin{bmatrix}0 & Q & 0 & 0 & 0\\
+\bar{G} & =\begin{bmatrix}0 & Q1 & 0 & 0 & 0\\
 L1 & 0 & L2 & 0 & 0\\
 P1 & P2 & 0 & P3 & 0\\
 G1 & G2 & 0 & 0 & G3\\
@@ -204,7 +239,7 @@ p_{L}\lambda_{L} & =L2\\
 f\left(1-p_{L}\right)\lambda_{L} & =L1\\
 f\lambda_{L} & =L1+fL2\\
 \lambda_{L} & =\frac{L1+fL2}{f}\\
-p_{L} & =\frac{fL2}{L1+fL2}\\
+p_{L} & =\frac{fL2}{L1+fL2}=\frac{L2}{\lambda_{L}}\\
 \lambda_{Q} & =Q
 \end{align*}
 
@@ -334,6 +369,11 @@ p_{G} & =1-\frac{a_{31}}{\left(1-f\right)\lambda_{G}}
 P1 & 0 & P2 & P3\\
 G1 & 0 & 0 & G2\\
 0 & 0 & 0 & 0
+\end{bmatrix}\\
+\bar{G}^{T} & =\begin{bmatrix}0 & P1 & G1 & 0\\
+L1 & 0 & 0 & 0\\
+0 & P2 & 0 & 0\\
+L2 & P3 & G2 & 0
 \end{bmatrix}
 \end{align*}
 

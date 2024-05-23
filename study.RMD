@@ -50,6 +50,7 @@ library(cols4all) # Colorblind-friendly palettes for ggplot
 # Load required functions ----
 source("code/utilities.R")
 
+eps = .Machine$double.eps
 
 ```
 # Introduction
@@ -76,6 +77,10 @@ We assume the following parameter values for the biting parameters
 ```{r biting-parameters, message=FALSE, warning=FALSE, fig.cap='Table 1: Blood-feeding parameters'}
 
 # Define phase type distribution
+# Questing
+pQ = 1
+lQ = 1 / (8 * 60) # 8 hours = 480 minutes
+
 # Landing
 pL = 0.7
 lL = 0.1 # 10 minutes
@@ -92,9 +97,10 @@ lG = 1 # 1 minutes
 f = 0.66
 
 param_table = tibble(
-  name = c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f"),
-  Symbol = c("$p_L$", "$\\lambda_L$", "$p_P$", "$\\lambda_P$", "$p_G$", "$\\lambda_G$", "$f$"),
-  Description = c("Probability of progressing from landing to probing ",
+  name = c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f"),
+  Symbol = c("$\\lambda_Q$", "$p_L$", "$\\lambda_L$", "$p_P$", "$\\lambda_P$", "$p_G$", "$\\lambda_G$", "$f$"),
+  Description = c("Exit rate from questing stage (per minute)", 
+                  "Probability of progressing from landing to probing ",
                   "Exit rate from landing stage (per minute)", 
                   "Probability of progressing from probing to ingesting",
                   "Exit rate from probing stage (per minute)",
@@ -102,7 +108,7 @@ param_table = tibble(
                   "Exit rate from ingestion stage (per minute)",
                   "Probability of seeking a new vertebrate host given feeding failure"
   ),
-  value = c(pL, lL, pP, lP, pG, lG, f)
+  value = c(lQ,pL, lL, pP, lP, pG, lG, f)
 )
 
 kable(select(param_table, -name) %>% rename(Value = value))
@@ -167,11 +173,20 @@ This simulation does not take into account the time that the mosquito spends que
 
 # subintensity matrix
 set_A = matrix(c(
-  (-1 + (1 - f) * (1- pL)) * lL, pL * lL, 0,
-  (1 - f) * (1 - pP) * lP, -lP, pP * lP,
-  (1 - f) * (1 - pG) * lG, 0, -lG), ncol = 3, byrow = TRUE) 
-set_alpha = c(1, 0, 0) # initial probability vector
+  -lQ,               lQ,                           0,       0,
+  f * (1- pL) * lL,  -lL + (1 - f) * (1- pL) * lL, pL * lL, 0,
+  f * (1 - pP) * lP, (1 - f) * (1 - pP) * lP,      -lP,     pP * lP,
+  f * (1 - pG) * lG, (1 - f) * (1 - pG) * lG,      0,       -lG), ncol = 4, byrow = TRUE) 
+set_alpha = c(1, 0, 0, 0) # initial probability vector
 ph = PH(set_A, set_alpha)
+
+
+# set_A = matrix(c(
+#   (-1 + (1 - f) * (1- pL)) * lL, pL * lL, 0,
+#   (1 - f) * (1 - pP) * lP, -lP, pP * lP,
+#   (1 - f) * (1 - pG) * lG, 0, -lG), ncol = 3, byrow = TRUE) 
+# set_alpha = c(1, 0, 0) # initial probability vector
+# ph = PH(set_A, set_alpha)
 
 # Get 100 random samples from the distribution
 direct_samps = rphtype(10000, set_alpha, set_A)
@@ -184,7 +199,7 @@ direct_samps = rphtype(10000, set_alpha, set_A)
 # total_sample_size = length(simulated_data$Out_time)
 sample_size = 100000
 
-test_data = direct_samps[1:sample_size]
+test_data = direct_samps[1:min(sample_size, length(direct_samps))]
 ```
 
 These parameters lead to a phase-type distributed waiting time for blood-feeding parameterized by the sub-intensity matrix $A$ given by
@@ -233,7 +248,7 @@ eta = 1 / (6 * 1440)
 # !!! this is explicit in the R0 calculation function lambdaQ = 1 / ((1/3) * 1440) # questing takes on average one third of a day
 gamma = 1/(3 * 1440) # rate of return from oviposition to blood-feeding (3 days) - resting - laying - resting
 parameters = tibble(
-  eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms, lambdaQ = lambdaQ
+  eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms
 )
 
 # Set up parameter set variation
@@ -241,16 +256,16 @@ param_set = param_table %>% select(name, value) %>% pivot_wider()
 
 sens_range = 1
 num_vary = 100
-num_params = 7
+num_params = length(param_set)
 full_param_set = data.frame(matrix(rep(0, num_vary, num_params), num_vary, num_params))
 
 for (j in 1:num_params) {
   
   if (colnames(param_set[j]) %in% c("f", "p_L", "p_P", "p_G")) {
     max_val = min(1,  (1 + sens_range))  / param_set[j][[1]]
-  } else {max_val = 1+sens_range}
+  } else {max_val = 1 + sens_range}
   
-  vary_range = seq(max(0, (1 - sens_range)), max_val, length.out = num_vary)
+  vary_range = seq(max(eps, (1 - sens_range)), max_val, length.out = num_vary)
   
   vary_params = vary_range * as.double(select(param_set, colnames(param_set[j])))
   
@@ -260,11 +275,9 @@ for (j in 1:num_params) {
 }
 
 colnames(full_param_set) = colnames(param_set)
-# full_param_set <- mutate(full_param_set, type = "vary") %>%
-#   rbind(mutate(param_set, type = "baseline"))
 
 R0_sensitivity_df <- tibble(R0 = as.double(), R = as.double(),
-                            p_L = as.double(), lambda_L = as.double(), p_P = as.double(),
+                            lambda_Q = as.double(), p_L = as.double(), lambda_L = as.double(), p_P = as.double(),
                             lambda_P = as.double(), p_G = as.double(), f = as.double(),
                             variable_parm = as.character())
 # Calculate R0 across varied baseline parameters
@@ -309,6 +322,7 @@ base_points = cbind(base_Rs, param_set) %>%
   pivot_longer(cols = -c(R0, R))
 
 R0_mono_plot <- test %>%
+  filter(R0 > 0) %>% 
   ggplot(aes(x = value, y = R0)) +
   geom_line(lwd = 1) +
   # geom_point(data = test2, aes(color = "mech"), alpha = 0.3) +
@@ -338,7 +352,7 @@ Table of values
 
 # Plot baseline PRCC values
 read_rds("./data/PRCC_variance_test.rds") %>% 
-  filter(iterate == 1) %>% 
+  filter(iterate == 1) %>%
   ggplot() +
   geom_col(aes(x = name, y = PRCC_R0)) +
   ggtitle("Baseline PRCC results") +
@@ -347,6 +361,7 @@ read_rds("./data/PRCC_variance_test.rds") %>%
   theme_minimal_hgrid(10)
 
 ```
+
 ```{r R0-PRCCs-func, message=FALSE, warning=FALSE}
 
 # Plot R0 - biting rate parameter PRCCs as the ratio of EIP and lifespan is varied
@@ -358,9 +373,9 @@ read_rds("./data/PRCC_variance_test.rds") %>%
 R0_PRCC_func <- function(vary_parameters, progress_bool = FALSE) {
   sens_res = 10000
   sens_range = 1
-  num_params = dim(param_table)[1] + 1
   param_set = param_table %>% select(name, value) %>% pivot_wider() %>%
     mutate(dummy = runif(1))
+  num_params = length(param_set)
   LHS_mat = randomLHS(sens_res, num_params)
   transformed_LHS_mat <- matrix(nrow = nrow(LHS_mat), ncol = ncol(LHS_mat))
   # Set up parameter set variation
@@ -436,16 +451,16 @@ R0_PRCC_df = data.table(name = as.character(), PRCC_R0 = as.double(), PRCC_R = a
 
 ```{r PRCC-calculations, message=FALSE, warning=FALSE}
 
-PRCC_calc = FALSE
+PRCC_calc = TRUE
 
 if (PRCC_calc) {
   
   # Test whether R0 is monotonic for each biting rate parameter over the LHS samples
   sens_res = 10000
   sens_range = 1
-  num_params = dim(param_table)[1] + 1
   param_set = param_table %>% select(name, value) %>% pivot_wider() %>%
     mutate(dummy = runif(1))
+  num_params = length(param_set)
   LHS_mat = randomLHS(sens_res, num_params)
   transformed_LHS_mat <- matrix(nrow = nrow(LHS_mat), ncol = ncol(LHS_mat))
   # Set up parameter set variation
@@ -465,7 +480,7 @@ if (PRCC_calc) {
                                  R0 = as.double(), R = as.double())
   parameter_indices = 1:dim(parameters)[1]
   LHS_indices = 1:dim(sens_params)[1]
-  
+T
   mono_R0_df = foreach(
     k = LHS_indices,
     .combine = "rbind") %do% {
@@ -480,21 +495,20 @@ if (PRCC_calc) {
   # If there is, then need to increase the resolution of the Latin Hypercube sampling
   print("Calculating variation in PRCC values")
   rep_params = parameters
-  for (i in 1:100) {rep_params = rbind(rep_params, parameters)}
+  for (i in 1:(100 - 1)) {rep_params = rbind(rep_params, parameters)}
   
   PRCC_var_test = R0_PRCC_func(rep_params, progress_bool = TRUE) %>% 
-    mutate(iterate = row_number())
+    mutate(iterate = floor((row_number() - 1) / 9) + 1)
   
   write_rds(PRCC_var_test, "./data/PRCC_variance_test.rds")
   
   # Calculate PRCCs as EIP is varied
   print("Calculating PRCCs as EIP is varied")
   parameters = tibble(
-    eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms, lambdaQ = lambdaQ
+    eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms
   )
   vary_parameters <- select(parameters, -eta) %>%
     cross_join(tibble(eta = 1/(1440 * seq(1, 28, length.out = 14))))
-  
   
   R0_PRCC_df_EIP = R0_PRCC_func(vary_parameters, progress_bool = TRUE) %>% 
     select(name, PRCC_R0, PRCC_R, eta)
@@ -515,19 +529,19 @@ if (PRCC_calc) {
   
   write_rds(R0_PRCC_df_mu, "./data/vary_lf_PRCC_vals.rds")
   
-  # Calculate PRCCs as questing duration is varied
-  print("Calculating PRCCs as questing duration is varied")
-  parameters = tibble(eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, 
-                      muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, 
-                      varPhi = varPhi, epi_parms, lambdaQ = lambdaQ)
-  
-  vary_parameters <- select(parameters, -lambdaQ) %>%
-    cross_join(tibble(lambdaQ = 1/(1440 * seq(1/60, 10, length.out = 4 * 60))))
-  
-  R0_PRCC_df_lambdaQ = R0_PRCC_func(vary_parameters, progress_bool = TRUE)
-  gc(verbose = FALSE)
-  
-  write_rds(R0_PRCC_df_lambdaQ, "./data/vary_lambdaQ_PRCC_vals.rds")
+  # # Calculate PRCCs as questing duration is varied
+  # print("Calculating PRCCs as questing duration is varied")
+  # parameters = tibble(eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, 
+  #                     muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, 
+  #                     varPhi = varPhi, epi_parms, lambdaQ = lambdaQ)
+  # 
+  # vary_parameters <- select(parameters, -lambdaQ) %>%
+  #   cross_join(tibble(lambdaQ = 1/(1440 * seq(1/60, 10, length.out = 4 * 60))))
+  # 
+  # R0_PRCC_df_lambdaQ = R0_PRCC_func(vary_parameters, progress_bool = TRUE)
+  # gc(verbose = FALSE)
+  # 
+  # write_rds(R0_PRCC_df_lambdaQ, "./data/vary_lambdaQ_PRCC_vals.rds")
 }
 
 ```
@@ -546,7 +560,7 @@ read_rds("./data/mono_R0_vals.rds") %>%
 ```{r PRCC_var_test, message=FALSE, warning=FALSE, fig.cap = 'Diagnostic test of the variation in PRCC values using 10 independent calculations'}
 # Plot multiple PRCC estimates to assess variability and whether LHS resolution should be increased
 
-read_rds("./data/PRCC_variance_test.rds") %>%
+read_rds("./data/PRCC_variance_test.rds")  %>%
   select(name, PRCC_R0, iterate) %>%
   # pivot_wider(names_from = name, values_from = PRCC_R0) %>%
   ggplot(aes(x = name, y = PRCC_R0)) +
@@ -663,11 +677,14 @@ For each model class, we use an expectation-maximization algorithm that uses Mar
 
 ```{r empirical-fitting, message=FALSE, warning=FALSE, echo = FALSE}
 
-redo_fitting = FALSE
+redo_fitting = TRUE
+
+# TODO:
+# [] fix the uninformed priors so that the sampler doesn't lock up
 
 if (redo_fitting) {
   
-  orders = c(1,3,5)
+  orders = c(1, 2, 4, 6)
   out_mats = lapply(rep(orders, 1000), function(x) matrix(NA, x, x))
   AIC_table = tibble(order = as.integer(), logLik = as.double(), AIC = as.integer())
   
@@ -684,11 +701,13 @@ if (redo_fitting) {
     # alpha is always set to (1,0,...,0)
     alpha = rep(0, num_transient_states); alpha[1] = 1
     
-    priors <- uninf_priors_func(mean(test_data) / num_transient_states, var(test_data), num_transient_states)
+    priors <- uninf_priors_func(mean(1/test_data) * num_transient_states, var(1/test_data), num_transient_states)
     # Gamma prior: reciprocal scale hyperparameters (one per matrix row)
-    nu <- priors$nu #rep(1/mean(test_data), num_states)
-    zeta <- priors$zeta[1:num_transient_states]
+    nu <- priors$nu # / 1000000 #rep(1/mean(test_data), num_states)
+    zeta <- priors$zeta[1:num_transient_states]# / 1000000
     
+    # nu = 1/nu
+    # zeta = 1/zeta
     
     res <- phtMCMC(test_data,
                    states = num_transient_states,
@@ -798,25 +817,29 @@ First, we look at how the waiting time statistics compare.
 ```{r mech-fit, message=FALSE, warning=FALSE}
 
 if (redo_fitting) {
-  PH_order = 3
+  PH_order = 4
   num_samples = 12000
   
   # Define the structure of the phase-type generator
   mech_mat = matrix(c(
-    0,    "P1", "G1", 0,
-    "L1",    0,    0, 0,
-    0,    "P2",    0, 0,
-    "L2", "P3", "G2", 0
-  ), 4)
+    0,    "Q1", 0,    0,    0,
+    "L1", 0,    "L2", 0,    0,
+    "P1", "P2",  0,   "P3", 0,
+    "G1", "G2",  0,   0,    "G3",
+    0,    0,     0,   0,    0
+  ), ncol = 5, byrow = TRUE) 
   # Gamma priors for shape hyperparameters of model parameters
   nu_ref = 0.125
   nu <- c(
+    "Q1" = nu_ref,
     "L1" = nu_ref, "L2" = nu_ref,
     "P1" = nu_ref, "P2" = nu_ref, "P3" = nu_ref,
-    "G1" = nu_ref, "G2" = nu_ref
+    "G1" = nu_ref, "G2" = nu_ref, "G3" = nu_ref
   )
   # Gamma priors for reciprocal scale hyperparameters of model parameters
   ## Use informed priors from known underlying parameters
+  # Questing
+  lQ = lQ
   # Landing
   pL = 0.7
   lL = 0.1 # 10 minutes
@@ -829,20 +852,21 @@ if (redo_fitting) {
   # Fleeing
   f = 0.66
   zeta <- c(
-    "L1" = (pL * lL)^(-1)/nu_ref, "L2" = (f*(1-pL)*lL)^(-1)/nu_ref,
-    "P1" = ((1 - f) * (1 - pP) * lP)^(-1)/nu_ref, "P2" = (pP * lP)^(-1)/nu_ref, "P3" = (f * (1 - pP) * lP)^(-1)/nu_ref,
-    "G1" = ((1 - f) * (1 - pG) * lG)^(-1)/nu_ref, "G2" = (pG * lG + f * (1 - pG) * lG)^(-1)/nu_ref
+    "Q1" = (lQ)^(-1)/nu_ref,
+    "L1" = (f * (1-pL) * lL)^(-1)/nu_ref, "L2" = (pL*lL)^(-1)/nu_ref,
+    "P1" = (f * (1 - pP) * lP)^(-1)/nu_ref, "P2" = ((1-f) * (1-pP) * lP)^(-1)/nu_ref, "P3" = (pP * lP)^(-1)/nu_ref,
+    "G1" = (f * (1 - pG) * lG)^(-1)/nu_ref, "G2" = ((1-f) * (1-pG) * lG)^(-1)/nu_ref, "G3" = (pG * lG)^(-1)/nu_ref
   )
   
   # alpha is always set to (1,0,0)
-  alpha = rep(0, 3); alpha[1] = 1
+  alpha = rep(0, 4); alpha[1] = 1
   
   # Get the fitted matrix entry samples
   mech_res <- phtMCMC2(test_data, 
                        TT = mech_mat, 
                        beta = alpha, 
                        nu = nu, zeta = zeta, 
-                       n = num_samples,
+                       n = 10, #num_samples,
                        method = "ECS",
                        mhit = 100000)
   
@@ -871,6 +895,7 @@ if (redo_fitting) {
         p(sprintf("i=%g", i))
         
         # Get phase-type matric from MCMC result
+        # !!! [] TODO: rewrite reshape_phtMCMC to include questing
         PH_mat = reshape_phtMCMC(mech_res$samples[i,], "Mechanistic")
         # Calculate likelihood of PH parameters
         logLik = PHlikelihood(sub_data, PH_mat)
@@ -1127,7 +1152,7 @@ R0_df %>%
   geom_violin() +
   geom_hline(yintercept = 1, color = "red") + 
   ggtitle("Distribution of R0 values from fitted parameter sets")
-  theme_minimal_hgrid()
+theme_minimal_hgrid()
 ```
 
 # Discussion

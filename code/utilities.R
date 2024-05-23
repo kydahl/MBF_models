@@ -63,12 +63,13 @@ PHlikelihood <- function(data, PH_mat) {
 # Function: transform mechanistic parameters to mechanistic matrix
 mech_params_to_mat <- function(PH_params){
   with(as.list(PH_params), {
-    
     # subintensity matrix
     PH_mat = matrix(c(
-      (-1 + (1 - f) * (1- p_L)) * lambda_L, p_L * lambda_L, 0,
-      (1 - f) * (1 - p_P) * lambda_P, -lambda_P, p_P * lambda_P,
-      (1 - f) * (1 - p_G) * lambda_G, 0, -lambda_G), ncol = 3, byrow = TRUE) 
+      -lambda_Q,                lambda_Q,                                  0,              0,
+      f * (1- p_L) * lambda_L,  -lambda_L + (1 - f) * (1- p_L) * lambda_L, p_L * lambda_L, 0,
+      f * (1 - p_P) * lambda_P, (1 - f) * (1 - p_P) * lambda_P,            -lambda_P,      p_P * lambda_P,
+      f * (1 - p_G) * lambda_G, (1 - f) * (1 - p_G) * lambda_G,            0,              -lambda_G), 
+      ncol = 4, byrow = TRUE) 
   })
 }
 
@@ -76,20 +77,32 @@ mech_params_to_mat <- function(PH_params){
 # Function: transform mechanistic matrix to mechanistic parameters
 mech_mat_to_params <- function(PH_mat){
   # Collect mechanistic parameters
-  lP_fit = -PH_mat[2, 2]
-  pP_fit = PH_mat[2,3] / lP_fit
-  temp0 = (PH_mat[2,1] / ((1 - pP_fit) * lP_fit))
-  f_fit = 1 - (PH_mat[2,1] / ((1 - pP_fit) * lP_fit))
+  lQ_fit = -PH_mat[1,1]
   
-  temp1 = - PH_mat[1,1] - PH_mat[1,2]
-  temp2 = temp1 / f_fit
-  lL_fit = temp2 + PH_mat[1,2]
-  pL_fit = PH_mat[1,2] / lL_fit
+  lP_fit = -PH_mat[3,3]
+  lG_fit = -PH_mat[4,4]
   
-  lG_fit = -PH_mat[3, 3]
-  pG_fit = max(0, 1 - (PH_mat[3,1] / ((1 - f_fit) * lG_fit)))
+  pG_fit = 1 - ((PH_mat[4,1] + PH_mat[4,2]) / lG_fit)
+  pP_fit = PH_mat[3,4] / lP_fit
+  f_fit = PH_mat[3,1] / ((1- pP_fit) * lP_fit) # Alternative: PH_mat[4,1] / ((1- pG_fit) * lG_fit)
   
-  mech_params = tibble(lambda_L = lL_fit, p_L = pL_fit, 
+  lL_fit = (PH_mat[2,1] / f_fit) + PH_mat[2,3]
+  pL_fit = PH_mat[2,3] / lL_fit
+  
+  # lP_fit = PH_mat[3,1] + PH_mat[3,2] + PH_mat[3,4] #-PH_mat[2, 2]
+  # pP_fit = PH_mat[3,4] / lP_fit
+  # # temp0 = (PH_mat[2,1] / ((1 - pP_fit) * lP_fit))
+  # f_fit = PH_mat[4,1] / (PH_mat[4,1] + PH_mat[4,2]) # 1 - (PH_mat[2,1] / ((1 - pP_fit) * lP_fit))
+  # 
+  # # temp1 = - PH_mat[1,1] - PH_mat[1,2]
+  # # temp2 = temp1 / f_fit
+  # lL_fit = (PH_mat[2,1] + f_fit * PH_mat[2,3]) / f_fit# temp2 + PH_mat[1,2]
+  # pL_fit = PH_mat[2,3] / lL_fit
+  # 
+  # lG_fit = PH_mat[4,1] + PH_mat[4,2] + PH_mat[4,5]
+  # pG_fit = PH_mat[4,5] / lG_fit  # max(0, 1 - (PH_mat[3,1] / ((1 - f_fit) * lG_fit)))
+  
+  mech_params = tibble(lambda_Q = lQ_fit, lambda_L = lL_fit, p_L = pL_fit, 
                        lambda_P = lP_fit, p_P = pP_fit, lambda_G = lG_fit, 
                        p_G = pG_fit, f = f_fit)
 }
@@ -138,7 +151,7 @@ uninf_priors_func <- function(mean, variance, order) {
   # Gamma prior: shape hyperparameters (one per matrix entry)
   nu <- rep(shape_k, order^2)
   # Gamma prior: reciprocal scale hyperparameters (one per matrix row)
-  zeta <- rep(scale_theta, order)
+  zeta <- rep(1/scale_theta, order)
   
   out <- data.frame(nu = nu, zeta = zeta)
   return(out)
@@ -238,19 +251,19 @@ get_beta_func <- function(PH_mat, PH_type, epi_parms) {
     # Mechanistic
     # epi_parms = betaP, betaG
     PH_params = mech_mat_to_params(PH_mat)
-    zero_mat = matrix(rep(0, (order + 1)^2), nrow = order + 1, ncol = order + 1)
+    zero_mat = matrix(rep(0, order^2), nrow = order, ncol = order)
     betaH = zero_mat; betaV = zero_mat; LambdaH = zero_mat; LambdaV = zero_mat
     betaH[3,3] = epi_parms$betaP
     betaV[4,4] = epi_parms$betaG
-    LambdaH[3,3] = -PH_mat[2,2]
-    LambdaV[4,4] = -PH_mat[3,3]
+    LambdaH[3,3] = -PH_mat[3,3]
+    LambdaV[4,4] = -PH_mat[4,4]
   } else if (PH_type %in% c("Empirical", "Exponential")) {
     # Empirical
     if (order == 1) {
       betaH = 1
       LambdaH = -PH_mat
     } else {
-      betaH = diag(order+1)
+      betaH = diag(order)
       LambdaH = diag(c(0, -rowSums(PH_mat)))
     }
     # epi_parms = betaH = betaV = 1
@@ -274,8 +287,6 @@ get_beta_func <- function(PH_mat, PH_type, epi_parms) {
 R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_params = NULL) {
   with(as.list(parameters), {
     
-    lambdaQ = parameters$lambdaQ
-    # lambdaQ = 1 / ((1/3) * 1440) # questing takes on average one third of a day
     if (PH_type == "Exponential") {
       order = 1
       A = as.double(PH_mat)
@@ -286,8 +297,8 @@ R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_
       betaV = betas$betaV
       LambdaH = as.double(betas$LambdaH)
       LambdaV = as.double(betas$LambdaV)
-      one_vec = matrix(rep(1, order + 1), nrow = 1)
-      tau = b / (mu +b)
+      one_vec = matrix(rep(1, order), nrow = 1)
+      tau = b / (mu + b)
       
       # Reproductive number
       R = tau * (varPhi / (gamma + mu)) * (rhoL / ( rhoL + muL)) * (1 - tau * gamma / (gamma + mu))^-1
@@ -298,9 +309,10 @@ R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_
       
     } else {
       if (PH_type == "Mechanistic") {
-        order = 3
+        order = 4
         # If parameters are provided, use those
         if (!is.null(provide_params)) {
+          lambdaQ = provide_params$lambda_Q
           lambdaL = provide_params$lambda_L
           pL = provide_params$p_L
           lambdaP = provide_params$lambda_P
@@ -310,7 +322,7 @@ R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_
           f = provide_params$f
           
           PH_mat = mech_params_to_mat(
-            list(lambda_L = lambdaL, p_L = pL, lambda_P = lambdaP, p_P = pP, 
+            list(lambda_Q = lambdaQ, lambda_L = lambdaL, p_L = pL, lambda_P = lambdaP, p_P = pP, 
                  lambda_G = lambdaG, p_G = pG, f = f))
           # Set up transmission matrices: beta and Lambda
           epi_parms = select(parameters, betaH, betaV, betaP, betaG)
@@ -320,18 +332,19 @@ R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_
           LambdaH = betas$LambdaH
           LambdaV = betas$LambdaV
           
-          A = matrix(0, ncol = order+1, nrow = order+1)
-          # !!! do this step separately later
-          A[2:(order+1), 2:(order+1)] = PH_mat
-          A[1,1] = -lambdaQ; A[1,2] = lambdaQ
-          A[2,1] = -rowSums(PH_mat)[1] # f * (1 - pL) * lambdaL # 
-          A[3,1] = -rowSums(PH_mat)[2] # f * (1 - pP) * lambdaP # -rowSums(PH_mat)[2]
-          A[4,1] = f * (1 - pG) * lambdaG # -rowSums(PH_mat)[3]
+          A = PH_mat
+          # A = matrix(0, ncol = order+1, nrow = order+1)
+          # # !!! do this step separately later
+          # A[2:(order+1), 2:(order+1)] = PH_mat
+          # A[1,1] = -lambdaQ; A[1,2] = lambdaQ
+          # A[2,1] = -rowSums(PH_mat)[1] # f * (1 - pL) * lambdaL # 
+          # A[3,1] = -rowSums(PH_mat)[2] # f * (1 - pP) * lambdaP # -rowSums(PH_mat)[2]
+          # A[4,1] = f * (1 - pG) * lambdaG # -rowSums(PH_mat)[3]
           
           # Otherwise calculate the parameters from matrix entries
         } else {
           PH_params = mech_mat_to_params(PH_mat)
-          
+          lambdaQ = PH_params$lambda_Q
           lambdaL = PH_params$lambda_L
           pL = PH_params$p_L
           lambdaP = PH_params$lambda_P
@@ -351,28 +364,29 @@ R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_
         LambdaH = betas$LambdaH
         LambdaV = betas$LambdaV
         
-        A = matrix(0, ncol = order+1, nrow = order+1)
-        A[2:(order+1), 2:(order+1)] = PH_mat
-        A[1,1] = -lambdaQ; A[1,2] = lambdaQ
-        A[2,1] = -rowSums(PH_mat)[1] # f * (1 - pL) * lambdaL # 
-        A[3,1] = -rowSums(PH_mat)[2] # f * (1 - pP) * lambdaP # -rowSums(PH_mat)[2]
+        A = PH_mat
+        # A = matrix(0, ncol = order+1, nrow = order+1)
+        # A[2:(order+1), 2:(order+1)] = PH_mat
+        # A[1,1] = -lambdaQ; A[1,2] = lambdaQ
+        # A[2,1] = -rowSums(PH_mat)[1] # f * (1 - pL) * lambdaL # 
+        # A[3,1] = -rowSums(PH_mat)[2] # f * (1 - pP) * lambdaP # -rowSums(PH_mat)[2]
       }
       
-      alpha = matrix(rep(0, order + 1), ncol = 1); alpha[1] = 1
-      one_vec = matrix(rep(1, order + 1), nrow = 1)
+      alpha = matrix(rep(0, order), ncol = 1); alpha[1] = 1
+      one_vec = matrix(rep(1, order), nrow = 1)
       
       
       spec_mat = alpha %*% one_vec %*% t(A)
-      M1 = (eta + mu) * diag(order + 1) - t(A) + (gamma / (eta + gamma + mu)) * spec_mat
-      M2 = eta * diag(order + 1) - (eta / (eta + gamma + mu)) * (gamma / (gamma + mu)) * spec_mat
-      M3 = mu * diag(order + 1) - t(A) + (gamma / (gamma + mu)) * spec_mat
+      M1 = (eta + mu) * diag(order) - t(A) + (gamma / (eta + gamma + mu)) * spec_mat
+      M2 = eta * diag(order) - (eta / (eta + gamma + mu)) * (gamma / (gamma + mu)) * spec_mat
+      M3 = mu * diag(order) - t(A) + (gamma / (gamma + mu)) * spec_mat
       
       # Pr(complete a gonotrophic cycle)
-      tau = as.double(-one_vec %*% t(A) %*% inv(mu * diag(order + 1) - t(A)) %*% alpha)
+      tau = as.double(-one_vec %*% t(A) %*% inv(mu * diag(order) - t(A)) %*% alpha)
       # Reproductive number
       R = tau * (varPhi / (gamma + mu)) * (rhoL / ( rhoL + muL)) * (1 - tau * gamma / (gamma + mu))^-1
       # Stable distribution of feeding classes
-      B_star = KL * ((R-1)/R) * (rhoL + muL) * (1/varPhi) * (R + varPhi * (rhoL/(rhoL + muL))) * inv(mu * diag(order + 1) - t(A)) %*% alpha
+      B_star = KL * ((R-1)/R) * (rhoL + muL) * (1/varPhi) * (R + varPhi * (rhoL/(rhoL + muL))) * inv(mu * diag(order) - t(A)) %*% alpha
       
       Q = inv(M3) %*% M2 %*% inv(M1)
       
