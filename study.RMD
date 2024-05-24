@@ -451,12 +451,12 @@ R0_PRCC_df = data.table(name = as.character(), PRCC_R0 = as.double(), PRCC_R = a
 
 ```{r PRCC-calculations, message=FALSE, warning=FALSE}
 
-PRCC_calc = TRUE
+PRCC_calc = FALSE
 
 if (PRCC_calc) {
   
   # Test whether R0 is monotonic for each biting rate parameter over the LHS samples
-  sens_res = 10000
+  sens_res = 1000
   sens_range = 1
   param_set = param_table %>% select(name, value) %>% pivot_wider() %>%
     mutate(dummy = runif(1))
@@ -609,10 +609,10 @@ read_rds("./data/vary_EIP_PRCC_vals.rds") %>%
   ggplot(aes(x = EIP, y = PRCC_R0, color = name)) +
   # geom_point(alpha = 0.3) +
   geom_line(lwd = 1) +
-  geom_hline(aes(yintercept = 0), color = "red") +
+  geom_hline(aes(yintercept = 0), color = "black") +
   scale_color_manual("Parameter",
-                     values = rev(c(c4a("miscs.okabe", 7),"black")),
-                     breaks = rev(c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
+                     values = rev(c(c4a("brewer.paired", 8),"grey")),
+                     breaks = rev(c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
   )+
   scale_x_continuous("Extrinsic incubation period (days)", expand = c(0,0)) +
   scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) +
@@ -629,10 +629,10 @@ read_rds("./data/vary_lf_PRCC_vals.rds") %>%
   ggplot(aes(x = lf, y = PRCC_R0, color = name)) +
   # geom_point(alpha = 0.3) +
   geom_line(lwd = 1) +
-  geom_hline(aes(yintercept = 0), color = "red") +
+  geom_hline(aes(yintercept = 0), color = "black") +
   scale_color_manual("Parameter",
-                     values = rev(c(c4a("miscs.okabe", 7),"black")),
-                     breaks = rev(c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
+                     values = rev(c(c4a("brewer.paired", 8),"grey")),
+                     breaks = rev(c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
   )+
   scale_x_continuous("Mosquito lifespan (days)", expand = c(0,0)) +
   scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) +
@@ -641,26 +641,26 @@ read_rds("./data/vary_lf_PRCC_vals.rds") %>%
   theme_minimal_grid()
 
 ```
-Let's see what happens when we increase the questing time
-```{r R0-PRCC-vary-lambdaQ, message=FALSE, warning=FALSE}
+<!-- Let's see what happens when we increase the questing time -->
+<!-- ```{r R0-PRCC-vary-lambdaQ, message=FALSE, warning=FALSE} -->
 
-read_rds("./data/vary_lambdaQ_PRCC_vals.rds") %>%
-  mutate(dQ = 1/(1440 * lambdaQ)) %>%
-  ggplot(aes(x = dQ, y = PRCC_R0, color = name)) +
-  # geom_point(alpha = 0.3) +
-  geom_line(lwd = 1) +
-  geom_hline(aes(yintercept = 0), color = "red") +
-  scale_color_manual("Parameter",
-                     values = rev(c(c4a("miscs.okabe", 7),"black")),
-                     breaks = rev(c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
-  )+
-  scale_x_continuous("Mosquito questing duration (days)", expand = c(0,0)) +
-  scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) +
-  ggtitle("R0 PRCCs as mosquito questing duration is varied") +
-  theme(axis.ticks.x = element_text(size = 6)) +
-  theme_minimal_grid()
+<!-- read_rds("./data/vary_lambdaQ_PRCC_vals.rds") %>% -->
+<!--   mutate(dQ = 1/(1440 * lambdaQ)) %>% -->
+<!--   ggplot(aes(x = dQ, y = PRCC_R0, color = name)) + -->
+<!--   # geom_point(alpha = 0.3) + -->
+<!--   geom_line(lwd = 1) + -->
+<!--   geom_hline(aes(yintercept = 0), color = "red") + -->
+<!--   scale_color_manual("Parameter", -->
+<!--                      values = rev(c(c4a("miscs.okabe", 7),"black")), -->
+<!--                      breaks = rev(c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy")) -->
+<!--   )+ -->
+<!--   scale_x_continuous("Mosquito questing duration (days)", expand = c(0,0)) + -->
+<!--   scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) + -->
+<!--   ggtitle("R0 PRCCs as mosquito questing duration is varied") + -->
+<!--   theme(axis.ticks.x = element_text(size = 6)) + -->
+<!--   theme_minimal_grid() -->
 
-```
+<!-- ``` -->
 
 # Results: Uncertainty analysis
 
