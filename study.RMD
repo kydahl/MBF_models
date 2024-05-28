@@ -1,7 +1,6 @@
 ---
 title: "Multiple blood-feeding modeling study"
-author:  |
-| Kyle J.-M. Dahlin, Michael Robert, Lauren Childs
+author:  Kyle J.-M. Dahlin, Michael Robert, Lauren Childs
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   pdf_document:
@@ -108,7 +107,7 @@ param_table = tibble(
                   "Exit rate from ingestion stage (per minute)",
                   "Probability of seeking a new vertebrate host given feeding failure"
   ),
-  value = c(lQ,pL, lL, pP, lP, pG, lG, f)
+  value = c(lQ, pL, lL, pP, lP, pG, lG, f)
 )
 
 kable(select(param_table, -name) %>% rename(Value = value))
@@ -131,16 +130,13 @@ varPhi = 3 / 1440
 # Epidemiological parameters
 epi_parms = tibble(betaP = 1, betaG = 1, betaH = 1, betaV = 1)
 
-# Questing rate needs to be set separately
-lambdaQ = 1 / ((1/3) * 1440) # questing takes one third of a day
-
 parameters = tibble(
-  eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms, lambdaQ = lambdaQ
+  eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms
 )
 
 nice_parameter_table = tibble(
   pivot_longer(parameters, everything()),
-  Symbol = c("$\\eta$", "$\\mu$", "$\\gamma$", "$\\gamma_H$", "$\\mu_H$", "$K_H$", "$K_L$", "$\\rho_L$", "$\\mu_L$", "$\\varphi$", "$\\beta_P$", "$\\beta_G$", "$\\beta_H$", "$\\beta_V$", "$\\lambda_Q$"),
+  Symbol = c("$\\eta$", "$\\mu$", "$\\gamma$", "$\\gamma_H$", "$\\mu_H$", "$K_H$", "$K_L$", "$\\rho_L$", "$\\mu_L$", "$\\varphi$", "$\\beta_P$", "$\\beta_G$", "$\\beta_H$", "$\\beta_V$"),
   Description = c("Extrinsic incubation rate", 
                   "Mosquito mortality rate",
                   "Return to blood-feeding rate",
@@ -154,12 +150,11 @@ nice_parameter_table = tibble(
                   "Probing transmission probability",
                   "Ingestion transmission probability",
                   "To-host transmission probability",
-                  "To-mosquito transmission probability",
-                  "Questing rate"
+                  "To-mosquito transmission probability"
   )
 )
 
-kable(select(nice_parameter_table, -name) %>%  relocate(Symbol, Description, Value = value), digits = c(0,0,2))
+kable(select(nice_parameter_table, -name) %>%  relocate(Symbol, Description, Value = value), digits = c(0,0,6))
 ```
 
 ## Simulation
@@ -172,6 +167,13 @@ This simulation does not take into account the time that the mosquito spends que
 ```{r simulate-data, message=FALSE, warning=FALSE}
 
 # subintensity matrix
+# # without questing
+# set_A = matrix(c(
+#   (-1 + (1 - f) * (1- pL)) * lL, pL * lL, 0,
+#   (1 - f) * (1 - pP) * lP, -lP, pP * lP,
+#   (1 - f) * (1 - pG) * lG, 0, -lG), ncol = 3, byrow = TRUE) 
+# set_alpha = c(1, 0, 0) # initial probability vector
+# with questing
 set_A = matrix(c(
   -lQ,               lQ,                           0,       0,
   f * (1- pL) * lL,  -lL + (1 - f) * (1- pL) * lL, pL * lL, 0,
@@ -204,12 +206,10 @@ test_data = direct_samps[1:min(sample_size, length(direct_samps))]
 
 These parameters lead to a phase-type distributed waiting time for blood-feeding parameterized by the sub-intensity matrix $A$ given by
 \[
-A = \begin{bmatrix}-\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
-\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
-\left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
-\end{bmatrix}  = \begin{bmatrix} `r set_A[1,1]` & `r set_A[1,2]` & 0\\
-`r set_A[2,1]` & `r set_A[2,2]` & `r set_A[2,3]`\\
-`r set_A[3,1]` & 0 & `r set_A[3,3]`
+A = \begin{bmatrix}-\lambda_{Q} & \lambda_{Q} & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
 \end{bmatrix}
 \]
 and initial vector $\alpha = \left(1,0,0\right)$.
@@ -281,16 +281,40 @@ R0_sensitivity_df <- tibble(R0 = as.double(), R = as.double(),
                             lambda_P = as.double(), p_G = as.double(), f = as.double(),
                             variable_parm = as.character())
 # Calculate R0 across varied baseline parameters
-for (j in 1:num_params) {
-  for (i in 1:num_vary) {
-    vary_params = param_set
-    vary_params[j] = full_param_set[i,j]
-    PH_mat = mech_params_to_mat(vary_params)
-    Rs = R0_calc(PH_mat, "Mechanistic", parameters, provide_params = vary_params)
-    R0_sensitivity_df <- rbind(R0_sensitivity_df,
-                               tibble(Rs, vary_params, variable_parm = colnames(vary_params)[j]))
-  }
-}
+plan(multisession)
+progressr::handlers(global = TRUE)
+progressr::handlers("cli")
+
+
+with_progress({
+  p = progressor(along = 1:num_vary)
+  
+  R0_sensitivity_df = foreach(j = 1:num_params,
+                              .combine = 'rbind') %do% {
+                                foreach(i = 1:num_vary,
+                                        .combine = 'rbind') %dofuture% {
+                                          # Iterate progress bar
+                                          p(sprintf("i=%g", i))
+                                          vary_params = param_set
+                                          vary_params[j] = full_param_set[i,j]
+                                          PH_mat = mech_params_to_mat(vary_params)
+                                          Rs = R0_calc(PH_mat, "Mechanistic", parameters, provide_params = vary_params)
+                                          tibble(Rs, vary_params, variable_parm = colnames(vary_params)[j])
+                                        }
+                              }
+})
+plan(sequential)
+
+# for (j in 1:num_params) {
+#   for (i in 1:num_vary) {
+#     vary_params = param_set
+#     vary_params[j] = full_param_set[i,j]
+#     PH_mat = mech_params_to_mat(vary_params)
+#     Rs = R0_calc(PH_mat, "Mechanistic", parameters, provide_params = vary_params)
+#     R0_sensitivity_df <- rbind(R0_sensitivity_df,
+#                                tibble(Rs, vary_params, variable_parm = colnames(vary_params)[j]))
+#   }
+# }
 
 test = R0_sensitivity_df %>%
   pivot_longer(cols = -c(R0, R, variable_parm)) %>%
@@ -339,8 +363,13 @@ R0_mono_plot
 Rs_mono_plot <- test %>%
   ggplot(aes(x = value, y = R)) +
   geom_line(lwd = 1) +
+  geom_point(data = base_points, aes(color = "actual"), size = 3) +
   # geom_point(data = test2, color = "blue", alpha = 0.3) +
   facet_wrap(~name, scales = "free") +
+  scale_color_manual("Type",
+                     breaks = c("actual"="green", "mech"="blue"),
+                     values = c("actual"="green", "mech"="blue"),
+                     labels = c("actual", "mech")) +
   theme_minimal_grid()
 Rs_mono_plot
 ```
@@ -408,7 +437,7 @@ R0_PRCC_func <- function(vary_parameters, progress_bool = FALSE) {
     progressr::handlers(global = TRUE)
     progressr::handlers("cli")
     progress_length = length(parameter_indices)
-    progress_chunk = 1#if_else(progress_length < 10, 1, 10)
+    progress_chunk = if_else(progress_length < 10, 1, 10)
     p = progressor(along = 1:(progress_length / progress_chunk))
   }
   
@@ -443,6 +472,7 @@ R0_PRCC_func <- function(vary_parameters, progress_bool = FALSE) {
       temp2 = cbind(temp, vary_parameters[i,])
     }
   plan(sequential)
+  print(1/vary_parameters$eta/1440)
   return(out)
 }
 
@@ -451,7 +481,7 @@ R0_PRCC_df = data.table(name = as.character(), PRCC_R0 = as.double(), PRCC_R = a
 
 ```{r PRCC-calculations, message=FALSE, warning=FALSE}
 
-PRCC_calc = TRUE
+PRCC_calc = FALSE
 
 if (PRCC_calc) {
   
@@ -480,7 +510,7 @@ if (PRCC_calc) {
                                  R0 = as.double(), R = as.double())
   parameter_indices = 1:dim(parameters)[1]
   LHS_indices = 1:dim(sens_params)[1]
-T
+  T
   mono_R0_df = foreach(
     k = LHS_indices,
     .combine = "rbind") %do% {
@@ -520,7 +550,7 @@ T
   print("Calculating PRCCs as lifespan is varied")
   parameters = tibble(eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, 
                       muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, 
-                      varPhi = varPhi, epi_parms, lambdaQ = lambdaQ)
+                      varPhi = varPhi, epi_parms)
   
   vary_parameters <- select(parameters, -mu) %>%
     cross_join(tibble(mu = 1/(1440 * seq(1, 60, length.out = 3 * 60))))
@@ -542,7 +572,34 @@ T
   # gc(verbose = FALSE)
   # 
   # write_rds(R0_PRCC_df_lambdaQ, "./data/vary_lambdaQ_PRCC_vals.rds")
+  # # Calculate PRCCs as questing duration is varied
+  # print("Calculating PRCCs as questing duration is varied")
+  # parameters = tibble(eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, 
+  #                     muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, 
+  #                     varPhi = varPhi, epi_parms, lambdaQ = lambdaQ)
+  # 
+  # vary_parameters <- select(parameters, -lambdaQ) %>%
+  #   cross_join(tibble(lambdaQ = 1/(1440 * seq(1/60, 10, length.out = 4 * 60))))
+  # 
+  # R0_PRCC_df_lambdaQ = R0_PRCC_func(vary_parameters, progress_bool = TRUE)
+  # gc(verbose = FALSE)
+  # 
+  # write_rds(R0_PRCC_df_lambdaQ, "./data/vary_lambdaQ_PRCC_vals.rds")
 }
+
+```
+Table of values
+```{r baseline-prcc-table, message=FALSE, warning=FALSE, fig.cap = 'Table 3: Baseline PRCC values'}
+
+# Plot baseline PRCC values
+read_rds("./data/PRCC_variance_test.rds") %>% 
+  filter(iterate %in% 1:9) %>% 
+  ggplot() +
+  geom_col(aes(x = name, y = PRCC_R0)) +
+  ggtitle("Baseline PRCC results") +
+  scale_x_discrete("") + 
+  scale_y_continuous("R0 PRCC values") + #, limits = c(-1,1)) +
+  theme_minimal_hgrid(10)
 
 ```
 
@@ -564,10 +621,11 @@ read_rds("./data/PRCC_variance_test.rds")  %>%
   select(name, PRCC_R0, iterate) %>%
   # pivot_wider(names_from = name, values_from = PRCC_R0) %>%
   ggplot(aes(x = name, y = PRCC_R0)) +
-  geom_violin() +
-  geom_beeswarm(alpha = 0.3) +
+  # geom_violin() +
+  geom_jitter(alpha = 0.1) +
+  # geom_quasirandom(alpha = 0.3) +
   geom_hline(yintercept = 0) +
-  theme_minimal_grid()
+  theme_minimal_grid(10)
 
 ```
 
@@ -611,8 +669,8 @@ read_rds("./data/vary_EIP_PRCC_vals.rds") %>%
   geom_line(lwd = 1) +
   geom_hline(aes(yintercept = 0), color = "red") +
   scale_color_manual("Parameter",
-                     values = rev(c(c4a("miscs.okabe", 7),"black")),
-                     breaks = rev(c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
+                     values = rev(c(c4a("tableau.color_blind", 8),"black")),
+                     breaks = rev(c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
   )+
   scale_x_continuous("Extrinsic incubation period (days)", expand = c(0,0)) +
   scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) +
@@ -631,8 +689,8 @@ read_rds("./data/vary_lf_PRCC_vals.rds") %>%
   geom_line(lwd = 1) +
   geom_hline(aes(yintercept = 0), color = "red") +
   scale_color_manual("Parameter",
-                     values = rev(c(c4a("miscs.okabe", 7),"black")),
-                     breaks = rev(c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
+                     values = rev(c(c4a("carto.safe", 8),"black")),
+                     breaks = rev(c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
   )+
   scale_x_continuous("Mosquito lifespan (days)", expand = c(0,0)) +
   scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) +
@@ -641,26 +699,26 @@ read_rds("./data/vary_lf_PRCC_vals.rds") %>%
   theme_minimal_grid()
 
 ```
-Let's see what happens when we increase the questing time
-```{r R0-PRCC-vary-lambdaQ, message=FALSE, warning=FALSE}
+<!-- Let's see what happens when we increase the questing time -->
+<!-- ```{r R0-PRCC-vary-lambdaQ, message=FALSE, warning=FALSE} -->
 
-read_rds("./data/vary_lambdaQ_PRCC_vals.rds") %>%
-  mutate(dQ = 1/(1440 * lambdaQ)) %>%
-  ggplot(aes(x = dQ, y = PRCC_R0, color = name)) +
-  # geom_point(alpha = 0.3) +
-  geom_line(lwd = 1) +
-  geom_hline(aes(yintercept = 0), color = "red") +
-  scale_color_manual("Parameter",
-                     values = rev(c(c4a("miscs.okabe", 7),"black")),
-                     breaks = rev(c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
-  )+
-  scale_x_continuous("Mosquito questing duration (days)", expand = c(0,0)) +
-  scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) +
-  ggtitle("R0 PRCCs as mosquito questing duration is varied") +
-  theme(axis.ticks.x = element_text(size = 6)) +
-  theme_minimal_grid()
+<!-- read_rds("./data/vary_lambdaQ_PRCC_vals.rds") %>% -->
+<!--   mutate(dQ = 1/(1440 * lambdaQ)) %>% -->
+<!--   ggplot(aes(x = dQ, y = PRCC_R0, color = name)) + -->
+<!--   # geom_point(alpha = 0.3) + -->
+<!--   geom_line(lwd = 1) + -->
+<!--   geom_hline(aes(yintercept = 0), color = "red") + -->
+<!--   scale_color_manual("Parameter", -->
+<!--                      values = rev(c(c4a("miscs.okabe", 7),"black")), -->
+<!--                      breaks = rev(c("p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy")) -->
+<!--   )+ -->
+<!--   scale_x_continuous("Mosquito questing duration (days)", expand = c(0,0)) + -->
+<!--   scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) + -->
+<!--   ggtitle("R0 PRCCs as mosquito questing duration is varied") + -->
+<!--   theme(axis.ticks.x = element_text(size = 6)) + -->
+<!--   theme_minimal_grid() -->
 
-```
+<!-- ``` -->
 
 # Results: Uncertainty analysis
 
@@ -677,7 +735,7 @@ For each model class, we use an expectation-maximization algorithm that uses Mar
 
 ```{r empirical-fitting, message=FALSE, warning=FALSE, echo = FALSE}
 
-redo_fitting = TRUE
+redo_fitting = FALSE
 
 # TODO:
 # [] fix the uninformed priors so that the sampler doesn't lock up
@@ -713,8 +771,8 @@ if (redo_fitting) {
                    states = num_transient_states,
                    beta = alpha,
                    nu = nu, zeta = zeta,
-                   n = num_samples,
-                   mhit = 100000)
+                   n = 10, #num_samples,
+                   mhit = 10)#100000)
     
     for (i in 1:dim(res$samples)[1]) {
       PH_mat = reshape_phtMCMC(res$samples[i,], "Empirical")
@@ -818,7 +876,7 @@ First, we look at how the waiting time statistics compare.
 
 if (redo_fitting) {
   PH_order = 4
-  num_samples = 12000
+  num_samples = 120
   
   # Define the structure of the phase-type generator
   mech_mat = matrix(c(
@@ -828,15 +886,7 @@ if (redo_fitting) {
     "G1", "G2",  0,   0,    "G3",
     0,    0,     0,   0,    0
   ), ncol = 5, byrow = TRUE) 
-  # Gamma priors for shape hyperparameters of model parameters
-  nu_ref = 0.125
-  nu <- c(
-    "Q1" = nu_ref,
-    "L1" = nu_ref, "L2" = nu_ref,
-    "P1" = nu_ref, "P2" = nu_ref, "P3" = nu_ref,
-    "G1" = nu_ref, "G2" = nu_ref, "G3" = nu_ref
-  )
-  # Gamma priors for reciprocal scale hyperparameters of model parameters
+  
   ## Use informed priors from known underlying parameters
   # Questing
   lQ = lQ
@@ -851,24 +901,51 @@ if (redo_fitting) {
   lG = 1 # 1 minutes
   # Fleeing
   f = 0.66
+  
+  # Gamma priors for reciprocal scale hyperparameters of model parameters
+  zeta_ref = 0.05 #0.125
   zeta <- c(
-    "Q1" = (lQ)^(-1)/nu_ref,
-    "L1" = (f * (1-pL) * lL)^(-1)/nu_ref, "L2" = (pL*lL)^(-1)/nu_ref,
-    "P1" = (f * (1 - pP) * lP)^(-1)/nu_ref, "P2" = ((1-f) * (1-pP) * lP)^(-1)/nu_ref, "P3" = (pP * lP)^(-1)/nu_ref,
-    "G1" = (f * (1 - pG) * lG)^(-1)/nu_ref, "G2" = ((1-f) * (1-pG) * lG)^(-1)/nu_ref, "G3" = (pG * lG)^(-1)/nu_ref
+    "Q1" = zeta_ref,
+    "L1" = zeta_ref, "L2" = zeta_ref,
+    "P1" = zeta_ref, "P2" = zeta_ref, "P3" = zeta_ref,
+    "G1" = zeta_ref, "G2" = zeta_ref, "G3" = zeta_ref
   )
+  # Gamma priors for shape hyperparameters of model parameters
+  nu <- c(
+    "Q1" = (lQ) * zeta_ref,
+    "L1" = (f * (1-pL) * lL) * zeta_ref, "L2" = (pL*lL) * zeta_ref,
+    "P1" = (f * (1 - pP) * lP) * zeta_ref, "P2" = ((1-f) * (1-pP) * lP) * zeta_ref, "P3" = (pP * lP) * zeta_ref,
+    "G1" = (f * (1 - pG) * lG) * zeta_ref, "G2" = ((1-f) * (1-pG) * lG) * zeta_ref, "G3" = (pG * lG) * zeta_ref
+  )
+
+  # # Gamma priors for shape hyperparameters of model parameters
+  # nu_ref = 0.125
+  # nu <- c(
+  #   "Q1" = nu_ref,
+  #   "L1" = nu_ref, "L2" = nu_ref,
+  #   "P1" = nu_ref, "P2" = nu_ref, "P3" = nu_ref,
+  #   "G1" = nu_ref, "G2" = nu_ref, "G3" = nu_ref
+  # )
+  # zeta <- c(
+  #   "Q1" = (lQ)^(-1)/nu_ref,
+  #   "L1" = (f * (1-pL) * lL)^(-1)/nu_ref, "L2" = (pL*lL)^(-1)/nu_ref,
+  #   "P1" = (f * (1 - pP) * lP)^(-1)/nu_ref, "P2" = ((1-f) * (1-pP) * lP)^(-1)/nu_ref, "P3" = (pP * lP)^(-1)/nu_ref,
+  #   "G1" = (f * (1 - pG) * lG)^(-1)/nu_ref, "G2" = ((1-f) * (1-pG) * lG)^(-1)/nu_ref, "G3" = (pG * lG)^(-1)/nu_ref
+  # )
   
   # alpha is always set to (1,0,0)
   alpha = rep(0, 4); alpha[1] = 1
   
   # Get the fitted matrix entry samples
-  mech_res <- phtMCMC2(test_data, 
-                       TT = mech_mat, 
-                       beta = alpha, 
-                       nu = nu, zeta = zeta, 
-                       n = 10, #num_samples,
-                       method = "ECS",
-                       mhit = 100000)
+  system.time(
+    mech_res <- phtMCMC2(test_data, 
+                         TT = mech_mat, 
+                         beta = alpha, 
+                         nu = nu, zeta = zeta, 
+                         n = num_samples,
+                         method = "ECS",
+                         mhit = 1e4) #2147483647)#1e10)
+  )
   
   # Put together formatted dataframe of samples
   mech_params_df <- data.table(iterate = rep(0, num_samples), lambda_L =rep(0, num_samples), 
@@ -885,7 +962,7 @@ if (redo_fitting) {
   # Create temporary function to create table
   mech_param_func = function(indices) {
     # Sub-sample test data so this runs in a reasonable amount of time
-    sub_data = test_data[1:1000]
+    sub_data = test_data
     p = progressor(along = indices)
     mech_params_df = foreach(
       i = indices,
@@ -909,9 +986,9 @@ if (redo_fitting) {
   temp = mech_param_func(1:dim(mech_res$samples)[1])
   
   mech_params_df = temp %>% 
-    filter(lambda_L < 60) %>% 
+    filter(lambda_L < 60, lambda_L > 0) %>% 
     arrange(logLik)
-  mech_params_df = mech_params_df[1:min(10000, dim(mech_params_df)[1]),]
+  mech_params_df = mech_params_df[1:min(1000, dim(mech_params_df)[1]),]
   
   plan(sequential)
   
@@ -968,7 +1045,7 @@ exp_times = rphtype(compare_res, c(1), exp_mat)
 # Mechanistic
 best_fit = filter(mech_params_df, logLik == max(logLik))
 out_mat = mech_params_to_mat(select(best_fit, -c(iterate, logLik)))
-mech_times = rphtype(compare_res, c(1,0,0), out_mat)
+mech_times = rphtype(compare_res, c(1,0,0,0), out_mat)
 
 KL_divs = tibble(dist = c("mech", "best_emp", "exp")) %>% 
   mutate(KL_div = case_when(
@@ -1046,14 +1123,14 @@ ggplot() +
 ```{r actual-params, message=FALSE, warning=FALSE}
 # Make list of actual parameters used to simulate process
 actual_mech_parms <- tibble(
-  p_L = pL, lambda_L = lL, p_P = pP, lambda_P = lP, p_G = pG, lambda_G = lG,
+  lambda_Q = lQ, p_L = pL, lambda_L = lL, p_P = pP, lambda_P = lP, p_G = pG, lambda_G = lG,
   f = f) %>% 
   pivot_longer(everything())
 
 
 # Make matrix of actual values used to simulate process
 actual_mech_mat = mech_params_to_mat(tibble(
-  p_L = pL, lambda_L = lL, p_P = pP, lambda_P = lP, p_G = pG, lambda_G = lG,
+  lambda_Q = lQ, p_L = pL, lambda_L = lL, p_P = pP, lambda_P = lP, p_G = pG, lambda_G = lG,
   f = f) )%>% 
   melt() %>% rename(row_index = Var1, col_index = Var2)
 

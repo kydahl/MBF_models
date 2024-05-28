@@ -96,18 +96,41 @@
 \urlstyle{same}
 \hypersetup{
   pdftitle={Multiple blood-feeding modeling study},
+  pdfauthor={Kyle J.-M. Dahlin, Michael Robert, Lauren Childs},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
 \title{Multiple blood-feeding modeling study}
 \author{Kyle J.-M. Dahlin, Michael Robert, Lauren Childs}
-\date{May 13, 2024}
+\date{May 14, 2024}
 
 \begin{document}
 \maketitle
 
-\subsection{Sensitivity analysis of the base
-model}\label{sensitivity-analysis-of-the-base-model}
+\section{Introduction}\label{introduction}
+
+Mosquito-borne diseases are a big problem.
+
+Multiple blood-feeding, in its many forms, is a phenomenon that may
+multiply the transmission of mosquito-borne parasites.
+
+\subsection{Mechanisms and processes of mosquito
+blood-feeding}\label{mechanisms-and-processes-of-mosquito-blood-feeding}
+
+Descriptions and diagrams
+
+\begin{figure}[H]
+\includegraphics[width=400px,]{./figures/process_cartoon_draft} \caption{Cartoon of the mosquito blood-feeding process.}\label{fig:figure-1}
+\end{figure}
+
+\section{Methods}\label{methods}
+
+\subsection{Box: Modeling processes with phase-type
+distributions}\label{box-modeling-processes-with-phase-type-distributions}
+
+\subsection{Model formulation}\label{model-formulation}
+
+\subsection{Parameterization}\label{parameterization}
 
 We assume the following parameter values for the biting parameters
 
@@ -147,26 +170,24 @@ Symbol & Description & Value \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\(\eta\) & Extrinsic incubation rate & 1.1570e-04 \\
-\(\mu\) & Mosquito mortality rate & 3.3100e-05 \\
-\(\gamma\) & Return to blood-feeding rate & 2.3150e-04 \\
-\(\gamma_H\) & Host recovery rate & 9.9200e-05 \\
-\(\mu_H\) & Host mortality rate & 0.0000e+00 \\
-\(K_H\) & Host carrying capacity & 1.0000e+07 \\
-\(K_L\) & Larval mosquito carrying capacity & 3.0000e+02 \\
-\(\rho_L\) & Larval mosquito maturation rate & 5.7900e-05 \\
-\(\mu_L\) & Larval mosquito mortality rate & 3.4700e-05 \\
-\(\varphi\) & Eggs per female per day & 2.0833e-03 \\
-\(\beta_P\) & Probing transmission probability & 1.0000e+00 \\
-\(\beta_G\) & Ingestion transmission probability & 1.0000e+00 \\
-\(\beta_H\) & To-host transmission probability & 1.0000e+00 \\
-\(\beta_V\) & To-mosquito transmission probability & 1.0000e+00 \\
-\(\lambda_Q\) & Questing rate & 2.0833e-03 \\
+\(\eta\) & Extrinsic incubation rate & 0e+00 \\
+\(\mu\) & Mosquito mortality rate & 0e+00 \\
+\(\gamma\) & Return to blood-feeding rate & 0e+00 \\
+\(\gamma_H\) & Host recovery rate & 0e+00 \\
+\(\mu_H\) & Host mortality rate & 0e+00 \\
+\(K_H\) & Host carrying capacity & 1e+07 \\
+\(K_L\) & Larval mosquito carrying capacity & 3e+02 \\
+\(\rho_L\) & Larval mosquito maturation rate & 0e+00 \\
+\(\mu_L\) & Larval mosquito mortality rate & 0e+00 \\
+\(\varphi\) & Eggs per female per day & 0e+00 \\
+\(\beta_P\) & Probing transmission probability & 1e+00 \\
+\(\beta_G\) & Ingestion transmission probability & 1e+00 \\
+\(\beta_H\) & To-host transmission probability & 1e+00 \\
+\(\beta_V\) & To-mosquito transmission probability & 1e+00 \\
+\(\lambda_Q\) & Questing rate & 0e+00 \\
 \end{longtable}
 
-\section{Parameter estimation}\label{parameter-estimation}
-
-\subsection{Simulated data set}\label{simulated-data-set}
+\subsection{Simulation}\label{simulation}
 
 We simulate a set of measurements of the time it takes for a single
 mosquito seeking a blood meal on a specific host to no longer seek a
@@ -189,14 +210,67 @@ A = \begin{bmatrix}-\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} 
 \] and initial vector \(\alpha = \left(1,0,0\right)\).
 
 This distribution takes the following approximate shape and has a mean
-of 16.8149793 minutes and standard deviation of 13.2789815 minutes. The
-5\% and 95\% quantiles are at 2.1959238 minutes and 42.73141 minutes,
+of 16.8353168 minutes and standard deviation of 13.5063023 minutes. The
+5\% and 95\% quantiles are at 2.0691565 minutes and 42.9387666 minutes,
 respectively.
 
 \includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/plot-simulation-1}
 We will use this simulated data set as a proxy for real data that might
 be collected to study the effects of multiple blood-feeding on
 transmission.
+
+\section{Results: Equilibrium
+analysis}\label{results-equilibrium-analysis}
+
+\subsection{Basic reproduction number}\label{basic-reproduction-number}
+
+\subsection{Existence and stability of
+equilibria}\label{existence-and-stability-of-equilibria}
+
+\section{Results: Sensitivity
+analysis}\label{results-sensitivity-analysis}
+
+\subsection{Relationships among reproduction numbers and blood-feeding
+parameters}\label{relationships-among-reproduction-numbers-and-blood-feeding-parameters}
+
+\begin{figure}[H]
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-monotonicity-plots-1} \caption{The basic reproduction and reproductive numbers as functions of the biting rate parameters. In each figure, only the labeled parameter is being varied. All other parameters are as in Tables 1 and 2.}\label{fig:R0-monotonicity-plots-1}
+\end{figure}
+\begin{figure}[H]
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-monotonicity-plots-2} \caption{The basic reproduction and reproductive numbers as functions of the biting rate parameters. In each figure, only the labeled parameter is being varied. All other parameters are as in Tables 1 and 2.}\label{fig:R0-monotonicity-plots-2}
+\end{figure}
+
+\subsection{PRCCs of R0 or R and blood-feeding
+parameters}\label{prccs-of-r0-or-r-and-blood-feeding-parameters}
+
+Table of values
+
+\begin{figure}[H]
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/baseline-prcc-table-1} \caption{Table 3: Baseline PRCC values}\label{fig:baseline-prcc-table}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-mono-check-1} \caption{Test for the monotonicity of R0 with respect to Latin hypercube sampled blood-feeding parameters.}\label{fig:R0-mono-check}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/PRCC_var_test-1} \caption{Diagnostic test of the variation in PRCC values using 10 independent calculations}\label{fig:PRCC_var_test}
+\end{figure}
+
+The global sensitivity of \(R_0\) to the biting rate parameters does not
+change when the extrinsic incubation period is increased.
+
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-PRCC-vary-EIP-1}
+Similarly, changing the lifespan of the mosquito also does not impact
+the global sensitivity of \(R_0\) to the biting rate parameters.
+
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-PRCC-vary-mu-1}
+Let's see what happens when we increase the questing time
+
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-PRCC-vary-lambdaQ-1}
+
+\section{Results: Uncertainty
+analysis}\label{results-uncertainty-analysis}
 
 \subsection{Fitting phase-type
 distributions}\label{fitting-phase-type-distributions}
@@ -234,7 +308,9 @@ Now considering the mechanistic model. We will make direct comparisons
 between this model, the simulated data, and the empirical model. First,
 we look at how the waiting time statistics compare.
 
-\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/compare-dists-1}
+\begin{figure}[H]
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/compare-dists-1} \caption{Comparison of approximated waiting-times for the original simulated data and fitted exponential, empirical phase-type, and mechanistic phase-type distributions.}\label{fig:compare-dists}
+\end{figure}
 
 Distributions of the mechanistic parameters compared to the those used
 in the simulations.
@@ -245,7 +321,8 @@ in the simulations.
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 \end{verbatim}
 
-\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/mech-params-dists-plot-1}
+\begin{figure}[H]
+\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/mech-params-dists-plot-1} \end{figure}
 
 Correlations among the fitted parameters of the mechanistic model
 
@@ -255,34 +332,12 @@ Scatter plots showing associations among mechanistic parameters
 
 \includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/mech-params-scatter-plot-1}
 
-\subsection{Blood-feeding and
-transmission}\label{blood-feeding-and-transmission}
+\subsubsection{Estimates of R0 from fitted parameter
+sets}\label{estimates-of-r0-from-fitted-parameter-sets}
 
 Here we study how the blood-feeding parameters affect transmission via
 the basic reproduction number.
 
-\subsection{Sensitivity analysis with base and fitted
-parameters}\label{sensitivity-analysis-with-base-and-fitted-parameters}
-
-\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-monotonicity-plots-1}
-\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-monotonicity-plots-2}
-
-\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-mono-check-1}
-
-\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/PRCC_var_test-1}
-
-\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/base-R0-PRCC-1}
-
-The global sensitivity of \(R_0\) to the biting rate parameters does not
-change when the extrinsic incubation period is increased.
-
-\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-PRCC-vary-EIP-1}
-Similarly, changing the lifespan of the mosquito also does not impact
-the global sensitivity of \(R_0\) to the biting rate parameters.
-
-\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-PRCC-vary-mu-1}
-Let's see what happens when we increase the questing time
-
-\includegraphics{F:/GitHub/MBF_models/doc/study_files/figure-latex/R0-PRCC-vary-lambdaQ-1}
+\section{Discussion}\label{discussion}
 
 \end{document}

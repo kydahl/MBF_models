@@ -157,14 +157,13 @@ uninf_priors_func <- function(mean, variance, order) {
   return(out)
 }
 
-# Function: reshape phtMCMC/2 output to matrix form
 # Function: Transform samples from phtMCMC2 into Phase-type matrix form
 reshape_phtMCMC <- function(res_sample, class) {
   # Get median values from the parameter posterior distributions
   order <- case_when(
     class == "Empirical" ~ sqrt(length(res_sample)),
     # class == "Phenomenological" ~ length(res_sample)/2, # NYI
-    class == "Mechanistic" ~ 3
+    class == "Mechanistic" ~ 4
   )
   
   if (abs(order - round(order))>0) {stop("Incorrect number of entries in input")}
@@ -174,16 +173,21 @@ reshape_phtMCMC <- function(res_sample, class) {
     med_seq = seq(1,order^2, by = order)
     
     if (class == "Mechanistic") {
-      PH_mat[1,1] = -(res_sample[3] + res_sample[4]) # -(L1 + L2)
-      PH_mat[1,2] = res_sample[3]
+      PH_mat[1,1] = -res_sample[9]
+      PH_mat[1,2] = res_sample[9]
       
-      PH_mat[2,1] = res_sample[5]
-      PH_mat[2,2] = -(res_sample[5] + res_sample[6] + res_sample[7]) # P1 + P2 + P3
-      PH_mat[2,3] = res_sample[6]
+      PH_mat[2,1] = res_sample[4]
+      PH_mat[2,2] = -(res_sample[4] + res_sample[5])
+      PH_mat[2,3] = res_sample[5]
       
-      PH_mat[3,1] = res_sample[1]
-      PH_mat[3,3] = -(res_sample[1] + res_sample[2])# G1 + G2
-      PH_mat = as.matrix(PH_mat)
+      PH_mat[3,1] = res_sample[6]
+      PH_mat[3,2] = res_sample[7]
+      PH_mat[3,3] = -(res_sample[6] + res_sample[7] + res_sample[8])
+      PH_mat[3,4] = res_sample[8]
+      
+      PH_mat[4,1] = res_sample[1]
+      PH_mat[4,2] = res_sample[2]
+      PH_mat[4,4] = -(res_sample[1] + res_sample[2] + res_sample[3])
     } else {
       out_rates <- res_sample[med_seq]
       off_diags <- res_sample[-med_seq]
@@ -313,6 +317,7 @@ R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_
         # If parameters are provided, use those
         if (!is.null(provide_params)) {
           lambdaQ = provide_params$lambda_Q
+          lambdaQ = provide_params$lambda_Q
           lambdaL = provide_params$lambda_L
           pL = provide_params$p_L
           lambdaP = provide_params$lambda_P
@@ -344,6 +349,7 @@ R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_
           # Otherwise calculate the parameters from matrix entries
         } else {
           PH_params = mech_mat_to_params(PH_mat)
+          lambdaQ = PH_params$lambda_Q
           lambdaQ = PH_params$lambda_Q
           lambdaL = PH_params$lambda_L
           pL = PH_params$p_L
