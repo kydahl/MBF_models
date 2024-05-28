@@ -482,11 +482,12 @@ R0_PRCC_df = data.table(name = as.character(), PRCC_R0 = as.double(), PRCC_R = a
 ```{r PRCC-calculations, message=FALSE, warning=FALSE}
 
 PRCC_calc = FALSE
+PRCC_calc = FALSE
 
 if (PRCC_calc) {
   
   # Test whether R0 is monotonic for each biting rate parameter over the LHS samples
-  sens_res = 10000
+  sens_res = 1000
   sens_range = 1
   param_set = param_table %>% select(name, value) %>% pivot_wider() %>%
     mutate(dummy = runif(1))
@@ -667,9 +668,11 @@ read_rds("./data/vary_EIP_PRCC_vals.rds") %>%
   ggplot(aes(x = EIP, y = PRCC_R0, color = name)) +
   # geom_point(alpha = 0.3) +
   geom_line(lwd = 1) +
-  geom_hline(aes(yintercept = 0), color = "red") +
+  geom_hline(aes(yintercept = 0), color = "black") +
   scale_color_manual("Parameter",
                      values = rev(c(c4a("tableau.color_blind", 8),"black")),
+                     breaks = rev(c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
+                     values = rev(c(c4a("brewer.paired", 8),"grey")),
                      breaks = rev(c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
   )+
   scale_x_continuous("Extrinsic incubation period (days)", expand = c(0,0)) +
@@ -687,9 +690,9 @@ read_rds("./data/vary_lf_PRCC_vals.rds") %>%
   ggplot(aes(x = lf, y = PRCC_R0, color = name)) +
   # geom_point(alpha = 0.3) +
   geom_line(lwd = 1) +
-  geom_hline(aes(yintercept = 0), color = "red") +
+  geom_hline(aes(yintercept = 0), color = "black") +
   scale_color_manual("Parameter",
-                     values = rev(c(c4a("carto.safe", 8),"black")),
+                     values = rev(c(c4a("brewer.paired", 8),"grey")),
                      breaks = rev(c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
   )+
   scale_x_continuous("Mosquito lifespan (days)", expand = c(0,0)) +
