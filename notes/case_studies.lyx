@@ -971,7 +971,7 @@ where
 \end_layout
 
 \begin_layout Subsection*
-General reproductive numbers and stability of the extinction equilibrium
+General basic offspring numbers and stability of the extinction equilibrium
 \end_layout
 
 \begin_layout Standard
@@ -1356,7 +1356,7 @@ Thus the eigenvalues of
 \begin_inset Formula 
 \begin{align*}
 R & =\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\phi_{V}\frac{1}{\zeta}\right)\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha\\
- & =\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha\left(\frac{\phi_{V}}{\gamma+\mu}\right)\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\right)\left(\frac{1}{1-\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha}\right)\\
+R & =\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha\left(\frac{\phi_{V}}{\gamma+\mu}\right)\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\right)\left[1-\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha\right]^{-1}\\
  & =\left[\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha\right]\times\left(\frac{\phi_{V}}{\gamma+\mu}\right)\times\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\right)\times\left(\frac{1}{1-\frac{\gamma}{\gamma+\mu}\left(-\boldsymbol{1}^{T}A^{T}\right)\left(\mu I-A^{T}\right)^{-1}\alpha}\right)\\
  & =\tau\times\left(\frac{\phi_{V}}{\gamma+\mu}\right)\times\left(\frac{\rho_{L}}{\left(\rho_{L}+\mu_{L}\right)-\phi_{L}}\right)\times\left(\frac{1}{1-\tau\frac{\gamma}{\gamma+\mu}}\right)\\
  & =\text{Pr\left(\text{survive to oviposition}\right)}\times\text{eggs produced while ovipositing}\times\text{proportion surviving to reach biting stages}\\
@@ -3304,7 +3304,7 @@ I_{V}
 0
 \end{bmatrix}-\left\{ \begin{bmatrix}\mu_{H}S_{H}\\
 \left(\gamma_{H}+\mu_{H}\right)I_{H}\\
-\eta\boldsymbol{E}+-D_{\textrm{diag}A}^{T}\boldsymbol{E}+\mu\boldsymbol{E}\\
+\eta\boldsymbol{E}-D_{\textrm{diag}A}^{T}\boldsymbol{E}+\mu\boldsymbol{E}\\
 -D_{\textrm{diag}A}^{T}\boldsymbol{I}+\mu\boldsymbol{I}\\
 \left(\eta_{V}+\gamma+\mu\right)E_{V}\\
 \left(\gamma+\mu\right)I_{V}
@@ -3718,7 +3718,8 @@ R= & \begin{bmatrix}\boldsymbol{0}_{1\times n} & \left[\boldsymbol{1}^{T}\boldsy
 \boldsymbol{0}_{n\times1}
 \end{bmatrix}\\
  & =\boldsymbol{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\left[\mu I-A^{T}+\left(\frac{\gamma}{\gamma+\mu}\right)\vec{\alpha}\left(\boldsymbol{1}^{T}A^{T}\right)\right]^{-1}\left[\eta I_{n}-\left(\frac{\eta}{\eta+\gamma+\mu}\right)\left(\frac{\gamma}{\gamma+\mu}\right)\vec{\alpha}\left(\boldsymbol{1}^{T}A^{T}\right)\right]\left[\left(\eta+\mu\right)I-A^{T}+\left(\frac{\gamma}{\eta+\gamma+\mu}\right)\vec{\alpha}\left(\boldsymbol{1}^{T}A^{T}\right)\right]^{-1}\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\left(\frac{\boldsymbol{B}^{*}}{K_{H}}\right)\\
- & =\boldsymbol{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\left[\eta I_{n}-\left(\frac{\eta}{\eta+\gamma+\mu}\right)\left(\frac{\gamma}{\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}\right]\left[\left(\eta+\mu\right)I-A^{T}+\left(\frac{\gamma}{\eta+\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}\right]^{-1}\left[\left(\mu I-A^{T}\right)+\left(\frac{\gamma}{\gamma+\mu}\right)\vec{\alpha}\left(\boldsymbol{1}^{T}A^{T}\right)\right]^{-1}\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\left(\frac{\boldsymbol{B}^{*}}{K_{H}}\right)
+\mathcal{R}_{0} & =\boldsymbol{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\left[\eta I_{n}-\left(\frac{\eta}{\eta+\gamma+\mu}\right)\left(\frac{\gamma}{\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}\right]\left[\left(\eta+\mu\right)I-A^{T}+\left(\frac{\gamma}{\eta+\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}\right]^{-1}\times\\
+ & \;\times\left[\left(\mu I-A^{T}\right)+\left(\frac{\gamma}{\gamma+\mu}\right)\vec{\alpha}\left(\boldsymbol{1}^{T}A^{T}\right)\right]^{-1}\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\left(\frac{\boldsymbol{B}^{*}}{K_{H}}\right)
 \end{align*}
 
 \end_inset

@@ -31,7 +31,7 @@ for (i in 1:length(ldf)) {
   
   temp_frame <- ldf[[i]] %>% 
     rename(any_of(cols_to_rename)) %>% 
-    select(any_of(c("trait.name", "T", "trait", "ref", "mosquito_species", "parasite"))) %>% 
+    dplyr::select(any_of(c("trait.name", "T", "trait", "ref", "mosquito_species", "parasite"))) %>%
     # assign parasite and mosquito species for data sets where they aren't included in the actual file
     # needs to be done for datasets: 3, 4, 
     mutate(dataset_ID = i,
@@ -46,7 +46,7 @@ for (i in 1:length(ldf)) {
                                     "gcd" ~ 1/trait
     )
     ) %>% 
-    select(-c(trait.name, trait))
+    dplyr::select(-c(trait.name, trait))
   
   data <- rbind(data, temp_frame)
 }

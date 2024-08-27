@@ -14,8 +14,7 @@ knit: (function(inputFile, encoding) {
 
 ```{r setup, include=FALSE, echo = FALSE}
 knitr::opts_chunk$set(
-  echo = FALSE, cache = FALSE, warning = FALSE, fig.pos = "H",
-  out.extra = ""
+  echo = FALSE, cache = FALSE, warning = FALSE, fig.pos = "H", dev = c("png", "pdf")
 )
 # Load Libraries----------------------------------------------------------------
 library(matrixdist)
@@ -99,7 +98,7 @@ param_table = tibble(
   name = c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f"),
   Symbol = c("$\\lambda_Q$", "$p_L$", "$\\lambda_L$", "$p_P$", "$\\lambda_P$", "$p_G$", "$\\lambda_G$", "$f$"),
   Description = c("Exit rate from questing stage (per minute)", 
-                  "Probability of progressing from landing to probing ",
+                  "Probability of progressing from landing to probing",
                   "Exit rate from landing stage (per minute)", 
                   "Probability of progressing from probing to ingesting",
                   "Exit rate from probing stage (per minute)",
@@ -107,38 +106,45 @@ param_table = tibble(
                   "Exit rate from ingestion stage (per minute)",
                   "Probability of seeking a new vertebrate host given feeding failure"
   ),
+  Label = c("Questing rate", "Landing success probability", "Landing rate", "Probing success probability", "Probing rate", "Ingestion success probability", "Ingesting rate", "Seek-new-host probability"), 
+  Type = c("Rate", "Probability", "Rate", "Probability", "Rate", "Probability", "Rate", "Probability"),
+  Prefix = c("Questing", "Landing", "Landing", "Probing", "Probing", "Ingesting",  "Ingesting", "Seeking"), 
   value = c(lQ, pL, lL, pP, lP, pG, lG, f)
 )
 
-kable(select(param_table, -name) %>% rename(Value = value))
+param_table$Label <- factor(param_table$Label, levels = c("Questing rate", "Seek-new-host probability", "Landing success probability", "Landing rate", "Probing success probability", "Probing rate", "Ingestion success probability", "Ingesting rate"))
+
+kable(select(param_table, -c(name, Label)) %>% rename(Value = value))
 ```
 and the following for the remaining model parameters
 ```{r other-parameters, message=FALSE, warning=FALSE, fig.cap='Table 2: All other parameters'}
 # !!! temporary values for testing
-eta = 1/(6 * 1440) # 6 days for infection to develop in vector
-mu = 1/(21 * 1440) # 20 day lifespan for vector
-gamma = 1/(3 * 1440) # rate of return from oviposition to blood-feeding (3 days)
+eta = 1/(10 * 1440) # 10 days for infection to develop in vector
+mu = 1/(20 * 1440) # 20 day lifespan for vector
+gammaV = 1/(5 * 1440) # exit rate from oviposition to resting, including bloodmeal digestion and site search (5 days)
+gammaR = 1/(2 * 1440) # exit rate from resting to return to blood-feeding (2 days)
 gammaH = 1/(7 * 1440) # rate of recovery in hosts (7 days)
 muH = 1/(365.25 * 65 * 1440) # host mortality rate (65 years)
 KH = 10^7 # host population density
 
-KL = 300
-rhoL = 1/(12 * 1440)
-muL = 1/(20 * 1440)
-varPhi = 3 / 1440
+KL = 3000
+rhoL = 1/(12 * 1440) # 12 day larval development period (from egg to adult)
+muL = 1/(20 * 1440) # 62.5% probability of larval survival
+varPhi = 3 / 1440 # on average 3 eggs per female per day
 
 # Epidemiological parameters
 epi_parms = tibble(betaP = 1, betaG = 1, betaH = 1, betaV = 1)
 
 parameters = tibble(
-  eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms
+  eta = eta, mu = mu, gammaV = gammaV, gammaR = gammaR, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms
 )
 
 nice_parameter_table = tibble(
   pivot_longer(parameters, everything()),
-  Symbol = c("$\\eta$", "$\\mu$", "$\\gamma$", "$\\gamma_H$", "$\\mu_H$", "$K_H$", "$K_L$", "$\\rho_L$", "$\\mu_L$", "$\\varphi$", "$\\beta_P$", "$\\beta_G$", "$\\beta_H$", "$\\beta_V$"),
+  Symbol = c("$\\eta$", "$\\mu$", "$\\gamma_V$", "$\\gamma_R$", "$\\gamma_H$", "$\\mu_H$", "$K_H$", "$K_L$", "$\\rho_L$", "$\\mu_L$", "$\\varphi$", "$\\beta_P$", "$\\beta_G$", "$\\beta_H$", "$\\beta_V$"),
   Description = c("Extrinsic incubation rate", 
                   "Mosquito mortality rate",
+                  "Oviposition exit rate",
                   "Return to blood-feeding rate",
                   "Host recovery rate", 
                   "Host mortality rate", 
@@ -217,9 +223,9 @@ and initial vector $\alpha = \left(1,0,0\right)$.
 This distribution takes the following approximate shape and has a mean of `r mean(direct_samps)` minutes and standard deviation of `r sd(direct_samps)` minutes. The 5\% and 95\% quantiles are at `r quantile(direct_samps, 0.05)` minutes and `r quantile(direct_samps, 0.95)` minutes, respectively. 
 
 ```{r plot-simulation}
-ggplot(as.data.frame(x = direct_samps), aes(x=direct_samps)) +
+ggplot(as.data.frame(x = direct_samps), aes(x=direct_samps / 1440)) +
   geom_density(fill = "blue", alpha = 0.5) + 
-  scale_x_continuous("Time before ending blood-feeding", expand = c(0,0)) +
+  scale_x_continuous("Time before ending blood-feeding (days)", expand = c(0,0)) +
   scale_y_continuous("Density", expand = c(0,0))
 ```
 We will use this simulated data set as a proxy for real data that might be collected to study the effects of multiple blood-feeding on transmission.
@@ -241,14 +247,8 @@ We will use this simulated data set as a proxy for real data that might be colle
 # - points for posterior sample sets, colored by type (just do empirical(1) and mechanistic)
 
 # Posterior R0 PRCC distribution calculations
-
-#
-mu = 1 / (21 * 1440)
-eta = 1 / (6 * 1440)
-# !!! this is explicit in the R0 calculation function lambdaQ = 1 / ((1/3) * 1440) # questing takes on average one third of a day
-gamma = 1/(3 * 1440) # rate of return from oviposition to blood-feeding (3 days) - resting - laying - resting
 parameters = tibble(
-  eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms
+  eta = eta, mu = mu, gammaR = gammaR, gammaV = gammaV, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms
 )
 
 # Set up parameter set variation
@@ -282,7 +282,7 @@ R0_sensitivity_df <- tibble(R0 = as.double(), R = as.double(),
                             variable_parm = as.character())
 # Calculate R0 across varied baseline parameters
 plan(multisession)
-progressr::handlers(global = TRUE)
+# progressr::handlers(global = TRUE)
 progressr::handlers("cli")
 
 
@@ -347,47 +347,169 @@ base_points = cbind(base_Rs, param_set) %>%
 
 R0_mono_plot <- test %>%
   filter(R0 > 0) %>% 
+  right_join(select(param_table, name, Label), by = "name") %>% 
   ggplot(aes(x = value, y = R0)) +
   geom_line(lwd = 1) +
   # geom_point(data = test2, aes(color = "mech"), alpha = 0.3) +
-  geom_point(data = base_points, aes(color = "actual"), size = 3) +
+  geom_point(data = right_join(base_points, select(param_table, name, Label), by = "name"), aes(color = "actual"), size = 3) +
   scale_color_manual("Type",
                      breaks = c("actual"="green", "mech"="blue"),
                      values = c("actual"="green", "mech"="blue"),
                      labels = c("actual", "mech")) +
-  facet_wrap(~name, scales = "free") +
-  ggtitle("Variation of R0 with respect to biting rate parameters") +
+  scale_y_continuous(name = TeX("Basic reproduction number, $R_0$")) +
+  scale_x_continuous(name = c()) +
+  facet_wrap( ~ Label, scales = "free", ncol = 2) +
+  # ggtitle("Variation of R0 with respect to biting rate parameters") +
   theme_minimal_grid()
 R0_mono_plot
 
 Rs_mono_plot <- test %>%
+  right_join(select(param_table, name, Label), by = "name") %>% 
   ggplot(aes(x = value, y = R)) +
   geom_line(lwd = 1) +
-  geom_point(data = base_points, aes(color = "actual"), size = 3) +
-  # geom_point(data = test2, color = "blue", alpha = 0.3) +
-  facet_wrap(~name, scales = "free") +
+  # geom_point(data = test2, aes(color = "mech"), alpha = 0.3) +
+  geom_point(data = right_join(base_points, select(param_table, name, Label), by = "name"), aes(color = "actual"), size = 3) +
   scale_color_manual("Type",
                      breaks = c("actual"="green", "mech"="blue"),
                      values = c("actual"="green", "mech"="blue"),
                      labels = c("actual", "mech")) +
+  scale_y_continuous(name = TeX("Basic offspring number, $R$")) +
+  scale_x_continuous(name = c()) +
+  facet_wrap( ~ Label, scales = "free", ncol = 2) +
   theme_minimal_grid()
 Rs_mono_plot
+
+
+
+```
+
+```{r monotonicity_both_Rs-plot}
+
+# Scaling coefficient for the two y-axes
+coeff = mean(mutate(filter(test, R0 >0), ratio = R / R0)$ratio, na.rm = T)
+coeff = 50
+
+both_Rs_mono_plot <- test %>%
+  filter(R0 > 0) %>% 
+  mutate(ratio = R / R0) %>% 
+  right_join(select(param_table, name, Label), by = "name") %>% 
+  ggplot(aes(x = value)) +
+  geom_line(aes(y = R0), color = "red", lwd = 1) +
+  geom_line(aes(y = R / coeff), color = "blue", lwd = 1) + 
+  # geom_point(data = test2, aes(color = "mech"), alpha = 0.3) +
+  # geom_point(data = right_join(base_points, select(param_table, name, Label), by = "name"), aes(y = R0, color = "actual"), size = 3) +
+  # geom_point(data = right_join(base_points, select(param_table, name, Label), by = "name"), aes(y = R / coeff, color = "actual"), size = 3) +
+  scale_color_manual("Type",
+                     breaks = c("actual"="green", "mech"="blue"),
+                     values = c("actual"="green", "mech"="blue"),
+                     labels = c("actual", "mech")) +
+  scale_y_continuous(name = TeX("Basic reproduction number, $R_0$"),
+                     sec.axis = sec_axis(trans = ~.*coeff, 
+                                         name = TeX("Basic offspring number, $R$"))
+  ) +
+  scale_x_continuous(name = c()) +
+  facet_wrap( ~ Label, scales = "free", ncol = 2) +
+  theme_minimal_grid() +
+  # ggtitle("Variation of R0 with respect to biting rate parameters") +
+  theme(
+    axis.title.y = element_text(color = "red", size=13),
+    axis.title.y.right = element_text(color = "blue", size=13)
+  )
+both_Rs_mono_plot
+
+ggsave("figures/Rs_comparison.png", plot = both_Rs_mono_plot, 
+       width = 13.333, height = 6.5, units = "in")
+
+```
+
+```{r monotonicity_isolate_pG-plot}
+
+coeff = 1
+
+just_pG_mono_plot <- test %>%
+  filter(name == "p_G") %>% 
+  filter(R0 > 0) %>% 
+  mutate(ratio = R / R0) %>% 
+  right_join(select(param_table, name, Label), by = "name") %>% 
+  ggplot(aes(x = value)) +
+  geom_line(aes(y = R0), color = "red", lwd = 1) +
+  geom_line(aes(y = R / coeff), color = "blue", lwd = 1) + 
+  # geom_point(data = test2, aes(color = "mech"), alpha = 0.3) +
+  # geom_point(data = right_join(base_points, filter(select(param_table, name, Label), name == "p_G"), by = "name"), aes(y = R0, color = "actual"), size = 3) +
+  # geom_point(data = right_join(base_points, filter(select(param_table, name, Label), name == "p_G"), by = "name"), aes(y = R, color = "actual"), size = 3) +
+  scale_color_manual("Type",
+                     breaks = c("actual"="green", "mech"="blue"),
+                     values = c("actual"="green", "mech"="blue"),
+                     labels = c("actual", "mech")) +
+  scale_y_continuous(name = TeX("Basic reproduction number, $R_0$"),
+                     sec.axis = sec_axis(trans = ~.*coeff, 
+                                         name = TeX("Basic offspring number, $R$"))
+  ) +
+  scale_x_continuous(name = c()) +
+  # facet_wrap( ~ Label, scales = "free", ncol = 2) +
+  theme_minimal_grid() +
+  ggtitle("Ingestion success probability") +
+  theme(
+    axis.title.y = element_text(color = "red", size=13),
+    axis.title.y.right = element_text(color = "blue", size=13), 
+    plot.title = element_text(hjust = 0.5)
+  )
+just_pG_mono_plot
+
+ggsave("figures/Rs_comparison_pGfocus.png", plot = just_pG_mono_plot, 
+       width = 13.333, height = 6.5, units = "in")
+
 ```
 
 ## PRCCs of R0 or R and blood-feeding parameters
 
 Table of values
-```{r baseline-prcc-table, message=FALSE, warning=FALSE, fig.cap = 'Table 3: Baseline PRCC values'}
+```{r baseline-prcc-plot, message=FALSE, warning=FALSE, fig.cap = 'Table 3: Baseline PRCC values'}
+
+
+# Labels
+param_labels = select(param_table, name, Label, Prefix, Type) %>% 
+  arrange(Label) %>% 
+  add_row(name = "dummy", Label = "Dummy variable", Prefix = "Dummy", Type = "Rate")
+
+
+temp = read_rds("./data/PRCC_variance_test.rds") %>% 
+  filter(iterate == 1) %>%
+  right_join(param_labels, by = "name")
+
+temp$Label <- factor(temp$Label, levels = c("Dummy variable", "Questing rate", "Seek-new-host probability", "Landing success probability", "Landing rate", "Probing success probability", "Probing rate", "Ingestion success probability", "Ingesting rate"))
+
+dummy_replace = temp %>% 
+  mutate(PRCC_R0 = filter(temp, name == "dummy")$PRCC_R0) %>% 
+  mutate(x = Inf)
+
+dummy_replace = add_row(dummy_replace, mutate(dummy_replace, x = -Inf))
+
+# Labels
+
+temp$Prefix = factor(temp$Prefix, levels = c("Dummy", "Questing", "Seeking", "Landing", "Probing", "Ingesting"))
+temp$Type = factor(temp$Type, levels = c("Rate", "Probability"))
+
 
 # Plot baseline PRCC values
-read_rds("./data/PRCC_variance_test.rds") %>% 
-  filter(iterate == 1) %>%
+baseline_PRCC_plot <- temp %>% 
   ggplot() +
-  geom_col(aes(x = name, y = PRCC_R0)) +
-  ggtitle("Baseline PRCC results") +
+  geom_col(aes(x = Label, y = PRCC_R0, fill = Prefix, linetype = Type), 
+           color = "black", lwd = 1) +
+  geom_hline(aes(yintercept = 0), lwd = 1) +
+  # geom_hline(data = filter(temp, name == "dummy"), aes(yintercept = PRCC_R0)) +
+  # geom_ribbon(data = dummy_replace, aes(ymin = -PRCC_R0, ymax = PRCC_R0, x, y = NULL), alpha = 0.5) +
+  # ggtitle("Baseline PRCC results") +
   scale_x_discrete("") + 
-  scale_y_continuous("R0 PRCC values") + #, limits = c(-1,1)) +
-  theme_minimal_hgrid(10)
+  scale_y_continuous(TeX("$R_0$ PRCC values")) + #, limits = c(-1,1)) +
+  scale_fill_manual("Parameter", values = c("grey", c4a("poly.dark24", 5))) +
+  theme_minimal_hgrid(16) +
+  theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1))
+
+baseline_PRCC_plot
+
+ggsave("figures/baseline_PRCC.png", plot = baseline_PRCC_plot, 
+       width = 13.333, height = 6.5, units = "in")
 
 ```
 
@@ -401,7 +523,7 @@ read_rds("./data/PRCC_variance_test.rds") %>%
 
 R0_PRCC_func <- function(vary_parameters, progress_bool = FALSE) {
   sens_res = 10000
-  sens_range = 1
+  sens_range = 10
   param_set = param_table %>% select(name, value) %>% pivot_wider() %>%
     mutate(dummy = runif(1))
   num_params = length(param_set)
@@ -413,10 +535,12 @@ R0_PRCC_func <- function(vary_parameters, progress_bool = FALSE) {
     
     if (colnames(param_set[j]) %in% c("f", "p_L", "p_P", "p_G")) {
       max_val = min(1,  (1 + sens_range) * param_set[j][[1]])
+    } else {
+      max_val = (1 + sens_range) * param_set[j][[1]]
     }
     
     transformed_LHS_mat[,j] = qunif(LHS_mat[,j],
-                                    min = (1 - sens_range) * param_set[j][[1]],
+                                    min = max(0, (1 - sens_range)) * param_set[j][[1]],
                                     max = max_val)
   }
   
@@ -472,7 +596,7 @@ R0_PRCC_func <- function(vary_parameters, progress_bool = FALSE) {
       temp2 = cbind(temp, vary_parameters[i,])
     }
   plan(sequential)
-  print(1/vary_parameters$eta/1440)
+  # print(1/vary_parameters$eta/1440)
   return(out)
 }
 
@@ -481,7 +605,6 @@ R0_PRCC_df = data.table(name = as.character(), PRCC_R0 = as.double(), PRCC_R = a
 
 ```{r PRCC-calculations, message=FALSE, warning=FALSE}
 
-PRCC_calc = FALSE
 PRCC_calc = FALSE
 
 if (PRCC_calc) {
@@ -500,18 +623,18 @@ if (PRCC_calc) {
       max_val = min(1,  (1 + sens_range) * param_set[j][[1]])
     }
     transformed_LHS_mat[,j] = qunif(LHS_mat[,j],
-                                    min = (1 - sens_range) * param_set[j][[1]],
+                                    min = max(0, (1 - sens_range)) * param_set[j][[1]],
                                     max = max_val)
   }
-  
+
   sens_params = as_tibble(transformed_LHS_mat)
   names(sens_params) = colnames(param_set[1:(num_params)])
-  
+
   R0_sensitivity_df = data.frame(sens_params[0,],
                                  R0 = as.double(), R = as.double())
   parameter_indices = 1:dim(parameters)[1]
   LHS_indices = 1:dim(sens_params)[1]
-  T
+
   mono_R0_df = foreach(
     k = LHS_indices,
     .combine = "rbind") %do% {
@@ -519,42 +642,57 @@ if (PRCC_calc) {
       Rs = R0_calc(PH_mat = NULL, "Mechanistic", parameters, provide_params = sens_params[k,])
       data.table(sens_params[k,], Rs)
     }
-  
+
   write_rds(mono_R0_df, "./data/mono_R0_vals.rds")
-  
+
   # Test whether there is detectable variation in PRCC values
   # If there is, then need to increase the resolution of the Latin Hypercube sampling
   print("Calculating variation in PRCC values")
   rep_params = parameters
-  for (i in 1:(100 - 1)) {rep_params = rbind(rep_params, parameters)}
-  
-  PRCC_var_test = R0_PRCC_func(rep_params, progress_bool = TRUE) %>% 
+  repeat_num = 10
+  for (i in 1:(repeat_num - 1)) {rep_params = rbind(rep_params, parameters)}
+
+  PRCC_var_test = R0_PRCC_func(rep_params, progress_bool = TRUE) %>%
     mutate(iterate = floor((row_number() - 1) / 9) + 1)
-  
+
   write_rds(PRCC_var_test, "./data/PRCC_variance_test.rds")
-  
+
   # Calculate PRCCs as EIP is varied
   print("Calculating PRCCs as EIP is varied")
   parameters = tibble(
-    eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms
+    eta = eta, mu = mu, gammaR = gammaR, gammaV = gammaV, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms
   )
   vary_parameters <- select(parameters, -eta) %>%
-    cross_join(tibble(eta = 1/(1440 * seq(1, 28, length.out = 14))))
-  
-  R0_PRCC_df_EIP = R0_PRCC_func(vary_parameters, progress_bool = TRUE) %>% 
+    cross_join(tibble(eta = 1/(1440 * seq(1, 21, length.out = 100))))
+
+  R0_PRCC_df_EIP = R0_PRCC_func(vary_parameters, progress_bool = TRUE) %>%
     select(name, PRCC_R0, PRCC_R, eta)
   gc(verbose = FALSE)
-  
+
   write_rds(R0_PRCC_df_EIP, "./data/vary_EIP_PRCC_vals.rds")
+
+    # Calculate PRCCs as resting time / oviposition site availability is varied
+  print("Calculating PRCCs as gamma_V is varied")
+  parameters = tibble(
+    eta = eta, mu = mu, gammaR = gammaR, gammaV = gammaV, gammaH = gammaH, muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, varPhi = varPhi, epi_parms
+  )
+  vary_parameters <- select(parameters, -gammaV) %>%
+    cross_join(tibble(gammaV = 1/(1440 * seq(1, 21, length.out = 21))))
+  
+  R0_PRCC_df_gamma = R0_PRCC_func(vary_parameters, progress_bool = TRUE) %>% 
+    select(name, PRCC_R0, PRCC_R, gammaV)
+  gc(verbose = FALSE)
+  
+  write_rds(R0_PRCC_df_gamma, "./data/vary_gamma_PRCC_vals.rds")
   
   # Calculate PRCCs as lifespan is varied
   print("Calculating PRCCs as lifespan is varied")
-  parameters = tibble(eta = eta, mu = mu, gamma = gamma, gammaH = gammaH, 
+  parameters = tibble(eta = eta, mu = mu, gammaR = gammaR, gammaV = gammaV, gammaH = gammaH, 
                       muH = muH, KH = KH, KL = KL, rhoL = rhoL, muL = muL, 
                       varPhi = varPhi, epi_parms)
   
   vary_parameters <- select(parameters, -mu) %>%
-    cross_join(tibble(mu = 1/(1440 * seq(1, 60, length.out = 3 * 60))))
+    cross_join(tibble(mu = 1/(1440 * seq(1, 30, length.out = 6 * 60))))
   R0_PRCC_df_mu = R0_PRCC_func(vary_parameters, progress_bool = TRUE)
   gc(verbose = FALSE)
   
@@ -592,26 +730,32 @@ if (PRCC_calc) {
 Table of values
 ```{r baseline-prcc-table, message=FALSE, warning=FALSE, fig.cap = 'Table 3: Baseline PRCC values'}
 
-# Plot baseline PRCC values
+# Table of baseline PRCC values
 read_rds("./data/PRCC_variance_test.rds") %>% 
-  filter(iterate %in% 1:9) %>% 
-  ggplot() +
-  geom_col(aes(x = name, y = PRCC_R0)) +
-  ggtitle("Baseline PRCC results") +
-  scale_x_discrete("") + 
-  scale_y_continuous("R0 PRCC values") + #, limits = c(-1,1)) +
-  theme_minimal_hgrid(10)
+  filter(iterate %in% 1) %>%  
+  select(name, PRCC_R0, PRCC_R) %>% 
+  kable()
 
 ```
 
 ```{r R0-mono-check, message=FALSE, warning=FALSE, fig.cap = 'Test for the monotonicity of R0 with respect to Latin hypercube sampled blood-feeding parameters.'}
+
+# Labels
+labels = select(param_table, name, Label) %>% 
+  arrange(Label) %>% 
+  add_row(name = "dummy", Label = "Dummy variable") %>% 
+  deframe()
+
 # Visual check for monotonicity
 read_rds("./data/mono_R0_vals.rds") %>%
   filter(R > 1) %>%
   pivot_longer(cols = -c(R0,R)) %>%
   ggplot(aes(x = value, y = log(R0))) +
   geom_point(alpha = 0.1) +
-  facet_wrap( ~ name, scales = "free") +
+  scale_y_continuous(name = TeX("$\\log(R_0)$")) +
+  facet_wrap( ~ name, scales = "free", 
+              labeller = as_labeller(labels)
+  ) +
   theme_minimal_grid()
 ```
 
@@ -663,45 +807,123 @@ read_rds("./data/PRCC_variance_test.rds")  %>%
 The global sensitivity of $R_0$ to the biting rate parameters does not change when the extrinsic incubation period is increased.
 ```{r R0-PRCC-vary-EIP, message=FALSE, warning=FALSE}
 
-read_rds("./data/vary_EIP_PRCC_vals.rds") %>%
+# Labels
+param_labels = select(param_table, name, Label, Prefix, Type) %>% 
+  arrange(Label) %>% 
+  add_row(name = "dummy", Label = "Dummy variable", Prefix = "Dummy", Type = "Rate")
+
+plot_df <- read_rds("./data/vary_EIP_PRCC_vals.rds") %>%
   mutate(EIP = 1 / (1440 * eta)) %>%
-  ggplot(aes(x = EIP, y = PRCC_R0, color = name)) +
+  right_join(param_labels, by = "name")
+
+plot_df$Prefix = factor(plot_df$Prefix, levels = c("Dummy", "Questing", "Seeking", "Landing", "Probing", "Ingesting"))
+plot_df$Type = factor(plot_df$Type, levels = c("Rate", "Probability"))
+
+
+R0_PRCC_vary_EIP_plot <- filter(plot_df, name != "dummy") %>%
+  ggplot(aes(x = EIP)) +
   # geom_point(alpha = 0.3) +
-  geom_line(lwd = 1) +
+  geom_line(aes(y = PRCC_R0, color = Prefix, linetype = Type), lwd = 1) +
   geom_hline(aes(yintercept = 0), color = "black") +
-  scale_color_manual("Parameter",
-                     values = rev(c(c4a("tableau.color_blind", 8),"black")),
-                     breaks = rev(c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
-                     values = rev(c(c4a("brewer.paired", 8),"grey")),
-                     breaks = rev(c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
-  )+
+  geom_ribbon(data = filter(plot_df, name == "dummy"), 
+              aes(ymin = -abs(PRCC_R0), ymax = abs(PRCC_R0)),
+              fill = c4a("tableau.classic_color_blind", 6)[3],
+              alpha = 0.5) +
+  scale_color_manual("Parameter", values = c4a("poly.dark24", 5)) +
   scale_x_continuous("Extrinsic incubation period (days)", expand = c(0,0)) +
-  scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) +
-  ggtitle("R0 PRCCs as EIP is varied") +
+  scale_y_continuous(TeX("$R_0$ PRCC value"), expand = c(0,0)) +
   theme(axis.ticks.x = element_text(size = 6)) +
   theme_minimal_grid()
+
+R0_PRCC_vary_EIP_plot
+
+ggsave("figures/R0_PRCC_vary_EIP.svg", plot = R0_PRCC_vary_EIP_plot, 
+       width = 13.333, height = 6.5, units = "in")
 
 ```
 Similarly, changing the lifespan of the mosquito also does not impact the global sensitivity of $R_0$ to the biting rate parameters.
 ```{r R0-PRCC-vary-mu, message=FALSE, warning=FALSE}
 
-read_rds("./data/vary_lf_PRCC_vals.rds") %>%
-  mutate(lf = 1/(1440 * mu)) %>%
-  ggplot(aes(x = lf, y = PRCC_R0, color = name)) +
+# Labels
+param_labels = select(param_table, name, Label, Prefix, Type) %>% 
+  arrange(Label) %>% 
+  add_row(name = "dummy", Label = "Dummy variable", Prefix = "Dummy", Type = "Rate")
+
+plot_df <- read_rds("./data/vary_lf_PRCC_vals.rds") %>%
+  mutate(lf = 1/(1440 * mu)) %>% 
+  right_join(param_labels, by = "name")
+
+plot_df$Prefix = factor(plot_df$Prefix, levels = c("Dummy", "Questing", "Seeking", "Landing", "Probing", "Ingesting"))
+plot_df$Type = factor(plot_df$Type, levels = c("Rate", "Probability"))
+  
+R0_PRCC_vary_lf_plot <- filter(plot_df, name != "dummy") %>%
+  ggplot(aes(x = lf)) +
   # geom_point(alpha = 0.3) +
-  geom_line(lwd = 1) +
+  geom_line(aes(y = PRCC_R0, color = Prefix, linetype = Type), lwd = 1) +
   geom_hline(aes(yintercept = 0), color = "black") +
+  geom_ribbon(data = filter(plot_df, name == "dummy"), 
+              aes(ymin = -abs(PRCC_R0), ymax = abs(PRCC_R0)),
+              fill = c4a("tableau.classic_color_blind", 6)[3],
+              alpha = 0.5) +
   scale_color_manual("Parameter",
-                     values = rev(c(c4a("brewer.paired", 8),"grey")),
-                     breaks = rev(c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
-  )+
-  scale_x_continuous("Mosquito lifespan (days)", expand = c(0,0)) +
-  scale_y_continuous("R0 PRCC value", expand = c(0,0), limits = c(-1,1)) +
-  ggtitle("R0 PRCCs as mosquito lifespan is varied") +
+                     values = c4a("poly.dark24", 5)
+                     # breaks = rev(c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
+  ) +
+  scale_x_continuous("Mosquito lifespan (days)", expand = c(0,0), limits = c(1, 30)) +
+  scale_y_continuous("R0 PRCC value", expand = c(0,0)) +
+  # ggtitle("R0 PRCCs as mosquito lifespan is varied") +
   theme(axis.ticks.x = element_text(size = 6)) +
   theme_minimal_grid()
 
+R0_PRCC_vary_lf_plot
+
+
+ggsave("figures/R0_PRCC_vary_lf.svg", plot = R0_PRCC_vary_lf_plot, 
+       width = 13.333, height = 6.5, units = "in")
+
 ```
+
+```{r R0-PRCC-vary-gamma, message=FALSE, warning=FALSE}
+
+# Labels
+param_labels = select(param_table, name, Label, Prefix, Type) %>% 
+  arrange(Label) %>% 
+  add_row(name = "dummy", Label = "Dummy variable", Prefix = "Dummy", Type = "Rate")
+
+plot_df <- read_rds("./data/vary_gamma_PRCC_vals.rds") %>%
+  mutate(rest = 1/(1440 * gammaV)) %>% 
+  right_join(param_labels, by = "name")
+
+plot_df$Prefix = factor(plot_df$Prefix, levels = c("Dummy", "Questing", "Seeking", "Landing", "Probing", "Ingesting"))
+plot_df$Type = factor(plot_df$Type, levels = c("Rate", "Probability"))
+  
+R0_PRCC_vary_gamma_plot <- filter(plot_df, name != "dummy") %>%
+  ggplot(aes(x = rest)) +
+  # geom_point(alpha = 0.3) +
+  geom_line(aes(y = PRCC_R0, color = Prefix, linetype = Type), lwd = 1) +
+  geom_hline(aes(yintercept = 0), color = "black") +
+  geom_ribbon(data = filter(plot_df, name == "dummy"), 
+              aes(ymin = -abs(PRCC_R0), ymax = abs(PRCC_R0)),
+              fill = c4a("tableau.classic_color_blind", 6)[3],
+              alpha = 0.5) +
+  scale_color_manual("Parameter",
+                     values = c4a("poly.dark24", 5)
+                     # breaks = rev(c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f", "dummy"))
+  ) +
+  scale_x_continuous("Resting period (days)", expand = c(0,0)) +
+  scale_y_continuous("R0 PRCC value", expand = c(0,0)) +
+  # ggtitle("R0 PRCCs as mosquito lifespan is varied") +
+  theme(axis.ticks.x = element_text(size = 6)) +
+  coord_cartesian(xlim = c(1,6)) +
+  theme_minimal_grid()
+
+R0_PRCC_vary_gamma_plot
+
+
+ggsave("figures/R0_PRCC_vary_gamma.svg", plot = R0_PRCC_vary_gamma_plot, 
+       width = 13.333, height = 6.5, units = "in")
+```
+
 <!-- Let's see what happens when we increase the questing time -->
 <!-- ```{r R0-PRCC-vary-lambdaQ, message=FALSE, warning=FALSE} -->
 
@@ -920,7 +1142,7 @@ if (redo_fitting) {
     "P1" = (f * (1 - pP) * lP) * zeta_ref, "P2" = ((1-f) * (1-pP) * lP) * zeta_ref, "P3" = (pP * lP) * zeta_ref,
     "G1" = (f * (1 - pG) * lG) * zeta_ref, "G2" = ((1-f) * (1-pG) * lG) * zeta_ref, "G3" = (pG * lG) * zeta_ref
   )
-
+  
   # # Gamma priors for shape hyperparameters of model parameters
   # nu_ref = 0.125
   # nu <- c(
@@ -960,7 +1182,7 @@ if (redo_fitting) {
   # Initialize parallel processing
   plan(multisession, workers = availableCores(), gc = TRUE)
   # Set up progress bar
-  handlers(global = TRUE)
+  # handlers(global = TRUE)
   handlers("cli")
   # Create temporary function to create table
   mech_param_func = function(indices) {
@@ -1179,6 +1401,7 @@ Correlations among the fitted parameters of the mechanistic model
 #### Parameter correlations plot
 mech_params_df %>% 
   select(-c(iterate)) %>% 
+  filter(!(is.infinite(f))) %>% 
   cor() %>% 
   corrplot(., type = "lower")
 ```
@@ -1204,7 +1427,7 @@ iterates = min(length(unique(emp_mats_df$iterate)), length(unique(mech_params_df
 
 plan(multisession)
 R0_df = foreach(i = 1:iterates,
-                .combine = 'rbind') %dofuture% {
+                .combine = 'rbind') %do% {
                   # Mechanistic R values
                   mech_Rs = R0_calc(NULL, "Mechanistic", parameters, provide_params = mech_params_df[i,])
                   temp_df = data.table(iterate = i, type = "Mechanistic", mech_Rs)
@@ -1223,6 +1446,7 @@ R0_df = foreach(i = 1:iterates,
                   exp_Rs = R0_calc(PH_exp_mat, "Exponential", parameters)
                   add_row(temp_df, iterate = i, type = "Exponential", exp_Rs)
                   
+                  temp_df
                 }
 
 

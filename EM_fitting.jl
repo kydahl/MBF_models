@@ -243,6 +243,7 @@ function full_fitting_function(number_iterations, data_in, subint_guess, alpha_g
         prev_logLik = logLik_new
         # println(logLik)
     end
+    # π_new = π_new / sum(π_new)
     return(T_new, π_new)
 end
 
@@ -274,14 +275,14 @@ t_ii = -subint_guess * ones(dim_guess) - t_vec_guess
 subint_guess[diagind(subint_guess)] .= t_ii
 
 alpha_guess = rand(Float64, (1, dim_guess))
-alpha_guess = alpha_guess / sum(alpha_guess)
-# alpha_guess = [1.0 0.0 0.0 0.0]
+# alpha_guess = alpha_guess / sum(alpha_guess)
+alpha_guess = [1.0 0.0 0.0 0.0]
 
-data_in = test_data#[1:1_000]
+data_in = test_data[1:100]
 
 # pre-run the function
-full_fitting_function(1, data_in, T, π)
-T_new, π_new = full_fitting_function(100, data_in, T, π)
+full_fitting_function(1, data_in, subint_guess, alpha_guess)
+T_new, π_new = full_fitting_function(1_000, data_in, subint_guess, alpha_guess)
 
 # Compare distributions
 fit_data = PH_dist_sampler(num_samples, T_new, π_new)

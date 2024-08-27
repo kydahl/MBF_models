@@ -143,9 +143,9 @@ n and aquatic stages at the rate
 \begin_inset Formula 
 \begin{align*}
 \frac{d}{dt}Q & =\left\{ \left(\rho_{A}A+\gamma V\right)+f\left[\left(1-p_{L}\right)\lambda_{L}L+\left(1-p_{P}\right)\lambda_{P}P\right]\right\} -\lambda_{Q}Q-\mu Q\\
-\frac{d}{dt}L & =\left\{ \lambda_{Q}Q+\left(1-f\right)\left[\left(1-p_{L}\right)\lambda_{L}L+\left(1-p_{P}\right)\lambda_{P}P+\left(1-p_{G}\right)\lambda_{G}G_{1}\right]\right\} -p_{L}\lambda_{L}L-f\left(1-p_{L}\right)\lambda_{L}L-\mu L_{1}\\
-\frac{d}{dt}P & =p_{L}\lambda_{L}L-f\left(1-p_{P}\right)\lambda_{P}P-\left(1-f\right)\left(1-p_{P}\right)\lambda_{P}P_{1}-p_{P}\lambda_{P}P_{1}-\mu P_{1}\\
-\frac{d}{dt}G & =p_{p}\lambda_{p}P_{1}-\left(1-f\right)\left(1-p_{g}\right)\lambda_{g}G_{1}-f\left(1-p_{g}\right)\lambda_{g}G_{1}-p_{g}\lambda_{g}G_{1}-\mu G_{1}
+\frac{d}{dt}L & =\left\{ \lambda_{Q}Q+\left(1-f\right)\left[\left(1-p_{L}\right)\lambda_{L}L+\left(1-p_{P}\right)\lambda_{P}P+\left(1-p_{G}\right)\lambda_{G}G\right]\right\} -p_{L}\lambda_{L}L-f\left(1-p_{L}\right)\lambda_{L}L-\mu L_{}\\
+\frac{d}{dt}P & =p_{L}\lambda_{L}L-f\left(1-p_{P}\right)\lambda_{P}P-\left(1-f\right)\left(1-p_{P}\right)\lambda_{P}P-p_{P}\lambda_{P}P-\mu P\\
+\frac{d}{dt}G & =p_{P}\lambda_{P}P-\left(1-f\right)\left(1-p_{G}\right)\lambda_{G}G-f\left(1-p_{G}\right)\lambda_{G}G-p_{G}\lambda_{G}G-\mu G
 \end{align*}
 
 \end_inset

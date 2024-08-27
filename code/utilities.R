@@ -268,7 +268,7 @@ get_beta_func <- function(PH_mat, PH_type, epi_parms) {
       LambdaH = -PH_mat
     } else {
       betaH = diag(order)
-      LambdaH = diag(c(0, -rowSums(PH_mat)))
+      LambdaH = diag(-rowSums(PH_mat))
     }
     # epi_parms = betaH = betaV = 1
     betaV = betaH
@@ -288,6 +288,28 @@ get_beta_func <- function(PH_mat, PH_type, epi_parms) {
 
 
 # Quantity of interest calculators ----
+
+# Average gonotrophic cycle duration
+GCD_calc <- function(PH_mat = NULL, parameters, provide_params = NULL) {
+  with(as.list(parameters), {
+    order = dim(PH_mat)[1]
+    A = PH_mat
+
+    A_tilde = cbind(A, (-A %*% matrix(rep(1, order))))
+    A_tilde = rbind(A_tilde, c(matrix(rep(0, order)), -gammaV))
+    
+    # # with mortality (this isn't quite correct because it counts death as an absorbing state as well)
+    # GCD = t(matrix(c(1,0,0,0,0))) %*% inv(mu * diag(order+1) - A_tilde) %*% matrix(rep(1, order+1))/1440
+    
+    # neglecting mortality
+    GCD = t(matrix(c(1,0,0,0,0))) %*% -inv(A_tilde) %*% matrix(rep(1, order+1))/1440
+    
+  })
+}
+
+# Basic offspring number
+
+# Basic reproduction number
 R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_params = NULL) {
   with(as.list(parameters), {
     
@@ -304,12 +326,37 @@ R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_
       one_vec = matrix(rep(1, order), nrow = 1)
       tau = b / (mu + b)
       
-      # Reproductive number
-      R = tau * (varPhi / (gamma + mu)) * (rhoL / ( rhoL + muL)) * (1 - tau * gamma / (gamma + mu))^-1
-      B_star = KL * ((R-1)/R) * (rhoL + muL) * (1/varPhi) * (R + varPhi * (rhoL/(rhoL + muL))) * (1/(mu+b))
+      # Basic offspring number
+      rho = 1 - (gammaV / (mu + gammaV)) * (gammaR / (mu + gammaR)) * tau
+      nG = 1/rho
+      N_offspring = tau * (varPhi / (mu + gammaV)) * (rhoL / (muL + rhoL)) * nG
+      B_star = (N_offspring - 1) * KL * ((rhoL / N_offspring) + (gammaR / (mu + gammaR)) * (muL + rhoL) / varPhi) * (1/(mu+b))
+      V_star = (N_offspring - 1) * KL * (rhoL + muL) / varPhi
       
+      A_tilde = matrix((c(-b, b, 0, -gammaV)), nrow = 2, byrow = T)
       
-      R0 = betaH * LambdaH * (eta+mu + b - b * (gamma / (eta + gamma + mu)))^(-1) * (eta + b * (eta/(eta+gamma+mu)) * (gamma / (gamma+mu))) + (mu + b - b * (gamma/(gamma+mu)))^(-1) * betaV * LambdaV * B_star / (KH * (gammaH+muH))
+      betaH_mat = matrix(c(betaH, 0, 0, 0), nrow = 2)
+      betaV_mat = matrix(c(betaV, 0, 0, 0), nrow = 2)
+      LambdaH_mat = matrix(c(LambdaH, 0, 0, 0), nrow = 2)
+      LambdaV_mat = matrix(c(LambdaV, 0, 0, 0), nrow = 2)
+      
+      ones_mat = t(matrix(c(1,1)))
+      alpha = matrix(c(1,0))
+      B_vec = matrix(c(B_star, V_star), nrow = 2)
+      
+      inverse_1 = inv(mu * diag(2) - t(A_tilde) - (gammaR / (mu + gammaR)) * alpha %*% (-ones_mat) %*% t(A_tilde))
+      
+      factor_2 = eta * diag(2) - (eta / (mu + gammaR + eta)) * alpha %*% ones_mat %*% t(A_tilde) / (mu + gammaR)
+      
+      inverse_2 = inv((mu + eta) * diag(2) - t(A_tilde) + (gammaR / (mu + gammaR + eta)) * alpha %*% ones_mat %*% t(A_tilde))
+      
+      # factor2 = (eta / (eta + mu + b)) * (mu + b)^(-1) + (eta / (eta + gamma + mu)) * (gamma / (gamma + mu)) * (b / (mu + b)) * (eta + mu + b)^(-1)
+      
+      # factor3 = (1 - (gamma / (eta + gamma + mu)) * (b / (eta + mu + b)))^(-1) * (1 - (gamma / (gamma + mu)) * (b / (mu + b)))^(-1)
+      
+      R0 = sqrt(ones_mat %*% betaH_mat %*% LambdaH_mat %*% inverse_1 %*% factor_2 %*% inverse_2 %*% betaV_mat %*% LambdaV_mat %*% B_vec * (1/(gammaH + muH)))
+      
+      # R0 = sqrt(betaH * betaV * b^2 * factor2 * factor3 * B_star / (KH * (gammaH + muH)))
       
     } else {
       if (PH_type == "Mechanistic") {
@@ -390,11 +437,11 @@ R0_calc <- function(PH_mat = NULL, PH_type = "Mechanistic", parameters, provide_
       # Pr(complete a gonotrophic cycle)
       tau = as.double(-one_vec %*% t(A) %*% inv(mu * diag(order) - t(A)) %*% alpha)
       # Reproductive number
-      R = tau * (varPhi / (gamma + mu)) * (rhoL / ( rhoL + muL)) * (1 - tau * gamma / (gamma + mu))^-1
+      R = tau * (varPhi / (gamma + mu)) * (rhoL / ( muL + rhoL)) * (1 - tau * gamma / (gamma + mu))^-1
       # Stable distribution of feeding classes
-      B_star = KL * ((R-1)/R) * (rhoL + muL) * (1/varPhi) * (R + varPhi * (rhoL/(rhoL + muL))) * inv(mu * diag(order) - t(A)) %*% alpha
+      B_star = KL * ((R-1)/R) * (muL + rhoL) * (1/varPhi) * (R + varPhi * (rhoL/(muL + rhoL))) * inv(mu * diag(order) - t(A)) %*% alpha
       
-      Q = inv(M3) %*% M2 %*% inv(M1)
+      Q = M2 %*% inv(M1) %*% inv(M3)
       
       R0 = as.double(one_vec %*% betaH %*% LambdaH %*% Q %*% betaV %*% LambdaV %*% B_star / ((gammaH + muH) * KH)) 
       
