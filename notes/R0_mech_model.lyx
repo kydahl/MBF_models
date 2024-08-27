@@ -1,0 +1,286 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+A & =\begin{bmatrix}-\lambda_{Q} & \lambda_{Q} & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
+\end{bmatrix}\\
+\alpha & =\begin{bmatrix}1 & 0 & 0 & 0\end{bmatrix}^{T}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\mathcal{R}_{0} & =\boldsymbol{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\left[\left(\eta+\mu\right)I-A^{T}+\left(\frac{\gamma}{\eta+\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}\right]^{-1}\left[\eta I-\left(\frac{\eta}{\eta+\gamma+\mu}\right)\left(\frac{\gamma}{\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}\right]\left[\mu I-A^{T}+\left(\frac{\gamma}{\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}\right]^{-1}\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\boldsymbol{B}^{*}}{K_{H}}\\
+ & =\boldsymbol{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}M_{1}^{-1}M_{2}M_{3}^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\boldsymbol{B}^{*}}{\left(\gamma_{H}+\mu_{H}\right)K_{H}}\\
+M_{1} & =\left(\eta+\mu\right)I-A^{T}+\left(\frac{\gamma}{\eta+\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}\\
+M_{2} & =\eta I-\left(\frac{\eta}{\eta+\gamma+\mu}\right)\left(\frac{\gamma}{\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}\\
+M_{3} & =\mu I-A^{T}+\left(\frac{\gamma}{\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\vec{\alpha}\boldsymbol{1}^{T}A^{T} & =\begin{bmatrix}1\\
+0\\
+0\\
+0
+\end{bmatrix}\begin{bmatrix}1 & 1 & 1 & 1\end{bmatrix}\begin{bmatrix}-\lambda_{Q} & f\left(1-p_{L}\right)\lambda_{L} & f\left(1-p_{P}\right)\lambda_{P} & f\left(1-p_{G}\right)\lambda_{G}\\
+\lambda_{Q} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G}\\
+0 & p_{L}\lambda_{L} & -\lambda_{P} & 0\\
+0 & 0 & p_{p}\lambda_{P} & -\lambda_{G}
+\end{bmatrix}\\
+ & =\begin{bmatrix}1\\
+0\\
+0\\
+0
+\end{bmatrix}\begin{bmatrix}0 & 0 & 0 & -p_{G}\lambda_{G}\end{bmatrix}\\
+ & =\begin{bmatrix}0 & 0 & 0 & -p_{G}\lambda_{G}\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+M_{1} & =\left(\eta+\mu\right)I-A^{T}+\left(\frac{\gamma}{\eta+\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}\\
+ & =\begin{bmatrix}\left(\eta+\mu\right) & 0 & 0 & 0\\
+0 & \left(\eta+\mu\right) & 0 & 0\\
+0 & 0 & \left(\eta+\mu\right) & 0\\
+0 & 0 & 0 & \left(\eta+\mu\right)
+\end{bmatrix}-\begin{bmatrix}-\lambda_{Q} & f\left(1-p_{L}\right)\lambda_{L} & f\left(1-p_{P}\right)\lambda_{P} & f\left(1-p_{G}\right)\lambda_{G}\\
+\lambda_{Q} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G}\\
+0 & p_{L}\lambda_{L} & -\lambda_{P} & 0\\
+0 & 0 & p_{p}\lambda_{P} & -\lambda_{G}
+\end{bmatrix}+\left(\frac{\gamma}{\eta+\gamma+\mu}\right)\begin{bmatrix}0 & 0 & 0 & -p_{G}\lambda_{G}\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0
+\end{bmatrix}\\
+ & =\begin{bmatrix}\left(\eta+\mu\right)+\lambda_{Q} & -f\left(1-p_{L}\right)\lambda_{L} & -f\left(1-p_{P}\right)\lambda_{P} & -f\left(1-p_{G}\right)\lambda_{G}-\left(\frac{\gamma}{\eta+\gamma+\mu}\right)p_{G}\lambda_{G}\\
+-\lambda_{Q} & \left(\eta+\mu\right)+\lambda_{L}-\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & -\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\left(1-f\right)\left(1-p_{G}\right)\lambda_{G}\\
+0 & -p_{L}\lambda_{L} & \left(\eta+\mu\right)+\lambda_{P} & 0\\
+0 & 0 & -p_{p}\lambda_{P} & \left(\eta+\mu\right)+\lambda_{G}
+\end{bmatrix}\\
+ & =\begin{bmatrix}\frac{\left(\eta+\mu\right)}{\lambda_{Q}}+1 & -f\left(1-p_{L}\right) & -f\left(1-p_{P}\right) & -f\left(1-p_{G}\right)-\left(\frac{\gamma}{\eta+\gamma+\mu}\right)p_{G}\\
+-1 & \frac{\left(\eta+\mu\right)}{\lambda_{L}}+\left(p_{L}+f\left(1-p_{L}\right)\right) & -\left(1-f\right)\left(1-p_{P}\right) & -\left(1-f\right)\left(1-p_{G}\right)\\
+0 & -p_{L} & \frac{\left(\eta+\mu\right)}{\lambda_{P}}+1 & 0\\
+0 & 0 & -p_{p} & \frac{\left(\eta+\mu\right)}{\lambda_{P}}+1
+\end{bmatrix}\begin{bmatrix}\lambda_{Q} & 0 & 0 & 0\\
+0 & \lambda_{L} & 0 & 0\\
+0 & 0 & \lambda_{P} & 0\\
+0 & 0 & 0 & \lambda_{G}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+M_{2} & =\eta I-\left(\frac{\eta}{\eta+\gamma+\mu}\right)\left(\frac{\gamma}{\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}\\
+ & =\begin{bmatrix}\eta & 0 & 0 & 0\\
+0 & \eta & 0 & 0\\
+0 & 0 & \eta & 0\\
+0 & 0 & 0 & \eta
+\end{bmatrix}-\left(\frac{\eta}{\eta+\gamma+\mu}\right)\left(\frac{\gamma}{\gamma+\mu}\right)\begin{bmatrix}0 & 0 & 0 & -p_{G}\lambda_{G}\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0
+\end{bmatrix}\\
+ & =\begin{bmatrix}\eta & 0 & 0 & \left(\frac{\eta}{\eta+\gamma+\mu}\right)\left(\frac{\gamma}{\gamma+\mu}\right)p_{G}\lambda_{G}\\
+0 & \eta & 0 & 0\\
+0 & 0 & \eta & 0\\
+0 & 0 & 0 & \eta
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+M_{3} & =\mu I-A^{T}+\left(\frac{\gamma}{\gamma+\mu}\right)\vec{\alpha}\boldsymbol{1}^{T}A^{T}\\
+ & =\begin{bmatrix}\mu & 0 & 0 & 0\\
+0 & \mu & 0 & 0\\
+0 & 0 & \mu & 0\\
+0 & 0 & 0 & \mu
+\end{bmatrix}-\begin{bmatrix}-\lambda_{Q} & f\left(1-p_{L}\right)\lambda_{L} & f\left(1-p_{P}\right)\lambda_{P} & f\left(1-p_{G}\right)\lambda_{G}\\
+\lambda_{Q} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G}\\
+0 & p_{L}\lambda_{L} & -\lambda_{P} & 0\\
+0 & 0 & p_{p}\lambda_{P} & -\lambda_{G}
+\end{bmatrix}+\left(\frac{\gamma}{\gamma+\mu}\right)\begin{bmatrix}0 & 0 & 0 & -p_{G}\lambda_{G}\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0
+\end{bmatrix}\\
+ & =\begin{bmatrix}\mu+\lambda_{Q} & -f\left(1-p_{L}\right)\lambda_{L} & -f\left(1-p_{P}\right)\lambda_{P} & -f\left(1-p_{G}\right)\lambda_{G}-\left(\frac{\gamma}{\gamma+\mu}\right)p_{G}\lambda_{G}\\
+-\lambda_{Q} & \mu+\lambda_{L}-\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & -\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\left(1-f\right)\left(1-p_{G}\right)\lambda_{G}\\
+0 & -p_{L}\lambda_{L} & \mu+\lambda_{P} & 0\\
+0 & 0 & -p_{p}\lambda_{P} & \mu+\lambda_{G}
+\end{bmatrix}\\
+ & =\begin{bmatrix}\frac{\mu}{\lambda_{Q}}+1 & -f\left(1-p_{L}\right) & -f\left(1-p_{P}\right) & -f\left(1-p_{G}\right)-\left(\frac{\gamma}{\gamma+\mu}\right)p_{G}\\
+-1 & \frac{\mu}{\lambda_{L}}+1-\left(1-f\right)\left(1-p_{L}\right) & -\left(1-f\right)\left(1-p_{P}\right) & -\left(1-f\right)\left(1-p_{G}\right)\\
+0 & -p_{L} & \frac{\mu}{\lambda_{P}}+1 & 0\\
+0 & 0 & -p_{p} & \frac{\mu}{\lambda_{G}}+1
+\end{bmatrix}\begin{bmatrix}\lambda_{Q} & 0 & 0 & 0\\
+0 & \lambda_{L} & 0 & 0\\
+0 & 0 & \lambda_{P} & 0\\
+0 & 0 & 0 & \lambda_{G}
+\end{bmatrix}\\
+M_{3}^{-1} & =\begin{bmatrix}1/\lambda_{Q} & 0 & 0 & 0\\
+0 & 1/\lambda_{L} & 0 & 0\\
+0 & 0 & 1/\lambda_{P} & 0\\
+0 & 0 & 0 & 1/\lambda_{G}
+\end{bmatrix}\begin{bmatrix}\frac{\mu}{\lambda_{Q}}+1 & -f\left(1-p_{L}\right) & -f\left(1-p_{P}\right) & -f\left(1-p_{G}\right)-\left(\frac{\gamma}{\gamma+\mu}\right)p_{G}\\
+-1 & \frac{\mu}{\lambda_{L}}+1-\left(1-f\right)\left(1-p_{L}\right) & -\left(1-f\right)\left(1-p_{P}\right) & -\left(1-f\right)\left(1-p_{G}\right)\\
+0 & -p_{L} & \frac{\mu}{\lambda_{P}}+1 & 0\\
+0 & 0 & -p_{p} & \frac{\mu}{\lambda_{G}}+1
+\end{bmatrix}^{-1}
+\end{align*}
+
+\end_inset
+
+Let 
+\begin_inset Formula $Q=M_{1}^{-1}M_{2}M_{3}^{-1}=\left[q_{ij}\right]$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\boldsymbol{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}Q\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\boldsymbol{B}^{*}}{\left(\gamma_{H}+\mu_{H}\right)K_{H}} & =\frac{1}{\left(\gamma_{H}+\mu_{H}\right)K_{H}}\begin{bmatrix}1 & 1 & 1 & 1\end{bmatrix}\begin{bmatrix}0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0\\
+0 & 0 & \beta_{P}\lambda_{P} & 0\\
+0 & 0 & 0 & 0
+\end{bmatrix}Q\begin{bmatrix}0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & \beta_{G}\lambda_{G}
+\end{bmatrix}\begin{bmatrix}B_{Q}^{*}\\
+B_{L}^{*}\\
+B_{P}^{*}\\
+B_{G}^{*}
+\end{bmatrix}\\
+ & =\frac{1}{\left(\gamma_{H}+\mu_{H}\right)K_{H}}\begin{bmatrix}0 & 0 & \beta_{P}\lambda_{P} & 0\end{bmatrix}Q\begin{bmatrix}0\\
+0\\
+0\\
+\beta_{G}\lambda_{G}B_{G}^{*}
+\end{bmatrix}\\
+ & =\frac{1}{\left(\gamma_{H}+\mu_{H}\right)K_{H}}\begin{bmatrix}0 & 0 & \beta_{P}\lambda_{P} & 0\end{bmatrix}\begin{bmatrix}q_{11} & q_{12} & q_{13} & q_{14}\\
+q_{21} & q_{22} & q_{23} & q_{24}\\
+q_{31} & q_{32} & q_{33} & q_{34}\\
+q_{41} & q_{42} & q_{43} & q_{44}
+\end{bmatrix}\begin{bmatrix}0\\
+0\\
+0\\
+\beta_{G}\lambda_{G}B_{G}^{*}
+\end{bmatrix}\\
+ & =\frac{1}{\left(\gamma_{H}+\mu_{H}\right)K_{H}}\begin{bmatrix}\beta_{P}\lambda_{P}q_{31} & \beta_{P}\lambda_{P}q_{32} & \beta_{P}\lambda_{P}q_{33} & \beta_{P}\lambda_{P}q_{34}\end{bmatrix}\begin{bmatrix}0\\
+0\\
+0\\
+\beta_{G}\lambda_{G}B_{G}^{*}
+\end{bmatrix}\\
+ & =\frac{1}{\left(\gamma_{H}+\mu_{H}\right)K_{H}}\beta_{P}\lambda_{P}q_{34}\beta_{G}\lambda_{G}B_{G}^{*}
+\end{align*}
+
+\end_inset
+
+So 
+\begin_inset Formula $R_{0}$
+\end_inset
+
+ only depends on 
+\begin_inset Formula $q_{34}$
+\end_inset
+
+ 
+\end_layout
+
+\end_body
+\end_document

@@ -1161,5 +1161,48 @@ In general, if
 
 \end_layout
 
+\begin_layout Section*
+Alternative (?) EM algorithm for fitting phase-type distributions
+\end_layout
+
+\begin_layout Standard
+Here we'll use the notation 
+\begin_inset Formula $\boldsymbol{T}$
+\end_inset
+
+ for the transient rate matrix / subintensity matrix / phase-type generator
+ and 
+\begin_inset Formula $\boldsymbol{\pi}$
+\end_inset
+
+ for the initial distribution 
+\bar under
+row vector
+\bar default
+.
+ Also, 
+\begin_inset Formula $\boldsymbol{t}=-\boldsymbol{T}\boldsymbol{e}$
+\end_inset
+
+ is the ??? where 
+\begin_inset Formula $\boldsymbol{e}=\left(1,\ldots,1\right)^{T}$
+\end_inset
+
+ is a column vector.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\boldsymbol{a}\left(y|\boldsymbol{\pi},\boldsymbol{T}\right) & =\boldsymbol{\pi}\exp\left(\boldsymbol{T}y\right)\\
+\boldsymbol{b}\left(y|\boldsymbol{\pi},\boldsymbol{T}\right) & =\exp\left(\boldsymbol{T}y\right)\boldsymbol{t}\\
+\boldsymbol{c}\left(y;i|\boldsymbol{\pi},\boldsymbol{T}\right) & =\int_{0}^{y}\boldsymbol{\pi}\exp\left(\boldsymbol{T}u\right)\boldsymbol{e}_{i}\exp\left(\boldsymbol{T}\left(y-u\right)\right)\boldsymbol{t}du,i=1,\ldots,p
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
 \end_body
 \end_document

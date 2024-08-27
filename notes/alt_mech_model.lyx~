@@ -142,6 +142,148 @@ n and aquatic stages at the rate
 , we obtain the following system of equations
 \begin_inset Formula 
 \begin{align*}
+\frac{d}{dt}Q & =\left\{ \left(\rho_{A}A+\gamma V\right)+f\left[\left(1-p_{L}\right)\lambda_{L}L+\left(1-p_{P}\right)\lambda_{P}P\right]\right\} -\lambda_{Q}Q-\mu Q\\
+\frac{d}{dt}L & =\left\{ \lambda_{Q}Q+\left(1-f\right)\left[\left(1-p_{L}\right)\lambda_{L}L+\left(1-p_{P}\right)\lambda_{P}P+\left(1-p_{G}\right)\lambda_{G}G\right]\right\} -p_{L}\lambda_{L}L-f\left(1-p_{L}\right)\lambda_{L}L-\mu L_{1}\\
+\frac{d}{dt}P & =p_{L}\lambda_{L}L-f\left(1-p_{P}\right)\lambda_{P}P-\left(1-f\right)\left(1-p_{P}\right)\lambda_{P}P-p_{P}\lambda_{P}P-\mu P\\
+\frac{d}{dt}G & =p_{P}\lambda_{P}P-\left(1-f\right)\left(1-p_{G}\right)\lambda_{G}G-f\left(1-p_{G}\right)\lambda_{G}G-p_{G}\lambda_{G}G-\mu G
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+A & =\begin{bmatrix}-\lambda_{Q} & \lambda_{Q} & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
+\end{bmatrix}\\
+ & =\begin{bmatrix}A_{11} & A_{12} & 0 & 0\\
+A_{21} & A_{22} & A_{23} & 0\\
+A_{31} & A_{32} & A_{33} & A_{34}\\
+A_{41} & A_{42} & 0 & A_{44}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\lambda_{Q} & =-A_{11}\\
+\lambda_{G} & =-A_{44}\\
+\lambda_{P} & =-A_{33}\\
+f & =\frac{A_{31}}{\left(1-p_{p}\right)\lambda_{P}}=\frac{A_{41}}{\left(1-p_{G}\right)\lambda_{G}}\\
+p_{G} & =1-\frac{A_{41}+A_{42}}{\lambda_{G}}\\
+p_{P} & =\frac{A_{34}}{\lambda_{P}}\\
+\lambda_{L} & =\frac{A_{21}}{f}+A_{23}\\
+\\
+\\
+\\
+\\
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+A & =\begin{bmatrix}-\lambda_{Q} & \lambda_{Q} & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
+\end{bmatrix}\\
+\bar{G} & =\begin{bmatrix}0 & \lambda_{Q} & 0 & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & 0 & p_{L}\lambda_{L} & 0 & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & 0 & p_{p}\lambda_{P} & 0\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & 0 & p_{G}\lambda_{G}\\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}\\
+\bar{G} & =\begin{bmatrix}0 & Q1 & 0 & 0 & 0\\
+L1 & 0 & L2 & 0 & 0\\
+P1 & P2 & 0 & P3 & 0\\
+G1 & G2 & 0 & 0 & G3\\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+G_{1} & =f\left(1-p_{G}\right)\lambda_{G}\\
+G_{2} & =\left(1-f\right)\left(1-p_{G}\right)\lambda_{G}\\
+G_{3} & =p_{G}\lambda_{G}\\
+P_{1} & =f\left(1-p_{P}\right)\lambda_{P}\\
+P_{2} & =\left(1-f\right)\left(1-p_{P}\right)\lambda_{P}\\
+P_{3} & =p_{P}\lambda_{P}\\
+L_{1} & =f\left(1-p_{L}\right)\lambda_{L}\\
+L_{2} & =p_{L}\lambda_{L}\\
+Q & =\lambda_{Q}
+\end{align*}
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{align*}
+\lambda_{G} & =G1+G2+G3\\
+p_{G} & =\frac{G3}{G1+G2+G3}\\
+G1 & =f\left(1-p_{G}\right)\lambda_{G}=f\left(\frac{G1+G2}{G1+G2+G3}\right)\left(G1+G2+G3\right)\\
+f & =\frac{G1}{G1+G2}\\
+\lambda_{P} & =P1+P2+P3\\
+p_{P} & =\frac{P3}{P1+P2+P3}\\
+\left[f\left(1-p_{L}\right)+p_{L}\right]\lambda_{L} & =L1+L2\\
+p_{L}\lambda_{L} & =L2\\
+f\left(1-p_{L}\right)\lambda_{L} & =L1\\
+f\lambda_{L} & =L1+fL2\\
+\lambda_{L} & =\frac{L1+fL2}{f}\\
+p_{L} & =\frac{fL2}{L1+fL2}=\frac{L2}{\lambda_{L}}\\
+\lambda_{Q} & =Q
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\lambda_{G} & =G3\\
+p_{G} & =1-\left(\frac{G1+G2}{G3}\right)\\
+f & =\frac{G1}{G1+G2}\\
+\lambda_{P} & =P1+P2+P3\\
+p_{P} & =\frac{P3}{P1+P2+P3}\\
+\lambda_{L} & =\frac{L1+fL2}{f}\\
+p_{L} & =\frac{fL2}{L1+fL2}\\
+\lambda_{Q} & =Q
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+A\boldsymbol{1} & =\begin{bmatrix}-\lambda_{Q} & \lambda_{Q} & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & \left(1-f\right)\left(1-p_{L}\right)\lambda_{L}-\lambda_{L} & p_{L}\lambda_{L} & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
+\end{bmatrix}\begin{bmatrix}1\\
+1\\
+1\\
+1
+\end{bmatrix}\\
+ & =\begin{bmatrix}0\\
+0\\
+0\\
+-p_{G}\lambda_{G}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
 \frac{d}{dt}Q_{1} & =\left\{ \left(\rho_{A}A+\gamma V\right)+f\left[\left(1-p_{L}\right)\lambda_{L}L_{1}+\left(1-p_{P}\right)\lambda_{P}P_{1}\right]\right\} -\lambda_{Q}Q_{1}-\mu Q_{1}\\
 \frac{d}{dt}L_{1} & =\left\{ \lambda_{Q}Q_{1}+\left(1-f\right)\left[\left(1-p_{L}\right)\lambda_{L}L_{1}+\left(1-p_{P}\right)\lambda_{P}P_{1}+\left(1-p_{G}\right)\lambda_{G}G_{1}\right]\right\} -p_{l}\lambda_{l}L_{1}-f\left(1-p_{l}\right)\lambda_{l}L_{1}-\mu L_{1}\\
 \frac{d}{dt}P_{1} & =p_{l}\lambda_{l}L_{1}-f\left(1-p_{p}\right)\lambda_{p}P_{1}-\left(1-f\right)\left(1-p_{p}\right)\lambda_{p}P_{1}-p_{p}\lambda_{p}P_{1}-\mu P_{1}\\
@@ -186,6 +328,124 @@ where
 \end_layout
 
 \begin_layout Section*
+Ignoring the questing stage
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\tilde{A} & =\begin{bmatrix}a_{11} & a_{12} & a_{13}\\
+a_{21} & a_{22} & a_{23}\\
+a_{31} & a_{32} & a_{33}
+\end{bmatrix}\\
+\lambda_{p} & =-a_{22}\\
+p_{P} & =a_{23}/\lambda_{P}\\
+f & =1-\frac{a_{21}}{\left(1-p_{P}\right)\lambda_{P}}\\
+\left(1-p_{L}\right)\lambda_{L} & =-\frac{\left(a_{11}+a_{12}\right)}{f}\\
+\lambda_{L} & =-\frac{\left(a_{11}+a_{12}\right)}{f}+a_{12}\\
+p_{L} & =a_{12}/\lambda_{L}\\
+\lambda_{G} & =-a_{33}\\
+p_{G} & =1-\frac{a_{31}}{\left(1-f\right)\lambda_{G}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\tilde{A} & =\begin{bmatrix}-\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
+\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+\left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
+\end{bmatrix}\\
+\bar{G} & =\begin{bmatrix}0 & p_{L}\lambda_{L} & 0 & f\left(1-p_{L}\right)\lambda_{L}\\
+\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & 0 & p_{p}\lambda_{P} & f\left(1-p_{P}\right)\lambda_{P}\\
+\left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & 0 & p_{G}\lambda_{G}+f\left(1-p_{G}\right)\lambda_{G}\\
+0 & 0 & 0 & 0
+\end{bmatrix}\\
+\bar{G} & =\begin{bmatrix}0 & L1 & 0 & L2\\
+P1 & 0 & P2 & P3\\
+G1 & 0 & 0 & G2\\
+0 & 0 & 0 & 0
+\end{bmatrix}\\
+\bar{G}^{T} & =\begin{bmatrix}0 & P1 & G1 & 0\\
+L1 & 0 & 0 & 0\\
+0 & P2 & 0 & 0\\
+L2 & P3 & G2 & 0
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+The sum of the rows should be the negative of the diagonal elements of 
+\begin_inset Formula $\tilde{A}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{align*}
+L1+L2 & =p_{L}\lambda_{L}+f\left(1-p_{L}\right)\lambda_{L}\\
+L1+L2 & =\left[1-\left(1-f\right)\left(1-p_{L}\right)\right]\lambda_{L}\\
+P1+P2+P3 & =\lambda_{P}\\
+G1+G2 & =\lambda_{G}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\lambda_{P} & =P1+P2+P3\\
+\lambda_{G} & =G1+G2\\
+p_{P} & =\frac{P2}{P1+P2+P3}\\
+f & =\frac{P3}{\left(1-p_{P}\right)\lambda_{P}}\\
+\left(1-f\right)p_{G} & =\left(1-f\right)-\frac{G1}{\lambda_{G}}\\
+p_{G} & =1-\frac{G1}{\left(1-f\right)\lambda_{G}}\\
+\lambda_{L} & =\frac{L2}{f}+L1\\
+p_{L} & =\frac{L1}{\lambda_{L}}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\tilde{G}=\begin{bmatrix}0 & P1 & G1 & 0\\
+L1 & 0 & 0 & 0\\
+0 & P2 & 0 & 0\\
+L2 & P3 & G2 & 0
+\end{bmatrix}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+A\boldsymbol{1} & =\begin{bmatrix}-\lambda_{Q} & \lambda_{Q} & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & \left(1-f\right)\left(1-p_{L}\right)\lambda_{L}-\lambda_{L} & p_{L}\lambda_{L} & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
+\end{bmatrix}\begin{bmatrix}1\\
+1\\
+1\\
+1
+\end{bmatrix}\\
+ & =\begin{bmatrix}0\\
+0\\
+0\\
+-p_{G}\lambda_{G}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
 Approximation
 \end_layout
 
@@ -225,7 +485,7 @@ where
  then write the system as:
 \begin_inset Formula 
 \begin{align*}
-\frac{d}{dt}B_{i} & =\left\{ \iota_{i}\left(\rho_{A}A+\gamma V\right)+\left(1-\iota_{i}\right)f\left(1-p_{G}\right)\lambda_{G}r_{P}r_{L}r_{Q}B_{i-1}+f\left[\left(1-p_{L}\right)\lambda_{L}r_{Q}B_{i}+\left(1-p_{P}\right)\lambda_{P}r_{L}r_{Q}B_{i}\right]\right\} -\left(\lambda_{Q}+\mu\right)B_{i}\\
+\frac{d}{dt}B_{i} & =\iota_{i}\left(\rho_{A}A+\gamma V\right)+\left(1-\iota_{i}\right)f\left(1-p_{G}\right)\lambda_{G}r_{P}r_{L}r_{Q}B_{i-1}+f\left[\left(1-p_{L}\right)\lambda_{L}r_{Q}B_{i}+\left(1-p_{P}\right)\lambda_{P}r_{L}r_{Q}B_{i}\right]-\left(\lambda_{Q}+\mu\right)B_{i}\\
 L_{i} & =r_{Q}B_{i}\\
 P_{i} & =r_{L}r_{Q}B_{i}\\
 G_{i} & =r_{P}r_{L}r_{Q}B_{i}\\
@@ -310,7 +570,7 @@ Note that we must have
 L_{i} & =r_{Q}B_{i}\\
 P_{i} & =r_{L}r_{Q}B_{i}\\
 G_{i} & =r_{P}r_{L}r_{Q}B_{i}\\
-\frac{d}{dt}V & =r_{P}r_{L}r_{Q}\sum_{i=1}^{n}B_{i}-\left(\gamma+\mu\right)V
+\frac{d}{dt}V & =p_{G}\lambda_{G}\left(r_{P}r_{L}r_{Q}\sum_{i=1}^{n}B_{i}\right)-\left(\gamma+\mu\right)V
 \end{align*}
 
 \end_inset
