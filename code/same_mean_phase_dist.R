@@ -572,8 +572,8 @@ R0_vary_plot_inverted_allparams = ggplot() +
                  type == "Mechanistic" ~ 1440 / (theta - (1/gammaV) - (1/gammaR))
                )) %>% 
               # restrict to a feasible domain
-              filter(between(b, 0, 0.5)) %>% 
-              filter(between(R0, 0, 1.1)) %>% 
+              # filter(between(b, 0, 0.5)) %>% 
+              # filter(between(R0, 0, 1.1)) %>% 
                # mutate(R0 = case_when(
                #   type == "Exponential" ~ R0^2,# - (1/gammaV) - (1/gammaR)), 
                #   type == "Mechanistic" ~ R0# - (1/gammaV) - (1/gammaR))
@@ -588,17 +588,17 @@ R0_vary_plot_inverted_allparams = ggplot() +
   geom_hline(aes(yintercept = 1), color = "red") +
   scale_linetype_manual("Type:", values = c(1, 2), breaks = c("Rate", "Probability")) +
   scale_x_continuous("``Bites per mosquito per day`` = 1/Gonotrophic cycle duration", 
-                     # limits = c(0, 1),
+                     limits = c(0, 0.5),
                      expand = c(0,0)) +
   scale_y_continuous(name = TeX("Basic reproduction number ($R_0$)"),
-                     limits = c(0, NA),
+                     # limits = c(0, NA),
                      # breaks = seq(0,4),
                      # trans = 'log10',
                      expand = c(0,0)
   ) +
   scale_color_manual("Parameter", values = c("Black", c4a("poly.dark24", 5))) +
   # coord_cartesian(xlim = c(0,0.5)) +
-  # coord_cartesian(ylim = c(0,6)) +
+  coord_cartesian(ylim = c(0, 4.1)) +
   # ggtitle("The response of R0 to 1/OCL depends on the mechanism causing variations in OCL") +
   theme_minimal_hgrid(16)
 
