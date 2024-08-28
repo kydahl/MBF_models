@@ -168,7 +168,7 @@ f\left(1-p_{L}\right)\lambda_{L} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\ri
 f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P} & 0 & 0\\
 f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G} & p_{G}\lambda_{G} & 0\\
 0 & 0 & 0 & 0 & -\gamma_{V} & \gamma_{V}\\
-\gamma_{R} & 0 & 0 & 0 & 0 & -\gamma_{R}
+0 & 0 & 0 & 0 & 0 & -\gamma_{R}
 \end{bmatrix}\\
 \boldsymbol{A}^{\prime} & =\begin{bmatrix}\begin{bmatrix}-\lambda_{Q} & \lambda_{Q} & 0 & 0\\
 f\left(1-p_{L}\right)\lambda_{L} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
@@ -271,7 +271,8 @@ p_{G}\lambda_{G} & 0
 \end{bmatrix}\\
 \vec{\alpha^{\prime}}^{T}\left(-\boldsymbol{A}^{\prime}\right)^{-1}\vec{1} & =\vec{\alpha}^{T}\left(-\boldsymbol{A}\right)^{-1}\vec{1}+\frac{1}{\gamma_{V}}+\frac{1}{\gamma_{R}}\\
 \vec{\alpha^{\prime}}^{T}\left(-\boldsymbol{A}^{\prime}\right)^{-1}\vec{1} & =\frac{1}{p_{L}p_{P}p_{G}}\left[\left[1-\left(1-f\right)\left(1-p_{L}p_{P}p_{G}\right)\right]\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right]+\frac{1}{\gamma_{V}}+\frac{1}{\gamma_{R}}\\
-\theta & =\frac{1}{p_{L}p_{P}p_{G}}\left[\left[1-\left(1-f\right)\left(1-p_{L}p_{P}p_{G}\right)\right]\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right]+\frac{1}{\gamma_{V}}+\frac{1}{\gamma_{R}}
+\theta & =\frac{1}{p_{L}p_{P}p_{G}}\left[\left[1-\left(1-f\right)\left(1-p_{L}p_{P}p_{G}\right)\right]\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right]+\frac{1}{\gamma_{V}}+\frac{1}{\gamma_{R}}\\
+ & =\frac{1}{p_{L}p_{P}p_{G}}\left\{ \left[1-\left(1-f\right)\left(1-p_{L}p_{P}p_{G}\right)\right]\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right\} 
 \end{align*}
 
 \end_inset
@@ -355,7 +356,7 @@ To ensure that
 :
 \begin_inset Formula 
 \begin{align*}
-\lambda_{Q}\left(\theta\right) & =\frac{1-\left(1-f\right)\left(1-p_{L}p_{P}p_{G}\right)}{p_{L}p_{P}p_{G}\left(\theta-\frac{1}{\gamma_{V}}-\frac{1}{\gamma_{R}}\right)-\left(\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right)}
+\lambda_{Q}\left(\theta\right) & =\frac{1-\left(1-f\right)\left(1-p_{L}p_{P}p_{G}\right)}{\left(\theta-\frac{1}{\gamma_{V}}-\frac{1}{\gamma_{R}}\right)p_{L}p_{P}p_{G}-\left(\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right)}
 \end{align*}
 
 \end_inset
@@ -700,7 +701,7 @@ f\left(1-p_{G}\right) & \left(1-p_{G}\right) & \left(1-p_{G}\right) & 1
 1
 \end{bmatrix}\\
  & =\frac{1}{p_{G}}\frac{\left(-p_{L}p_{P}p_{G}f+p_{L}p_{P}p_{G}+f\right)}{p_{L}p_{P}\lambda_{Q}}+\frac{1}{p_{G}}\frac{1}{p_{L}p_{P}\lambda_{L}}+\frac{1}{p_{G}}\frac{1}{p_{P}\lambda_{P}}+\frac{1}{p_{G}}\frac{1}{\lambda_{G}}\\
- & =\frac{1}{p_{L}p_{P}p_{G}}\left\{ \left(-1+\left(1-fp_{L}p_{P}p_{G}+p_{L}p_{P}p_{G}+f\right)\right)\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right\} \\
+ & =\frac{1}{p_{L}p_{P}p_{G}}\left\{ \left[1-\left(1-f\right)\left(1-p_{L}p_{P}p_{G}\right)\right]\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right\} \\
  & =\frac{1}{p_{G}}\frac{-p_{L}p_{P}p_{G}f}{p_{L}p_{P}\lambda_{Q}}+\frac{1}{p_{G}}\frac{p_{L}p_{P}p_{G}}{p_{L}p_{P}\lambda_{Q}}+\frac{1}{p_{G}}\frac{f}{p_{L}p_{P}\lambda_{Q}}+\frac{1}{p_{G}}\frac{1}{p_{L}p_{P}\lambda_{L}}+\frac{1}{p_{G}}\frac{1}{p_{P}\lambda_{P}}+\frac{1}{p_{G}}\frac{1}{\lambda_{G}}\\
  & =\left[\left(1-f\right)+\frac{f}{p_{L}p_{P}p_{G}}\right]\frac{1}{\lambda_{Q}}+\frac{1}{p_{L}p_{P}p_{G}}\frac{1}{\lambda_{L}}+\frac{1}{p_{P}p_{G}}\frac{1}{\lambda_{P}}+\frac{1}{p_{G}}\frac{1}{\lambda_{G}}\\
  & =\left[\left(1-f\right)+f\left(\frac{1}{p_{L}}\right)\left(\frac{1}{p_{P}}\right)\left(\frac{1}{p_{G}}\right)\right]\left(\frac{1}{\lambda_{Q}}\right)+\left(\frac{1}{p_{L}}\right)\left(\frac{1}{p_{P}}\right)\left(\frac{1}{p_{G}}\right)\left(\frac{1}{\lambda_{L}}\right)+\left(\frac{1}{p_{P}}\right)\left(\frac{1}{p_{G}}\right)\left(\frac{1}{\lambda_{P}}\right)+\left(\frac{1}{p_{G}}\right)\left(\frac{1}{\lambda_{G}}\right)\\

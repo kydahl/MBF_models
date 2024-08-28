@@ -1031,9 +1031,9 @@ r & =K_{L}\left(\mathcal{N}-1\right)\frac{1}{\mathcal{N}}n_{G}\tau\rho_{L}\\
 V^{*} & =\left(\frac{1}{\mu+\gamma_{V}}\right)r\\
 R^{*} & =\left(\frac{1}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)r\\
 \\
-\vec{B}^{*}=\left(\rho_{L}L^{*}\left(r\right)+\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}r\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\\
+\vec{B}^{*} & =\left(\rho_{L}L^{*}\left(r\right)+\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}r\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\\
 \vec{B}^{*} & =\left(\rho_{L}K_{L}\left(\mathcal{N}-1\right)\frac{1}{\mathcal{N}}+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)K_{L}\left(\mathcal{N}-1\right)\frac{1}{\mathcal{N}}n_{G}\tau\rho_{L}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\\
-\vec{B}^{*} & =K_{L}\left(\mathcal{N}-1\right)\rho_{L}\frac{1}{\mathcal{N}}\left(1+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)n_{G}\tau\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\\
+\vec{B}^{*} & =\rho_{L}K_{L}\left(\mathcal{N}-1\right)\frac{1}{\mathcal{N}}\left(1+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)n_{G}\tau\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\\
 \\
 \vec{B}^{*} & =\left(\rho_{L}\left(1-\frac{1}{\mathcal{N}}\right)K_{L}+\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\frac{1}{\phi}\left(\mu+\gamma_{V}\right)\left(\rho_{L}+\mu_{L}\right)\left(\mathcal{N}-1\right)K_{L}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\\
 \vec{B}^{*} & =\left(\mathcal{N}-1\right)K_{L}\left(\rho_{L}\frac{1}{\mathcal{N}}+\frac{\gamma_{R}}{\mu+\gamma_{R}}\gamma_{V}\left(\frac{\rho_{L}+\mu_{L}}{\phi}\right)\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}
@@ -1528,8 +1528,8 @@ If
 \begin_inset Formula 
 \begin{align*}
 \phi\left(1-\frac{L}{K_{L}}\right) & =\left[\frac{1}{\gamma+\mu}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\tau\left(1-\tau\frac{\gamma}{\gamma+\mu}\right)^{-1}\right]^{-1}\\
-\left(1-\frac{L}{K_{L}}\right) & =\frac{1}{R}\\
-L^{*} & =\frac{K_{L}}{R}\left(R-1\right)
+\left(1-\frac{L}{K_{L}}\right) & =\frac{1}{\mathcal{N}}\\
+L^{*} & =\frac{K_{L}}{\mathcal{N}}\left(\mathcal{N}-1\right)
 \end{align*}
 
 \end_inset
@@ -3969,7 +3969,14 @@ Let
 
 \end_inset
 
+Then the only non-zero eigenvalues are 
+\begin_inset Formula $\pm\mathcal{R}_{0}$
+\end_inset
 
+.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
 \left[\left(\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right)-\frac{\gamma_{R}}{\mu+\gamma_{R}}\vec{\alpha}\left(-\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right)\right]^{T} & =\left(\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}\right)-\frac{\gamma_{R}}{\mu+\gamma_{R}}\left(-\boldsymbol{\tilde{A}}\right)\left(\vec{1}\vec{\alpha}^{T}\right)\\
@@ -3987,11 +3994,7 @@ Let
 
 \end_inset
 
-Then the only non-zero eigenvalues are 
-\begin_inset Formula $\pm\mathcal{R}_{0}$
-\end_inset
 
-.
 \begin_inset Formula 
 \begin{align*}
 \vec{\alpha}\left(-\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right) & =\begin{bmatrix}1\\
