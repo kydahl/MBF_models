@@ -271,8 +271,7 @@ p_{G}\lambda_{G} & 0
 \end{bmatrix}\\
 \vec{\alpha^{\prime}}^{T}\left(-\boldsymbol{A}^{\prime}\right)^{-1}\vec{1} & =\vec{\alpha}^{T}\left(-\boldsymbol{A}\right)^{-1}\vec{1}+\frac{1}{\gamma_{V}}+\frac{1}{\gamma_{R}}\\
 \vec{\alpha^{\prime}}^{T}\left(-\boldsymbol{A}^{\prime}\right)^{-1}\vec{1} & =\frac{1}{p_{L}p_{P}p_{G}}\left[\left[1-\left(1-f\right)\left(1-p_{L}p_{P}p_{G}\right)\right]\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right]+\frac{1}{\gamma_{V}}+\frac{1}{\gamma_{R}}\\
-\theta & =\frac{1}{p_{L}p_{P}p_{G}}\left[\left[1-\left(1-f\right)\left(1-p_{L}p_{P}p_{G}\right)\right]\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right]+\frac{1}{\gamma_{V}}+\frac{1}{\gamma_{R}}\\
- & =\frac{1}{p_{L}p_{P}p_{G}}\left\{ \left[1-\left(1-f\right)\left(1-p_{L}p_{P}p_{G}\right)\right]\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right\} 
+\theta=\mathbb{E}\left(\tau\right) & =\frac{1}{p_{L}p_{P}p_{G}}\left[\left[1-\left(1-f\right)\left(1-p_{L}p_{P}p_{G}\right)\right]\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right]+\frac{1}{\gamma_{V}}+\frac{1}{\gamma_{R}}
 \end{align*}
 
 \end_inset
