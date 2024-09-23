@@ -1,0 +1,718 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+Suppose that 
+\begin_inset Formula $\boldsymbol{A}=\boldsymbol{A}\left(K_{B}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $K_{B}=\vec{1}^{T}\vec{B}$
+\end_inset
+
+, the total biting vector population.
+ We want to find the equilibrium for the mosquito population distribution.
+ We make a few substitutions to simplify calculations.
+ Let 
+\begin_inset Formula $r=-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}$
+\end_inset
+
+, the net rates out of the blood-feeding compartments, and 
+\begin_inset Formula $\theta=\vec{1}^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}$
+\end_inset
+
+, which equals the average dwell time in the blood feeding stages, and 
+\begin_inset Formula $\bar{\theta}=\vec{1}^{T}\left(-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}$
+\end_inset
+
+, which is the average dwell time neglecting mortality, and 
+\begin_inset Formula $\tau=\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}$
+\end_inset
+
+, the probability of surviving a single trip through the blood-feeding stages.
+ A useful relation will be 
+\begin_inset Formula $\tau=1-\mu\theta$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The base equilibrium equations are:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+0 & =\varphi\left(V,L\right)-\left(\mu_{L}+\rho_{L}\right)L\\
+\vec{0} & =\left(\rho_{L}L+\gamma_{R}R\right)\vec{\alpha}-\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)\vec{B}\\
+0 & =\left(-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}\right)-\left(\mu+\gamma_{V}\right)V\\
+0 & =\gamma_{V}V-\left(\mu+\gamma_{R}\right)R
+\end{align*}
+
+\end_inset
+
+We re-write these in 
+\begin_inset Quotes eld
+\end_inset
+
+rate in = rate out
+\begin_inset Quotes erd
+\end_inset
+
+ form:
+\begin_inset Formula 
+\begin{align*}
+\varphi\left(V,L\right) & =\left(\rho_{L}+\mu_{L}\right)L\\
+\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)\vec{B} & =\left(\rho_{L}L+\gamma_{R}R\right)\vec{\alpha}\\
+V & =\frac{1}{\mu+\gamma_{V}}\left(-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}\right)\\
+R & =\frac{1}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\left(-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}\right)
+\end{align*}
+
+\end_inset
+
+For now, we ignore the first equation and focus on the three remaining.
+ The second equation, 
+\begin_inset Formula $\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)\vec{B}=\left(\rho_{L}L+\gamma_{R}R\right)\vec{\alpha}$
+\end_inset
+
+, is particular important and we will use it in three 
+\begin_inset Quotes eld
+\end_inset
+
+flavors
+\begin_inset Quotes erd
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+\vec{B} & =\left(\rho_{L}L+\gamma_{R}R\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\\
+\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\vec{B}=r & =\left(\rho_{L}L+\gamma_{R}R\right)\tau\\
+\vec{1}^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)\vec{B}=\mu K_{B}+r & =\rho_{L}L+\gamma_{R}R\\
+K_{B} & =\left(\rho_{L}L+\gamma_{R}R\right)\theta
+\end{align*}
+
+\end_inset
+
+For now, let 
+\begin_inset Formula $\omega=\rho_{L}L+\gamma_{R}R$
+\end_inset
+
+ and recall that 
+\begin_inset Formula $\tau=1-\mu\theta$
+\end_inset
+
+.
+ Then
+\begin_inset Formula 
+\begin{align*}
+\vec{B} & =\omega\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\\
+r & =\omega\tau\\
+r & =\omega\left(1-\mu\theta\right)\\
+\theta & =\frac{1}{\mu}\left(1-\frac{r}{\omega}\right)\\
+K_{B} & =\frac{1}{\mu}\omega-\frac{1}{\mu}r\\
+K_{B} & =\omega\theta\\
+\tau & =1-\mu\theta\\
+\theta & =\frac{1}{\mu}\left(1-\tau\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can write the 
+\begin_inset Formula $V$
+\end_inset
+
+ and 
+\begin_inset Formula $R$
+\end_inset
+
+ equations in terms of 
+\begin_inset Formula $r$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+V & =\frac{1}{\mu+\gamma_{V}}r\\
+R & =\frac{1}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}r
+\end{align*}
+
+\end_inset
+
+There exists 
+\begin_inset Formula $L^{*}$
+\end_inset
+
+ independent of 
+\begin_inset Formula $V^{*}$
+\end_inset
+
+ such that 
+\begin_inset Formula $\bar{\phi}\left(L^{*}\right)=\left(\rho_{L}+\mu_{L}\right)\frac{1}{V^{*}}L^{*}$
+\end_inset
+
+ by assumptions 2 and 3.
+ 
+\begin_inset Formula 
+\begin{align*}
+\left(\rho_{L}L+\gamma_{R}R\right)\tau & =r\\
+\rho_{L}L & =\frac{r}{\tau}\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\\
+\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\rho_{L}L & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{r}{\tau}\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\\
+\varphi\left(V,L\right) & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{r}{\tau}\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\\
+\bar{\varphi}\left(L\right) & =\frac{r}{V}\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\\
+\bar{\varphi}\left(L\right) & =\left(\mu+\gamma_{V}\right)\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)
+\end{align*}
+
+\end_inset
+
+Let 
+\begin_inset Formula $L^{*}$
+\end_inset
+
+ solve this equation (we know a solution exists by assumption 3).
+ Now we have 
+\begin_inset Formula $L^{*}=L^{*}\left(K_{B}\right)$
+\end_inset
+
+.
+ We can solve the remaining equilibrium states using 
+\begin_inset Formula $L^{*}$
+\end_inset
+
+.
+\begin_inset Formula 
+\[
+V^{*}=\left(\rho_{L}+\mu_{L}\right)\frac{L^{*}}{\bar{\phi}\left(L^{*}\right)}
+\]
+
+\end_inset
+
+and
+\begin_inset Formula 
+\begin{align*}
+R^{*} & =\frac{1}{\mu+\gamma_{R}}\gamma_{V}\left(\rho_{L}+\mu_{L}\right)\frac{L^{*}}{\bar{\phi}\left(L^{*}\right)}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\omega=\left(\rho_{L}+\mu_{L}\right)\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}L^{*}+\frac{\gamma_{R}}{\mu+\gamma_{R}}\gamma_{V}\frac{L^{*}}{\bar{\phi}\left(L^{*}\right)}\right)
+\]
+
+\end_inset
+
+Now we can solve for 
+\begin_inset Formula $r$
+\end_inset
+
+ in terms of 
+\begin_inset Formula $L^{*}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+r=\left(\mu+\gamma_{V}\right)\left(\rho_{L}+\mu_{L}\right)\frac{L^{*}}{\bar{\phi}\left(L^{*}\right)}
+\]
+
+\end_inset
+
+and hence 
+\begin_inset Formula $K_{B}$
+\end_inset
+
+ is can be determined from 
+\begin_inset Formula $r$
+\end_inset
+
+, and written as a function of 
+\begin_inset Formula $L^{*}$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+\mu K_{B}+r & =\rho_{L}L^{*}+\gamma_{R}R^{*}\\
+K_{B} & =\frac{\rho_{L}}{\mu}L^{*}+\frac{\gamma_{R}}{\mu}R^{*}-\frac{r}{\mu}\\
+K_{B} & =\left(\rho_{L}+\mu_{L}\right)\frac{1}{\mu}\left(\mu+\gamma_{V}\right)\frac{L^{*}}{\bar{\phi}\left(L^{*}\right)}\left[\bar{\phi}\left(L^{*}\right)\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\frac{1}{\mu+\gamma_{V}}+\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}-1\right]
+\end{align*}
+
+\end_inset
+
+The particular solution to this equation depends on the form of 
+\begin_inset Formula $\bar{\phi}$
+\end_inset
+
+.
+ Once this is known, we can find 
+\begin_inset Formula $\boldsymbol{A}=\boldsymbol{A}\left(K_{B}\right)$
+\end_inset
+
+ independently of 
+\begin_inset Formula $\vec{B}$
+\end_inset
+
+ and obtain
+\begin_inset Formula 
+\[
+\vec{B}=\left(\rho_{L}L+\gamma_{R}R\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}
+\]
+
+\end_inset
+
+
+\series bold
+Special case
+\series default
+: 
+\begin_inset Formula $\varphi\left(V,L\right)=\phi V\left(1-\frac{L}{K_{L}}\right)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In this case, 
+\begin_inset Formula 
+\begin{align*}
+\bar{\varphi}\left(L\right) & =\left(\mu+\gamma_{V}\right)\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\\
+L^{*} & =K_{L}\left[1-\frac{1}{\phi}\left(\mu+\gamma_{V}\right)\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\right]
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\frac{L^{*}}{\bar{\varphi}\left(L^{*}\right)} & =K_{L}\frac{1-\frac{1}{\phi}\left(\mu+\gamma_{V}\right)\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)}{\left(\mu+\gamma_{V}\right)\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau}\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)}\\
+\frac{L^{*}}{\bar{\varphi}\left(L^{*}\right)} & =K_{L}\frac{1}{\phi}\left[\phi\frac{1}{\mu+\gamma_{V}}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\tau\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)^{-1}-1\right]
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\omega & =\rho_{L}L^{*}+\gamma_{R}R^{*}\\
+\omega & =\left(\rho_{L}+\mu_{L}\right)\frac{L^{*}}{\bar{\phi}\left(L^{*}\right)}\left[\bar{\phi}\left(L^{*}\right)\frac{\rho_{L}}{\rho_{L}+\mu_{L}}+\frac{\gamma_{R}}{\mu+\gamma_{R}}\gamma_{V}\right]\\
+\omega & =\left(\mu+\gamma_{V}\right)\left(\rho_{L}+\mu_{L}\right)K_{L}\frac{1}{\phi}\frac{1}{\tau}\left[\phi\frac{1}{\left(\mu+\gamma_{V}\right)}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\tau\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)^{-1}-1\right]
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+r & =\left(\mu+\gamma_{V}\right)\left(\rho_{L}+\mu_{L}\right)\frac{L^{*}}{\bar{\phi}\left(L^{*}\right)}\\
+r & =\left(\mu+\gamma_{V}\right)\left(\rho_{L}+\mu_{L}\right)K_{L}\frac{1}{\phi}\left[\phi\frac{1}{\mu+\gamma_{V}}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\tau\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)^{-1}-1\right]
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\theta & =\frac{1}{\mu}\left(1-\frac{r}{\omega}\right)\\
+\theta & =\frac{1}{\mu}\left(1-\tau\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+K_{B} & =\frac{1}{\mu}\left(\omega-r\right)\\
+K_{B} & =\frac{1}{\mu}\left(\left(\mu+\gamma_{V}\right)\left(\rho_{L}+\mu_{L}\right)K_{L}\frac{1}{\phi}\frac{1}{\tau}\left[\phi\frac{1}{\left(\mu+\gamma_{V}\right)}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\tau\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)^{-1}-1\right]-\left(\mu+\gamma_{V}\right)\left(\rho_{L}+\mu_{L}\right)K_{L}\frac{1}{\phi}\left[\phi\frac{1}{\mu+\gamma_{V}}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\tau\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)^{-1}-1\right]\right)\\
+K_{B} & =\frac{1}{\mu}\left(\mu+\gamma_{V}\right)\left(\rho_{L}+\mu_{L}\right)K_{L}\frac{1}{\phi}\left(\frac{1}{\tau}-1\right)\left[\phi\frac{1}{\left(\mu+\gamma_{V}\right)}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\tau\left(1-\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)^{-1}-1\right]\\
+K_{B}\left(\theta\right) & =\left(\rho_{L}+\mu_{L}\right)\left(\mu+\gamma_{V}\right)K_{L}\frac{1}{\phi}\left(\frac{\theta}{1-\mu\theta}\right)\left[\phi\frac{1}{\mu+\gamma_{V}}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)\left(1-\mu\theta\right)\left(1-\left(1-\mu\theta\right)\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)^{-1}-1\right]\\
+K_{B}\left(\theta\right) & =\left(\frac{\theta}{1-\mu\theta}\right)\left[\rho_{L}\left(1-\mu\theta\right)\left(1-\left(1-\mu\theta\right)\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)^{-1}-\left(\rho_{L}+\mu_{L}\right)\left(\mu+\gamma_{V}\right)\frac{1}{\phi}\right]K_{L}
+\end{align*}
+
+\end_inset
+
+If 
+\begin_inset Formula $\boldsymbol{A}$
+\end_inset
+
+ is roughly linear in 
+\begin_inset Formula $K_{B}$
+\end_inset
+
+, then 
+\begin_inset Formula $\theta$
+\end_inset
+
+ is roughly of order 
+\begin_inset Formula $-1$
+\end_inset
+
+ in 
+\begin_inset Formula $K_{B}$
+\end_inset
+
+.
+ Then the right-hand side of the equation above is roughly constant in 
+\begin_inset Formula $K_{B}$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+\bar{\theta} & =\vec{1}^{T}\left(-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\\
+\bar{\theta} & =\left[-K_{H}\lambda_{G}\lambda_{P}\lambda_{Q}-K_{B}f\lambda_{G}\lambda_{L}\lambda_{P}-K_{H}\lambda_{G}\lambda_{L}\lambda_{Q}p_{L}-K_{H}\lambda_{L}\lambda_{P}\lambda_{Q}p_{L}p_{P}-K_{B}\lambda_{G}\lambda_{L}\lambda_{P}p_{G}p_{L}p_{P}+K_{B}f\lambda_{G}\lambda_{L}\lambda_{P}p_{G}p_{L}p_{P}\right]/\left(K_{H}\lambda_{G}\lambda_{L}\lambda_{P}\lambda_{Q}p_{G}p_{L}p_{P}\right)\\
+\bar{\theta} & =\left[-\frac{\lambda_{G}\lambda_{P}\lambda_{Q}}{\lambda_{G}\lambda_{L}\lambda_{P}\lambda_{Q}p_{G}p_{L}p_{P}}-\frac{K_{B}}{K_{H}}f\frac{\lambda_{G}\lambda_{L}\lambda_{P}}{\lambda_{G}\lambda_{L}\lambda_{P}\lambda_{Q}p_{G}p_{L}p_{P}}-\frac{\lambda_{G}\lambda_{L}\lambda_{Q}p_{L}}{\lambda_{G}\lambda_{L}\lambda_{P}\lambda_{Q}p_{G}p_{L}p_{P}}-\frac{\lambda_{L}\lambda_{P}\lambda_{Q}p_{L}p_{P}}{\lambda_{G}\lambda_{L}\lambda_{P}\lambda_{Q}p_{G}p_{L}p_{P}}-\frac{K_{B}}{K_{H}}\frac{\lambda_{G}\lambda_{L}\lambda_{P}p_{G}p_{L}p_{P}}{\lambda_{G}\lambda_{L}\lambda_{P}\lambda_{Q}p_{G}p_{L}p_{P}}+\frac{K_{B}}{K_{H}}f\frac{\lambda_{G}\lambda_{L}\lambda_{P}p_{G}p_{L}p_{P}}{\lambda_{G}\lambda_{L}\lambda_{P}\lambda_{Q}p_{G}p_{L}p_{P}}\right]\\
+\bar{\theta} & =\left[-\frac{1}{\lambda_{L}p_{G}p_{L}p_{P}}-\frac{K_{B}}{K_{H}}f\frac{1}{\lambda_{Q}p_{G}p_{L}p_{P}}-\frac{1}{\lambda_{P}p_{G}p_{P}}-\frac{1}{\lambda_{G}p_{G}}-\frac{K_{B}}{K_{H}}\frac{1}{\lambda_{Q}}+\frac{K_{B}}{K_{H}}f\frac{1}{\lambda_{Q}}\right]\\
+\bar{\theta} & =\left[-\frac{K_{B}}{K_{H}}\frac{1}{\lambda_{Q}}+\frac{K_{B}}{K_{H}}f\frac{1}{\lambda_{Q}}-\frac{K_{B}}{K_{H}}f\frac{1}{p_{G}p_{L}p_{P}}\frac{1}{\lambda_{Q}}-\frac{1}{p_{G}p_{L}p_{P}}\frac{1}{\lambda_{L}}-\frac{1}{p_{G}p_{P}}\frac{1}{\lambda_{P}}-\frac{1}{\lambda_{G}p_{G}}\right]
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\boldsymbol{A} & =\begin{bmatrix}-\bar{\lambda}_{Q}\frac{H}{\vec{1}^{T}\vec{B}} & \lambda_{Q}\frac{H}{\vec{1}^{T}\vec{B}} & 0 & 0\\
+f\left(1-p_{L}\right)\lambda_{L} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & p_{L}\lambda_{L} & 0\\
+f\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\lambda_{P} & p_{p}\lambda_{P}\\
+f\left(1-p_{G}\right)\lambda_{G} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0 & -\lambda_{G}
+\end{bmatrix}\\
+\boldsymbol{A}^{T} & =\begin{bmatrix}-\bar{\lambda}_{Q}\frac{H}{\vec{1}^{T}\vec{B}} & f\left(1-p_{L}\right)\lambda_{L} & f\left(1-p_{P}\right)\lambda_{P} & f\left(1-p_{G}\right)\lambda_{G}\\
+\lambda_{Q}\frac{H}{\vec{1}^{T}\vec{B}} & -\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G}\\
+0 & p_{L}\lambda_{L} & -\lambda_{P} & 0\\
+0 & 0 & p_{p}\lambda_{P} & -\lambda_{G}
+\end{bmatrix}\\
+\bar{\boldsymbol{A}}^{T} & =\begin{bmatrix}-\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & \left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & \left(1-f\right)\left(1-p_{G}\right)\lambda_{G}\\
+p_{L}\lambda_{L} & -\lambda_{P} & 0\\
+0 & p_{p}\lambda_{P} & -\lambda_{G}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+0 & =\varphi\left(V,L\right)-\left(\mu_{L}+\rho_{L}\right)L\\
+0 & =\left(\rho_{L}L+\gamma_{R}R\right)+f\left(1-p_{L}\right)\lambda_{L}L^{*}+f\left(1-p_{P}\right)\lambda_{P}P^{*}+f\left(1-p_{G}\right)\lambda_{G}G^{*}-\bar{\lambda}_{Q}Q\left(\frac{H}{Q+L+P+G}\right)\\
+\vec{0} & =\lambda_{Q}Q\begin{bmatrix}1\\
+0\\
+0
+\end{bmatrix}-\left(\mu\boldsymbol{I}-\boldsymbol{\bar{A}}^{T}\right)\vec{\bar{B}}\\
+0 & =\left(-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}\right)-\left(\mu+\gamma_{V}\right)V\\
+0 & =\gamma_{V}V-\left(\mu+\gamma_{R}\right)R
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\lambda_{Q}Q\begin{bmatrix}1\\
+0\\
+0
+\end{bmatrix}-\left(\mu\boldsymbol{I}-\boldsymbol{\bar{A}}^{T}\right)\vec{\bar{B}} & =\begin{bmatrix}0\\
+0\\
+0
+\end{bmatrix}\\
+\begin{bmatrix}\lambda_{Q}Q+\mu+\lambda_{L}-\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & -\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\left(1-f\right)\left(1-p_{G}\right)\lambda_{G}\\
+-p_{L}\lambda_{L} & \mu+\lambda_{P} & 0\\
+0 & -p_{p}\lambda_{P} & \mu+\lambda_{G}
+\end{bmatrix}\begin{bmatrix}L\\
+P\\
+G
+\end{bmatrix} & =\begin{bmatrix}0\\
+0\\
+0
+\end{bmatrix}\\
+\begin{bmatrix}\lambda_{Q}Q+\left[\mu+\lambda_{L}-\left(1-f\right)\left(1-p_{L}\right)\lambda_{L}\right]L-\left(1-f\right)\left(1-p_{P}\right)\lambda_{P}P-\left(1-f\right)\left(1-p_{G}\right)\lambda_{G}G\\
+-p_{L}\lambda_{L}L+\left(\mu+\lambda_{P}\right)P\\
+-p_{p}\lambda_{P}P+\left(\mu+\lambda_{G}\right)G
+\end{bmatrix} & =\begin{bmatrix}0\\
+0\\
+0
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+G & =\frac{1}{\mu+\lambda_{G}}p_{p}\lambda_{P}P=\frac{1}{\mu+\lambda_{G}}\frac{\lambda_{P}}{\mu+\lambda_{P}}p_{p}p_{L}\lambda_{L}L\\
+P & =\frac{1}{\mu+\lambda_{P}}p_{L}\lambda_{L}L\\
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\lambda_{Q}Q+\left[\mu+\lambda_{L}-\left(1-f\right)\left(1-p_{L}\right)\lambda_{L}\right]L & =\left(1-f\right)\left(1-p_{P}\right)\frac{\lambda_{P}}{\mu+\lambda_{P}}p_{L}\lambda_{L}L+\left(1-f\right)\left(1-p_{G}\right)\frac{\lambda_{G}}{\mu+\lambda_{G}}\frac{\lambda_{P}}{\mu+\lambda_{P}}p_{p}p_{L}\lambda_{L}L\\
+Q & =\frac{1}{\lambda_{Q}}\left[\left(1-f\right)\left(1-p_{P}\right)\frac{\lambda_{P}}{\mu+\lambda_{P}}p_{L}\lambda_{L}+\left(1-f\right)\left(1-p_{G}\right)\frac{\lambda_{G}}{\mu+\lambda_{G}}\frac{\lambda_{P}}{\mu+\lambda_{P}}p_{p}p_{L}\lambda_{L}-\mu-\lambda_{L}+\left(1-f\right)\left(1-p_{L}\right)\lambda_{L}\right]L
+\end{align*}
+
+\end_inset
+
+Let 
+\begin_inset Formula $f\left(Q\right)=f\left(1-p_{L}\right)\lambda_{L}L^{*}\left(Q\right)+f\left(1-p_{P}\right)\lambda_{P}P^{*}\left(Q\right)+f\left(1-p_{G}\right)\lambda_{G}G^{*}\left(Q\right)$
+\end_inset
+
+, 
+\begin_inset Formula $g\left(Q\right)=Q+L+P+G$
+\end_inset
+
+, and 
+\begin_inset Formula $h\left(Q\right)=-\vec{1}^{T}\boldsymbol{\bar{A}}^{T}\vec{\bar{B}}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $F$
+\end_inset
+
+,
+\begin_inset Formula $G$
+\end_inset
+
+, and 
+\begin_inset Formula $H$
+\end_inset
+
+.
+ can be considered independent of all the other state variables and is linear
+ in 
+\begin_inset Formula $Q$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+-\vec{1}^{T}\boldsymbol{\bar{A}}^{T}\vec{\bar{B}} & =\begin{bmatrix}1 & 1 & 1\end{bmatrix}\begin{bmatrix}\lambda_{L}-\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & -\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\left(1-f\right)\left(1-p_{G}\right)\lambda_{G}\\
+-p_{L}\lambda_{L} & \lambda_{P} & 0\\
+0 & -p_{p}\lambda_{P} & \lambda_{G}
+\end{bmatrix}\begin{bmatrix}L\\
+P\\
+G
+\end{bmatrix}\\
+-\vec{1}^{T}\boldsymbol{\bar{A}}^{T}\vec{\bar{B}} & =\begin{bmatrix}\lambda_{L}-\left(1-f\right)\left(1-p_{L}\right)\lambda_{L}-p_{L}\lambda_{L} & -\left(1-f\right)\left(1-p_{P}\right)\lambda_{P}+\lambda_{P}-p_{p}\lambda_{P} & -\left(1-f\right)\left(1-p_{G}\right)\lambda_{G}+\lambda_{G}\end{bmatrix}\begin{bmatrix}L\\
+P\\
+G
+\end{bmatrix}\\
+-\vec{1}^{T}\boldsymbol{\bar{A}}^{T}\vec{\bar{B}} & =\begin{bmatrix}f\left(1-p_{L}\right)\lambda_{L} & f\left(1-p_{P}\right)\lambda_{P} & p_{G}\lambda_{G}+f\left(1-p_{G}\right)\lambda_{G}\end{bmatrix}\begin{bmatrix}L\\
+P\\
+G
+\end{bmatrix}\\
+-\vec{1}^{T}\boldsymbol{\bar{A}}^{T}\vec{\bar{B}} & =f\left(1-p_{L}\right)\lambda_{L}L+f\left(1-p_{P}\right)\lambda_{P}P+\left[p_{G}\lambda_{G}+f\left(1-p_{G}\right)\lambda_{G}\right]G
+\end{align*}
+
+\end_inset
+
+Note that 
+\begin_inset Formula $h\left(Q\right)=-\vec{1}^{T}\boldsymbol{\bar{A}}^{T}\vec{\bar{B}}=f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)$
+\end_inset
+
+.
+ After these substitutions, we're left with
+\begin_inset Formula 
+\begin{align*}
+\varphi\left(V,L\right) & =\left(\mu_{L}+\rho_{L}\right)L\\
+\left(\rho_{L}L+\gamma_{R}R\right)+f\left(Q\right) & =\bar{\lambda}_{Q}Q\left(\frac{H}{g\left(Q\right)}\right)\\
+f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right) & =\left(\mu+\gamma_{V}\right)V\\
+\gamma_{V}V & =\left(\mu+\gamma_{R}\right)R
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+V & =\frac{1}{\mu+\gamma_{V}}\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]\\
+R & =\frac{1}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]\\
+L & =\frac{1}{\rho_{L}}\bar{\lambda}_{Q}Q\left(\frac{H}{g\left(Q\right)}\right)-\frac{1}{\rho_{L}}f\left(Q\right)-\frac{1}{\rho_{L}}\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\varphi\left(V,L\right) & =\left(\mu_{L}+\rho_{L}\right)\left[\frac{1}{\rho_{L}}\bar{\lambda}_{Q}Q\left(\frac{H}{g\left(Q\right)}\right)-\frac{1}{\rho_{L}}f\left(Q\right)-\frac{1}{\rho_{L}}\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]\right]\\
+\bar{\varphi}\left(L\right) & =\frac{1}{V}\left(\mu_{L}+\rho_{L}\right)\left[\frac{1}{\rho_{L}}\bar{\lambda}_{Q}Q\left(\frac{H}{g\left(Q\right)}\right)-\frac{1}{\rho_{L}}f\left(Q\right)-\frac{1}{\rho_{L}}\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]\right]\\
+\bar{\varphi}\left(L\right) & =\left(\mu+\gamma_{V}\right)\left(\mu_{L}+\rho_{L}\right)\left[\frac{1}{\rho_{L}}\bar{\lambda}_{Q}Q\left(\frac{H}{g\left(Q\right)}\right)\frac{1}{f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)}-\frac{1}{\rho_{L}}\frac{f\left(Q\right)}{f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)}-\frac{1}{\rho_{L}}\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right]\\
+L^{*} & =\bar{\varphi}^{-1}\left[\left(\mu+\gamma_{V}\right)\left(\mu_{L}+\rho_{L}\right)\left[\frac{1}{\rho_{L}}\bar{\lambda}_{Q}Q\left(\frac{H}{g\left(Q\right)}\right)\frac{1}{f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)}-\frac{1}{\rho_{L}}\frac{f\left(Q\right)}{f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)}-\frac{1}{\rho_{L}}\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right]\right]\\
+L^{*} & =j\left(Q\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left(\rho_{L}L+\gamma_{R}R\right)+f\left(Q\right) & =\bar{\lambda}_{Q}Q\left(\frac{H}{g\left(Q\right)}\right)\\
+\rho_{L}j\left(Q\right)+\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]+f\left(Q\right) & =\bar{\lambda}_{Q}Q\left(\frac{H}{g\left(Q\right)}\right)\\
+j\left(Q\right) & =\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]\left[\frac{1}{\rho_{L}}\bar{\lambda}_{Q}Q\left(\frac{H}{g\left(Q\right)}\right)\frac{1}{f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)}-\frac{1}{\rho_{L}}\frac{f\left(Q\right)}{f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)}-\frac{1}{\rho_{L}}\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right]\\
+j\left(Q\right) & =\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]q\left(Q\right)\\
+\bar{\varphi}^{-1}\left[\left(\mu+\gamma_{V}\right)\left(\mu_{L}+\rho_{L}\right)q\left(Q\right)\right] & =\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]q\left(Q\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\bar{\varphi}\left(L\right) & =\phi\left(1-\frac{L}{K_{L}}\right)\\
+\bar{\varphi}^{-1}\left(x\right) & =K_{L}\left(1-\frac{1}{\phi}x\right)
+\end{align*}
+
+\end_inset
+
+Let 
+\begin_inset Formula $q\left(Q\right)=\frac{1}{\rho_{L}}\bar{\lambda}_{Q}Q\left(\frac{H}{g\left(Q\right)}\right)\frac{1}{f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)}-\frac{1}{\rho_{L}}\frac{f\left(Q\right)}{f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)}-\frac{1}{\rho_{L}}\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\bar{\varphi}^{-1}\left[\left(\mu+\gamma_{V}\right)\left(\mu_{L}+\rho_{L}\right)q\left(Q\right)\right] & =\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]q\left(Q\right)\\
+K_{L}\left(1-\frac{1}{\phi}\left(\mu+\gamma_{V}\right)\left(\mu_{L}+\rho_{L}\right)q\left(Q\right)\right) & =\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]q\left(Q\right)\\
+\left\{ \frac{1}{\phi}\left(\mu+\gamma_{V}\right)\left(\mu_{L}+\rho_{L}\right)+\frac{1}{K_{L}}\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]\right\} q\left(Q\right) & =1\\
+\left\{ \frac{1}{\phi}\left(\mu+\gamma_{V}\right)\left(\mu_{L}+\rho_{L}\right)+\frac{1}{K_{L}}\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]\right\} \left\{ \frac{1}{\rho_{L}}\bar{\lambda}_{Q}QH-\frac{1}{\rho_{L}}f\left(Q\right)g\left(Q\right)-\frac{1}{\rho_{L}}\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}g\left(Q\right)\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]\right\}  & =g\left(Q\right)f\left(Q\right)+p_{G}\lambda_{G}g\left(Q\right)G\left(Q\right)\\
+\left\{ K_{L}\left(\mu+\gamma_{V}\right)\left(\mu_{L}+\rho_{L}\right)+\phi\left[f\left(Q\right)+p_{G}\lambda_{G}G\left(Q\right)\right]\right\} \left\{ \bar{\lambda}_{Q}HQ-\left(1+\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)f\left(Q\right)g\left(Q\right)-\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}p_{G}\lambda_{G}g\left(Q\right)G\left(Q\right)\right\}  & =\phi\rho_{L}K_{L}g\left(Q\right)f\left(Q\right)+\phi\rho_{L}K_{L}p_{G}\lambda_{G}g\left(Q\right)G\left(Q\right)
+\end{align*}
+
+\end_inset
+
+This is a cubic equation in 
+\begin_inset Formula $Q$
+\end_inset
+
+.
+ It can be solved numerically.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

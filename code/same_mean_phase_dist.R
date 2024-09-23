@@ -6,6 +6,8 @@ library(actuar)
 library(matlib)
 library(latex2exp) # to display TeX
 library(cols4all)
+library(doFuture)
+library(progressr)
 
 # Set up parameters ----
 
@@ -14,61 +16,56 @@ library(cols4all)
 # Define phase type distribution
 # Questing
 pQ = 1
-lQ = 1 / (8 * 60) # 1 / (3 * 1440) # 8 hours = 480 minutes
+# base_lQ = 1 / (3 * 1440) # 8 hours = 480 minutes
+lQ = 1 / 480
 
 # Landing
-pL = .9 # 0.7 # 0.5 #0.3
+pL =  0.1 # 0.7 # 0.1 # 0.3
 lL = 0.1 # 10 minutes
 
 # Probing
-pP = .9 # 0.8 # 0.5 #0.2
+pP = 0.1 # 0.8 # 0.2
 lP = 0.2 # 5 minutes
 
 # Ingesting
-pG = .9 # 0.9 # 0.5 #0.75
+pG = 0.1 # 0.9 # 0.75
 lG = 1 # 1 minutes
 
 # Fleeing
-f = .01 # 0.66 # 0.5 #0.8
+f =  0.1 # 0.66 # 0.15 # 0.8
 
 # Average total duration of blood-feeding stage
 base_theta = 1440 * 3
 theta = base_theta # three days for feeding, five days for ovipositing, and two days of resting
 
-gammaV = 1/(.01 * 1440) # exit rate from oviposition to resting, including bloodmeal digestion and site search (5 days)
-gammaR = 1/(.01 * 1440) # exit rate from resting to return to blood-feeding (2 days)
+gammaV = 1/(1 * 1440) # exit rate from oviposition to resting, including bloodmeal digestion and site search (5 days)
+gammaR = 1/(1 * 1440) # exit rate from resting to return to blood-feeding (2 days)
 
+# parameters = tibble(base_lQ, pL, lL, pP, lP, pG, lG, f, gammaV, gammaR, theta)
 parameters = tibble(lQ, pL, lL, pP, lP, pG, lG, f, gammaV, gammaR, theta)
 
 # Transmission parameters
-betaH = betaV = betaP = betaG = 1
+betaH = betaV = betaP = betaG = 0.01
 eta = 1/(6 * 1440) # 6 days for infection to develop in vector
 mu = 1/(20 * 1440) # 20 day lifespan for vector
 # gamma = 1/(2 * 1440) # rate of return from oviposition to blood-feeding (3 days)
 gammaH = 1/(7 * 1440) # rate of recovery in hosts (7 days)
 muH = 1/(365.25 * 65 * 1440) # host mortality rate (65 years)
-KH = 1E7 # host population density
+KH = 1E5 # host population density
 
-KL = 3 * 1E6
-rhoL = 1/(12 * 1440) # 12 day larval development period
-muL = 1/ (20 * 1440) # 62.5% probability of larval survival (20 / (20 + 12))
+KL = 3 * 1E8
+rhoL = 1 / (12 * 1440) # 12 day larval development period
+muL = 1 / (20 * 1440) # 62.5% probability of larval survival (20 / (20 + 12))
 varPhi = 300 / 1440 # on average 3 eggs per female per day
 
 extra_parameters = tibble(betaH, betaV, betaP, betaG, eta, mu, gammaH, muH, KH, KL, rhoL, muL, varPhi)
-
-# (GCD_func(cbind(parameters, extra_parameters))/1440)
-# 
-# 1/(GCD_func(cbind(parameters, extra_parameters))/1440)
-# 
-# 
-# R_calc_function_mech(cbind(parameters, extra_parameters))
-# R_calc_function_exp(cbind(parameters, extra_parameters))
 
 # Compare waiting time distributions ----
 
 # Function: transform mechanistic parameters to mechanistic matrix
 params_to_mat_func <- function(parameters){
   with(as.list(parameters), {
+    # lQ = base_lQ * KH / B_sum
     # subintensity matrix
     out = matrix(c(
       -lQ,                                        lQ,       0,       0,
@@ -77,6 +74,7 @@ params_to_mat_func <- function(parameters){
       f * (1 - pG) * lG,     (1 - f) * (1 - pG) * lG,       0,      -lG
     ), 
     ncol = 4, byrow = TRUE) 
+    return(as.matrix(out))
   })
 }
 
@@ -103,11 +101,99 @@ params_to_prime_mat_func <- function(parameters){
 }
 
 # Function to calculate mean duration (to check that other calculations are correct)
-GCD_func <- function(parameters) {
-  with(as.list(parameters), {
-    GCD = ((1 - (1 - f) * (1 - pL * pP * pG))/lQ + 1 / lL + pL / lP + pL * pP / lG) / (pL * pP * pG) + (1 / gammaV) + (1 / gammaR)
+GCD_func <- function(params) {
+  # with(as.list(params), {
+  mat_order = 4
+  A_mat = params_to_mat_func(params)
+  alpha_vec = matrix(rep(0, mat_order), ncol = 1); alpha_vec[1] = 1
+  one_vec = matrix(rep(1, mat_order), nrow = 1)
+  
+  theta = one_vec %*% -inv(t(A_mat)) %*% alpha_vec
+  GCD = theta[1] + (1 / gammaV) + (1 / gammaR)
+  
+  return(GCD)
+  # })
+}
+
+# Function to calculate equilibrium vector population density
+vec_density_func <- function(params) {
+  with(as.list(params), {
+  # Exponential case: host = (b * V / H) * H = vector = b * V
+  if (type == "Exponential") {
+    B_star = (rhoL / mu) * KL * (1 - mu * (muL + rhoL) / (varPhi * rhoL))
+    # Mechanistic case:
+  } else {
+    order = 4
+    A = params_to_mat_func(params)
+    A_tilde = params_to_tilde_mat_func(params)
+    alpha = matrix(rep(0, order), ncol = 1); alpha[1] = 1
+    one_vec = matrix(rep(1, order), nrow = 1)
+    # Pr(complete a gonotrophic cycle)
+    tau = as.double(-one_vec %*% t(A) %*% inv(mu * diag(order) - t(A)) %*% alpha)
+    rho = 1 - (gammaV / (mu + gammaV)) * (gammaR / (mu + gammaR)) * tau
+    nG = 1 / rho
+    # Basic offspring number
+    N_offspring = tau * (varPhi / (mu + gammaV)) * (rhoL / ( rhoL + muL)) * nG
+    if (N_offspring < 1) {B_star = 0
+    } else {
+      R_star = rhoL * KL * tau * nG * (1 - (1/N_offspring)) * (gammaV / (mu + gammaV)) / (mu + gammaR)
+      r = (N_offspring - 1) * KL * ((rhoL + muL)/ varPhi) * (mu + gammaV)
+      # Stable distribution of feeding classes
+      L_star = KL * (N_offspring - 1) / N_offspring
+      B_vec = ((N_offspring - 1) * KL * rhoL / N_offspring) * (1 + (gammaR / (mu + gammaR)) * (gammaV / (mu + gammaV)) * nG * tau) * (inv(mu * diag(order) - t(A))) %*% alpha
+      B_star = sum(B_vec)
+    }
+  }
+  return(B_star)
   })
 }
+
+# Contact rate functions ----
+contact_rate_func <- function(params) {
+  with(as.list(params), {
+    # Exponential case: host = (b * V / H) * H = vector = b * V
+    if (type == "Exponential") {
+      B_star = (rhoL / mu) * KL * (1 - mu * (muL + rhoL) / (varPhi * rhoL))
+      exp_contact = (1 / theta) * B_star
+      to_host_contact = exp_contact
+      to_vector_contact = exp_contact
+      # Mechanistic case:
+    } else {
+      order = 4
+      A = params_to_mat_func(params)
+      A_tilde = params_to_tilde_mat_func(params)
+      alpha = matrix(rep(0, order), ncol = 1); alpha[1] = 1
+      one_vec = matrix(rep(1, order), nrow = 1)
+      # Pr(complete a gonotrophic cycle)
+      tau = as.double(-one_vec %*% t(A) %*% inv(mu * diag(order) - t(A)) %*% alpha)
+      rho = 1 - (gammaV / (mu + gammaV)) * (gammaR / (mu + gammaR)) * tau
+      nG = 1 / rho
+      # Basic offspring number
+      N_offspring = tau * (varPhi / (mu + gammaV)) * (rhoL / ( rhoL + muL)) * nG
+      if (N_offspring < 1) {to_host_contact = to_vector_contact = 0
+      } else {
+        R_star = rhoL * KL * tau * nG * (1 - (1/N_offspring)) * (gammaV / (mu + gammaV)) / (mu + gammaR)
+        r = (N_offspring - 1) * KL * ((rhoL + muL)/ varPhi) * (mu + gammaV)
+        # Stable distribution of feeding classes
+        L_star = KL * (N_offspring - 1) / N_offspring
+        B_star = ((N_offspring - 1) * KL * rhoL / N_offspring) * (1 + (gammaR / (mu + gammaR)) * (gammaV / (mu + gammaV)) * nG * tau) * (inv(mu * diag(order) - t(A))) %*% alpha
+        V_star = r / (mu + gammaV)
+        R_star = r * (gammaV / (mu + gammaV)) / (mu + gammaR)
+        B_vec = rbind(B_star, V_star)
+        
+        theta = one_vec %*% -inv(A) %*% alpha
+        
+        to_host_contact = pL * lL# * B_vec[2] / sum(B_star)
+        to_vector_contact = pP * lP# * B_vec[3] / sum(B_star)
+      }
+    }
+    
+    
+    return(tibble(to_host = to_host_contact, to_vector = to_vector_contact))
+    
+  })
+}
+
 
 # Basic offspring number and reproduction number comparisons ----
 
@@ -119,8 +205,8 @@ R_calc_function_exp <- function(params) {
     b = -A
     
     # Set up transmission matrices: beta and Lambda
-    betaH = 1
-    betaV = 1
+    betaH = betaH
+    betaV = betaV
     LambdaH = b
     LambdaV = b
     
@@ -143,7 +229,6 @@ R_calc_function_mech <- function(params) {
     # # !!!
     # list2env(as.list(params), envir = .GlobalEnv)
     # # !!!
-    
     order = 4
     A = params_to_mat_func(params)
     A_tilde = params_to_tilde_mat_func(params)
@@ -158,6 +243,9 @@ R_calc_function_mech <- function(params) {
     nG = 1 / rho
     # Basic offspring number
     N_offspring = tau * (varPhi / (mu + gammaV)) * (rhoL / ( rhoL + muL)) * nG
+    
+    R_star = rhoL * KL * tau * nG * (1 - (1/N_offspring)) * (gammaV / (mu + gammaV)) / (mu + gammaR)
+    
     r = (N_offspring - 1) * KL * ((rhoL + muL)/ varPhi) * (mu + gammaV)
     # r = (N_offspring - 1) * KL * nG * tau * rhoL
     
@@ -176,7 +264,8 @@ R_calc_function_mech <- function(params) {
     
     B_vec = rbind(B_star, V_star)
     
-    if (N_offspring < 1) {R0 = 0
+    if (N_offspring < 1) {
+      R0 = 0
     } else {
       
       # Adjust matrix to include oviposition (where new infections can occur)
@@ -185,22 +274,41 @@ R_calc_function_mech <- function(params) {
       
       # Set up transmission matrices: beta and Lambda
       zero_mat = matrix(rep(0, (order+1)^2), nrow = order+1, ncol = order+1)
-      betaH = zero_mat; betaV = zero_mat; LambdaH = zero_mat; LambdaV = zero_mat
-      betaH[3,3] = 1
-      betaV[4,4] = 1
-      LambdaH[3,3] = -A[3,3]
-      LambdaV[4,4] = -A[4,4]
+      betaH_mat = zero_mat; betaV_mat = zero_mat; LambdaH = zero_mat; LambdaV = zero_mat
+      # # Rate of contact depends on how long they stay in transmission compartments
+      # betaH_mat[3,3] = 1
+      # betaV_mat[4,4] = 1
+      # LambdaH[3,3] = -A[3,3]
+      # LambdaV[4,4] = -A[4,4]
+      # # Rate of contact is rate of entrance into transmission compartments
+      LambdaH[2,3] = A[2,3]
+      LambdaV[3,4] = A[3,4]
+      betaH_mat[3,3] = betaH
+      betaV_mat[4,4] = betaV
       
       temp_mat = (-one_vec) %*% t(A_tilde)
       temp_mat[temp_mat < 1e-16] = 0 # remove small numerical errors to ease computation
       
       spec_mat = alpha %*% temp_mat
-      M1 = mu * diag(order+1) - (A_tilde) - (gammaR / (mu + gammaR)) * spec_mat
+      M1 = mu * diag(order+1) - t(A_tilde) - (gammaR / (mu + gammaR)) * spec_mat
       M2 = eta * diag(order+1) + (eta / (mu + gammaR + eta)) * (1 / (mu + gammaR)) * spec_mat
-      M3 = (eta + mu) * diag(order+1) - (A_tilde) - (gammaR / (mu + gammaR + eta)) * spec_mat
+      M3 = (eta + mu) * diag(order+1) - t(A_tilde) - (gammaR / (mu + gammaR + eta)) * spec_mat
       Q = inv(M1) %*% M2 %*% inv(M3)
       
-      R0 = sqrt(one_vec %*% betaH %*% LambdaH %*% Q %*% betaV %*% LambdaV %*% B_vec / (KH * (muH + gammaH)))
+      # # (maybe) Average infectious period to host
+      # test_1 = one_vec %*% inv(M1) %*% LambdaV %*% B_vec
+      # # (maybe) Average infectious period to vector
+      # test_1 = one_vec %*% inv(M1) %*% LambdaV %*% B_vec
+      # # (maybe) Pr(survive EIP)
+      # test_2 = one_vec %*% betaH %*% M2 %*% inv(M3) %*% betaV
+      
+      # B_star_exp = (rhoL / mu) * KL * (1 - mu * (muL + rhoL) / (varPhi * rhoL))
+      # R0_exp = sqrt(1 * (1/theta) * (1 / mu) * (eta / (mu + eta)) * (1/theta) * B_star_exp * (1 / (KH * (muH + gammaH))))
+      
+      # R0 = sqrt(one_vec %*% betaH_mat %*% t(LambdaH) %*% Q %*% betaV_mat %*% t(LambdaV) %*% B_vec / (KH * (muH + gammaH)))
+      
+      # # If we get rid of the Ross-MacDonald "availability" assumption
+      R0 = sqrt(one_vec %*% betaH_mat %*% t(LambdaH) %*% Q %*% betaV_mat %*% t(LambdaV) %*% B_vec / (sum(B_star) * (muH + gammaH)))
     }
     
     return(tibble(N_offspring = N_offspring, R0 = R0))
@@ -210,35 +318,32 @@ R_calc_function_mech <- function(params) {
 # Set up data tables to compute R and R0 across ranges of...
 
 # Vary f
-f_vec2 = seq(0, 1, length.out = 101)
+f_vec2 = seq(0, 1, length.out = 10001)
 vary_f_parameters = cbind(extra_parameters, parameters) %>%
   dplyr::select(-c(theta, f)) %>%
   cbind(tibble(f = f_vec2)) %>%
-  mutate(theta = GCD_func(.)) %>% 
   mutate(type = "Mechanistic") %>%
   mutate(vary_parm = "Seek-new-host probability") %>% 
   mutate(vary_lab = "f") %>% 
   mutate(vary_val = f)
 
 # Vary pL
-pL_vec = seq(0, 1, length.out = 101)
+pL_vec = seq(0, 1, length.out = 1001)
 pL_vec = pL_vec[-1]
 vary_pL_parameters = cbind(extra_parameters, parameters) %>%
   dplyr::select(-c(theta, pL)) %>%
   cbind(tibble(pL = pL_vec)) %>%
-  mutate(theta = GCD_func(.)) %>% 
   mutate(type = "Mechanistic") %>%
   mutate(vary_parm = "Landing success probability") %>% 
   mutate(vary_lab = "pL") %>% 
   mutate(vary_val = pL)
 
 # Vary pP
-pP_vec = seq(0, 1, length.out = 101)
+pP_vec = seq(0, 1, length.out = 1001)
 pP_vec = pP_vec[-1]
 vary_pP_parameters = cbind(extra_parameters, parameters) %>%
   dplyr::select(-c(theta, pP)) %>%
   cbind(tibble(pP = pP_vec)) %>%
-  mutate(theta = GCD_func(.)) %>% 
   mutate(type = "Mechanistic") %>%
   mutate(vary_parm = "Probing success probability") %>% 
   mutate(vary_lab = "pP") %>% 
@@ -250,55 +355,58 @@ pG_vec = pG_vec[-1]
 vary_pG_parameters = cbind(extra_parameters, parameters) %>%
   dplyr::select(-c(theta, pG)) %>%
   cbind(tibble(pG = pG_vec)) %>%
-  mutate(theta = GCD_func(.)) %>% 
   mutate(type = "Mechanistic") %>%
   mutate(vary_parm = "Ingestion success probability") %>% 
   mutate(vary_lab = "pG") %>% 
   mutate(vary_val = pG)
 
 # Vary lQ
-inv_lQ_vec = seq(0, 100 * 1440, length.out = 1002)
+inv_lQ_vec = seq(0, 10 * 1440, length.out = 1002)
 inv_lQ_vec = inv_lQ_vec[-1]
+base_lQ_vec = seq(0.5, 100, length.out = 1001) * lQ
+inv_lQ_vec = sort(unique(c(inv_lQ_vec, 1/base_lQ_vec)))
 vary_lQ_parameters = cbind(extra_parameters, parameters) %>%
   dplyr::select(-c(theta, lQ)) %>%
-  cbind(tibble(lQ = 1/inv_lQ_vec)) %>%
-  mutate(theta = GCD_func(.)) %>% 
+  cbind(tibble(lQ = 1/rev(inv_lQ_vec))) %>%
   mutate(type = "Mechanistic") %>%
   mutate(vary_parm = "Questing rate") %>% 
   mutate(vary_lab = "lQ") %>% 
   mutate(vary_val = lQ)
 
 # Vary lL
-inv_lL_vec = seq(0, 100 * 1440, length.out = 1002)
+inv_lL_vec = seq(0, 10 * 1440, length.out = 1002)
 inv_lL_vec = inv_lL_vec[-1]
+base_lL_vec = seq(0.5, 100, length.out = 1001) * lL
+inv_lL_vec = sort(unique(c(inv_lL_vec, 1/base_lL_vec)))
 vary_lL_parameters = cbind(extra_parameters, parameters) %>%
   dplyr::select(-c(theta, lL)) %>%
-  cbind(tibble(lL = 1/inv_lL_vec)) %>%
-  mutate(theta = GCD_func(.)) %>% 
+  cbind(tibble(lL = 1/rev(inv_lL_vec))) %>%
   mutate(type = "Mechanistic") %>%
   mutate(vary_parm = "Landing rate") %>% 
   mutate(vary_lab = "lL") %>% 
   mutate(vary_val = lL)
 
 # Vary lP
-inv_lP_vec = seq(0, 100 * 1440, length.out = 10002)
+inv_lP_vec = seq(0, 10 * 1440, length.out = 1002)
 inv_lP_vec = inv_lP_vec[-1]
+base_lP_vec = seq(0.5, 100, length.out = 1001) * lP
+inv_lP_vec = sort(unique(c(inv_lP_vec, 1/base_lP_vec)))
 vary_lP_parameters = cbind(extra_parameters, parameters) %>%
   dplyr::select(-c(theta, lP)) %>%
-  cbind(tibble(lP = 1/inv_lP_vec)) %>%
-  mutate(theta = GCD_func(.)) %>% 
+  cbind(tibble(lP = 1/rev(inv_lP_vec))) %>%
   mutate(type = "Mechanistic") %>%
   mutate(vary_parm = "Probing rate") %>% 
   mutate(vary_lab = "lP") %>% 
   mutate(vary_val = lP)
 
 # Vary lG
-inv_lG_vec = seq(0, 100 * 1440, length.out = 10002)
+inv_lG_vec = seq(0, 10 * 1440, length.out = 1002)
 inv_lG_vec = inv_lG_vec[-1]
+base_lG_vec = seq(0.5, 1.5, length.out = 1001) * lG
+inv_lG_vec = sort(unique(c(inv_lG_vec, 1/base_lG_vec)))
 vary_lG_parameters = cbind(extra_parameters, parameters) %>%
   dplyr::select(-c(theta, lG)) %>%
-  cbind(tibble(lG = 1/inv_lG_vec)) %>%
-  mutate(theta = GCD_func(.)) %>% 
+  cbind(tibble(lG = 1/rev(inv_lG_vec))) %>%
   mutate(type = "Mechanistic") %>%
   mutate(vary_parm = "Ingesting rate") %>% 
   mutate(vary_lab = "lG") %>% 
@@ -309,60 +417,50 @@ all_vary_parameters = rbind(
   vary_lL_parameters, vary_lP_parameters, vary_lG_parameters
 )
 
-all_vary_R_vals = tibble(R0 = as.double(), N_offspring = as.double(), theta = as.double(), type = as.character(), vary_parm = as.character(), vary_lab = as.character(), vary_val = as.double())
-
-for (i in 1:dim(all_vary_parameters)[1]) {
-  params = all_vary_parameters[i,]
-  Rs = R_calc_function_mech(params)
-  N_val = Rs$N_offspring
-  R0_val = Rs$R0[1]
-  temp_tibble = tibble(
-    R0 = R0_val,
-    N_offspring = N_val,
-    theta = params$theta,
-    type = params$type,
-    vary_parm = params$vary_parm,
-    vary_lab = params$vary_lab,
-    vary_val = params$vary_val)
-  all_vary_R_vals <- add_row(all_vary_R_vals, temp_tibble)
-}
-
-
-theta_plot = all_vary_R_vals %>% 
-  ggplot(aes(x = vary_val, y = 1440/(theta - (1/gammaV) - (1/gammaR)), color = vary_lab)) +
-  geom_line(lwd = 1) +
-  scale_x_continuous(limits = c(0,1), expand = c(0,0)) +
-  scale_color_brewer(palette = "BrBG") +
-  theme_minimal_grid()
-
 # Set up theta variation for the exponential case
 exp_vary_R_vals = tibble(R0 = as.double(), N_offspring = as.double(), theta = as.double(), type = as.character(), vary_parm = as.character(), vary_lab = as.character(), vary_val = as.double())
 
-theta_vec = 1440 * (seq(0, 100, length.out = 101))
+theta_vec = 1440 * (seq(0, 1000, length.out = 10001))
 theta_vec = theta_vec[-1]
 
 vary_exp_parameters = tibble(
   cbind(extra_parameters,
         dplyr::select(parameters, -theta),
-        tibble(theta = theta_vec)),
-  type = "Exponential")
+        tibble(theta = rev(theta_vec))),
+  type = "Exponential",
+  vary_parm = "theta",
+  vary_lab = "theta",
+  vary_val = theta) %>% 
+  select(-theta)
 
-for (i in 1:dim(vary_exp_parameters)[1]) {
-  params = vary_exp_parameters[i,]
-  Rs = R_calc_function_exp(params)
-  N_val = Rs$N_offspring
-  R0_val = Rs$R0
-  temp_tibble = tibble(
-    R0 = R0_val,
-    N_offspring = N_val,
-    theta = params$theta,
-    type = params$type,
-    vary_parm = "Exponential",
-    vary_lab = "theta",
-    vary_val = params$theta
-    )
-  exp_vary_R_vals <- add_row(exp_vary_R_vals, temp_tibble)
-}
+all_varied_parameters = rbind(all_vary_parameters, vary_exp_parameters)
+
+# Calculate all N and R0 values
+plan(multisession)
+all_vary_vals <- foreach(
+  index =  1:dim(all_varied_parameters)[1],
+  .combine = 'rbind') %dofuture% {
+    params = all_varied_parameters[index,]
+    if (params$type == "Mechanistic") {
+      Rs = R_calc_function_mech(params)
+      GCD = GCD_func(params)
+    } else {
+      params$theta = params$vary_val
+      Rs = R_calc_function_exp(params)
+      GCD = params$vary_val
+    }
+    N_val = Rs$N_offspring
+    R0_val = Rs$R0[1]
+    temp_tibble = tibble(
+      R0 = R0_val,
+      N_offspring = N_val,
+      GCD = GCD,
+      type = params$type,
+      vary_parm = params$vary_parm,
+      vary_lab = params$vary_lab,
+      vary_val = params$vary_val)
+  }
+plan(sequential)
 
 param_table = tibble(
   name = c("lambda_Q", "p_L", "lambda_L", "p_P", "lambda_P", "p_G", "lambda_G", "f"),
@@ -377,20 +475,19 @@ param_table = tibble(
                   "Probability of seeking a new vertebrate host given feeding failure"
   ),
   Label = c("Questing rate", "Landing success probability", "Landing rate", "Probing success probability", "Probing rate", "Ingestion success probability", "Ingesting rate", "Seek-new-host probability"), 
-  Type = c("Rate", "Probability", "Rate", "Probability", "Rate", "Probability", "Rate", "Probability"),
+  Type = c("Rates", "Probabilities", "Rates", "Probabilities", "Rates", "Probabilities", "Rates", "Probabilities"),
   Prefix = c("Questing", "Landing", "Landing", "Probing", "Probing", "Ingesting",  "Ingesting", "Seeking"), 
   value = c(lQ, pL, lL, pP, lP, pG, lG, f)
 )
 
-all_vary_plot_df = all_vary_R_vals %>% 
-  rbind(exp_vary_R_vals) %>% 
+all_vary_plot_df = all_vary_vals %>% 
   filter(!is.na(R0)) %>% 
   filter(!is.na(vary_parm)) %>% 
   left_join(rename(param_table, vary_parm = Label)) %>% 
   rename(Label = vary_parm) %>% 
   mutate(Label = ifelse(is.na(Label), "Exponential", Label)) %>% 
   mutate(Prefix = ifelse(is.na(Prefix), "Exponential", Prefix)) %>% 
-  mutate(Type = ifelse(is.na(Type), "Rate", Type)) %>%
+  mutate(Type = ifelse(is.na(Type), "Rates", Type)) %>%
   filter(is.finite(R0))
 
 all_vary_plot_df$Label <- factor(all_vary_plot_df$Label, levels = c("Exponential", "Questing rate", "Seek-new-host probability", "Landing success probability", "Landing rate", "Probing success probability", "Probing rate", "Ingestion success probability", "Ingesting rate"))
@@ -398,55 +495,218 @@ all_vary_plot_df$Label <- factor(all_vary_plot_df$Label, levels = c("Exponential
 # Labels
 
 all_vary_plot_df$Prefix = factor(all_vary_plot_df$Prefix, levels = c("Exponential", "Questing", "Seeking", "Landing", "Probing", "Ingesting"))
-all_vary_plot_df$Type = factor(all_vary_plot_df$Type, levels = c("Exponential", "Rate", "Probability"))
+all_vary_plot_df$Type = factor(all_vary_plot_df$Type, levels = c("Rates", "Probabilities"))
 
+# Add Exponential into prob plot too
+temp_df <- filter(all_vary_plot_df, type == "Exponential") %>% 
+  select(-Type) %>% 
+  mutate(Type = "Probabilities")
+
+all_vary_plot_df <- rbind(all_vary_plot_df, temp_df)
 
 # Plot R0 vs "GCD" ----
 # !!! Make distinction between rates and probabilities as in main RMD file
-R0_vary_plot_inverted_allparams = ggplot() +
-  geom_line(data = all_vary_plot_df %>% 
-              filter(vary_lab %in% c("lQ", "theta")) %>% 
-              # filter(type != "Exponential") %>%
-              # filter(Type == "Probability") %>%
-              # mutate(b = 1440 / theta) %>% 
-              mutate(b = case_when(
-                type == "Exponential" ~ 1440 / (theta),# - (1/gammaV) - (1/gammaR)), 
-                type == "Mechanistic" ~ 1440 / ((theta))#  - (1/gammaV) - (1/gammaR))
-              )) %>% 
-              # restrict to a feasible domain
-              # filter(between(b, 0, 0.5)) %>% 
-              # filter(between(R0, 0, 1.1)) %>% 
-              as.tibble(),
-            aes(x = b, y = R0, 
-                group = Label,
-                color = Prefix,
-                linetype = Type
-            ),
-            lwd = 1, alpha = 0.9) +
+R0_vary_plot_inverted_allparams = all_vary_plot_df %>% 
+  # filter(vary_lab == "lG") %>%
+  mutate(b = 1440 / GCD) %>% 
+  filter(b < 0.5) %>%
+  ggplot() +
+  geom_path(
+    aes(x = b, y = R0, 
+        group = Label,
+        color = Prefix
+    ),
+    lineend = "round",
+    arrow = arrow(ends = "last", type = "closed"),
+    lwd = 1, alpha = 0.75) +
   geom_hline(aes(yintercept = 1), color = "red") +
+  facet_wrap(vars(Type), ncol = 1, scales = "free_y") +
+  # facet_grid(rows = vars(Type), scales = "free", switch = "y") +
   scale_linetype_manual("Type:", values = c(1, 2), breaks = c("Rate", "Probability")) +
-  scale_x_continuous("``Bites per mosquito per day`` = 1/Gonotrophic cycle duration", 
+  scale_x_continuous("1/Gonotrophic cycle duration = ``Bites per mosquito per day``", 
                      # limits = c(0, 0.33),
-                     breaks = seq(0, 1, by = 0.1), 
+                     # trans = 'log10',
+                     breaks = seq(0, 1, by = 0.05),
                      expand = c(0,0)) +
   scale_y_continuous(name = TeX("Basic reproduction number ($R_0$)"),
                      # limits = c(0, NA),
                      # breaks = seq(0,4),
                      # trans = 'log10',
-                     expand = c(0,0)
+                     # expand = c(0,0)
   ) +
   scale_color_manual("Parameter", values = c("Black", c4a("poly.dark24", 5))) +
   coord_cartesian(
-    xlim = c(0, 1),
-    ylim = c(0, 20)
+    # xlim = c(0, .33),
+    # ylim = c(0, 15)
   ) +
-  # ggtitle("The response of R0 to 1/OCL depends on the mechanism causing variations in OCL") +
-  theme_minimal_hgrid(16)
+  theme_minimal_grid(16) +
+  theme(strip.background = element_rect(fill = "grey"))
 
 R0_vary_plot_inverted_allparams
 
-ggsave("figures/R0_model_invert_all_params.png", plot = R0_vary_plot_inverted_allparams, 
+ggsave("figures/R0_model_invert_all_params_log.png", plot = R0_vary_plot_inverted_allparams, 
        width = 13.333, height = 6.5, units = "in")
+
+
+# Plot relationships between contact rates and GCD ----
+
+# Calculate all contact rates and GCD values
+
+contact_params = all_varied_parameters # filter(all_varied_parameters, theta < 1/mu)
+
+plan(multisession)
+contact_vary_vals <- foreach(
+  index =  1:dim(contact_params)[1],
+  .combine = 'rbind') %dofuture% {
+    params = contact_params[index,]
+    KB = vec_density_func(params)
+    if (params$type == "Exponential") {
+      params$theta = params$vary_val
+      GCD = params$theta
+      contacts = contact_rate_func(params)
+      # exp_contact = (1 / vary_val) * KB
+      # to_host_contact = exp_contact
+      # to_vector_contact = exp_contact
+    } else {
+      GCD = GCD_func(params)
+      contacts = contact_rate_func(params)
+    }
+    temp_tibble = tibble(
+      to_host = contacts$to_host,
+      to_vector = contacts$to_vector,
+      KB = KB,
+      GCD = GCD,
+      type = params$type,
+      vary_parm = params$vary_parm,
+      vary_lab = params$vary_lab,
+      vary_val = params$vary_val)
+  }
+plan(sequential)
+
+# Set up plot dataframe and labels
+contact_plot_df = contact_vary_vals %>% 
+  left_join(rename(param_table, vary_parm = Label)) %>% 
+  rename(Label = vary_parm) %>% 
+  mutate(Label = ifelse(is.na(Label), "Exponential", Label)) %>% 
+  mutate(Prefix = ifelse(is.na(Prefix), "Exponential", Prefix)) %>% 
+  mutate(Type = ifelse(is.na(Type), "Rates", Type))
+
+contact_plot_df$Label <- factor(contact_plot_df$Label, levels = c("Exponential", "Questing rate", "Seek-new-host probability", "Landing success probability", "Landing rate", "Probing success probability", "Probing rate", "Ingestion success probability", "Ingesting rate"))
+
+# Labels
+
+contact_plot_df$Prefix = factor(contact_plot_df$Prefix, levels = c("Exponential", "Questing", "Seeking", "Landing", "Probing", "Ingesting"))
+contact_plot_df$Type = factor(contact_plot_df$Type, levels = c("Rates", "Probabilities"))
+
+# Add Exponential into prob plot too
+temp_df <- filter(contact_plot_df, type == "Exponential") %>% 
+  select(-Type) %>% 
+  mutate(Type = "Probabilities")
+
+contact_plot_df <- rbind(contact_plot_df, temp_df)
+
+host_contact_range = filter(contact_plot_df, type == "Exponential", Type == "Rates") %>% 
+  mutate(daily_biting = 1440 * to_host / KH) %>% 
+  select(daily_biting) %>% range()
+
+# Plot GCD vs HOST contact rate ----
+host_contact_GCD_plot = contact_plot_df %>% 
+  # filter(type == "Mechanistic") %>% 
+  mutate(daily_biting = 1440 * to_host / KH) %>% 
+  # filter(between(daily_biting, host_contact_range[1], host_contact_range[2])) %>%
+  ggplot() +
+  geom_path(aes(y = daily_biting, x = GCD / 1440, 
+                group = Label,
+                color = Prefix
+  ),
+  lineend = "round",
+  arrow = arrow(ends = "last", type = "closed"),
+  lwd = 1, alpha = 0.75) +
+  facet_wrap(vars(Type), ncol = 1, scales = "free_y") +
+  # scale_linetype_manual("Type:", values = c(1, 2), breaks = c("Rate", "Probability")) +
+  scale_y_continuous("Effective contact rate to hosts (bites per human per day)", 
+                     trans = 'log10',
+                     # limits = contact_range,
+                     # breaks = seq(0, 1, by = 0.1), 
+                     # expand = c(0,0)
+                     ) +
+  scale_x_continuous(name = "Gonotrophic cycle duration (days)", 
+                     trans = 'log10',
+                     # limits = c(0, NA),
+                     # breaks = seq(0,4),
+                     # trans = 'log10',
+                     # expand = c(0,0)
+  ) +
+  scale_color_manual("Parameter", values = c("Black", c4a("poly.dark24", 5))) +
+  coord_cartesian(
+    # xlim = c(0, .3),
+    xlim = c(NA, 21)
+  ) +
+  # ggtitle("The response of R0 to 1/OCL depends on the mechanism causing variations in OCL") +
+  theme_minimal_grid(16) +
+  theme(strip.background = element_rect(fill = "grey"))
+
+host_contact_GCD_plot
+# NB: pP and pG curves overlap
+ggsave("figures/host_contact_GCD_log.png", plot = host_contact_GCD_plot, 
+       width = 13.333, height = 6.5, units = "in")
+
+
+vector_contact_range = filter(contact_plot_df, type == "Mechanistic") %>% 
+  filter(KB > 0) %>% 
+  mutate(daily_biting = 1440 * to_vector / KB) %>% 
+  select(daily_biting) %>% range()
+
+# Plot GCD vs VECTOR contact rate ----
+vector_contact_GCD_plot = contact_plot_df %>% 
+  filter(KB > 0) %>% 
+  # filter(type != "Exponential") %>%
+  # mutate(GCD = theta / 1440) %>% 
+  mutate(daily_biting = 1440 * to_vector / KB) %>%
+  filter(between(daily_biting, vector_contact_range[1], 3)) %>%  # vector_contact_range[2])) %>% 
+  ggplot() +
+  # geom_point(aes(x = to_host, y = GCD))
+  geom_path(aes(y = daily_biting, x = GCD / 1440, 
+                group = Label,
+                color = Prefix
+  ),
+  lineend = "round",
+  arrow = arrow(ends = "last", type = "closed"),
+  lwd = 1, alpha = 0.75) +
+  facet_wrap(vars(Type), ncol = 1, scales = "free_y") +
+  # scale_linetype_manual("Type:", values = c(1, 2), breaks = c("Rate", "Probability")) +
+  scale_y_continuous("Effective contact rate to vectors (bites per mosquito per day)",  
+                     # trans = 'log10',
+                     # limits = c(0, 0.33),
+                     # breaks = seq(0, 1, by = 0.1), 
+                     # expand = c(0,0)
+  ) +
+  scale_x_continuous(name = "Gonotrophic cycle duration (days)", 
+                     # trans = 'log10',
+                     # limits = c(0, NA),
+                     # breaks = seq(0,4),
+                     # trans = 'log10',
+                     # expand = c(0,0)
+  ) +
+  scale_color_manual("Parameter", values = c("Black", c4a("poly.dark24", 5))) +
+  coord_cartesian(
+    # xlim = c(0, .3),
+    xlim = c(NA, 21)
+  ) +
+  # ggtitle("The response of R0 to 1/OCL depends on the mechanism causing variations in OCL") +
+  theme_minimal_grid(16) +
+  theme(strip.background = element_rect(fill = "grey"))
+
+vector_contact_GCD_plot
+
+ggsave("figures/vector_contact_GCD.png", plot = vector_contact_GCD_plot, 
+       width = 13.333, height = 6.5, units = "in")
+
+
+
+
+
+
 # 
 # # Rel'ships among parameters with fixed GCD ----
 # 
