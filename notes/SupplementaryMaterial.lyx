@@ -3117,7 +3117,9 @@ In the case that we ignore the oviposition and resting stages and assume
  is given by
 \begin_inset Formula 
 \begin{align*}
-\mathcal{R}_{0} & =\sqrt{b\beta_{V}\frac{B^{*}}{K_{H}}\frac{1}{\gamma_{H}+\mu_{H}}b\beta_{H}\frac{\eta}{\eta+\mu}\frac{1}{\mu}}
+\mathcal{R}_{0}^{RM} & =\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\beta_{H}b\frac{K_{B}}{K_{H}}\frac{1}{\mu}\frac{\eta}{\mu+\eta}\beta_{V}b}\\
+\mathcal{R}_{0}^{C} & =\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\beta_{H}\frac{bK_{B}\sigma_{H}}{bK_{B}+\sigma_{H}K_{H}}\frac{1}{\mu}\frac{\eta}{\mu+\eta}\beta_{V}\frac{b\sigma_{H}K_{H}}{bK_{B}+\sigma_{H}K_{H}}}\\
+\mathcal{R}_{0}^{C} & =\frac{b\sigma_{H}}{bK_{B}+\sigma_{H}K_{H}}\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\beta_{H}K_{B}\frac{1}{\mu}\frac{\eta}{\mu+\eta}\beta_{V}K_{H}}
 \end{align*}
 
 \end_inset

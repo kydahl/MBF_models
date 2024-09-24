@@ -276,6 +276,24 @@ p_{G}\lambda_{G} & 0
 
 \end_inset
 
+Note that, with respect to the probabilities, this function has a minimum
+ of 
+\begin_inset Formula 
+\begin{align*}
+\frac{d\theta}{dp_{L}} & =-\frac{1}{p_{L}^{2}p_{P}p_{G}}\left[\left[1-\left(1-f\right)\left(1-p_{L}p_{P}p_{G}\right)\right]\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}+p_{L}\frac{1}{\lambda_{P}}+p_{L}p_{P}\frac{1}{\lambda_{G}}\right]+\frac{1}{p_{L}p_{P}p_{G}}\left[\left[1+\left(1-f\right)p_{P}p_{G}\right]\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{P}}+p_{P}\frac{1}{\lambda_{G}}\right]\\
+\frac{d\theta}{dp_{L}} & =-\frac{1}{p_{L}^{2}p_{P}p_{G}}\left\{ \left(f-p_{L}\right)\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}\right\} 
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\min\theta=\left[\frac{1}{\lambda_{Q}}+\frac{1}{\lambda_{L}}+\frac{1}{\lambda_{P}}+\frac{1}{\lambda_{G}}\right]+\frac{1}{\gamma_{V}}+\frac{1}{\gamma_{R}}
+\]
+
+\end_inset
+
 
 \begin_inset Formula $f$
 \end_inset
