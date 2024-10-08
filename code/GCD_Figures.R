@@ -8,7 +8,7 @@ library(latex2exp) # to display TeX
 library(cols4all)
 library(doFuture)
 library(progressr)
-
+library(matrixcalc)
 
 # Cases to plot ----
 
@@ -53,7 +53,8 @@ mech_GCD_calc <- function(df_in) {
   one_vec = matrix(rep(1, 4), nrow = 1)
   alpha_vec = matrix(rep(0, 4), ncol = 1); alpha_vec[1] = 1
   
-  df_out = df_in %>% rowwise() %>%
+  df_out = df_in %>% 
+    dplyr::rowwise() %>%
     mutate(A_matrix = list(matrix(c(
       -lQ,                                        lQ,       0,       0,
       f * (1- pL) * lL, -lL + (1 - f) * (1- pL) * lL, pL * lL,       0,
@@ -62,9 +63,12 @@ mech_GCD_calc <- function(df_in) {
     ),
     ncol = 4, byrow = TRUE)
     )) %>%
-    mutate(condition = kappa(A_matrix)) %>% 
+    mutate(singular_check = is.singular.matrix(A_matrix, tol = sqrt(.Machine$double.eps))) %>% 
+    # mutate(rank = pracma::Rank(A_matrix)) %>% 
+    # mutate(condition = kappa(A_matrix)) %>% 
     # mutate(theta = (one_vec %*% -inv(t(A_matrix)) %*% alpha_vec)[1]) %>% 
-    mutate(GCD = (one_vec %*% -inv(t(A_matrix)) %*% alpha_vec)[1] + (1 / gammaV) + (1 / gammaR)) %>% 
+    mutate(GCD = ifelse(singular_check, NA,
+                        (one_vec %*% -Inverse(t(A_matrix), tol = sqrt(.Machine$double.eps)) %*% alpha_vec)[1] + (1 / gammaV) + (1 / gammaR))) %>% 
     # select(-A_matrix) %>% 
     ungroup()
 }
@@ -154,28 +158,33 @@ contact_rate_function <- function(df_in) {
   # Transmission type can be IN or OUT
   
   df_out = df_in %>% 
+    # rowwise() %>% 
+    
     # Contact rates to the HOST
+    # in units of "contacts per host per day"
     mutate(to_host_contact = case_when(
       # Exponential model
       model_type == "Exponential" & contact_type == "RM" ~ (1/GCD) * B_tot / KH,
       model_type == "Exponential" & contact_type == "Chitnis" ~ sigmaH * (1/GCD) * B_tot / ((1/GCD) * B_tot + sigmaH * KH),
       # Mechanistic model
-      model_type == "Mechanistic" & contact_type == "RM" & transmission_type == "IN" ~ pL * lL * B_tot / KH,
-      model_type == "Mechanistic" & contact_type == "RM" & transmission_type == "OUT" ~ lP * B_tot / KH,
-      model_type == "Mechanistic" & contact_type == "Chitnis" & transmission_type == "IN" ~ sigmaH * pL * lL * B_tot / (pL * lL * B_tot + sigmaH * KH),
-      model_type == "Mechanistic" & contact_type == "Chitnis" & transmission_type == "OUT" ~ sigmaH * lP * B_tot / (lP * B_tot + sigmaH * KH)
+      model_type == "Mechanistic" & contact_type == "RM" & transmission_type == "IN" ~ pL * lL * B_vec[2] / KH,
+      model_type == "Mechanistic" & contact_type == "RM" & transmission_type == "OUT" ~ lP * B_vec[3] / KH,
+      model_type == "Mechanistic" & contact_type == "Chitnis" & transmission_type == "IN" ~ sigmaH * pL * lL * B_vec[2] / (pL * lL * B_vec[2] + sigmaH * KH),
+      model_type == "Mechanistic" & contact_type == "Chitnis" & transmission_type == "OUT" ~ sigmaH * lP * B_vec[3] / (lP *  B_vec[3] + sigmaH * KH)
     )) %>%
     # Contact rates to the VECTOR
+    # in units of "contacts per mosquito per day"
     mutate(to_vector_contact = case_when(
       # Exponential model
       model_type == "Exponential" & contact_type == "RM" ~ (1/GCD),
       model_type == "Exponential" & contact_type == "Chitnis" ~ (1/GCD) * sigmaH * KH / ((1/GCD) * B_tot + sigmaH * KH),
       # Mechanistic model
-      model_type == "Mechanistic" & contact_type == "RM" & transmission_type == "IN" ~ pP * lP,
-      model_type == "Mechanistic" & contact_type == "RM" & transmission_type == "OUT" ~ pG,
-      model_type == "Mechanistic" & contact_type == "Chitnis" & transmission_type == "IN" ~ pP * lP * sigmaH * KH / (pP * lP * B_tot + sigmaH * KH),
-      model_type == "Mechanistic" & contact_type == "Chitnis" & transmission_type == "OUT" ~ pG * sigmaH * KH / (pG * B_tot + sigmaH * KH)
-    ))
+      model_type == "Mechanistic" & contact_type == "RM" & transmission_type == "IN" ~ pP * lP * B_vec[3] / B_tot,
+      model_type == "Mechanistic" & contact_type == "RM" & transmission_type == "OUT" ~ lG * B_vec[4] / B_tot,
+      model_type == "Mechanistic" & contact_type == "Chitnis" & transmission_type == "IN" ~ pP * lP * (B_vec[3] / B_tot) * sigmaH * KH / (pP * lP * B_vec[3] + sigmaH * KH),
+      model_type == "Mechanistic" & contact_type == "Chitnis" & transmission_type == "OUT" ~ lG * (B_vec[4] / B_tot) * sigmaH * KH / (pG * B_vec[4] + sigmaH * KH)
+    )) # %>% 
+    # ungroup()
 }
 
 #### Function: calculate basic reproduction number ----
@@ -209,8 +218,8 @@ R0_function <- function(df_in) {
       # Set up transmission matrices: beta and Lambda
       betaH_mat = list(matrix(c(
         0, 0, 0, 0, 0,
-        0, 0, betaH, 0, 0,
         0, 0, 0, 0, 0,
+        0, 0, betaH, 0, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0
       ),ncol = 5, byrow = TRUE)),
@@ -222,6 +231,7 @@ R0_function <- function(df_in) {
         0, 0, 0, 0, 0
       ),ncol = 5, byrow = TRUE)),
       LambdaH_mat = case_when(
+        # !!! double-check all these when returning. only RM + OUT is checked
         contact_type == "RM" & transmission_type == "IN" ~ list(t(matrix(c(
           0, 0, 0, 0, 0,
           0, 0, pL * lL * B_vec[2] / KH, 0, 0,
@@ -252,10 +262,11 @@ R0_function <- function(df_in) {
         ), ncol = 5, byrow = TRUE)))
       ),
       LambdaV_mat = case_when(
+        # !!! double-check all these when returning. only RM + OUT is checked
         contact_type == "RM" & transmission_type == "IN" ~ list(t(matrix(c(
           0, 0, 0, 0, 0,
           0, 0, 0, 0, 0,
-          0, 0, 0, pP * lP * B_vec[3] / KH, 0,
+          0, 0, 0, pP * lP, 0,
           0, 0, 0, 0, 0,
           0, 0, 0, 0, 0
         ), ncol = 5, byrow = TRUE))),
@@ -263,7 +274,7 @@ R0_function <- function(df_in) {
           0, 0, 0, 0, 0,
           0, 0, 0, 0, 0,
           0, 0, 0, 0, 0,
-          0, 0, 0, lG * B_vec[4] / KH, 0,
+          0, 0, 0, lG, 0,
           0, 0, 0, 0, 0
         ), ncol = 5, byrow = TRUE))),
         contact_type == "Chitnis" & transmission_type == "IN" ~ list(t(matrix(c(
@@ -310,7 +321,7 @@ KH = 1E8 # host population density
 KL = 3 * 1E8
 rhoL = 1 / (12 * 1440) # 12 day larval development period
 muL = 1 / (20 * 1440) # 62.5% probability of larval survival (20 / (20 + 12))
-varPhi = 300 / 1440 # on average 3 eggs per female per day
+varPhi = 3 / 1440 # on average 3 eggs per female per day
 
 # In the Chitnis model, maximum per-capita contact rate for hosts
 sigmaH = 100 / 1440 # = 100 bites / day = 100 (bites / day) * (1 day / 1440 minutes)
@@ -404,6 +415,7 @@ exp_df = full_parameters %>%
       mutate(parameter_type = "baseline")
   ) %>% 
   mutate(B_tot = (rhoL / mu) * KL * (1 - mu * (muL + rhoL) / (varPhi * rhoL))) %>% 
+  mutate(B_vec = NA) %>% 
   ungroup() %>% 
   contact_rate_function() %>% 
   mutate(b = 1/GCD) %>% 
@@ -427,6 +439,7 @@ full_variation_df = as_tibble(matrix(
   dimnames = list(NULL, c("parameter_type", "varied_parameter", colnames(full_parameters)))
 ))
 
+
 # Add in variation data frame for each parameter
 for (parameter_name in parameter_characters) {
   new_df = vary_parameter_function(full_parameters, parameter_name) %>% 
@@ -435,6 +448,7 @@ for (parameter_name in parameter_characters) {
     rowwise() %>%
     mech_population_density_function() %>% 
     ungroup() %>% 
+    rowwise() %>%
     contact_rate_function() %>% 
     rowwise() %>%
     R0_function()
@@ -483,7 +497,7 @@ param_table = tibble(
                   
   ),
   Label = c("Questing rate", "Landing success probability", "Landing rate", "Probing success probability", "Probing rate", "Ingestion success probability", "Ingesting rate", "Seek-new-host probability", "Exp. biting rate"), 
-  Type = c("Rates", "Probabilities", "Rates", "Probabilities", "Rates", "Probabilities", "Rates", "Probabilities", "Rates"),
+  Type = c("(a) Rates", "(b) Probabilities", "(a) Rates", "(b) Probabilities", "(a) Rates", "(b) Probabilities", "(a) Rates", "(b) Probabilities", "(a) Rates"),
   Prefix = c("Questing", "Landing", "Landing", "Probing", "Probing", "Ingesting",  "Ingesting", "Seeking", "Exponential"), 
   short_label = c("lQ", "pL", "lL", "pP", "lP", "pG", "lG", "f", "theta")
 )
@@ -496,7 +510,7 @@ plot_df$Label <- factor(plot_df$Label, levels = c("Exp. biting rate", "Questing 
 
 # Labels
 plot_df$Prefix = factor(plot_df$Prefix, levels = c("Exponential", "Questing", "Seeking", "Landing", "Probing", "Ingesting"))
-plot_df$Type = factor(plot_df$Type, levels = c("Rates", "Probabilities"))
+plot_df$Type = factor(plot_df$Type, levels = c("(a) Rates", "(b) Probabilities"))
 
 
 ## GCD vs Contact rates figures ----
@@ -504,15 +518,17 @@ plot_df$Type = factor(plot_df$Type, levels = c("Rates", "Probabilities"))
 #### IN Contact rates ----
 
 GCD_contact_IN_df <- plot_df %>% 
-  filter(transmission_type == "IN") %>% 
+  filter(transmission_type == "IN") %>%
+  filter(contact_type == "RM",
+         GCD_day > 1/3,
+         GCD_day < 7) %>% 
   distinct()
 
 ###### To host
 GCD_contact_IN_host_plot <- GCD_contact_IN_df %>% 
-  filter(contact_type == "RM") %>% 
   ggplot(aes(x = GCD_day, y = to_host_contact, group = interaction(Label, Prefix, contact_type), color = Prefix)) +
   geom_line(lwd = 1,
-            arrow = arrow(ends = "last", type = "closed"),
+            arrow = arrow(ends = "first", type = "closed"),
             alpha = 0.5
             ) +
   facet_wrap(vars(Type), ncol = 1, scales = "free") +
@@ -531,14 +547,13 @@ ggsave(paste0(folder_name, "/GCD_contact_IN_host.png"), GCD_contact_IN_host_plot
 
 ###### To vector
 GCD_contact_IN_vector_plot <- GCD_contact_IN_df %>% 
-  filter(contact_type == "RM") %>% 
   ggplot(aes(x = GCD_day, y = to_vector_contact, group = interaction(Label, Prefix, contact_type), color = Prefix)) +
   geom_line(lwd = 1,
-            arrow = arrow(ends = "last", type = "closed"),
+            arrow = arrow(ends = "first", type = "closed"),
             alpha = 0.5
   ) +
   facet_wrap(vars(Type), ncol = 1, scales = "free") +
-  scale_x_continuous("Gonotrophic cycle duration",
+  scale_x_continuous("Gonotrophic cycle duration (days)",
                      # trans = 'log10'
   ) +
   scale_y_continuous("Effective contact rate to vectors (bites per mosquito per day)",
@@ -555,14 +570,17 @@ ggsave(paste0(folder_name, "/GCD_contact_IN_vector.png"), GCD_contact_IN_vector_
 
 GCD_contact_OUT_df <- plot_df %>% 
   filter(transmission_type == "OUT") %>% 
+  filter(contact_type == "RM",
+         GCD_day > 1/3,
+         GCD_day < 7
+         ) %>% 
   distinct()
 
 ###### To host
 GCD_contact_OUT_host_plot <- GCD_contact_OUT_df %>% 
-  filter(contact_type == "RM") %>% 
   ggplot(aes(x = GCD_day, y = to_host_contact, group = interaction(Label, Prefix, contact_type), color = Prefix)) +
   geom_line(lwd = 1,
-            arrow = arrow(ends = "last", type = "closed"),
+            arrow = arrow(ends = "first", type = "closed"),
             alpha = 0.5
   ) +
   facet_wrap(vars(Type), ncol = 1, scales = "free") +
@@ -581,14 +599,13 @@ ggsave(paste0(folder_name, "/GCD_contact_OUT_host.png"), GCD_contact_OUT_host_pl
 
 ###### To vector
 GCD_contact_OUT_vector_plot <- GCD_contact_OUT_df %>% 
-  filter(contact_type == "RM") %>% 
   ggplot(aes(x = GCD_day, y = to_vector_contact, group = interaction(Label, Prefix, contact_type), color = Prefix)) +
   geom_line(lwd = 1,
-            arrow = arrow(ends = "last", type = "closed"),
+            arrow = arrow(ends = "first", type = "closed"),
             alpha = 0.5
   ) +
   facet_wrap(vars(Type), ncol = 1, scales = "free") +
-  scale_x_continuous("Gonotrophic cycle duration",
+  scale_x_continuous("Gonotrophic cycle duration (days)",
                      # trans = 'log10'
   ) +
   scale_y_continuous("Effective contact rate to vectors (bites per mosquito per day)",
@@ -613,7 +630,7 @@ R0_GCD_IN_plot <- R0_GCD_IN_df %>%
   filter(contact_type == "RM") %>% 
   ggplot(aes(x = GCD_day, y = R0, group = interaction(Label, Prefix, contact_type), color = Prefix)) +
   geom_line(lwd = 1,
-            arrow = arrow(ends = "last", type = "closed"),
+            arrow = arrow(ends = "first", type = "closed"),
             alpha = 0.5
   ) +
   facet_wrap(vars(Type), ncol = 1, scales = "free") +
@@ -641,7 +658,7 @@ R0_GCD_OUT_plot <- R0_GCD_OUT_df %>%
   filter(contact_type == "RM") %>% 
   ggplot(aes(x = GCD_day, y = R0, group = interaction(Label, Prefix, contact_type), color = Prefix)) +
   geom_line(lwd = 1,
-            arrow = arrow(ends = "last", type = "closed"),
+            arrow = arrow(ends = "first", type = "closed"),
             alpha = 0.5
   ) +
   facet_wrap(vars(Type), ncol = 1, scales = "free") +
@@ -667,7 +684,7 @@ ggsave(paste0(folder_name, "/R0_GCD_OUT.png"), R0_GCD_OUT_plot,
 R0_invGCD_IN_df <- plot_df %>% 
   mutate(invGCD = 1/GCD_day) %>% 
   filter(transmission_type == "IN",
-         invGCD < 0.4
+         # invGCD < 0.4
          ) %>% 
   distinct()
 
@@ -698,7 +715,7 @@ ggsave(paste0(folder_name, "/R0_invGCD_IN.png"), R0_invGCD_IN_plot,
 R0_invGCD_OUT_df <- plot_df %>% 
   mutate(invGCD = 1/GCD_day) %>% 
   filter(transmission_type == "OUT",
-         invGCD < 0.4
+         # invGCD < 0.4
          ) %>% 
   distinct()
 
