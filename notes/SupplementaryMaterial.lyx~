@@ -2574,6 +2574,8 @@ We now proceed to calculate the basic reproduction number following the
 R_{H}\\
 \vec{E}\\
 \vec{I}\\
+E_{V}\\
+I_{V}\\
 E_{R}\\
 I_{R}
 \end{bmatrix} & =\begin{bmatrix}\frac{\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\vec{I}}{K_{B}}\left(K_{H}-I_{H}-R_{H}\right)\\
@@ -2581,11 +2583,15 @@ I_{R}
 \boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{I_{H}}{K_{H}}\left(\vec{B}^{*}-\vec{E}-\vec{I}\right)\\
 \boldsymbol{0}_{n\times1}\\
 0\\
+0\\
+0\\
 0
 \end{bmatrix}-\left\{ \begin{bmatrix}\left(\gamma_{H}+\mu_{H}\right)I_{H}\\
 \mu_{H}R_{H}\\
 \left(\eta+\mu\right)\vec{E}-\boldsymbol{D}_{\textrm{diag}\tilde{\boldsymbol{A}}}^{T}\vec{E}\\
 \mu\vec{I}-\boldsymbol{D}_{\textrm{diag}\tilde{\boldsymbol{A}}}^{T}\vec{I}\\
+\left(\mu+\gamma_{V}+\eta\right)E_{V}\\
+\left(\mu+\gamma_{V}\right)I_{V}\\
 \left(\mu+\gamma_{R}+\eta\right)E_{R}\\
 \left(\mu+\gamma_{R}\right)I_{R}
 \end{bmatrix}-\begin{bmatrix}0\\
@@ -2593,7 +2599,9 @@ I_{R}
 \left(\gamma_{R}E_{R}\right)\vec{\alpha}+\left(\tilde{\boldsymbol{A}}-D_{\textrm{diag}\tilde{\boldsymbol{A}}}\right)^{T}\vec{E}\\
 \left(\gamma_{R}I_{R}\right)\vec{\alpha}+\eta\vec{E}+\left(\tilde{\boldsymbol{A}}-D_{\textrm{diag}\tilde{\boldsymbol{A}}}\right)^{T}\vec{I}\\
 \left(-\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\vec{E}\right)\\
-\eta E_{R}+\left(-\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\vec{I}\right)
+\eta E_{V}+\left(-\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\vec{I}\right)\\
+\gamma_{V}E_{V}\\
+\eta E_{R}+\gamma_{V}I_{V}
 \end{bmatrix}\right\} \\
  & =\mathcal{F}-\mathcal{V}
 \end{align*}

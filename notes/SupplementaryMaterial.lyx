@@ -2521,7 +2521,7 @@ This system of equations clearly has a parasite-free equilibria given by
  This allows us to simplify the system substantially to 
 \begin_inset Formula 
 \begin{align*}
-\frac{d}{dt}I_{H} & =\frac{\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\vec{I}}{K_{B}}\left(K_{H}-I_{H}-R_{H}\right)-\left(\gamma_{H}+\mu_{H}\right)I_{H}\\
+\frac{d}{dt}I_{H} & =\frac{\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\vec{I}}{K_{B}+V^{*}}\left(K_{H}-I_{H}-R_{H}\right)-\left(\gamma_{H}+\mu_{H}\right)I_{H}\\
 \frac{d}{dt}R_{H} & =\gamma_{H}I_{H}-\mu_{H}R_{H}\\
 \frac{d}{dt}\vec{E} & =\left(\gamma_{R}E_{R}\right)\vec{\alpha}+\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{I_{H}}{K_{H}}\left(\vec{B}^{*}-\vec{E}-\vec{I}\right)-\left(\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\vec{E}\right)\vec{E}\\
 \frac{d}{dt}\vec{I} & =\left(\gamma_{R}I_{R}\right)\vec{\alpha}+\eta\vec{E}-\left(\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right)\vec{I}\\
@@ -3007,9 +3007,10 @@ We define the largest eigenvalue of
 .
  Thus
 \begin_inset Formula 
-\[
-\mathcal{R}_{0}=\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\left[\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}+\frac{\gamma_{R}}{\mu+\gamma_{R}}\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{\gamma_{R}}{\mu+\gamma_{R}}\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}+\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{B}}}
-\]
+\begin{align*}
+\mathcal{R}_{0} & =\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\left[\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B^{\prime}}^{*}}{K_{B}}}\\
+\mathcal{R}_{0} & =\frac{1}{\textrm{GCD}}\sqrt{\beta_{H}\left(\frac{\eta}{\mu+\eta}\right)\left(\frac{\textrm{GCD}}{\mu+\gamma_{R}+\gamma_{V}+\textrm{GCD}}\frac{1}{\mu}\right)\left(\frac{1}{\mu_{H}+\gamma_{H}}\right)\beta_{B}\left(\frac{B_{\textrm{total}}}{B_{\textrm{total}}+V^{*}+R^{*}}\right)}
+\end{align*}
 
 \end_inset
 
@@ -3126,6 +3127,7 @@ In the case that we ignore the oviposition and resting stages and assume
 \begin_inset Formula 
 \begin{align*}
 \mathcal{R}_{0}^{RM} & =\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\beta_{H}b\frac{K_{B}}{K_{H}}\frac{1}{\mu}\frac{\eta}{\mu+\eta}\beta_{V}b}\\
+\mathcal{R}_{0}\left(\textrm{GCD}\right) & =\frac{1}{\textrm{GCD}}\sqrt{\beta_{H}\left(\frac{\eta}{\mu+\eta}\right)\left(\frac{1}{\mu}\right)\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\beta_{B}\frac{B_{\textrm{total}}}{K_{H}}}\\
 \mathcal{R}_{0}^{C} & =\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\beta_{H}\frac{bK_{B}\sigma_{H}}{bK_{B}+\sigma_{H}K_{H}}\frac{1}{\mu}\frac{\eta}{\mu+\eta}\beta_{V}\frac{b\sigma_{H}K_{H}}{bK_{B}+\sigma_{H}K_{H}}}\\
 \mathcal{R}_{0}^{C} & =\frac{b\sigma_{H}}{bK_{B}+\sigma_{H}K_{H}}\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\beta_{H}K_{B}\frac{1}{\mu}\frac{\eta}{\mu+\eta}\beta_{V}K_{H}}
 \end{align*}
