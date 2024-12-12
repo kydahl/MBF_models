@@ -10,6 +10,11 @@ library(doFuture)
 library(progressr)
 library(matrixcalc)
 
+# TODO
+# [] Reduce to only show key parameters
+# [] PRCC plots
+
+
 # Cases to plot ----
 
 # 1. "Persistent" vs. "Flighty" mosquito parameter sets
@@ -28,6 +33,7 @@ library(matrixcalc)
 # 5. Plotting GCD vs contact rates or 1/GCD vs R0
 #     [] Set up a plotting function where only the x and y axes need to be specified
 #     [] Ensure that it labels the parameters nicely
+# 6. PRCC plots
 
 
 # Load in data ----
@@ -43,7 +49,7 @@ folder_name = paste0("figures/GCD_figures/",chosen_mosquito_type)
 plot_df <- combined_df %>% 
   filter(mosquito_type == chosen_mosquito_type) %>% 
   arrange(across(lQ:f)) %>% 
-  select(c(mosquito_type:f,GCD, to_host_contact, to_vector_contact, R0)) %>% 
+  select(c(mosquito_type:gammaR,GCD, to_host_contact, to_vector_contact, R0)) %>% 
   mutate(mod_GCD = case_when(
     model_type == "Exponential" ~ GCD,
     model_type == "Mechanistic" ~ GCD - (1/gammaV) - (1/gammaR)
@@ -67,7 +73,7 @@ param_table = tibble(
   ),
   Label = c("Questing rate", "Landing success probability", "Landing rate", "Probing success probability", "Probing rate", "Ingestion success probability", "Ingesting rate", "Seek-new-host probability", "Exp. biting rate"), 
   Type = c("A Rates", "B Probabilities", "A Rates", "B Probabilities", "A Rates", "B Probabilities", "A Rates", "B Probabilities", "A Rates"),
-  Prefix = c("Host-seeking", "Landing", "Landing", "Probing", "Probing", "Ingesting",  "Ingesting", "Stick-around", "Exponential"), 
+  Prefix = c("Host-seeking", "Landing", "Landing", "Probing", "Probing", "Ingesting",  "Ingesting", "Persistence", "Exponential"), 
   short_label = c("lQ", "pL", "lL", "pP", "lP", "pG", "lG", "f", "theta")
 )
 
@@ -78,7 +84,7 @@ plot_df = plot_df %>%
 plot_df$Label <- factor(plot_df$Label, levels = c("Exp. biting rate", "Host detection rate", "Seek-new-host probability", "Landing success probability", "Landing rate", "Probing success probability", "Probing rate", "Ingestion success probability", "Ingesting rate"))
 
 # Labels
-plot_df$Prefix = factor(plot_df$Prefix, levels = c("Exponential", "Host-seeking", "Stick-around", "Landing", "Probing", "Ingesting"))
+plot_df$Prefix = factor(plot_df$Prefix, levels = c("Exponential", "Host-seeking", "Persistence", "Landing", "Probing", "Ingesting"))
 plot_df$Type = factor(plot_df$Type, levels = c("A Rates", "B Probabilities"))
 
 
@@ -675,21 +681,85 @@ vars_R0_out_plot = plot_grid(var_R0_plot_rates, var_R0_plot_probs, nrow = 2)
 ggsave(paste0(folder_name, "/vars_R0_out.png"), vars_R0_out_plot, 
        width = 13.333, height = 7.5, units = "in")
 
+# PRCC Plots ----
+
+# Load in data
+LHS_data = read_csv("data/julia_outputs.csv.gz")
+
+rank_data = LHS_data %>% 
+  group_by(type) %>% 
+  mutate(across(lQ:R0, ~ rank(.x)))
+
+PRCC_data <- rank_data %>%
+  pivot_longer(cols = lQ:pG, names_to = "input", values_to = "input_value") %>%
+  pivot_longer(cols = GCD:R0, names_to = "output", values_to = "output_value") %>%
+  group_by(type, input, output) %>%
+  summarise(
+    PRCC = cor(input_value, output_value),
+    .groups = "drop"
+  )
 
 
+plot_data <- PRCC_data %>% 
+  right_join(
+    param_table %>% 
+      rename(input = short_label) %>% 
+      rbind(list(
+        Symbol = "$\\sigma$",
+        Description = "Persistence probability",
+        Label = "Persistence probability",
+        Type = "B Probabilities",
+        Prefix = "Persistence",
+        input = "sigma"
+      ))
+  ) %>% 
+  mutate(
+    output_label = case_when(
+      output == "R0" ~ "Basic reproduction number",
+      output == "GCD" ~ "Gonotrophic cycle duration",
+      output == "N_offspring" ~ "Basic offspring number",
+    )
+  ) %>% 
+  mutate(
+    type_label = case_when(
+      type == "flighty" ~ "Flighty baseline",
+      type == "persistent" ~ "Persistent baseline",
+      type == "max" ~ "Maximum variation",
+    )
+  ) 
+
+plot_data$type = factor(plot_data$type, levels = c("flighty", "persistent", "max"))
+plot_data$input = factor(plot_data$input, levels = c(
+  "lQ", "lL", "lP", "lG", "sigma", "pL", "pP", "pG"
+))
+plot_data$output_label = factor(plot_data$output_label, levels = c(
+  "Gonotrophic cycle duration", "Basic offspring number","Basic reproduction number"
+))
+
+plot_data$type_label = factor(plot_data$type_label, levels = c(
+  "Flighty baseline","Persistent baseline","Maximum variation"
+))
 
 
+plot_data$Label = factor(plot_data$Label, levels = c(
+  c("Questing rate", "Landing rate","Probing rate", "Ingesting rate", "Persistence probability", "Landing success probability",  "Probing success probability", "Ingestion success probability")
+))
 
 
+PRCC_plots <- plot_data %>% 
+  arrange(input) %>% 
+  filter(type %in% c("flighty", "persistent", "max")) %>% 
+  ggplot(aes(x = Label, y = PRCC, fill = type_label)) +
+  geom_col(position = "dodge") +
+  geom_hline(yintercept = 0, color = "black", size =1 ) +
+  facet_wrap(~output_label, ncol = 1, scales = "free_y") +
+  scale_fill_discrete(name = "Parameter set:") +
+  scale_x_discrete(name = "") +
+  theme_minimal(16)+
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1))
 
-
-
-
-
-
-
-
-
-
+ggsave("figures/GCD_figures/PRCCs_draft.png", PRCC_plots, 
+       width = 13.333, height = 7.5, units = "in")
 
 
