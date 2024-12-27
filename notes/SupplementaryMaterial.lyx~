@@ -1559,11 +1559,11 @@ Necessary and sufficient conditions for the existence of positive equilibria
 
 \begin_layout Standard
 Since 
-\begin_inset Formula $\varphi\left(0,L\right)=0$
+\begin_inset Formula $\varphi\left(0,J\right)=0$
 \end_inset
 
 , we know that 
-\begin_inset Formula $L_{0}=0$
+\begin_inset Formula $J_{0}=0$
 \end_inset
 
 , 
@@ -1591,8 +1591,8 @@ is an equilibrium.
 \begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
-0 & =\varphi\left(V,L\right)-\left(\rho_{L}+\mu_{L}\right)L\\
-\vec{0} & =\left(\rho_{L}L+\gamma_{R}R\right)\vec{\alpha}+\boldsymbol{A}^{T}\vec{B}-\mu\vec{B}\\
+0 & =\varphi\left(V,J\right)-\left(\rho_{J}+\mu_{J}\right)J\\
+\vec{0} & =\left(\rho_{J}J+\gamma_{R}R\right)\vec{\alpha}+\boldsymbol{A}^{T}\vec{B}-\mu\vec{B}\\
 0 & =\left(-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}\right)-\gamma_{V}V-\mu V\\
 0 & =\gamma_{V}V-\gamma_{R}R-\mu R
 \end{align*}
@@ -1602,8 +1602,8 @@ is an equilibrium.
 
 \begin_inset Formula 
 \begin{align*}
-\varphi\left(V^{*},L^{*}\right) & =\left(\rho_{L}+\mu_{L}\right)L^{*}\\
-\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)\vec{B}^{*} & =\left(\rho_{L}L^{*}+\gamma_{R}R^{*}\right)\vec{\alpha}\\
+\varphi\left(V^{*},J^{*}\right) & =\left(\rho_{J}+\mu_{J}\right)J^{*}\\
+\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)\vec{B}^{*} & =\left(\rho_{J}J^{*}+\gamma_{R}R^{*}\right)\vec{\alpha}\\
 V^{*} & =\left(\frac{1}{\mu+\gamma_{V}}\right)\left(-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}^{*}\right)\\
 R^{*} & =\left(\frac{1}{\mu+\gamma_{R}}\right)\gamma_{V}V^{*}
 \end{align*}
@@ -1615,7 +1615,7 @@ R^{*} & =\left(\frac{1}{\mu+\gamma_{R}}\right)\gamma_{V}V^{*}
 
 \begin_layout Standard
 There exists 
-\begin_inset Formula $L^{*}$
+\begin_inset Formula $J^{*}$
 \end_inset
 
  independent of 
@@ -1623,11 +1623,11 @@ There exists
 \end_inset
 
  such that 
-\begin_inset Formula $\bar{\phi}\left(L^{*}\right)=\left(\rho_{L}+\mu_{L}\right)\frac{1}{V^{*}}L^{*}$
+\begin_inset Formula $\frac{\varphi\left(V^{*},J^{*}\right)}{V^{*}}=\bar{\varphi}\left(J^{*}\right)=\left(\rho_{J}+\mu_{J}\right)\frac{1}{V^{*}}J^{*}$
 \end_inset
 
 , giving 
-\begin_inset Formula $V^{*}=\left(\rho_{L}+\mu_{L}\right)\frac{L^{*}}{\bar{\phi}\left(L^{*}\right)}$
+\begin_inset Formula $V^{*}=\left(\rho_{J}+\mu_{J}\right)\frac{J^{*}}{\bar{\varphi}\left(J^{*}\right)}$
 \end_inset
 
  by assumptions 2 and 3.
@@ -1651,15 +1651,17 @@ There exists
  , we obtain
 \begin_inset Formula 
 \begin{align*}
-r & =\tau\rho_{L}L^{*}+\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}r\\
-r & =\tau\rho_{L}L^{*}+\tau\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}r\\
-\rho_{L}L^{*} & =\frac{r}{\tau n_{G}}\\
-\\
-\left(\rho_{L}+\mu_{L}\right)L^{*} & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau n_{G}}r\\
-\varphi\left(V^{*},L^{*}\right) & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau n_{G}}r\\
-\bar{\varphi}\left(L^{*}\right) & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{1}{\tau n_{G}}\frac{r}{V^{*}}\\
-\bar{\varphi}\left(L^{*}\right) & =\left(\frac{\rho_{L}+\mu_{L}}{\rho_{L}}\right)\frac{\mu+\gamma_{V}}{\tau n_{G}}\\
-\bar{\varphi}\left(L^{*}\right) & =\left[\tau\frac{1}{\mu+\gamma_{V}}\left(\frac{\rho_{L}}{\rho_{L}+\mu_{L}}\right)n_{G}\right]^{-1}
+\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\vec{B}^{*} & =\left(\rho_{J}J^{*}+\gamma_{R}R^{*}\right)\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\\
+r & =\left(\rho_{J}J^{*}+\gamma_{R}R^{*}\right)\tau\\
+r & =\tau\rho_{J}J^{*}+\tau\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)r\\
+\rho_{J}J^{*} & =\frac{1}{\tau}\left[1-\tau\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\right]r\\
+\rho_{J}J^{*} & =\frac{1}{\tau}\varrho r\\
+\rho_{J}J^{*} & =\frac{1}{\tau n_{G}}r\\
+\left(\rho_{J}+\mu_{J}\right)J^{*} & =\left(\frac{\rho_{J}+\mu_{J}}{\rho_{J}}\right)\frac{1}{\tau n_{G}}r\\
+\varphi\left(V^{*},J^{*}\right) & =\left(\frac{\rho_{J}+\mu_{J}}{\rho_{J}}\right)\frac{1}{\tau n_{G}}r\\
+\bar{\varphi}\left(J^{*}\right) & =\left(\frac{\rho_{J}+\mu_{J}}{\rho_{J}}\right)\frac{1}{\tau n_{G}}\frac{r}{V^{*}}\\
+\bar{\varphi}\left(J^{*}\right) & =\left(\frac{\rho_{J}+\mu_{J}}{\rho_{J}}\right)\frac{1}{\tau n_{G}}\left(\mu+\gamma_{V}\right)\\
+\bar{\varphi}\left(J^{*}\right) & =\left[\tau\left(\frac{1}{\mu+\gamma_{V}}\right)\left(\frac{\rho_{J}}{\rho_{J}+\mu_{J}}\right)n_{G}\right]^{-1}
 \end{align*}
 
 \end_inset
@@ -1677,7 +1679,7 @@ where
 \end_inset
 
 , and 
-\begin_inset Formula $\bar{\varphi}\left(L^{*}\right)=\frac{\varphi\left(V^{*},L^{*}\right)}{V^{*}}$
+\begin_inset Formula $\bar{\varphi}\left(J^{*}\right)=\frac{\varphi\left(J^{*},L^{*}\right)}{J^{*}}$
 \end_inset
 
 .
@@ -1686,25 +1688,25 @@ where
 \end_inset
 
 , there exists at least one 
-\begin_inset Formula $L^{*}$
+\begin_inset Formula $J^{*}$
 \end_inset
 
  solving the above equation.
  Every such 
-\begin_inset Formula $L^{*}$
+\begin_inset Formula $J^{*}$
 \end_inset
 
  determines an equilibrium.
  Since
-\begin_inset Formula $V^{*}=\left(\rho_{L}+\mu_{L}\right)L^{*}/\bar{\varphi}\left(L^{*}\right)$
+\begin_inset Formula $V^{*}=\left(\rho_{L}+\mu_{L}\right)J^{*}/\bar{\varphi}\left(J^{*}\right)$
 \end_inset
 
-, we can solve for 
+, we can now solve for 
 \begin_inset Formula $r$
 \end_inset
 
  via 
-\begin_inset Formula $r=\left(\mu+\gamma_{V}\right)\frac{\left(\rho_{L}+\mu_{L}\right)L^{*}}{\bar{\varphi}\left(L^{*}\right)}$
+\begin_inset Formula $r=\left(\mu+\gamma_{V}\right)\frac{\left(\rho_{L}+\mu_{L}\right)J}{\bar{\varphi}\left(J\right)}$
 \end_inset
 
  and hence for 
@@ -1714,7 +1716,7 @@ where
 through the equation
 \begin_inset Formula 
 \[
-\vec{B}^{*}=\left(\rho_{L}L^{*}+\gamma_{R}R^{*}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha},
+\vec{B}^{*}=\left(\rho_{J}J^{*}+\gamma_{R}R^{*}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha},
 \]
 
 \end_inset
@@ -2521,7 +2523,7 @@ This system of equations clearly has a parasite-free equilibria given by
  This allows us to simplify the system substantially to 
 \begin_inset Formula 
 \begin{align*}
-\frac{d}{dt}I_{H} & =\frac{\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\vec{I}}{K_{B}}\left(K_{H}-I_{H}-R_{H}\right)-\left(\gamma_{H}+\mu_{H}\right)I_{H}\\
+\frac{d}{dt}I_{H} & =\frac{\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\vec{I}}{K_{B}+V^{*}}\left(K_{H}-I_{H}-R_{H}\right)-\left(\gamma_{H}+\mu_{H}\right)I_{H}\\
 \frac{d}{dt}R_{H} & =\gamma_{H}I_{H}-\mu_{H}R_{H}\\
 \frac{d}{dt}\vec{E} & =\left(\gamma_{R}E_{R}\right)\vec{\alpha}+\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{I_{H}}{K_{H}}\left(\vec{B}^{*}-\vec{E}-\vec{I}\right)-\left(\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\vec{E}\right)\vec{E}\\
 \frac{d}{dt}\vec{I} & =\left(\gamma_{R}I_{R}\right)\vec{\alpha}+\eta\vec{E}-\left(\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right)\vec{I}\\
@@ -3007,9 +3009,10 @@ We define the largest eigenvalue of
 .
  Thus
 \begin_inset Formula 
-\[
-\mathcal{R}_{0}=\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\left[\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}+\frac{\gamma_{R}}{\mu+\gamma_{R}}\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{\gamma_{R}}{\mu+\gamma_{R}}\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}+\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{B}}}
-\]
+\begin{align*}
+\mathcal{R}_{0} & =\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\left[\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B^{\prime}}^{*}}{K_{B}}}\\
+\mathcal{R}_{0} & =\frac{1}{\textrm{GCD}}\sqrt{\beta_{H}\left(\frac{\eta}{\mu+\eta}\right)\left(\frac{\textrm{GCD}}{\mu+\gamma_{R}+\gamma_{V}+\textrm{GCD}}\frac{1}{\mu}\right)\left(\frac{1}{\mu_{H}+\gamma_{H}}\right)\beta_{B}\left(\frac{B_{\textrm{total}}}{B_{\textrm{total}}+V^{*}+R^{*}}\right)}
+\end{align*}
 
 \end_inset
 
@@ -3126,6 +3129,7 @@ In the case that we ignore the oviposition and resting stages and assume
 \begin_inset Formula 
 \begin{align*}
 \mathcal{R}_{0}^{RM} & =\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\beta_{H}b\frac{K_{B}}{K_{H}}\frac{1}{\mu}\frac{\eta}{\mu+\eta}\beta_{V}b}\\
+\mathcal{R}_{0}\left(\textrm{GCD}\right) & =\frac{1}{\textrm{GCD}}\sqrt{\beta_{H}\left(\frac{\eta}{\mu+\eta}\right)\left(\frac{1}{\mu}\right)\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\beta_{B}\frac{B_{\textrm{total}}}{K_{H}}}\\
 \mathcal{R}_{0}^{C} & =\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\beta_{H}\frac{bK_{B}\sigma_{H}}{bK_{B}+\sigma_{H}K_{H}}\frac{1}{\mu}\frac{\eta}{\mu+\eta}\beta_{V}\frac{b\sigma_{H}K_{H}}{bK_{B}+\sigma_{H}K_{H}}}\\
 \mathcal{R}_{0}^{C} & =\frac{b\sigma_{H}}{bK_{B}+\sigma_{H}K_{H}}\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\beta_{H}K_{B}\frac{1}{\mu}\frac{\eta}{\mu+\eta}\beta_{V}K_{H}}
 \end{align*}

@@ -49,6 +49,8 @@ folder_name = paste0("figures/GCD_figures/",chosen_mosquito_type)
 plot_df <- combined_df %>% 
   filter(mosquito_type == chosen_mosquito_type) %>% 
   arrange(across(lQ:f)) %>% 
+  mutate(f = 1-f, .keep = "unused") %>% 
+  rename(sigma = f) %>% 
   select(c(mosquito_type:gammaR,GCD, to_host_contact, to_vector_contact, R0)) %>% 
   mutate(mod_GCD = case_when(
     model_type == "Exponential" ~ GCD,
@@ -59,7 +61,7 @@ plot_df <- combined_df %>%
 
 # Dictionary for labeling
 param_table = tibble(
-  Symbol = c("$\\lambda_Q$", "$p_L$", "$\\lambda_L$", "$p_P$", "$\\lambda_P$", "$p_G$", "$\\lambda_G$", "$f$", "$b$"),
+  Symbol = c("$\\lambda_Q$", "$p_L$", "$\\lambda_L$", "$p_P$", "$\\lambda_P$", "$p_G$", "$\\lambda_G$", "$\\sigma$", "$b$"),
   Description = c("Exit rate from questing stage (per minute)", 
                   "Probability of progressing from landing to probing",
                   "Exit rate from landing stage (per minute)", 
@@ -71,10 +73,10 @@ param_table = tibble(
                   "Biting rate (exponential model)"
                   
   ),
-  Label = c("Questing rate", "Landing success probability", "Landing rate", "Probing success probability", "Probing rate", "Ingestion success probability", "Ingesting rate", "Seek-new-host probability", "Exp. biting rate"), 
+  Label = c("Questing rate", "Landing success probability", "Landing rate", "Probing success probability", "Probing rate", "Ingestion success probability", "Ingesting rate", "Persistence probability", "Exp. biting rate"), 
   Type = c("A Rates", "B Probabilities", "A Rates", "B Probabilities", "A Rates", "B Probabilities", "A Rates", "B Probabilities", "A Rates"),
   Prefix = c("Host-seeking", "Landing", "Landing", "Probing", "Probing", "Ingesting",  "Ingesting", "Persistence", "Exponential"), 
-  short_label = c("lQ", "pL", "lL", "pP", "lP", "pG", "lG", "f", "theta")
+  short_label = c("lQ", "pL", "lL", "pP", "lP", "pG", "lG", "sigma", "theta")
 )
 
 # Add in nice labels for the parameters
@@ -179,6 +181,15 @@ plot_df$Type = factor(plot_df$Type, levels = c("A Rates", "B Probabilities"))
 # ggsave(paste0(folder_name, "/GCD_contact_IN_vector.png"), GCD_contact_IN_vector_plot, 
 #        width = 13.333, height = 7.5, units = "in")
 
+## Plot parameters ----
+
+selected_parameters <- c(
+  "theta", "pP", "f", "lP"
+)
+
+plot_df <- plot_df %>% 
+  filter(varied_parameter %in% selected_parameters)
+
 #### OUT Contact rates ----
 
 GCD_contact_OUT_df <- plot_df %>% 
@@ -213,7 +224,7 @@ GCD_contact_OUT_df <- plot_df %>%
 
 ###### To host
 alt_GCD_contact_OUT_host_plot <- GCD_contact_OUT_df %>% 
-  ggplot(aes(x = GCD_day, y = to_host_contact, group = interaction(Label, Prefix, contact_type), color = Prefix)) +
+  ggplot(aes(x = GCD_day, y = to_host_contact, group = interaction(Label, Prefix, contact_type), color = Label)) +
   # Curves
   geom_line(lwd = 1) +
   # Arrows showing direction of increasing parameter values
@@ -245,7 +256,7 @@ alt_GCD_contact_OUT_host_plot <- GCD_contact_OUT_df %>%
     lwd = 1,
     arrow = arrow(ends = "first", type = "closed")
   ) +
-  facet_wrap(vars(Type), ncol = 1, scales = "free") +
+  # facet_wrap(vars(Type), ncol = 1, scales = "free") +
   scale_x_continuous("Gonotrophic cycle duration (days)",
                      # trans = 'log10'
   ) +
