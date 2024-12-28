@@ -395,7 +395,7 @@ full_parameters = base_parameters %>%
 # Set up parameter variation ----
 
 # Set wow finely we explore parameter space
-variation_resolution = 1001
+variation_resolution = 10001
 
 ## Exponential variable ----
 # The only relevant parameter for variation here is GCD, the gonotrophic cycle duration
@@ -463,3 +463,5 @@ combined_df <- rbind(
   exp_df) %>% 
   # Sort columns for easier reading
   relocate(mosquito_type, model_type, contact_type, transmission_type, varied_parameter, parameter_type)
+
+write_rds(combined_df, "data/GCD_R0_vals.rds")
