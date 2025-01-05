@@ -426,9 +426,6 @@ exp_df = full_parameters %>%
     R0 = sqrt(R02)
     ) %>% 
   filter(b > 0) %>% 
-
-
-
   # mutate(B_vec = NA) %>% 
   ungroup() %>% 
   # contact_rate_function() %>% 
