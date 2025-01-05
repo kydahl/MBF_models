@@ -1041,8 +1041,8 @@ Suppose now that the compartment
  Then we obtain the general model
 \begin_inset Formula 
 \begin{align}
-\frac{d}{dt}L & =\varphi\left(V,L\right)-\left(\rho_{L}+\mu_{L}\right)L\nonumber \\
-\frac{d}{dt}\vec{B} & =\left(\rho_{L}L+\gamma_{R}R\right)\vec{\alpha}+\boldsymbol{A}^{T}\vec{B}-\mu\vec{B}\nonumber \\
+\frac{d}{dt}J & =\varphi\left(V,J\right)-\left(\rho_{J}+\mu_{J}\right)J\nonumber \\
+\frac{d}{dt}\vec{B} & =\left(\rho_{J}J+\gamma_{R}R\right)\vec{\alpha}+\boldsymbol{A}^{T}\vec{B}-\mu\vec{B}\nonumber \\
 \frac{d}{dt}V & =\left(-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}\right)-\gamma_{V}V-\mu V\label{eq:general_model}\\
 \frac{d}{dt}R & =\gamma_{V}V-\gamma_{R}R-\mu R\nonumber 
 \end{align}
@@ -1614,24 +1614,7 @@ R^{*} & =\left(\frac{1}{\mu+\gamma_{R}}\right)\gamma_{V}V^{*}
 \end_layout
 
 \begin_layout Standard
-There exists 
-\begin_inset Formula $J^{*}$
-\end_inset
-
- independent of 
-\begin_inset Formula $V^{*}$
-\end_inset
-
- such that 
-\begin_inset Formula $\frac{\varphi\left(V^{*},J^{*}\right)}{V^{*}}=\bar{\varphi}\left(J^{*}\right)=\left(\rho_{J}+\mu_{J}\right)\frac{1}{V^{*}}J^{*}$
-\end_inset
-
-, giving 
-\begin_inset Formula $V^{*}=\left(\rho_{J}+\mu_{J}\right)\frac{J^{*}}{\bar{\varphi}\left(J^{*}\right)}$
-\end_inset
-
- by assumptions 2 and 3.
- Let 
+Let 
 \begin_inset Formula $r=-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}^{*}$
 \end_inset
 
@@ -1679,7 +1662,7 @@ where
 \end_inset
 
 , and 
-\begin_inset Formula $\bar{\varphi}\left(J^{*}\right)=\frac{\varphi\left(J^{*},L^{*}\right)}{J^{*}}$
+\begin_inset Formula $\bar{\varphi}\left(J^{*}\right)=\frac{\varphi\left(V^{*},J^{*}\right)}{V^{*}}$
 \end_inset
 
 .

@@ -1041,8 +1041,8 @@ Suppose now that the compartment
  Then we obtain the general model
 \begin_inset Formula 
 \begin{align}
-\frac{d}{dt}L & =\varphi\left(V,L\right)-\left(\rho_{L}+\mu_{L}\right)L\nonumber \\
-\frac{d}{dt}\vec{B} & =\left(\rho_{L}L+\gamma_{R}R\right)\vec{\alpha}+\boldsymbol{A}^{T}\vec{B}-\mu\vec{B}\nonumber \\
+\frac{d}{dt}J & =\varphi\left(V,J\right)-\left(\rho_{J}+\mu_{J}\right)J\nonumber \\
+\frac{d}{dt}\vec{B} & =\left(\rho_{J}J+\gamma_{R}R\right)\vec{\alpha}+\boldsymbol{A}^{T}\vec{B}-\mu\vec{B}\nonumber \\
 \frac{d}{dt}V & =\left(-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}\right)-\gamma_{V}V-\mu V\label{eq:general_model}\\
 \frac{d}{dt}R & =\gamma_{V}V-\gamma_{R}R-\mu R\nonumber 
 \end{align}
@@ -2993,7 +2993,7 @@ We define the largest eigenvalue of
  Thus
 \begin_inset Formula 
 \begin{align*}
-\mathcal{R}_{0} & =\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\left[\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B^{\prime}}^{*}}{K_{B}}}\\
+\mathcal{R}_{0} & =\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\left[\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(-\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right)\right]^{-1}\left[\eta\boldsymbol{I}-\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(-\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right)\right]\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\left(-\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right)\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B^{\prime}}^{*}}{K_{B}}}\\
 \mathcal{R}_{0} & =\frac{1}{\textrm{GCD}}\sqrt{\beta_{H}\left(\frac{\eta}{\mu+\eta}\right)\left(\frac{\textrm{GCD}}{\mu+\gamma_{R}+\gamma_{V}+\textrm{GCD}}\frac{1}{\mu}\right)\left(\frac{1}{\mu_{H}+\gamma_{H}}\right)\beta_{B}\left(\frac{B_{\textrm{total}}}{B_{\textrm{total}}+V^{*}+R^{*}}\right)}
 \end{align*}
 

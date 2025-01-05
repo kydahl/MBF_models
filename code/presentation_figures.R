@@ -52,13 +52,15 @@ plot_df <- combined_df %>%
   mutate(varied_parameter = ifelse(varied_parameter == "f", "sigma", varied_parameter)) %>% 
   rename(sigma = f) %>% 
   arrange(across(pQ:sigma)) %>% 
-  select(c(mosquito_type:gammaR,GCD, to_host_contact, to_vector_contact, R0)) %>% 
-  mutate(mod_GCD = case_when(
-    model_type == "Exponential" ~ GCD,
-    model_type == "Mechanistic" ~ GCD - (1/gammaV) - (1/gammaR)
-  )) %>% 
-  mutate(GCD_day = mod_GCD / 1440) %>% 
-  filter(GCD_day < 1/mu/1440)
+  # select(c(mosquito_type:gammaR,GCD, to_host_contact, to_vector_contact, R0)) %>% 
+  select(c(mosquito_type:gammaR, GCD, R0)) %>% 
+  mutate(GCD_day = GCD / 1440) #%>% 
+  # mutate(mod_GCD = case_when(
+  #   model_type == "Exponential" ~ GCD,
+  #   model_type == "Mechanistic" ~ GCD - (1/gammaV) - (1/gammaR)
+  # )) %>% 
+  # mutate(GCD_day = mod_GCD / 1440) %>% 
+  # filter(GCD_day < 1/mu/1440)
 
 
 # Dictionary for labeling
@@ -94,89 +96,19 @@ plot_df$Type = factor(plot_df$Type, levels = c("A Rates", "B Probabilities"))
 ## Settings for plots ----
 
 selected_parameters <- c(
-  "theta", "pP", "sigma", "lP"
+  # "theta", "pP", "sigma", "lP"
+  # try the following
+  "pP", "pG", "lQ", "theta"
 )
 
 parameter_palette = c("Black", (c4a("tol.muted", 5))) # !!! update to use consistent colors for each parameter across all the plots
-
-
-## GCD vs Contact rates figures ----
-
-#### OUT Contact rates ----
-
-GCD_contact_OUT_df <- plot_df %>% 
-  filter(varied_parameter %in% selected_parameters) %>% 
-  filter(transmission_type == "OUT") %>% 
-  filter(contact_type == "RM",
-         GCD_day > 1/3,
-         GCD_day < 7
-  ) %>% 
-  distinct() %>% 
-  group_by(varied_parameter) %>% 
-  mutate(nudge = rnorm(1, 0.1)) %>% 
-  mutate(GCD_nudge = GCD_day + nudge) %>% 
-  ungroup()
-
-small_nudge_func = function(sd_in) {1+(rnorm(1, mean = 0, sd = sd_in))}
-
-GCD_contact_OUT_df <- plot_df %>% 
-  filter(varied_parameter %in% selected_parameters) %>% 
-  filter(transmission_type == "OUT",
-         contact_type == "RM",
-         GCD_day > 1/3,
-         GCD_day < 4
-  ) %>% 
-  distinct() %>% 
-  group_by(varied_parameter) %>% 
-  mutate(nudge0 = min(GCD_day)) %>% 
-  mutate(nudge1 = small_nudge_func(0.1) * (1 * max(GCD_day)/4)) %>% 
-  mutate(nudge2 = small_nudge_func(0.1) * (2 * max(GCD_day)/4)) %>% 
-  mutate(nudge3 = small_nudge_func(0.1) * (3 * max(GCD_day)/4)) %>% 
-  mutate(nudge4 = 4 * max(GCD_day)/4) %>% 
-  ungroup()
-
-
-###### To host
-GCD_contact_host_plot <- GCD_contact_OUT_df %>% 
-  ggplot(aes(x = GCD_day, y = to_host_contact, group = Label, color = Label)) +
-  # Curves
-  geom_line(lwd = 1,
-            arrow = arrow(ends = "first", type = "closed")) +
-  # x-axis
-  scale_x_continuous("Gonotrophic cycle duration (days)") +
-  # y-axis
-  scale_y_continuous("Effective contact rate to hosts (bites per human per day)") +
-  scale_color_manual("Parameter", values = parameter_palette) +
-  theme_minimal_grid() +
-  theme(strip.text.x = element_text(hjust = 0))
-
-ggsave(paste0(folder_name, "/alt_GCD_contact_OUT_host.png"),
-       GCD_contact_host_plot, 
-       width = 13.333, height = 7.5, units = "in")
-
-###### To vector
-GCD_contact_vector_plot <- GCD_contact_OUT_df %>% 
-  ggplot(aes(x = GCD_day, y = to_vector_contact, group = Label, color = Label)) +
-  # Curves
-  geom_line(lwd = 1,
-            arrow = arrow(ends = "first", type = "closed")) +
-  # x-axis
-  scale_x_continuous("Gonotrophic cycle duration (days)") +
-  # y-axis
-  scale_y_continuous("Effective contact rate to hosts (bites per human per day)") +
-  scale_color_manual("Parameter", values = parameter_palette) +
-  theme_minimal_grid() +
-  theme(strip.text.x = element_text(hjust = 0))
-
-ggsave(paste0(folder_name, "/GCD_contact_OUT_vector.png"), GCD_contact_vector_plot, 
-       width = 13.333, height = 7.5, units = "in")
 
 ## GCD vs R0 figures ----
 
 #### OUT Contact rates ----
 
-R0_GCD_OUT_df <- plot_df %>% 
-  filter(varied_parameter %in% selected_parameters) %>% 
+R0_GCD_OUT_df <- plot_df %>%
+  filter(varied_parameter %in% selected_parameters) %>%
   filter(transmission_type == "OUT") %>% 
   distinct()
 
@@ -189,10 +121,14 @@ R0_GCD_OUT_plot <- R0_GCD_OUT_df %>%
   ) +
   scale_x_continuous("Gonotrophic cycle duration (days)",
                      breaks = seq(1,21),
-                     limits = c(NA, max(filter(R0_GCD_OUT_df, varied_parameter == "lP")$GCD_day))) +
+                     limits = c(4, 7)
+                     # limits = c(NA, max(filter(R0_GCD_OUT_df, varied_parameter == "lP")$GCD_day))
+                     ) +
   scale_y_continuous("Basic reproduction number",
-                     limits = c(NA, max(filter(R0_GCD_OUT_df, varied_parameter != "theta")$R0))) +
-  scale_color_manual("Parameter", values = parameter_palette) +
+                     limits = c(NA, 20)
+                     # limits = c(NA, max(filter(R0_GCD_OUT_df, varied_parameter != "theta")$R0))
+                     ) +
+  # scale_color_manual("Parameter", values = parameter_palette) +
   ggtitle("R0 as a function of GCD (using OUT-rates)") +
   theme_minimal_grid()
 
@@ -203,11 +139,11 @@ ggsave(paste0(folder_name, "/R0_GCD_OUT.png"), R0_GCD_OUT_plot,
 ## 1/GCD vs R0 figures ----
 
 R0_invGCD_OUT_df <- plot_df %>% 
-  filter(varied_parameter %in% selected_parameters) %>% 
+  filter(varied_parameter %in% selected_parameters) %>%
   mutate(invGCD = 1/GCD_day) %>% 
   filter(transmission_type == "OUT",
          contact_type == "RM",
-         invGCD < 2
+         # invGCD < 2
   ) %>% 
   distinct() %>% 
   group_by(varied_parameter) %>% 
@@ -224,8 +160,10 @@ R0_invGCD_OUT_plot <- R0_invGCD_OUT_df %>%
   ) +
   scale_x_continuous("1/Gonotrophic cycle duration = \"Biting rate\""
   ) +
-  scale_y_continuous("Basic reproduction number") +
-  scale_color_manual("Parameter", values = parameter_palette) +
+  scale_y_continuous("Basic reproduction number",
+                     # limits = c(NA, 21)
+                     ) +
+  # scale_color_manual("Parameter", values = parameter_palette) +
   theme_minimal_grid() +
   theme(strip.text.x = element_text(hjust = 0))
 

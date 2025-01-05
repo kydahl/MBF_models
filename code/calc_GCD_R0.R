@@ -104,7 +104,7 @@ vary_parameter_function = function(df_in, varied_parameter) {
       rbind(baseline_values)
     # Set up variation in rate parameters
   } else {
-    rate_vec = 10^seq(-5, 1, length.out = variation_resolution)
+    rate_vec = 10^seq(-6, 2, length.out = variation_resolution)
     
     vary_df = baseline_values %>% 
       cross_join(tibble(rate = rate_vec)) %>% 
@@ -234,7 +234,7 @@ R0_function <- function(df_in) {
         # !!! double-check all these when returning. only RM + OUT is checked
         contact_type == "RM" & transmission_type == "IN" ~ list(t(matrix(c(
           0, 0, 0, 0, 0,
-          0, 0, pL * lL * B_vec[2] / KH, 0, 0,
+          0, pL * lL * B_tot / KH, 0, 0, 0,
           0, 0, 0, 0, 0,
           0, 0, 0, 0, 0,
           0, 0, 0, 0, 0
@@ -242,7 +242,7 @@ R0_function <- function(df_in) {
         contact_type == "RM" & transmission_type == "OUT" ~ list(t(matrix(c(
           0, 0, 0, 0, 0,
           0, 0, 0, 0, 0,
-          0, 0, lP * B_vec[3] / KH, 0, 0,
+          0, 0, lP * B_tot / KH, 0, 0,
           0, 0, 0, 0, 0,
           0, 0, 0, 0, 0
         ), ncol = 5, byrow = TRUE))),
@@ -295,11 +295,16 @@ R0_function <- function(df_in) {
       temp_mat = list(matrix((-one_vec) %*% t(A_tilde), ncol = 1)),
       temp_mat = list(matrix(zero_out(temp_mat), nrow = 5)),
       spec_mat = list(alpha_vec %*% t(temp_mat)),
+      term_1 = list(mu * diag(5) - t(A_tilde) - (gammaR / (gammaR + mu)) * spec_mat),
+      term_2 = list(eta * diag(5) - (eta / (eta + gammaR + mu)) * (gammaR / (gammaR + mu)) * spec_mat),
+      term_3 = list((eta + mu) * diag(5) - t(A_tilde) - (gammaR / (eta + gammaR + mu) * spec_mat)),
       M1 = list(mu * diag(5) - t(A_tilde) - (gammaR / (mu + gammaR)) * spec_mat),
       M2 = list(eta * diag(5) + (eta / (mu + gammaR + eta)) * (1 / (mu + gammaR)) * spec_mat),
       M3 = list((eta + mu) * diag(5) - t(A_tilde) - (gammaR / (mu + gammaR + eta)) * spec_mat),
       Q = list(inv(M1) %*% M2 %*% inv(M3)),
-      R0 = sqrt(one_vec %*% betaH_mat %*% LambdaH_mat %*% Q %*% betaV_mat %*% LambdaV_mat %*% BV_vec / (sum(B_tot) * (muH + gammaH))),
+      R02 = (1 / (gammaH + muH)) * one_vec %*% betaH_mat %*% LambdaH_mat %*% inv(term_1) %*% term_2 %*% inv(term_3) %*% betaV_mat %*% LambdaV_mat %*% (BV_vec / (B_tot)),
+      R0 = sqrt(R02),
+      # R0 = sqrt(one_vec %*% betaH_mat %*% LambdaH_mat %*% Q %*% betaV_mat %*% LambdaV_mat %*% BV_vec / (sum(B_tot) * (muH + gammaH))),
       R0 = ifelse(N_offspring < 1, 0, R0)
     )
 }
@@ -308,7 +313,7 @@ R0_function <- function(df_in) {
 
 # Parameters that won't change throughout
 # Oviposition and resting
-gammaV = 1/(5 * 1440) # exit rate from oviposition to resting, including bloodmeal digestion and site search (5 days)
+gammaV = 1 / (2 * 1440) #1/(5 * 1440) # exit rate from oviposition to resting, including bloodmeal digestion and site search (5 days)
 gammaR = 1/(2 * 1440) # exit rate from resting to return to blood-feeding (2 days)
 # Transmission parameters
 betaH = betaB = 1
@@ -367,7 +372,7 @@ base_params_persistent = tibble(
 base_parameters = rbind(base_params_flighty, base_params_persistent)
 
 # Set base gonotrophic cycle duration for the exponential model
-base_GCD = 3 * 1440 # 3 days
+base_GCD = 10 * 1440 # 3 days for feeding, 5 for ovipositing, 2 for resting
 
 full_parameters = base_parameters %>% 
   cbind(extra_parameters) %>%
@@ -398,9 +403,9 @@ full_parameters = base_parameters %>%
 variation_resolution = 10001
 
 ## Exponential variable ----
-# The only relevant parameter for variation here is GCD, the gonotrophic cycle duration
-GCD_vec = 1440 * seq(0, 1/mu/1440, length.out = variation_resolution)
-GCD_vec = GCD_vec[-1]
+# The only relevant parameter for variation here is GCD, the gonotrophic cycle duration (in minutes)
+GCD_vec = 1440 * seq(1/gammaV/1440 + 1/gammaR/1440, 1/mu/1440, length.out = variation_resolution)
+# GCD_vec = GCD_vec[-1]
 
 exp_df = full_parameters %>% 
   filter(model_type == "Exponential") %>% 
@@ -422,19 +427,18 @@ exp_df = full_parameters %>%
     B_eq = ((gammaV + mu) / b) * V_eq,
     nG = (1 - (gammaR / (gammaR + mu)) * (gammaV / (gammaV + mu)) * (b / (b + mu)))^(-1),
     nE = (1 - (gammaR / (eta + gammaR + mu)) * (gammaV / (eta + gammaV + mu)) * (b / (eta + b + mu)))^(-1),
-    R02 = betaB * b * (B_eq / KH) * (1 / (gammaH + muH)) * betaH * (b / (b + mu)) * (eta / (eta + gammaV + mu)) * (gammaR / (gammaR + mu)) * (gammaV / (gammaV + mu)) * nG + (gammaV / (eta + gammaV + mu)) * (gammaR / (eta + gammaR + mu)) * ( (eta / (eta + b + mu)) + (gammaR / (gammaR + mu)) * (1 + ( (eta / (eta + b + mu)) * (b / (b + mu)) + (b / (eta + b + mu)) * (eta / (eta + gammaV + mu))) * (gammaV / (gammaV + mu))) * nG) * nE,
+    R02 = betaB * b * (B_eq / KH) * (1 / (gammaH + muH)) * betaH * (b / (b + mu)) * ( (gammaR / (gammaR + mu)) * (gammaV / (gammaV + mu)) * (eta / (eta + gammaV + mu)) * nG + ( (gammaV / (eta + gammaV + mu)) * ( (eta / (eta + b + mu)) * (gammaR / (eta + gammaR + mu)) + (gammaR / (gammaR + mu)) * ( (eta / (eta + gammaR + mu)) + (gammaV / (gammaV + mu)) * (gammaR / (eta + gammaR + mu)) * ( (eta / (eta + b + mu)) * (b / (b + mu)) + (b / (eta + b + mu)) * (eta / (eta + gammaV + mu)))) * nG ) * nE ) ),
     R0 = sqrt(R02)
     ) %>% 
-  filter(b > 0) %>% 
   # mutate(B_vec = NA) %>% 
-  ungroup() %>% 
+  ungroup() #%>% 
   # contact_rate_function() %>% 
   # mutate(b = 1/GCD) %>% 
   # mutate(R0 = case_when(
   #   contact_type == "RM" ~ b * sqrt(betaB * B_tot * betaH * (eta / (mu +eta)) / (KH * (muH + gammaH) * mu)),
   #   contact_type == "Chitnis" ~ (sigmaH * b /(sigmaH * KH + b * B_tot)) * sqrt(betaB * b * B_tot * betaH * sigmaH * (eta / (mu +eta)) * KH / ((muH + gammaH) * mu))
   # )) %>% 
-  select(-b)
+  # select(-b)
 
 
 
