@@ -475,4 +475,4 @@ combined_df <- rbind(
   # Sort columns for easier reading
   relocate(mosquito_type, model_type, contact_type, transmission_type, varied_parameter, parameter_type)
 
-write_rds(combined_df, "data/GCD_R0_vals.rds")
+write_rds(combined_df, "data/GCD_R0_vals.rds.gz", compress = "gz")
