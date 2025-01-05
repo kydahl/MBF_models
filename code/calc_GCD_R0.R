@@ -430,15 +430,14 @@ exp_df = full_parameters %>%
     R02 = betaB * b * (B_eq / KH) * (1 / (gammaH + muH)) * betaH * (b / (b + mu)) * ( (gammaR / (gammaR + mu)) * (gammaV / (gammaV + mu)) * (eta / (eta + gammaV + mu)) * nG + ( (gammaV / (eta + gammaV + mu)) * ( (eta / (eta + b + mu)) * (gammaR / (eta + gammaR + mu)) + (gammaR / (gammaR + mu)) * ( (eta / (eta + gammaR + mu)) + (gammaV / (gammaV + mu)) * (gammaR / (eta + gammaR + mu)) * ( (eta / (eta + b + mu)) * (b / (b + mu)) + (b / (eta + b + mu)) * (eta / (eta + gammaV + mu)))) * nG ) * nE ) ),
     R0 = sqrt(R02)
     ) %>% 
-  # mutate(B_vec = NA) %>% 
+  # mutate(B_vec = NA) %>%
   ungroup() #%>% 
   # contact_rate_function() %>% 
   # mutate(b = 1/GCD) %>% 
   # mutate(R0 = case_when(
   #   contact_type == "RM" ~ b * sqrt(betaB * B_tot * betaH * (eta / (mu +eta)) / (KH * (muH + gammaH) * mu)),
   #   contact_type == "Chitnis" ~ (sigmaH * b /(sigmaH * KH + b * B_tot)) * sqrt(betaB * b * B_tot * betaH * sigmaH * (eta / (mu +eta)) * KH / ((muH + gammaH) * mu))
-  # )) %>% 
-  # select(-b)
+  # )) 
 
 
 
