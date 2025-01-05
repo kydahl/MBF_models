@@ -9,7 +9,7 @@ using CSV
 using ProgressBars
 
 # Define fixed parameters
-const (KJ, rhoJ, muJ, varPhi) = [3E8, (1/(12 * 1440)), (1 / (20 * 1440)), (300 / 1440)]
+const (KJ, rhoJ, muJ, varPhi) = [3E6, (1/(12 * 1440)), (1 / (20 * 1440)), (300 / 1440)]
 const (gV, gR, mu) = [(1/((1/3) * 1440)), (1/(1 * 1440)), (1/(20 * 1440))]
 const (bH, bB, eta, gH) = [1, 1, (1/(6 * 1440)), (1/(7 * 1440))]
 const (muH, KH) = [1/(365.25 * 65 * 1440), 1E5]
@@ -24,8 +24,6 @@ N_offspring_func = Serialization.deserialize("N_offspring_func.jls");
 
 function R0_func(B_vals_in, N_offspring_in)
     (lQ, lL, lP, lG, sigma, pL, pP, pG) = B_vals_in
-
-
 
     f = 1 - sigma
     # Define subintensity matrices
@@ -46,7 +44,7 @@ function R0_func(B_vals_in, N_offspring_in)
 
     r = (N_offspring_in - 1) * KJ * ((rhoJ + muJ)/ varPhi) * (mu + gV)
     # Distribution of mosquitoes across states at equilibrium
-    B_prefactor = (N_offspring_in - 1) * KJ * ((rhoJ / N_offspring_in) + (gR / (mu+gR) * gV * (rhoJ + muJ) / varPhi))
+    B_prefactor = (N_offspring_in - 1) * KJ * ((rhoJ / N_offspring_in) + (gR / (mu + gR) * gV * (rhoJ + muJ) / varPhi))
     temp_inv = simplify(inv(mu * I - transpose(A_mat)))
     B_postfactor = temp_inv * alpha_vec_four
 

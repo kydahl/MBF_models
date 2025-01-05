@@ -12,29 +12,29 @@ using Serialization
 #### Create mean GCD functions ####
 
 # Give variables appropriate names
-@variables B_vars[1:9]  # V_vars[1:3] 
-# (gV, gR, mu) = V_vars
+@variables B_vars[1:9]  V_vars[1:3] J_vars[1:4]
+(gV, gR, mu) = V_vars
 (invlQ_minute, invlL_minute, invlP_minute, invlG_minute, sigma, pL, pP, pG) = B_vars
 
-lQ = 1/(invlQ_minute)
-lL = 1/(invlL_minute)
-lP = 1/(invlP_minute)
-lG = 1/(invlG_minute)
+lQ = 1 / (invlQ_minute)
+lL = 1 / (invlL_minute)
+lP = 1 / (invlP_minute)
+lG = 1 / (invlG_minute)
 
 f = 1 - sigma
 
 # Define subintensity matrix
-A_mat = [-lQ         lQ                  0     0
-         f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0
-         f*(1-pP)*lP (1-f)*(1-pP)*lP     -lP pP*lP
-         f*(1-pG)*lG (1-f)*(1-pG)*lG     0  -lG]
+A_mat = [-lQ lQ 0 0
+    f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0
+    f*(1-pP)*lP (1-f)*(1-pP)*lP -lP pP*lP
+    f*(1-pG)*lG (1-f)*(1-pG)*lG 0 -lG]
 
 tA_inv = inv(transpose(-A_mat))
 
 temp_inv = simplify(inv(mu * I - transpose(A_mat)))
 
 one_vec = [1 1 1 1]
-alpha_vec = [1;0;0;0]
+alpha_vec = [1; 0; 0; 0]
 
 GCD_sym = simplify(one_vec * temp_inv * alpha_vec)
 GCD_mu_zero_sym = simplify(one_vec * tA_inv * alpha_vec)
@@ -66,31 +66,31 @@ Serialization.serialize("GCD_mu_zero_func.jls", GCD_mu_zero_func)
 f = 1 - sigma
 
 # Define subintensity matrices
-A_mat = [-lQ         lQ                  0f0   0f0   
-         f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0f0 
-         f*(1-pP)*lP (1-f)*(1-pP)*lP     -lP   pP*lP
-         f*(1-pG)*lG (1-f)*(1-pG)*lG     0f0   -lG
-         ]
+A_mat = [-lQ lQ 0.0f0 0.0f0
+    f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0.0f0
+    f*(1-pP)*lP (1-f)*(1-pP)*lP -lP pP*lP
+    f*(1-pG)*lG (1-f)*(1-pG)*lG 0.0f0 -lG
+]
 
-A_tilde = [-lQ       lQ                  0f0   0f0   0f0
-         f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0f0   0f0
-         f*(1-pP)*lP (1-f)*(1-pP)*lP     -lP   pP*lP 0f0
-         f*(1-pG)*lG (1-f)*(1-pG)*lG     0f0   -lG   pG*lG
-         0f0         0f0                 0f0   0f0   -gV
-         ]
+A_tilde = [-lQ lQ 0.0f0 0.0f0 0.0f0
+    f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0.0f0 0.0f0
+    f*(1-pP)*lP (1-f)*(1-pP)*lP -lP pP*lP 0.0f0
+    f*(1-pG)*lG (1-f)*(1-pG)*lG 0.0f0 -lG pG*lG
+    0.0f0 0.0f0 0.0f0 0.0f0 -gV
+]
 
-one_vec_five = [1f0 1f0 1f0 1f0 1f0]
-alpha_vec_five = [1f0; 0f0; 0f0; 0f0; 0f0]
-one_vec_four = [1f0 1f0 1f0 1f0]
-alpha_vec_four = [1f0; 0f0; 0f0; 0f0]
+one_vec_five = [1.0f0 1.0f0 1.0f0 1.0f0 1.0f0]
+alpha_vec_five = [1.0f0; 0.0f0; 0.0f0; 0.0f0; 0.0f0]
+one_vec_four = [1.0f0 1.0f0 1.0f0 1.0f0]
+alpha_vec_four = [1.0f0; 0.0f0; 0.0f0; 0.0f0]
 
 # Pr(complete a gonotrophic cycle)
 tau = -one_vec_four * transpose(-A_mat) * inv(-mu * I + transpose(A_mat)) * alpha_vec_four
 tau = tau[1]
-rho = 1f0 - (gV / (mu + gV)) * (gR / (mu + gR)) * tau
-nG = 1f0 / rho
+rho = 1.0f0 - (gV / (mu + gV)) * (gR / (mu + gR)) * tau
+nG = 1.0f0 / rho
 # Basic offspring number
-N_offspring = tau * (varPhi / (mu + gV)) * (rhoJ / ( rhoJ + muJ)) * nG
+N_offspring = tau * (varPhi / (mu + gV)) * (rhoJ / (rhoJ + muJ)) * nG
 
 # Generate a Julia function from the symbolic expression
 # LVB_vars = [L_vars; V_vars; B_vars]
@@ -100,6 +100,56 @@ N_offspring_func = Symbolics.build_function(N_offspring[1], B_vars, expression=V
 Serialization.serialize("N_offspring_func.jls", N_offspring_func)
 
 # Continue to calculate R0 --
+
+
+# R0 for the exponential case
+# (lQ, lL, lP, lG, sigma, pL, pP, pG) = B_vals_in
+# theta = 1/b
+@variables b J_vars[1:4] Epi_vars[1:4] Host_vars[1:2]
+(KJ, rhoJ, muJ, varPhi) = J_vars
+(bH, bB, eta, gH) = Epi_vars
+(muH, KH) = Host_vars
+
+J_eq = KJ * (1 - (varPhi * (rhoJ / (rhoJ + muJ) * (b / (b + mu)) * (1 / (gV + mu)) * (1 - (b / (b + mu)) * (gV / (gV + mu)) * (gR / (gR + mu)))^(-1)))^(-1))
+V_eq = (1 - (b / (b + mu)) * (gV / (gV + mu)) * (gR / (gR + mu)))^(-1) * (b / (b + mu)) * (1 / (gV + mu)) * rhoJ * J_eq
+B_eq = ((gV + mu) / b) * V_eq
+
+F_mat = [
+    0 0 bH*b 0 0 0 0
+    0 0 0 0 0 0 0
+    0 0 0 0 0 0 0
+    bB*b*B_eq/KH 0 0 0 0 0 0
+    0 0 0 0 0 0 0
+    0 0 0 0 0 0 0
+    0 0 0 0 0 0 0
+]
+
+V_mat = [
+    gH+muH 0 0 0 0 0 0
+    0 eta+b+mu 0 0 0 -gR 0
+    0 -eta b+mu 0 0 0 -gR
+    0 -b 0 eta+gV+mu 0 0 0
+    0 0 -b -eta gV+mu 0 0
+    0 0 0 -gV 0 eta+gR+mu 0
+    0 0 0 0 -gV -eta gR+mu
+]
+
+K_mat = F_mat * inv(V_mat)
+
+function LinearAlgebra.eigen(A::AbstractMatrix{T}) where {T <: Sym}
+    LinearAlgebra.Eigen(eigvals(A), eigvecs(A))
+end
+
+K_eigs = GenericLinearAlgebra.eigvals(K_mat)
+
+R0_func = Symbolics.build_function(K_eigs, [B_vars, J_vars, Epi_vars, Host_vars], expression=Val{false})
+
+# Save the basic offspring number function to a file
+Serialization.serialize("N_offspring_func.jls", N_offspring_func)
+
+
+R0 = maximum(real(eigen(K_mat).values))
+
 
 # # r
 # r = (N_offspring - 1) * KJ * ((rhoJ + muJ)/ varPhi) * (mu + gV)

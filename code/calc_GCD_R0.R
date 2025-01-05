@@ -133,16 +133,16 @@ mech_population_density_function <- function(df_in) {
       # Average number of gonotrophic cycles
       nG = 1 / rho,
       # Basic offspring number
-      N_offspring = tau * (varPhi / (mu + gammaV)) * (rhoL / ( rhoL + muL)) * nG,
+      N_offspring = tau * (varPhi / (mu + gammaV)) * (rhoJ / ( rhoJ + muJ)) * nG,
       # Resting mosquitoes
-      R_star = rhoL * KL * tau * nG * (1 - (1/N_offspring)) * (gammaV / (mu + gammaV)) / (mu + gammaR),
-      r = (N_offspring - 1) * KL * ((rhoL + muL)/ varPhi) * (mu + gammaV),
+      R_star = rhoJ * KJ * tau * nG * (1 - (1/N_offspring)) * (gammaV / (mu + gammaV)) / (mu + gammaR),
+      r = (N_offspring - 1) * KJ * ((rhoJ + muJ)/ varPhi) * (mu + gammaV),
       # Aquatic stage mosquitoes
-      L_star = KL * (N_offspring - 1) / N_offspring,
+      L_star = KJ * (N_offspring - 1) / N_offspring,
       # Ovipositing mosquitoes
       V_star = r / (mu + gammaV),
       # Blood-feeding stages
-      B_vec = list(((N_offspring - 1) * KL * rhoL / N_offspring) * (1 + (gammaR / (mu + gammaR)) * (gammaV / (mu + gammaV)) * nG * tau) * inv(mu * diag(4) - t(A_matrix)) %*% alpha_vec),
+      B_vec = list(((N_offspring - 1) * KJ * rhoJ / N_offspring) * (1 + (gammaR / (mu + gammaR)) * (gammaV / (mu + gammaV)) * nG * tau) * inv(mu * diag(4) - t(A_matrix)) %*% alpha_vec),
       # Blood-feeding and ovipositing stages
       BV_vec = list(matrix(rbind(B_vec, V_star), ncol = 1)),
       # Total number of blood-feeding mosquitoes
@@ -197,7 +197,7 @@ R0_function <- function(df_in) {
   alpha_vec = matrix(rep(0, 5), ncol = 1); alpha_vec[1] = 1
   one_vec = matrix(rep(1, 5), nrow = 1)
   
-  # Function to replace numerical errors with zeroes
+  # Function to replace small numerical values with zeroes
   zero_out = Vectorize(function(vector_in) {
     vector_out = vector_in
     vector_out[vector_out < 1e-16] <- 0
@@ -227,7 +227,7 @@ R0_function <- function(df_in) {
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
-        0, 0, 0, betaV, 0,
+        0, 0, 0, betaB, 0,
         0, 0, 0, 0, 0
       ),ncol = 5, byrow = TRUE)),
       LambdaH_mat = case_when(
@@ -311,22 +311,22 @@ R0_function <- function(df_in) {
 gammaV = 1/(5 * 1440) # exit rate from oviposition to resting, including bloodmeal digestion and site search (5 days)
 gammaR = 1/(2 * 1440) # exit rate from resting to return to blood-feeding (2 days)
 # Transmission parameters
-betaH = betaV = 1
+betaH = betaB = 1
 eta = 1/(6 * 1440) # 6 days for infection to develop in vector
 mu = 1/(20 * 1440) # 20 day lifespan for vector
 gammaH = 1/(7 * 1440) # rate of recovery in hosts (7 days)
 muH = 1/(365.25 * 65 * 1440) # host mortality rate (65 years)
 KH = 1E8 # host population density
 
-KL = 3 * 1E8
-rhoL = 1 / (12 * 1440) # 12 day larval development period
-muL = 1 / (20 * 1440) # 62.5% probability of larval survival (20 / (20 + 12))
+KJ = 3 * 1E8
+rhoJ = 1 / (12 * 1440) # 12 day larval development period
+muJ = 1 / (20 * 1440) # 62.5% probability of larval survival (20 / (20 + 12))
 varPhi = 3 / 1440 # on average 3 eggs per female per day
 
 # In the Chitnis model, maximum per-capita contact rate for hosts
 sigmaH = 100 / 1440 # = 100 bites / day = 100 (bites / day) * (1 day / 1440 minutes)
 
-extra_parameters = tibble(betaH, betaV, eta, mu, gammaH, muH, KH, KL, rhoL, muL, varPhi, sigmaH, gammaV, gammaR)
+extra_parameters = tibble(betaH, betaB, eta, mu, gammaH, muH, KH, KJ, rhoJ, muJ, varPhi, sigmaH, gammaV, gammaR)
 
 base_params_flighty = tibble(
   mosquito_type = "flighty",
@@ -394,7 +394,7 @@ full_parameters = base_parameters %>%
 
 # Set up parameter variation ----
 
-# Set wow finely we explore parameter space
+# Set how finely we explore parameter space
 variation_resolution = 10001
 
 ## Exponential variable ----
@@ -414,15 +414,29 @@ exp_df = full_parameters %>%
       mutate(varied_parameter = "theta") %>% 
       mutate(parameter_type = "baseline")
   ) %>% 
-  mutate(B_tot = (rhoL / mu) * KL * (1 - mu * (muL + rhoL) / (varPhi * rhoL))) %>% 
-  mutate(B_vec = NA) %>% 
+  rowwise() %>% 
+  mutate(
+    b = 1/(GCD - (1 / gammaV) - (1 / gammaR)),
+    J_eq = KJ * (1 - (varPhi * (rhoJ / (rhoJ + muJ) * (b / (b + mu)) * (1 / (gammaV + mu)) * (1 - (b / (b + mu)) * (gammaV / (gammaV + mu)) * (gammaR / (gammaR + mu)))^(-1)))^(-1)),
+    V_eq = (1 - (b / (b + mu)) * (gammaV / (gammaV + mu)) * (gammaR / (gammaR + mu)))^(-1) * (b / (b + mu)) * (1 / (gammaV + mu)) * rhoJ * J_eq ,
+    B_eq = ((gammaV + mu) / b) * V_eq,
+    nG = (1 - (gammaR / (gammaR + mu)) * (gammaV / (gammaV + mu)) * (b / (b + mu)))^(-1),
+    nE = (1 - (gammaR / (eta + gammaR + mu)) * (gammaV / (eta + gammaV + mu)) * (b / (eta + b + mu)))^(-1),
+    R02 = betaB * b * (B_eq / KH) * (1 / (gammaH + muH)) * betaH * (b / (b + mu)) * (eta / (eta + gammaV + mu)) * (gammaR / (gammaR + mu)) * (gammaV / (gammaV + mu)) * nG + (gammaV / (eta + gammaV + mu)) * (gammaR / (eta + gammaR + mu)) * ( (eta / (eta + b + mu)) + (gammaR / (gammaR + mu)) * (1 + ( (eta / (eta + b + mu)) * (b / (b + mu)) + (b / (eta + b + mu)) * (eta / (eta + gammaV + mu))) * (gammaV / (gammaV + mu))) * nG) * nE,
+    R0 = sqrt(R02)
+    ) %>% 
+  filter(b > 0) %>% 
+
+
+
+  # mutate(B_vec = NA) %>% 
   ungroup() %>% 
-  contact_rate_function() %>% 
-  mutate(b = 1/GCD) %>% 
-  mutate(R0 = case_when(
-    contact_type == "RM" ~ b * sqrt(betaV * B_tot * betaH * (eta / (mu +eta)) / (KH * (muH + gammaH) * mu)),
-    contact_type == "Chitnis" ~ (sigmaH * b /(sigmaH * KH + b * B_tot)) * sqrt(betaV * b * B_tot * betaH * sigmaH * (eta / (mu +eta)) * KH / ((muH + gammaH) * mu))
-  )) %>% 
+  # contact_rate_function() %>% 
+  # mutate(b = 1/GCD) %>% 
+  # mutate(R0 = case_when(
+  #   contact_type == "RM" ~ b * sqrt(betaB * B_tot * betaH * (eta / (mu +eta)) / (KH * (muH + gammaH) * mu)),
+  #   contact_type == "Chitnis" ~ (sigmaH * b /(sigmaH * KH + b * B_tot)) * sqrt(betaB * b * B_tot * betaH * sigmaH * (eta / (mu +eta)) * KH / ((muH + gammaH) * mu))
+  # )) %>% 
   select(-b)
 
 
@@ -459,8 +473,8 @@ for (parameter_name in parameter_characters) {
 
 # Add back in the exponential model
 combined_df <- rbind(
-  select(full_variation_df, colnames(exp_df)), 
-  exp_df) %>% 
+  select(full_variation_df, intersect(colnames(full_variation_df), colnames(exp_df))),
+  select(exp_df, intersect(colnames(full_variation_df), colnames(exp_df)))) %>% 
   # Sort columns for easier reading
   relocate(mosquito_type, model_type, contact_type, transmission_type, varied_parameter, parameter_type)
 
