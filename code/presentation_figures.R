@@ -297,6 +297,7 @@ PRCC_data <- rank_data %>%
     .groups = "drop"
   )
 
+write_csv(PRCC_data, "data/PRCC_data.csv")
 
 plot_data <- PRCC_data %>% 
   right_join(
