@@ -357,6 +357,8 @@ PRCC_plots <- plot_data %>%
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1))
 
+# [] Make a plot with just R0 as an output, comparing flighty/persistent baselines
+
 ggsave("figures/GCD_figures/PRCCs_draft.png", PRCC_plots, 
        width = 13.333, height = 7.5, units = "in")
 

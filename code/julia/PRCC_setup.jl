@@ -29,7 +29,7 @@ min_lbs = [1/(3*1440.0f0), 1/10.0f0, 1/10.0f0, 1/10.0f0, 0.0f0, 0.0f0, 0.0f0, 0.
 max_ubs = [60.0f0, 60.0f0, 60.0f0, 60.0f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0]
 
 # Set number of LHC samples
-n_samples = 1_000_000::Int #100000000::Int
+n_samples = 1_000_000::Int
 
 # Set up initial grid
 using QuasiMonteCarlo
