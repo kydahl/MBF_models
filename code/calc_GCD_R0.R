@@ -142,7 +142,10 @@ mech_population_density_function <- function(df_in) {
       # Ovipositing mosquitoes
       V_star = r / (mu + gammaV),
       # Blood-feeding stages
-      B_vec = list(((N_offspring - 1) * KJ * rhoJ / N_offspring) * (1 + (gammaR / (mu + gammaR)) * (gammaV / (mu + gammaV)) * nG * tau) * inv(mu * diag(4) - t(A_matrix)) %*% alpha_vec),
+      B_prefactor = (N_offspring - 1) * KJ * ((rhoJ / N_offspring) + (gammaR / (mu + gammaR) * gammaV * (rhoJ + muJ) / varPhi)),
+      B_postfactor = list(inv(mu * diag(4) - t(A_matrix)) %*% alpha_vec),
+      B_vec = list(B_prefactor * B_postfactor),
+      # B_vec = list(((N_offspring - 1) * KJ * rhoJ / N_offspring) * (1 + (gammaR / (mu + gammaR)) * (gammaV / (mu + gammaV)) * nG * tau) * inv(mu * diag(4) - t(A_matrix)) %*% alpha_vec),
       # Blood-feeding and ovipositing stages
       BV_vec = list(matrix(rbind(B_vec, V_star), ncol = 1)),
       # Total number of blood-feeding mosquitoes
@@ -298,14 +301,19 @@ R0_function <- function(df_in) {
       term_1 = list(mu * diag(5) - t(A_tilde) - (gammaR / (gammaR + mu)) * spec_mat),
       term_2 = list(eta * diag(5) - (eta / (eta + gammaR + mu)) * (gammaR / (gammaR + mu)) * spec_mat),
       term_3 = list((eta + mu) * diag(5) - t(A_tilde) - (gammaR / (eta + gammaR + mu) * spec_mat)),
-      M1 = list(mu * diag(5) - t(A_tilde) - (gammaR / (mu + gammaR)) * spec_mat),
-      M2 = list(eta * diag(5) + (eta / (mu + gammaR + eta)) * (1 / (mu + gammaR)) * spec_mat),
-      M3 = list((eta + mu) * diag(5) - t(A_tilde) - (gammaR / (mu + gammaR + eta)) * spec_mat),
-      Q = list(inv(M1) %*% M2 %*% inv(M3)),
+      # M1 = list(mu * diag(5) - t(A_tilde) - (gammaR / (mu + gammaR)) * spec_mat),
+      # M2 = list(eta * diag(5) + (eta / (mu + gammaR + eta)) * (1 / (mu + gammaR)) * spec_mat),
+      # M3 = list((eta + mu) * diag(5) - t(A_tilde) - (gammaR / (mu + gammaR + eta)) * spec_mat),
+      # Q = list(inv(M1) %*% M2 %*% inv(M3)),
       R02 = (1 / (gammaH + muH)) * one_vec %*% betaH_mat %*% LambdaH_mat %*% inv(term_1) %*% term_2 %*% inv(term_3) %*% betaV_mat %*% LambdaV_mat %*% (BV_vec / (B_tot)),
       R0 = sqrt(R02),
       # R0 = sqrt(one_vec %*% betaH_mat %*% LambdaH_mat %*% Q %*% betaV_mat %*% LambdaV_mat %*% BV_vec / (sum(B_tot) * (muH + gammaH))),
       R0 = ifelse(N_offspring < 1, 0, R0)
+    )
+  
+  df_out = df_out %>% 
+    mutate(
+      test = (1 / (gammaH + muH)) * one_vec %*% betaH_mat %*% LambdaH_mat  %*% inv(term_1)
     )
 }
 
@@ -326,7 +334,7 @@ KH = 1E8 # host population density
 KJ = 3 * 1E8
 rhoJ = 1 / (12 * 1440) # 12 day larval development period
 muJ = 1 / (20 * 1440) # 62.5% probability of larval survival (20 / (20 + 12))
-varPhi = 3 / 1440 # on average 3 eggs per female per day
+varPhi = 300 / 1440 # on average 3 eggs per female per day
 
 # In the Chitnis model, maximum per-capita contact rate for hosts
 sigmaH = 100 / 1440 # = 100 bites / day = 100 (bites / day) * (1 day / 1440 minutes)
@@ -400,7 +408,7 @@ full_parameters = base_parameters %>%
 # Set up parameter variation ----
 
 # Set how finely we explore parameter space
-variation_resolution = 10001
+variation_resolution = 101
 
 ## Exponential variable ----
 # The only relevant parameter for variation here is GCD, the gonotrophic cycle duration (in minutes)
@@ -460,7 +468,6 @@ for (parameter_name in parameter_characters) {
     # Calculate GCD
     mech_GCD_calc() %>% 
     rowwise() %>%
-    mech_population_density_function() %>% 
     ungroup() %>% 
     rowwise() %>%
     contact_rate_function() %>% 

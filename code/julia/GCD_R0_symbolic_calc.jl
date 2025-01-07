@@ -11,10 +11,19 @@ using Serialization
 
 #### Create mean GCD functions ####
 
+# Define fixed parameters
+const (KJ, rhoJ, muJ, varPhi) = [3E8, (1/(12 * 1440)), (1 / (20 * 1440)), (300 / 1440)]
+const (gV, gR, mu) = [(1/(2 * 1440)), (1/(2 * 1440)), (1/(20 * 1440))]
+const (bH, bB, eta, gH) = [1, 1, (1/(6 * 1440)), (1/(7 * 1440))]
+const (muH, KH) = [1/(365.25 * 65 * 1440), 1E8]
+const pQ = 1.0f0
+const (bH, bB, eta, gH) = [1f0, 1f0, 1 / (6 * 1440), 1 / (7 * 1440)]
+
+
 # Give variables appropriate names
-@variables B_vars[1:9]  V_vars[1:3] J_vars[1:4]
-(gV, gR, mu) = V_vars
+@variables B_vars[1:9] # V_vars[1:3] J_vars[1:4]
 (invlQ_minute, invlL_minute, invlP_minute, invlG_minute, sigma, pL, pP, pG) = B_vars
+
 
 lQ = 1 / (invlQ_minute)
 lL = 1 / (invlL_minute)
@@ -63,15 +72,6 @@ Serialization.serialize("GCD_mu_zero_func.jls", GCD_mu_zero_func)
 # (bH, bB, eta, gH) = Epi_vars
 # (muH, KH) = Host_vars
 
-f = 1 - sigma
-
-# Define subintensity matrices
-A_mat = [-lQ lQ 0.0f0 0.0f0
-    f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0.0f0
-    f*(1-pP)*lP (1-f)*(1-pP)*lP -lP pP*lP
-    f*(1-pG)*lG (1-f)*(1-pG)*lG 0.0f0 -lG
-]
-
 A_tilde = [-lQ lQ 0.0f0 0.0f0 0.0f0
     f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0.0f0 0.0f0
     f*(1-pP)*lP (1-f)*(1-pP)*lP -lP pP*lP 0.0f0
@@ -105,10 +105,7 @@ Serialization.serialize("N_offspring_func.jls", N_offspring_func)
 # R0 for the exponential case
 # (lQ, lL, lP, lG, sigma, pL, pP, pG) = B_vals_in
 # theta = 1/b
-@variables b J_vars[1:4] Epi_vars[1:4] Host_vars[1:2]
-(KJ, rhoJ, muJ, varPhi) = J_vars
-(bH, bB, eta, gH) = Epi_vars
-(muH, KH) = Host_vars
+@variables b # Epi_vars[1:4] Host_vars[1:2]
 
 J_eq = KJ * (1 - (varPhi * (rhoJ / (rhoJ + muJ) * (b / (b + mu)) * (1 / (gV + mu)) * (1 - (b / (b + mu)) * (gV / (gV + mu)) * (gR / (gR + mu)))^(-1)))^(-1))
 V_eq = (1 - (b / (b + mu)) * (gV / (gV + mu)) * (gR / (gR + mu)))^(-1) * (b / (b + mu)) * (1 / (gV + mu)) * rhoJ * J_eq
@@ -136,19 +133,55 @@ V_mat = [
 
 K_mat = F_mat * inv(V_mat)
 
-function LinearAlgebra.eigen(A::AbstractMatrix{T}) where {T <: Sym}
-    LinearAlgebra.Eigen(eigvals(A), eigvecs(A))
-end
 
-K_eigs = GenericLinearAlgebra.eigvals(K_mat)
+V1 = [
+    eta+b+mu 0    0
+    -eta     b+mu 0
+    -b       0    eta+gV+mu
+]
 
-R0_func = Symbolics.build_function(K_eigs, [B_vars, J_vars, Epi_vars, Host_vars], expression=Val{false})
+V2 = [
+    0 -gR 0
+    0 0   -gR
+    0 0   0
+]
+
+V3 = [
+    0 -b -eta
+    0 0  -gV
+    0 0  0
+]
+
+V4 = [
+    gV+mu 0         0
+    0     eta+gR+mu 0
+    -gV   -eta      gR+mu
+]
+
+big_term = simplify(inv(V4 - V3 * inv(V1) * V2))
+
+W1 = inv(V1) + inv(V1) * V2 * big_term * V3 * inv(V1)
+W2 = -inv(V1) * V2 * big_term
+
+subK1 = [0 bH*b 0] * W1
+w3 = subK1[3]
+# subK2 = [0 bH*b 0] * W2
+eigen_K_mat = sqrt(-bB*b*B_eq*(1/KH)*(1/(gH+muH)) * w3)
+
+# K_mat = [
+#     0 [subK1 subK2]
+#     0 0 0 0 0 0 0
+#     0 0 0 0 0 0 0
+#     -bB*b*B_eq*(1//KH)*(1//gH+muH) 0 0 0 0 0 0
+#     0 0 0 0 0 0 0
+#     0 0 0 0 0 0 0
+#     0 0 0 0 0 0 0
+# ]
+
+R0_exp_func = Symbolics.build_function(eigen_K_mat, b, expression=Val{false})
 
 # Save the basic offspring number function to a file
-Serialization.serialize("N_offspring_func.jls", N_offspring_func)
-
-
-R0 = maximum(real(eigen(K_mat).values))
+Serialization.serialize("R0_exp_func.jls", R0_exp_func)
 
 
 # # r
