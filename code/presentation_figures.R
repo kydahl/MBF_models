@@ -47,7 +47,7 @@ folder_name = paste0("figures/GCD_figures/",chosen_mosquito_type)
 
 # For now, just look at persistent mosquitoes
 plot_df <- combined_df %>% 
-  filter(mosquito_type == chosen_mosquito_type) %>% 
+  # filter(mosquito_type == chosen_mosquito_type) %>% 
   mutate(f = 1-f, .keep = "unused") %>% 
   mutate(varied_parameter = ifelse(varied_parameter == "f", "sigma", varied_parameter)) %>% 
   rename(sigma = f) %>% 
@@ -110,22 +110,24 @@ selected_parameters <- c(
   "b", "lQ", "pP" # persistent
 )
 
-parameter_palette = c("Black", (c4a("tol.muted", 2))) # !!! update to use consistent colors for each parameter across all the plots
+parameter_palette = c("black", c4a("brewer.set1", 2)) #c("Black", (c4a("tol.muted", 2))) # !!! update to use consistent colors for each parameter across all the plots
 
 ## GCD vs R0 figures ----
 
 #### OUT Contact rates ----
 
 R0_GCD_OUT_df <- plot_df %>%
+  # filter(mosquito_type == "persistent") %>% 
   filter(varied_parameter %in% selected_parameters) %>%
-  filter(transmission_type == "OUT") %>% 
+  filter(transmission_type == "OUT") %>%  
+  filter(contact_type == "RM") %>%
   distinct()
 
 R0_GCD_OUT_plot <- R0_GCD_OUT_df %>% 
-  filter(contact_type == "RM") %>% 
-  ggplot(aes(x = GCD_day, y = R0, group = Label, color = Label)) +
+  ggplot(aes(x = GCD_day, y = R0, color = Label, linetype = mosquito_type)) +
   # Curves
   geom_line(lwd = 1,
+            # linetype = 2
             # arrow = arrow(ends = "first", type = "closed")
   ) +
   scale_x_continuous("Gonotrophic cycle duration [days]",
@@ -138,16 +140,26 @@ R0_GCD_OUT_plot <- R0_GCD_OUT_df %>%
                      # limits = c(NA, max(filter(R0_GCD_OUT_df, varied_parameter != "theta")$R0))
   ) +
   scale_color_manual("Parameter", values = parameter_palette) +
+  # scale_linetype(
+  #   "Mosquito type"
+  # ) +
+  guides(
+    linetype = "none",
+    color = "none"
+  ) +
   # ggtitle("R0 as a function of GCD (using OUT-rates)") +
   theme_minimal_grid(16)
 
-ggsave(paste0(folder_name, "/R0_GCD_OUT.png"), R0_GCD_OUT_plot, 
-       width = 13.333, height = 7.5, units = "in")
+ggsave("figures/R0_GCD_OUT.png", R0_GCD_OUT_plot, 
+       width = 13.333, height = 7, units = "in")
 
 
 ## 1/GCD vs R0 figures ----
 
+plot_df$mosquito_type = factor(plot_df$mosquito_type, levels = c("persistent", "flighty"))
+
 R0_invGCD_OUT_df <- plot_df %>% 
+  # filter(mosquito_type == "persistent") %>% 
   filter(varied_parameter %in% selected_parameters) %>%
   mutate(invGCD = 1/GCD_day) %>% 
   filter(transmission_type == "OUT",
@@ -155,14 +167,11 @@ R0_invGCD_OUT_df <- plot_df %>%
          # invGCD < 2
   ) %>% 
   distinct() %>% 
-  group_by(varied_parameter) %>% 
-  mutate(nudge = rnorm(1, 0.1)) %>% 
-  mutate(invGCD_nudge = invGCD + nudge) %>% 
-  ungroup()
+  group_by(varied_parameter)
 
 
 R0_invGCD_OUT_plot <- R0_invGCD_OUT_df %>% 
-  ggplot(aes(x = invGCD, y = R0, group = Label, color = Label)) +
+  ggplot(aes(x = invGCD, y = R0, color = Label, linetype = mosquito_type)) +
   geom_line(lwd = 1,
             # arrow = arrow(ends = "last", type = "closed"),
             # alpha = 1
@@ -171,18 +180,25 @@ R0_invGCD_OUT_plot <- R0_invGCD_OUT_df %>%
                      limits = c(0.05, 1/4)
   ) +
   scale_y_continuous(TeX("Basic reproduction number, $R_0$"),
-                     breaks = seq(0,7),
-                     limits = c(NA, 7)
+                     # breaks = seq(0,7),
+                     # limits = c(NA, 7)
   ) +
   scale_color_manual(
     "Parameter", 
     values = parameter_palette
     ) +
+  scale_linetype(
+    "Mosquito type"
+  ) +
   theme_minimal_grid(16) +
+  guides(
+    linetype = "none",
+    color = "none"
+  ) +
   theme(strip.text.x = element_text(hjust = 0))
 
-ggsave(paste0(folder_name, "/R0_invGCD_OUT.png"), R0_invGCD_OUT_plot, 
-       width = 13.333, height = 7.5, units = "in")
+ggsave("figures/R0_invGCD_OUT.png", R0_invGCD_OUT_plot, 
+       width = 13.333, height = 7, units = "in")
 
 ### Plot GCD against each parameter individually ----
 var_GCD_plot_probs <- plot_df %>% 
@@ -299,6 +315,8 @@ PRCC_data <- rank_data %>%
 
 write_csv(PRCC_data, "data/PRCC_data.csv")
 
+PRCC_data <- read_csv("data/PRCC_data.csv")
+
 plot_data <- PRCC_data %>% 
   right_join(
     param_table %>% 
@@ -321,8 +339,8 @@ plot_data <- PRCC_data %>%
   ) %>% 
   mutate(
     type_label = case_when(
-      type == "flighty" ~ "Flighty baseline",
-      type == "persistent" ~ "Persistent baseline",
+      type == "flighty" ~ "Flighty",
+      type == "persistent" ~ "Persistent",
       type == "max" ~ "Maximum variation",
     )
   ) 
@@ -336,24 +354,29 @@ plot_data$output_label = factor(plot_data$output_label, levels = c(
 ))
 
 plot_data$type_label = factor(plot_data$type_label, levels = c(
-  "Flighty baseline","Persistent baseline","Maximum variation"
+  "Flighty","Persistent","Maximum variation"
 ))
 
 
 plot_data$Label = factor(plot_data$Label, levels = c(
-  c("Questing rate", "Landing rate","Probing rate", "Ingesting rate", "Persistence probability", "Landing success probability",  "Probing success probability", "Ingestion success probability")
+  c("Host-seeking rate", "Landing rate","Probing rate", "Ingesting rate", "Persistence probability", "Landing success probability",  "Probing success probability", "Ingestion success probability")
 ))
 
 
 PRCC_plots <- plot_data %>% 
   arrange(input) %>% 
-  filter(type %in% c("flighty", "persistent", "max")) %>% 
+  filter(!(input %in% c("pP", "pG", "lP", "lG"))) %>% 
+  filter(output == "R0") %>% 
+  filter(type %in% c("flighty", "persistent")) %>% 
   ggplot(aes(x = Label, y = PRCC, fill = type_label)) +
   geom_col(position = "dodge") +
-  geom_hline(yintercept = 0, color = "black", size =1 ) +
-  facet_wrap(~output_label, ncol = 1, scales = "free_y") +
+  geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
+  # facet_wrap(~output_label, ncol = 1, scales = "free_y") +
   scale_fill_discrete(name = "Parameter set:") +
   scale_x_discrete(name = "") +
+  scale_y_continuous(
+    TeX("$R_0$ Partial Rank Correlation Coefficients")
+  ) +
   theme_minimal(16)+
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1))
