@@ -2782,10 +2782,10 @@ W_{4} & =\begin{bmatrix}\left(\mu+\gamma_{R}+\eta\right) & 0\\
 \end{bmatrix}_{2\times2}\\
 \\
 \\
-W^{-1} & =\begin{bmatrix}\left(W_{1}-W_{2}W_{4}^{-1}W_{3}\right)^{-1} & \left(W_{1}-W_{2}W_{4}^{-1}W_{3}\right)^{-1}W_{2}W_{4}^{-1}\\
+\boldsymbol{V}_{V}^{-1} & =\begin{bmatrix}\left(W_{1}-W_{2}W_{4}^{-1}W_{3}\right)^{-1} & \left(W_{1}-W_{2}W_{4}^{-1}W_{3}\right)^{-1}W_{2}W_{4}^{-1}\\
 -W_{4}^{-1}W_{3}\left(W_{1}-W_{2}W_{4}^{-1}W_{3}\right)^{-1} & W_{4}^{-1}+W_{4}^{-1}W_{3}\left(W_{1}-W_{2}W_{4}^{-1}W_{3}\right)^{-1}W_{2}W_{4}^{-1}
 \end{bmatrix}\\
-W^{-1} & =\begin{bmatrix}\left[\tilde{W}_{1}\right]_{2n\times2n} & \left[\tilde{W}_{2}\right]_{2n\times2}\\
+\boldsymbol{V}_{V}^{-1} & =\begin{bmatrix}\left[\tilde{W}_{1}\right]_{2n\times2n} & \left[\tilde{W}_{2}\right]_{2n\times2}\\
 \left[\tilde{W}_{3}\right]_{2\times2n} & \left[\tilde{W}_{4}\right]_{2\times2}
 \end{bmatrix}
 \end{align*}
@@ -2881,10 +2881,6 @@ Thus
 \end{bmatrix}
 \end{align*}
 
-\end_inset
-
-where 
-\begin_inset Formula $\tilde{X}_{1}$
 \end_inset
 
 
