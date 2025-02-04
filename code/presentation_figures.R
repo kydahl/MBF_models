@@ -43,7 +43,7 @@ combined_df = readRDS(file = "data/GCD_R0_vals.rds.gz")
 
 chosen_mosquito_type = "persistent"
 
-folder_name = paste0("figures/GCD_figures/",chosen_mosquito_type)
+folder_name = paste0("figures/GCD_figures/", chosen_mosquito_type)
 
 # For now, just look at persistent mosquitoes
 plot_df <- combined_df %>% 
@@ -62,13 +62,7 @@ plot_df <- combined_df %>%
            varied_parameter
          )
   ) %>% 
-  relocate(b, .after = "lQ") #%>% 
-# mutate(mod_GCD = case_when(
-#   model_type == "Exponential" ~ GCD,
-#   model_type == "Mechanistic" ~ GCD - (1/gammaV) - (1/gammaR)
-# )) %>% 
-# mutate(GCD_day = mod_GCD / 1440) %>% 
-# filter(GCD_day < 1/mu/1440)
+  relocate(b, .after = "lQ")
 
 
 # Dictionary for labeling

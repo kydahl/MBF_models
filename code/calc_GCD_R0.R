@@ -197,7 +197,7 @@ R0_function <- function(df_in) {
   # Transmission type can be IN or OUT
   
   # Accessory vectors
-  alpha_vec = matrix(rep(0, 5), ncol = 1); alpha_vec[1] = 1
+  alpha_vec = matrix(c(1, 0, 0, 0, 0,), ncol = 1)
   one_vec = matrix(rep(1, 5), nrow = 1)
   
   # Function to replace small numerical values with zeroes
