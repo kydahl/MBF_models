@@ -260,7 +260,7 @@ phenom_EpiTerms <- function(A_matrix, v_alpha) {
 get_mech_A <- function(lQ, pQ, pL, lL, pP, lP, pG, lG, sigma){
   # subintensity matrix
   out = matrix(c(
-    -lQ,                                        pQ * lQ,       0,       0,
+    -pQ * lQ,                           pQ * lQ,       0,       0,
     (1 - sigma) * (1- pL) * lL, -lL + sigma * (1- pL) * lL, pL * lL,       0,
     (1 - sigma) * (1 - pP) * lP,     sigma * (1 - pP) * lP,     -lP, pP * lP,
     (1 - sigma) * (1 - pG) * lG,     sigma * (1 - pG) * lG,       0,      -lG
@@ -398,9 +398,9 @@ get_stable_pop <- function(A_matrix, v_alpha) {
 # Calculate theta, biting process duration
 theta_calc <- function(A_matrix, v_alpha) {
   A_dim = dim(A_matrix)[1]
-  green_A = inv(-t(A_matrix)*1440) * 1440
-  v_one = matrix(rep(1, A_dim), 1)
-  theta = v_one %*% green_A %*% v_alpha
+  green_A = inv(-(A_matrix)*1440) * 1440
+  v_one = matrix(rep(1, A_dim), ncol = 1)
+  theta = t(v_alpha) %*% green_A %*% v_one
 }
 
 # Calculate GCD, gonotrophic cycle duration
