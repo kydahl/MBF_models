@@ -1075,7 +1075,7 @@ Suppose now that the compartment
 \begin{align}
 \frac{d}{dt}J & =\varphi\left(V,J\right)-\rho_{J}J-\mu_{J}J\nonumber \\
 \frac{d}{dt}\vec{B} & =\left(\rho_{J}J+\gamma_{R}R\right)\vec{\alpha}+\boldsymbol{A}^{T}\vec{B}-\mu\vec{B}\nonumber \\
-\frac{d}{dt}V & =\left(-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}\right)-\gamma_{V}V-\mu V\label{eq:general_model}\\
+\frac{d}{dt}V & =\left(-\boldsymbol{A}\vec{1}\right)^{T}\vec{B}-\gamma_{V}V-\mu V\label{eq:general_model}\\
 \frac{d}{dt}R & =\gamma_{V}V-\gamma_{R}R-\mu R\nonumber 
 \end{align}
 
@@ -1634,7 +1634,7 @@ is an equilibrium.
 \begin{align*}
 \varphi\left(V^{*},J^{*}\right) & =\left(\rho_{J}+\mu_{J}\right)J^{*}\\
 \left(\rho_{J}J^{*}+\gamma_{R}R^{*}\right)\vec{\alpha} & =\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)\vec{B}^{*}\\
-\left(-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}^{*}\right) & =\left(\gamma_{V}+\mu\right)V^{*}\\
+\left(-\boldsymbol{A}\vec{1}\right)^{T}\vec{B}^{*} & =\left(\gamma_{V}+\mu\right)V^{*}\\
 \gamma_{V}V^{*} & =\left(\gamma_{R}+\mu\right)R^{*}
 \end{align*}
 
@@ -1645,7 +1645,7 @@ is an equilibrium.
 \begin{align*}
 \varphi\left(V^{*},J^{*}\right) & =\left(\rho_{J}+\mu_{J}\right)J^{*}\\
 \left(\rho_{J}J^{*}+\gamma_{R}R^{*}\right)\vec{\alpha} & =\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)\vec{B}^{*}\\
-V^{*} & =\left(\frac{1}{\mu+\gamma_{V}}\right)\left(-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}^{*}\right)\\
+V^{*} & =\left(\frac{1}{\mu+\gamma_{V}}\right)\left(-\boldsymbol{A}\vec{1}\right)^{T}\vec{B}^{*}\\
 R^{*} & =\left(\frac{1}{\mu+\gamma_{R}}\right)\gamma_{V}V^{*}
 \end{align*}
 
@@ -1656,7 +1656,7 @@ R^{*} & =\left(\frac{1}{\mu+\gamma_{R}}\right)\gamma_{V}V^{*}
 
 \begin_layout Standard
 Let 
-\begin_inset Formula $r=-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}^{*}$
+\begin_inset Formula $r=\left(-\boldsymbol{A}\vec{1}\right)^{T}\vec{B}^{*}$
 \end_inset
 
  and note that 
@@ -1690,7 +1690,7 @@ Let
 \end_inset
 
 where 
-\begin_inset Formula $\tau=\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}$
+\begin_inset Formula $\tau=\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}$
 \end_inset
 
  is a scalar that is independent of any of the state variables.
@@ -1718,7 +1718,9 @@ And hence we need only determine
 \varphi\left(V^{*},J^{*}\right) & =\left(\rho_{J}+\mu_{J}\right)J^{*}\\
 \varphi\left(V^{*},J^{*}\right) & =\frac{1}{\tau}\left(\frac{\rho_{J}+\mu_{J}}{\rho_{J}}\right)\left[1-\tau\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\right]r\\
 \bar{\varphi}\left(J^{*}\right) & =\frac{1}{\tau}\left(\frac{\rho_{J}+\mu_{J}}{\rho_{J}}\right)\left[1-\tau\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\right]\frac{r}{V^{*}}\\
-\bar{\varphi}\left(J^{*}\right) & =\frac{1}{\tau}\left(\mu+\gamma_{V}\right)\left(\frac{\rho_{J}+\mu_{J}}{\rho_{J}}\right)\left[1-\tau\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\right]
+\bar{\varphi}\left(J^{*}\right) & =\frac{1}{\tau}\left(\mu+\gamma_{V}\right)\left(\frac{\rho_{J}+\mu_{J}}{\rho_{J}}\right)\left[1-\tau\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\right]\\
+\bar{\varphi}\left(J^{*}\right) & =\left[\tau\frac{1}{\mu+\gamma_{V}}\left(\frac{\rho_{J}}{\mu_{J}+\rho_{J}}\right)\frac{1}{1-\tau\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)}\right]^{-1}\\
+\bar{\varphi}\left(J^{*}\right) & =\left[\tau\frac{1}{\mu+\gamma_{V}}\left(\frac{\rho_{J}}{\mu_{J}+\rho_{J}}\right)\frac{1}{1-\tau\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)}\right]^{-1}
 \end{align*}
 
 \end_inset
@@ -1789,6 +1791,16 @@ through the equation
 \vec{B}^{*} & =\left(\rho_{J}J^{*}+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)r\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha},\\
 \vec{B}^{*} & =\left(\rho_{J}J^{*}+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\tau n_{G}\rho_{J}J^{*}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha},\\
 \vec{B}^{*} & =\left(1+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\tau n_{G}\right)\rho_{J}J^{*}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha},
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\vec{B}^{*} & =\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\left(1+\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\tau n_{G}\right)\rho_{J}J^{*},\\
+V^{*} & =\left(\frac{1}{\mu+\gamma_{V}}\right)\rho_{J}\tau n_{G}J^{*},\\
+R^{*}= & \tau n_{G}\left(\frac{1}{\mu+\gamma_{R}}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\rho_{J}J^{*}.
 \end{align*}
 
 \end_inset
@@ -1884,10 +1896,14 @@ R
 \left(\mu+\gamma_{R}\right)R
 \end{bmatrix}-\begin{bmatrix}\varphi\left(V,J\right)\\
 \gamma_{R}R\vec{\alpha}+\left(\boldsymbol{A}-\boldsymbol{D}_{\textrm{diag}A}\right)^{T}\vec{B}\\
-\left(-\vec{1}^{T}\boldsymbol{A}^{T}\vec{B}\right)\\
+\left(-\boldsymbol{A}\vec{1}\right)^{T}\vec{B}\\
 \gamma_{V}V
 \end{bmatrix}\right\} \\
- & =\mathcal{F}-\mathcal{V}
+\frac{d}{dt}\begin{bmatrix}J\\
+\vec{B}\\
+V\\
+R
+\end{bmatrix} & =\mathcal{F}-\mathcal{V}
 \end{align*}
 
 \end_inset
@@ -1909,7 +1925,7 @@ Let
 \end_inset
 
  evaluated at the extinction equilibrium 
-\begin_inset Formula $\left(0,0,0\right)$
+\begin_inset Formula $\left(0,\vec{0},0,0\right)$
 \end_inset
 
 .
@@ -1927,7 +1943,7 @@ Let
 \end{bmatrix},\\
 \boldsymbol{V}=\mathcal{V}_{x}\left(0,0,0\right) & =\begin{bmatrix}\left(\rho_{J}+\mu_{J}\right)-\phi_{J} & \boldsymbol{0}_{1\times n} & -\phi_{V} & 0\\
 \boldsymbol{0}_{n\times1} & \mu\boldsymbol{I}-\boldsymbol{A}^{T} & \boldsymbol{0}_{n\times1} & -\gamma_{R}\vec{\alpha}\\
-0 & \vec{1}^{T}\boldsymbol{A}^{T} & \left(\mu+\gamma_{V}\right) & 0\\
+0 & \left(\boldsymbol{A}\vec{1}\right)^{T} & \left(\mu+\gamma_{V}\right) & 0\\
 0 & \boldsymbol{0}_{1\times n} & -\gamma_{V} & \left(\mu+\gamma_{R}\right)
 \end{bmatrix}
 \end{align*}
@@ -1955,28 +1971,28 @@ We first need to find the inverse of the matrix
  Let 
 \begin_inset Formula $\boldsymbol{W}=\begin{bmatrix}\left(\rho_{J}+\mu_{J}\right)-\phi_{J} & \boldsymbol{0}_{1\times n}\\
 \boldsymbol{0}_{n\times1} & \mu\boldsymbol{I}-\boldsymbol{A}^{T}
-\end{bmatrix}_{n+1\times n+1}$
+\end{bmatrix}$
 \end_inset
 
 ,
  
 \begin_inset Formula $\boldsymbol{X}=\begin{bmatrix}-\phi_{V} & 0\\
 \boldsymbol{0}_{n\times1} & -\gamma_{R}\vec{\alpha}
-\end{bmatrix}_{n+1\times2}$
+\end{bmatrix}$
 \end_inset
 
 ,
  
-\begin_inset Formula $\boldsymbol{Y}=\begin{bmatrix}0 & -\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\\
+\begin_inset Formula $\boldsymbol{Y}=\begin{bmatrix}0 & -\left(-\boldsymbol{A}\vec{1}\right)^{T}\\
 0 & \boldsymbol{0}_{1\times n}
-\end{bmatrix}_{2\times n+1}$
+\end{bmatrix}$
 \end_inset
 
 ,
  
 \begin_inset Formula $\boldsymbol{Z}=\begin{bmatrix}\left(\mu+\gamma_{V}\right) & 0\\
 -\gamma_{V} & \left(\mu+\gamma_{R}\right)
-\end{bmatrix}_{2\times2}$
+\end{bmatrix}$
 \end_inset
 
  so that 
@@ -2212,7 +2228,41 @@ n_{G}\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\
 
 \end_inset
 
-where again 
+
+\begin_inset Formula 
+\begin{align*}
+\boldsymbol{V}^{-1} & =\begin{bmatrix}\frac{1}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}} & \frac{\phi_{V}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{1}{\mu+\gamma_{V}}\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1} & \frac{\phi_{V}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{1}{\mu+\gamma_{V}} & 0\\
+\boldsymbol{0}_{n\times1} & \left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\left[1+n_{G}\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\right] & n_{G}\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha} & n_{G}\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\\
+0 & n_{G}\frac{1}{\mu+\gamma_{V}}\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1} & \frac{1}{\mu+\gamma_{V}} & \frac{1}{\mu+\gamma_{V}}\frac{\gamma_{R}}{\mu+\gamma_{R}}\tau\\
+0 & n_{G}\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}}\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1} & \frac{\gamma_{V}}{\mu+\gamma_{V}}\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
+\end{bmatrix}\\
+\boldsymbol{V}^{-1} & =\begin{bmatrix}\frac{1}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}} & \frac{\phi_{V}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{1}{\mu+\gamma_{V}}\boldsymbol{M} & \frac{\phi_{V}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{1}{\mu+\gamma_{V}} & 0\\
+\boldsymbol{0}_{n\times1} & \left[\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}+n_{G}\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\boldsymbol{N}\boldsymbol{M}\right] & n_{G}\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\boldsymbol{N} & n_{G}\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\boldsymbol{N}\\
+0 & n_{G}\frac{1}{\mu+\gamma_{V}}\boldsymbol{M} & \frac{1}{\mu+\gamma_{V}} & \frac{1}{\mu+\gamma_{V}}\frac{\gamma_{R}}{\mu+\gamma_{R}}\tau\\
+0 & n_{G}\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}}\boldsymbol{M} & \frac{\gamma_{V}}{\mu+\gamma_{V}}\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\boldsymbol{M}=\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}$
+\end_inset
+
+ (and 
+\begin_inset Formula $\boldsymbol{M}\vec{\alpha}=\tau$
+\end_inset
+
+),
+ 
+\begin_inset Formula $\boldsymbol{N}=\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}$
+\end_inset
+
+ (and 
+\begin_inset Formula $\left(-\boldsymbol{A}\vec{1}\right)^{T}\boldsymbol{N}=\tau$
+\end_inset
+
+) and where again 
 \begin_inset Formula $\tau=\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\left(\mu I-A^{T}\right)^{-1}\vec{\alpha}$
 \end_inset
 
@@ -2234,10 +2284,10 @@ where again
  in block-matrix form to facilitate more straight forward multiplication
 \begin_inset Formula 
 \begin{align*}
-F & =\begin{bmatrix}F_{11} & \boldsymbol{0}_{n+1\times2}\\
+\boldsymbol{F} & =\begin{bmatrix}\boldsymbol{F}_{11} & \boldsymbol{0}_{n+1\times2}\\
 \boldsymbol{0}_{2\times n+1} & \boldsymbol{0}_{2\times2}
 \end{bmatrix}\\
-F_{11} & =\begin{bmatrix}0 & \boldsymbol{0}_{1\times n}\\
+\boldsymbol{F}_{11} & =\begin{bmatrix}0 & \boldsymbol{0}_{1\times n}\\
 \rho_{J}\vec{\alpha} & \boldsymbol{0}_{n\times n}
 \end{bmatrix}
 \end{align*}
@@ -2251,15 +2301,15 @@ F_{11} & =\begin{bmatrix}0 & \boldsymbol{0}_{1\times n}\\
  gives us
 \begin_inset Formula 
 \begin{align*}
-K & =FV^{-1}\\
+\boldsymbol{K} & =\boldsymbol{F}\boldsymbol{V}^{-1}\\
  & =\begin{bmatrix}\boldsymbol{F}_{11} & \boldsymbol{0}_{n+1\times2}\\
 \boldsymbol{0}_{2\times n+1} & \boldsymbol{0}_{2\times2}
 \end{bmatrix}\begin{bmatrix}\boldsymbol{W}^{-1}+\boldsymbol{W}^{-1}\boldsymbol{X}\left(\boldsymbol{Z}-\boldsymbol{Y}\boldsymbol{W}^{-1}\boldsymbol{X}\right)^{-1}\boldsymbol{Y}\boldsymbol{W}^{-1} & -\boldsymbol{W}^{-1}\boldsymbol{X}\left(\boldsymbol{Z}-\boldsymbol{Y}\boldsymbol{W}^{-1}\boldsymbol{X}\right)^{-1}\\
 -\left(\boldsymbol{Z}-\boldsymbol{Y}\boldsymbol{W}^{-1}\boldsymbol{X}\right)^{-1}\boldsymbol{Y}\boldsymbol{W}^{-1} & \left(\boldsymbol{Z}-\boldsymbol{Y}\boldsymbol{W}^{-1}\boldsymbol{X}\right)^{-1}
 \end{bmatrix}\\
- & =\begin{bmatrix}\boldsymbol{F}_{11}\boldsymbol{W}^{-1}+\boldsymbol{W}^{-1}\boldsymbol{X}\left(\boldsymbol{Z}-\boldsymbol{Y}\boldsymbol{W}^{-1}\boldsymbol{X}\right)^{-1}\boldsymbol{Y}\boldsymbol{W}^{-1} & -\boldsymbol{F}_{11}\boldsymbol{W}^{-1}\boldsymbol{X}\left(\boldsymbol{Z}-\boldsymbol{Y}\boldsymbol{W}^{-1}\boldsymbol{X}\right)^{-1}\\
+ & =\begin{bmatrix}\boldsymbol{F}_{11}\left[\boldsymbol{W}^{-1}+\boldsymbol{W}^{-1}\boldsymbol{X}\left(\boldsymbol{Z}-\boldsymbol{Y}\boldsymbol{W}^{-1}\boldsymbol{X}\right)^{-1}\boldsymbol{Y}\boldsymbol{W}^{-1}\right] & -\boldsymbol{F}_{11}\boldsymbol{W}^{-1}\boldsymbol{X}\left(\boldsymbol{Z}-\boldsymbol{Y}\boldsymbol{W}^{-1}\boldsymbol{X}\right)^{-1}\\
 \boldsymbol{0}_{2\times n+1} & \boldsymbol{0}_{2\times2}
-\end{bmatrix}
+\end{bmatrix}\\
 \end{align*}
 
 \end_inset
@@ -2281,11 +2331,11 @@ Since
 \begin{align*}
 \boldsymbol{Q} & =\begin{bmatrix}0 & \boldsymbol{0}_{1\times n}\\
 \rho_{J}\vec{\alpha} & \boldsymbol{0}_{n\times n}
-\end{bmatrix}\begin{bmatrix}\frac{1}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}} & \frac{\phi_{V}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{1}{\mu+\gamma_{V}}\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\\
-\boldsymbol{0}_{n\times1} & \left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\left[1+n_{G}\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\right]
+\end{bmatrix}\begin{bmatrix}\frac{1}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}} & \frac{\phi_{V}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{1}{\mu+\gamma_{V}}\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\\
+\boldsymbol{0}_{n\times1} & \left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\left[1+n_{G}\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\right]
 \end{bmatrix}\\
  & =\begin{bmatrix}0 & \boldsymbol{0}_{1\times n}\\
-\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}\vec{\alpha} & \frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{\phi_{V}}{\mu+\gamma_{V}}\vec{\alpha}\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}
+\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}\vec{\alpha} & \frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{\phi_{V}}{\mu+\gamma_{V}}\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}
 \end{bmatrix}
 \end{align*}
 
@@ -2297,7 +2347,7 @@ Now
 
  is itself lower block-triangular,
  so its eigenvalues are zero and the eigenvalues of 
-\begin_inset Formula $\boldsymbol{\tilde{Q}}=\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{\phi_{V}}{\mu+\gamma_{V}}\vec{\alpha}\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}$
+\begin_inset Formula $\boldsymbol{\tilde{Q}}=\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{\phi_{V}}{\mu+\gamma_{V}}\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}$
 \end_inset
 
 .
@@ -2308,10 +2358,10 @@ Now
 
 \begin_inset Formula 
 \begin{align*}
-\det\left(\lambda\boldsymbol{I}-\boldsymbol{\tilde{Q}}\right) & =\det\left(\lambda\boldsymbol{I}_{n}-\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{\phi_{V}}{\mu+\gamma_{V}}\vec{\alpha}\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\right)\\
-\det\left(\lambda\boldsymbol{I}-\boldsymbol{\tilde{Q}}\right) & =\lambda^{n}\det\left(\boldsymbol{I}_{n}+\left(-1\right)\lambda^{-1}\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{\phi_{V}}{\mu+\gamma_{V}}\vec{\alpha}\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\right)\\
-\det\left(\lambda\boldsymbol{I}-\boldsymbol{\tilde{Q}}\right) & =\lambda^{n}\det\left(1+\left(-1\right)\lambda^{-1}\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{\phi_{V}}{\mu+\gamma_{V}}\left(-\vec{1}^{T}\boldsymbol{A}^{T}\right)\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\right)\\
-\det\left(\lambda\boldsymbol{I}-\boldsymbol{\tilde{Q}}\right) & =\lambda^{n-1}\left(\lambda-\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}\frac{\phi_{V}}{\mu+\gamma_{V}}\tau n_{G}\right)
+\det\left(\lambda\boldsymbol{I}-\boldsymbol{\tilde{Q}}\right) & =\det\left(\lambda\boldsymbol{I}_{n}-\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{\phi_{V}}{\mu+\gamma_{V}}\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\right),\\
+\det\left(\lambda\boldsymbol{I}-\boldsymbol{\tilde{Q}}\right) & =\lambda^{n}\det\left(\boldsymbol{I}_{n}-\lambda^{-1}\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{\phi_{V}}{\mu+\gamma_{V}}\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\right),\\
+\det\left(\lambda\boldsymbol{I}-\boldsymbol{\tilde{Q}}\right) & =\lambda^{n}\det\left(1-\lambda^{-1}\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}n_{G}\frac{\phi_{V}}{\mu+\gamma_{V}}\left(-\boldsymbol{A}\vec{1}\right)^{T}\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)^{-1}\vec{\alpha}\right),\\
+\det\left(\lambda\boldsymbol{I}-\boldsymbol{\tilde{Q}}\right) & =\lambda^{n-1}\left(\lambda-\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}\frac{\phi_{V}}{\mu+\gamma_{V}}\tau n_{G}\right).
 \end{align*}
 
 \end_inset
@@ -2326,7 +2376,7 @@ Hence
  
 \begin_inset Formula 
 \begin{align*}
-\mathcal{N} & =\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}\frac{\phi_{V}}{\mu+\gamma_{V}}\tau n_{G}\\
+\mathcal{N}_{0} & =\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}\frac{\phi_{V}}{\mu+\gamma_{V}}\tau n_{G}\\
  & =\tau\times\left(\frac{\phi_{V}}{\mu+\gamma_{V}}\right)\times\left(\frac{\rho_{J}}{\left(\rho_{J}+\mu_{J}\right)-\phi_{J}}\right)\times n_{G}\\
  & =\text{Pr\left(\text{survive to oviposition}\right)}\times\text{eggs produced while ovipositing}\times\text{proportion surviving to reach biting stages}\\
  & \times\text{average number of complete cycles}
@@ -2544,7 +2594,7 @@ where
 
 \begin_layout Standard
 To simplify the following calculations,
- we take the states 
+ we treat the states 
 \begin_inset Formula $\vec{B}$
 \end_inset
 
@@ -2552,7 +2602,11 @@ To simplify the following calculations,
 \begin_inset Formula $V$
 \end_inset
 
- to be the transient states and modify the state variables so that 
+ as transient states and 
+\begin_inset Formula $R$
+\end_inset
+
+ as an absorbing state by modifying the state variables so that 
 \begin_inset Formula $\vec{S}^{'}=\begin{bmatrix}\vec{S}\\
 S_{V}
 \end{bmatrix}$
@@ -2573,7 +2627,7 @@ I_{V}
 \end_inset
 
 .
- We drop the prime notation for now for ease of notation.
+ We will drop the prime notation for now for ease of notation and return to it at the conclusion of the proof.
  The matrices
 \series bold
  
@@ -2582,11 +2636,23 @@ I_{V}
 
  
 \series default
-are also modified to have an additional row and column of zeroes,
- to match the size of these new compartments,
- noting that no transmission can occur to or from the oviposition states.
- Now our transient state matrix is 
-\begin_inset Formula $\boldsymbol{\tilde{A}}$
+must also be modified to have an additional row and column of zeroes corresponding to the oviposition state,
+ 
+\begin_inset Formula $V$
+\end_inset
+
+,
+ having no involving in transmission.
+ The modified transient state matrix and initial vector are then given by
+\begin_inset Formula 
+\[
+\vec{\tilde{\alpha}}=\begin{bmatrix}\vec{\alpha}\\
+0
+\end{bmatrix},\,\tilde{\boldsymbol{A}}=\begin{bmatrix}\boldsymbol{A} & -\boldsymbol{A}\vec{1}\\
+\boldsymbol{0}_{1\times n} & -\gamma_{V}
+\end{bmatrix}
+\]
+
 \end_inset
 
 
