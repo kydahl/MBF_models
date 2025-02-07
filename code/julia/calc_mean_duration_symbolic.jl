@@ -29,58 +29,59 @@ A_mat = [-lQ+(1-pQ)*lQ       pQ*lQ               0     0
          (1-sigma)*(1-pP)*lP sigma*(1-pP)*lP     -lP   pP*lP
          (1-sigma)*(1-pG)*lG sigma*(1-pG)*lG     0     -lG]
 
-@variables b
-F_mat = [-b   0   0   0   0   0
-          0 -2b  2b   0   0   0
-          0   0 -2b   0   0   0
-          0   0   0 -3b  3b   0
-          0   0   0   0 -3b  3b
-          0   0   0   0   0 -3b]
-one_six = transpose([1 1 1 1 1 1])
-alpha_six = transpose([1/3 1/3 0 1/3 0 0])
-F_inv = simplify(inv(-F_mat))
 
-theta_F = transpose(alpha_six) * F_inv * one_six
-theta_F = theta_F[]
-simplify(theta_F)
+# @variables b
+# F_mat = [-b   0   0   0   0   0
+#           0 -2b  2b   0   0   0
+#           0   0 -2b   0   0   0
+#           0   0   0 -3b  3b   0
+#           0   0   0   0 -3b  3b
+#           0   0   0   0   0 -3b]
+# one_six = transpose([1 1 1 1 1 1])
+# alpha_six = transpose([1/3 1/3 0 1/3 0 0])
+# F_inv = simplify(inv(-F_mat))
 
-@variables lambda sigma1 sigma2
-D_mat = [-lambda (1-sigma1)*lambda 0
-          0      -lambda           (1-sigma2)*lambda
-          0      0                 -lambda]
+# theta_F = transpose(alpha_six) * F_inv * one_six
+# theta_F = theta_F[]
+# simplify(theta_F)
 
-one_three = transpose([1 1 1])
-alpha_three = transpose([1 0 0])
-D_inv = simplify(inv(-D_mat))
+# @variables lambda sigma1 sigma2
+# D_mat = [-lambda (1-sigma1)*lambda 0
+#           0      -lambda           (1-sigma2)*lambda
+#           0      0                 -lambda]
 
-theta_D = transpose(alpha_three) * D_inv * one_three
-theta_D = theta_D[]
-simplify(theta_D)
+# one_three = transpose([1 1 1])
+# alpha_three = transpose([1 0 0])
+# D_inv = simplify(inv(-D_mat))
 
-mu_theta_D = transpose(alpha_three) * inv(mu * I - D_mat) * one_three
-mu_theta_D = mu_theta_D[]
-simplify(mu_theta_D)
+# theta_D = transpose(alpha_three) * D_inv * one_three
+# theta_D = theta_D[]
+# simplify(theta_D)
+
+# mu_theta_D = transpose(alpha_three) * inv(mu * I - D_mat) * one_three
+# mu_theta_D = mu_theta_D[]
+# simplify(mu_theta_D)
           
-rowsums_D = -transpose(one_three) * transpose(D_mat)
+# rowsums_D = -transpose(one_three) * transpose(D_mat)
 
-tau_D = rowsums_D * inv(mu * I - D_mat) * alpha_three
-tau_D = tau_D[]
-simplify(tau_D)
+# tau_D = rowsums_D * inv(mu * I - D_mat) * alpha_three
+# tau_D = tau_D[]
+# simplify(tau_D)
 
-dist_D = transpose(alpha_three) * inv(mu * I - D_mat)
+# dist_D = transpose(alpha_three) * inv(mu * I - D_mat)
 
 
-@variables b1 b2 b3
-sigma_2 = 1 - ( (1 / (b2 * lambda)) * (1 - (mu + lambda)^2 * b1) * (lambda / (mu+lambda)) - (mu+lambda))
-sigma_1 = 1 - (( (mu + lambda) + (1 - sigma_2))^(-1)) * (1/lambda) * ((1/b1) - (mu+lambda)^2)
+# @variables b1 b2 b3
+# sigma_2 = 1 - ( (1 / (b2 * lambda)) * (1 - (mu + lambda)^2 * b1) * (lambda / (mu+lambda)) - (mu+lambda))
+# sigma_1 = 1 - (( (mu + lambda) + (1 - sigma_2))^(-1)) * (1/lambda) * ((1/b1) - (mu+lambda)^2)
 
-eq_1 = b1 - (1 + (1 - sigma1) * (lambda / (mu+lambda)) + (1-sigma1) * (1-sigma2) * (lambda / (mu+lambda))^2)^(-1)
-test_1 = simplify(substitute(eq_1, Dict([sigma1 => sigma_1, sigma2 => sigma_2])), expand = true)
+# eq_1 = b1 - (1 + (1 - sigma1) * (lambda / (mu+lambda)) + (1-sigma1) * (1-sigma2) * (lambda / (mu+lambda))^2)^(-1)
+# test_1 = simplify(substitute(eq_1, Dict([sigma1 => sigma_1, sigma2 => sigma_2])), expand = true)
 
-# mat_dynamic_lQ = [mu+lQ*KH/KB -lQ*KH/KB 0 0
-#        -f*(1-pL)*lL mu+lL-(1-f)*(1-pL)*lL -pL*lL 0
-#        -f*(1-pP)*lP -(1-f)*(1-pP)*lP mu+lP -pP*lP
-#        -f*(1-pG)*lG -(1-f)*(1-pG)*lG 0 mu+lG]
+# # mat_dynamic_lQ = [mu+lQ*KH/KB -lQ*KH/KB 0 0
+# #        -f*(1-pL)*lL mu+lL-(1-f)*(1-pL)*lL -pL*lL 0
+# #        -f*(1-pP)*lP -(1-f)*(1-pP)*lP mu+lP -pP*lP
+# #        -f*(1-pG)*lG -(1-f)*(1-pG)*lG 0 mu+lG]
 
 neg_mat = -A_mat
 # neg_mat = [-(mu+lQ) lQ 0 0
@@ -94,6 +95,53 @@ alpha = transpose([1 0 0 0])
 one_vec = transpose([1 1 1 1])
 
 row_sums = A_mat * one_vec
+row_sums = simplify_matrix(row_sums)
+
+@variables gV pR pE mu eta betaH[1:4] betaB[1:4] lambdaH[1:4] lambdaB[1:4]
+
+tilde_A = hcat(A_mat[:,1], A_mat[:,2], A_mat[:,3], A_mat[:,4], -row_sums)
+tilde_A = vcat(tilde_A, [0 0 0 0 -gV])
+
+tilde_alpha = transpose([1 0 0 0 0])
+tilde_ones = transpose([1 1 1 1 1])
+tilde_row_sums = simplify_matrix(tilde_A * tilde_ones)
+
+gammaI = simplify_matrix(mu * I - transpose(A_mat) - pR * alpha * transpose(row_sums))
+GammaI = simplify_matrix(inv(gammaI))
+tilde_gammaI = simplify_matrix(mu * I - transpose(tilde_A) - pR * tilde_alpha * transpose(tilde_row_sums))
+tilde_GammaI = simplify_matrix(inv(tilde_gammaI))
+
+gammaE = ((eta + mu) * I - transpose(A_mat) - pE * alpha * transpose(row_sums))
+GammaE = (inv(gammaE))
+tilde_gammaE = ((eta + mu) * I - transpose(tilde_A) - pE * tilde_alpha * transpose(tilde_row_sums))
+tilde_GammaE = (inv(tilde_gammaE))
+
+tauE_first = simplify_matrix( eta * I + pE * pR * alpha * transpose(row_sums))
+tauE = tauE_first * GammaE
+tilde_tauE_first = simplify_matrix( eta * I + pE * pR * tilde_alpha * transpose(tilde_row_sums))
+tilde_tauE = tilde_tauE_first * tilde_GammaE
+
+
+BetaH = diagm([betaH[1], betaH[2], betaH[3], betaH[4]])
+BetaB = diagm([betaB[1], betaB[2], betaB[3], betaB[4]])
+LambdaH = diagm([lambdaH[1], lambdaH[2], lambdaH[3], lambdaH[4]])
+LambdaB = diagm([lambdaB[1], lambdaB[2], lambdaB[3], lambdaB[4]])
+tilde_BetaH = diagm([betaH[1], betaH[2], betaH[3], betaH[4], 0])
+tilde_BetaB = diagm([betaB[1], betaB[2], betaB[3], betaB[4], 0])
+tilde_LambdaH = diagm([lambdaH[1], lambdaH[2], lambdaH[3], lambdaH[4], 0])
+tilde_LambdaB = diagm([lambdaB[1], lambdaB[2], lambdaB[3], lambdaB[4], 0])
+
+@variables C_scalar B[1:5]
+
+B_prime = [B[1], B[2], B[3], B[4]]
+tilde_B_prime = [B[1], B[2], B[3], B[4], B[5]]
+
+R0 = (transpose(one_vec) * BetaH * LambdaH * GammaI * tauE * BetaB * LambdaB * B_prime)[]
+tilde_R0 = (transpose(tilde_ones) * tilde_BetaH * tilde_LambdaH * tilde_GammaI * tilde_tauE * tilde_BetaB * tilde_LambdaB * tilde_B_prime)[]
+
+R0_test = simplify(R0 - tilde_R0)
+
+diff_test = simplify(R0 - R0_test)
 
 # # Alternate calculation
 # pre_vec = transpose(alpha) * temp_inv
