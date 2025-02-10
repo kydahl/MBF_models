@@ -6,7 +6,8 @@ library(latex2exp)
 library(cols4all)
 library(cowplot)
 library(expm)
-
+library(matlib)
+library(scales)
 
 # Load data ----
 Full_df = read_rds("data/GCD_R0_data.rds") %>% 
@@ -76,7 +77,7 @@ shift_legend <- function(p) {
 # Plot parameters ----
 
 # Colors for the model types
-type_colors = c("black", c4a("cols4all.line7",4))
+type_colors = c("black", c4a("brewer.dark2",4))
 
 # 1. Pdfs of distributions ----
 
@@ -93,6 +94,8 @@ Fig1_labeller <- function(value) TeX(paste0("Mean of ", as.double(value)/1440, "
 # For mechanistic model, we can't guarantee these values so choose the closest ones
 Mech_df_filtered <- Full_df %>% 
   filter(`Model type` %in% c("Mechanistic")) %>% 
+  filter(varied_parameter == "lQ") %>% # the curves look almost identical, so just look at one
+  # mutate(Type = "Mechanistic (lQ, pP, pG)") %>% 
   group_by(`Model type`, varied_parameter) %>% 
   filter(theta %in% sapply(theta_vals, function(x) theta[which.min(abs(theta - x))])) %>%
   ungroup()
@@ -101,6 +104,12 @@ Mech_df_filtered <- Full_df %>%
 Figure1_df <- Full_df %>% 
   # Remove the Mechanistic rows, which are handled separately
   filter(!(`Model type` %in% c("Mechanistic"))) %>% 
+  # Combine Standard and Exponential since they are equivalent in this case
+  mutate(Type = if_else(
+    Type %in% c("Standard", "Exponential"),
+    "Standard / Exponential",
+    Type)
+  ) %>% 
   # Just keep chosen theta values
   filter(theta %in% theta_vals) %>% 
   # Add the filtered Mechanistic rows
@@ -115,72 +124,99 @@ Figure1_df <- Full_df %>%
   cross_join(tibble(x = seq(0, pdf_max, length.out = resolution))) %>% 
   # Calculate values of the pdf
   rowwise() %>% 
-  mutate(pdf_val = PH_pdf(x, A_matrix, v_alpha)) #%>% 
-  # Cut off when pdf_val is really small
-  # group_by(Type, closest_theta)# %>% 
+  mutate(pdf_val = PH_pdf(x, A_matrix, v_alpha))
+# Cut off when pdf_val is really small
+# group_by(Type, closest_theta)# %>% 
 # filter(pdf_val > 1e-5) %>% 
 
-Fig1_color_vals = c("Standard" = "black",
-                    "Exponential" = c4a("cols4all.line7", 4)[2],
-                    "Empirical" = c4a("cols4all.line7", 4)[1],
-                    "Phenomenological" = c4a("cols4all.line7", 4)[4],
-                    "Mechanistic (lQ)" = c4a("cols4all.line7", 4)[3],
-                    "Mechanistic (pP)" = c4a("cols4all.line7", 4)[3],
-                    "Mechanistic (pG)" = c4a("cols4all.line7", 4)[3])
+Figure1_df$Type = factor(
+  Figure1_df$Type,
+  levels = c("Empirical", "Phenomenological", "Mechanistic (lQ, pP, pG)","Standard / Exponential"))
 
-Fig1_lty_vals = c("Standard" = 1,
-                  "Exponential" = 1,
+Figure1_labels = c(expression("Standard / Exponential"), expression("Empirical"), expression("Phenomenological"), 
+                   expression("Mechanistic " (lambda[Q]))
+)
+
+Fig1_color_vals = c("Standard / Exponential" = "black",
+                    # "Exponential" = c4a("brewer.dark2", 4)[2],
+                    "Empirical" = c4a("brewer.dark2", 3)[1],
+                    "Phenomenological" = c4a("brewer.dark2", 3)[2],
+                    "Mechanistic (lQ, pP, pG)" = c4a("brewer.dark2", 3)[3]#,
+                    # "Mechanistic (lQ)" = c4a("brewer.dark2", 4)[3],
+                    # "Mechanistic (pP)" = c4a("brewer.dark2", 4)[3],
+                    # "Mechanistic (pG)" = c4a("brewer.dark2", 4)[3]
+)
+
+Fig1_lty_vals = c("Standard / Exponential" = 1,
+                  # "Exponential" = 1,
                   "Empirical" = 1,
                   "Phenomenological" = 1,
                   "Mechanistic (lQ)" = 2,
                   "Mechanistic (pP)" = 3,
                   "Mechanistic (pG)" = 4)
 
-Figure1 = Figure1_df %>% 
-  ggplot(aes(x = x / 1440, y = pdf_val, color = Type, lty = Type)) +
-  geom_line(
-    lwd = 1,
+
+Figure1 = Figure1_df %>%
+  ggplot(aes(x = x / 1440, y = pdf_val, color = Type)) +
+  geom_path(
+    lwd = 0.75,
     alpha = 0.9
-    ) + 
+  ) + 
   # # Add line showing the means of the distributions (which are pretty much equal)
   # geom_vline(
-  #   data = Figure1_df %>% 
-  #     select(-c(x, pdf_val)) %>% unique() %>% 
-  #     # group_by(`Model type`, closest_theta) %>% 
+  #   data = Figure1_df %>%
+  #     select(-c(x, pdf_val)) %>% unique() %>%
+  #     # group_by(`Model type`, closest_theta) %>%
   #     rowwise() %>%
   #     mutate(mean = PH_mean(A_matrix, v_alpha)),
-  #   aes(xintercept = mean / 1440, color = `Model type`),
+  #   aes(xintercept = mean / 1440, color = Type),
   #   lty = 2, alpha = 0.1, lwd = 2) +
   facet_wrap( ~ closest_theta,
               labeller = as_labeller(Fig1_labeller),
               ncol = 1,
-              scales = "free") +
+              scales = "free_y") +
   scale_x_continuous(
     name = "Gonotrophic cycle duration [Days]",
     limits =  c(0, 3),
-    expand = c(0,0),
+    expand = c(0.01,0),
     breaks = seq(0,10)
   ) +
   scale_y_continuous(
-    name = "",
+    name = "Density",
     limits = c(0, NA),
     expand = c(0.01,0)
   ) +
-  scale_linetype_manual(
-    name = "Model type",
-    values = Fig1_lty_vals,
-    breaks = unique(Figure1_df$Type),
-    # labels = c("", "lQ", "pP", "pG" ),
-  ) +
+  # scale_linetype_manual(
+  #   name = "Model type",
+  #   values = Fig1_lty_vals,
+  #   breaks = unique(Figure1_df$Type)
+  # ) +
   scale_color_manual(
-    name = "Model type",
+    name = "Model type:",
     values = Fig1_color_vals,
-    breaks = unique(Figure1_df$Type)
+    breaks = unique(Figure1_df$Type),
+    labels = Figure1_labels
+    # labels = scales::label_parse()
   ) +
-  theme_minimal(18)
+  guides(
+    color = guide_legend(
+      position = "top",
+      direction = "horizontal",
+      nrow = 2
+    )
+  ) +
+  theme_half_open(11) +
+  theme(
+    strip.background = element_rect(color = "white", fill = "white"),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
 
 Figure1
-ggsave("figures/Figure1.png", Figure1, width = 20, height = 8, units = "in")
+
+# shift_legend(Figure1)
+
+ggsave("figures/Figure1.pdf", Figure1, width = 4.25, height = 3.25 * 9/6.5, units = "in")
 
 # 2. R0 vs. standard biting rates ----
 
@@ -188,32 +224,87 @@ ggsave("figures/Figure1.png", Figure1, width = 20, height = 8, units = "in")
 # Distinguish types by color and linetype (make a backup with linetype)
 # Make sure the labels are nice
 
-Figure2 <- Full_df %>%
+Fig2_color_vals = c("Standard" = "black",
+                    "Exponential" = "black",
+                    "Empirical" = c4a("brewer.dark2", 3)[1],
+                    "Phenomenological" = c4a("brewer.dark2", 3)[2],
+                    "Mechanistic~(lambda[Q])" = c4a("brewer.dark2", 3)[3],
+                    "Mechanistic~(p[P])" = c4a("brewer.dark2", 3)[3],
+                    "Mechanistic~(p[G])" = c4a("brewer.dark2", 3)[3])
+
+Fig2_lty_vals = c("Standard" = 1,
+                  "Exponential" = 2,
+                  "Empirical" = 1,
+                  "Phenomenological" = 1,
+                  "Mechanistic~(lambda[Q])" = 2,
+                  "Mechanistic~(p[P])" = 3,
+                  "Mechanistic~(p[G])" = 4)
+
+Figure2_df = Full_df %>%
   filter(theta > (1/2) * 1440) %>%
+  mutate(Type = case_when(
+    Type == "Mechanistic (lQ)" ~ "Mechanistic~(lambda[Q])",
+    Type == "Mechanistic (pP)" ~ "Mechanistic~(p[P])",
+    Type == "Mechanistic (pG)" ~ "Mechanistic~(p[G])",
+    TRUE ~ Type
+  ))
+
+Figure2_labels = c(expression("Standard"), expression("Exponential"), expression("Empirical"), expression("Phenomenological"), 
+                   expression("Mechanistic " (lambda[Q])), expression("Mechanistic " (p[P])),expression("Mechanistic " (p[G]))
+)
+
+
+
+Figure2 <- Figure2_df %>% 
   ggplot(aes(x = 1440 / theta, y = R0, color = Type, lty = Type)) +
-  geom_line(lwd = 2) +
-  geom_hline(aes(yintercept = 1), color = "red", linetype = 2) +
+  geom_hline(aes(yintercept = 1), color = "grey", lwd = 2) +
+  geom_line(lwd = 0.75) +
   scale_x_continuous(
-    name = TeX("Standard biting rate [Days$^{-1}$]")
+    name = TeX("Standard biting rate [Days$^{-1}$]"),
+    expand = c(0,0)
   ) +
   scale_y_continuous(
-    name = TeX("Basic reproduction number \\, [$R_0$]")
+    name = TeX("Basic reproduction number \\, [$R_0$]"),
+    expand = c(0,0)
   ) +
   scale_linetype_manual(
     name = "Model type:",
-    values = Fig1_lty_vals,
-    breaks = unique(Figure1_df$Type),
-    # labels = c("", "lQ", "pP", "pG" ),
+    values = Fig2_lty_vals,
+    breaks = unique(Figure2_df$Type),
+    labels = Figure2_labels
   ) +
   scale_color_manual(
     name = "Model type:",
-    values = Fig1_color_vals,
-    breaks = unique(Figure1_df$Type)
+    values = Fig2_color_vals,
+    breaks = unique(Figure2_df$Type),
+    labels = Figure2_labels
   ) +
-  theme_minimal(18)
+  theme_half_open(11) + 
+  theme(
+    legend.key.width = unit(0.4, "in")
+  )
 
 Figure2
-ggsave("figures/Figure2.png", Figure2, width = 20, height = 8, units = "in")
+
+ggsave("figures/Figure2.pdf", Figure2, width = 6.5, height = 3.25 * 9/6.5, units = "in")
+
+Figure2_alt <- Figure2 +
+  guides(
+    color = guide_legend(
+      position = "top",
+      direction = "horizontal",
+      nrow = 2,
+      byrow = T
+    ),
+    linetype = guide_legend(
+      position = "top",
+      direction = "horizontal",
+      nrow = 2,
+      byrow = T
+    )
+  )
+
+ggsave("figures/Figure2_alt.pdf", Figure2_alt, width = 7.5, height = 3.25 * 9/6.5, units = "in")
 
 # 3. R0 vs. mechanistic parameters ----
 
@@ -262,7 +353,7 @@ Figure3_df <- Mech_df %>%
   # Reduce the range for rates
   filter(!(parameter_type == "rate" & value >= (1/60))) %>% 
   right_join(nice_mech_labels)
-  
+
 Figure3_df$name <- factor(
   Figure3_df$name,
   levels = c("pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG"))
@@ -279,7 +370,7 @@ Figure3 <- Figure3_df %>%
     ncol = 5,
     labeller = labeller(nice_labels = label_parsed),
     scales = "free_x"
-    ) +
+  ) +
   scale_x_continuous(
     name = "Parameter value",
     expand = c(0,0)
@@ -294,10 +385,10 @@ Figure3 <- Figure3_df %>%
   scale_linetype_discrete(
     name = "Mosquito type:"
   ) +
-  theme_minimal(18)
-  
+  theme_half_open(18)
+
 shift_legend(Figure3)
-ggsave("figures/Figure3.png", shift_legend(Figure3), width = 20, height = 8, units = "in")
+ggsave("figures/Figure3.pdf", shift_legend(Figure3), width = 20, height = 8, units = "in")
 
 # Supplementary: theta vs. mechanistic parameters ----
 
@@ -326,9 +417,9 @@ Figure4 <- Figure3_df %>%
   scale_linetype_discrete(
     name = "Mosquito type:"
   ) +
-  theme_minimal(18)
+  theme_half_open(18)
 
 shift_legend(Figure4)
-ggsave("figures/SuppFigure.png", shift_legend(Figure4), width = 20, height = 8, units = "in")
+ggsave("figures/SuppFigure.pdf", shift_legend(Figure4), width = 20, height = 8, units = "in")
 # Distinguish parameters by color
 # Distinguish sets by linetype (flighty vs. persistent)
