@@ -273,7 +273,7 @@ get_mech_A <- function(lQ, pQ, pL, lL, pP, lP, pG, lG, sigma){
 mech_EpiTerms <- function(v_B_star, lP, lG, varied_parameter) {
   
   if (varied_parameter == "pG") {
-    correction_for_plot = 0.125
+    correction_for_plot = 0.2
   } else {
     correction_for_plot = 1
   }
