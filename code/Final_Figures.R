@@ -286,7 +286,7 @@ Figure2 <- Figure2_df %>%
 
 Figure2
 
-ggsave("figures/Figure2.pdf", Figure2, width = 6.5, height = 3.25 * 9/6.5, units = "in")
+ggsave("figures/Figure2.pdf", Figure2, width = 7.5, height = 3.25 * 9/6.5, units = "in")
 
 Figure2_alt <- Figure2 +
   guides(
