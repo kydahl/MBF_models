@@ -3178,32 +3178,16 @@ Thus the eigenvalues of
 
 \begin_inset Formula 
 \begin{align*}
+\boldsymbol{\Gamma}_{I} & =\left[\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right]^{-1}\\
 \vec{1}^{T}\boldsymbol{\Gamma}_{I}\vec{\alpha} & =\vec{1}^{T}\left[\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right]^{-1}\vec{\alpha}\\
-\vec{1}^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha} & =\vec{1}^{T}\left[\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right]^{-1}\vec{\alpha}\\
-\vec{1}^{T}\boldsymbol{\tau}_{E}\vec{\alpha} & =\eta\left(\vec{1}^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}\right)+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\left(-\boldsymbol{A}\vec{1}\right)^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}\right)
+\boldsymbol{\tau}_{E} & =\left\{ \eta\boldsymbol{I}+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right\} \boldsymbol{\Gamma}_{E}\\
+\vec{1}^{T}\boldsymbol{\tau}_{E}\vec{\alpha} & =\vec{1}^{T}\left\{ \eta\boldsymbol{I}+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right\} \boldsymbol{\Gamma}_{E}\vec{\alpha}\\
+\vec{1}^{T}\boldsymbol{\tau}_{E}\vec{\alpha} & =\eta\vec{1}^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(-\boldsymbol{A}\vec{1}\right)^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}
 \end{align*}
 
 \end_inset
 
-where 
-\begin_inset Formula $\vec{1}^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}$
-\end_inset
 
- is the average amount of time an exposed mosquito spends in the biting compartments and 
-\begin_inset Formula $\left(-\boldsymbol{A}\vec{1}\right)^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}$
-\end_inset
-
- is the probability that an exposed mosquito survives the biting stages.
- Thus,
- 
-\begin_inset Formula $\eta\left(\vec{1}^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}\right)$
-\end_inset
-
- is the probability that an exposed mosquito becomes infectious while in the biting stages and 
-\begin_inset Formula $\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\left(-\boldsymbol{A}\vec{1}\right)^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}\right)$
-\end_inset
-
- is the probability that an exposed mosquito exits the biting stages (without dying or becoming infectious) and then becomes infectious in either the oviposition or resting stage.
 \begin_inset Formula 
 \begin{align*}
 \boldsymbol{\Gamma}_{I}^{T} & =\left[\left(\mu\boldsymbol{I}-\boldsymbol{A}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(-\boldsymbol{A}\vec{1}\right)\vec{\alpha}^{T}\right]^{-1}\\

@@ -317,6 +317,8 @@ Figure2_alt <- Figure2 +
     )
   )
 
+Figure2_alt
+
 ggsave("figures/Figure2_alt.pdf", Figure2_alt, width = 7.5, height = 3.25 * 9/6.5, units = "in")
 
 # 3. R0 vs. mechanistic parameters ----
@@ -401,25 +403,26 @@ shift_legend(Figure3)
 ggsave("figures/Figure3.pdf", shift_legend(Figure3), width = 12, height = 3.25 * 9/6.5, units = "in")
 
 # 4. PRCCs of R0 against mechanistic parameters ----
-# Load in data
-LHS_data = read_csv("data/julia_outputs.csv.gz")
+# # Load in data
+# LHS_data = read_csv("data/julia_outputs.csv.gz")
+# 
+# rank_data = LHS_data %>% 
+#   group_by(type) %>% 
+#   mutate(across(lQ:R0, ~ rank(.x)))
+# 
+# PRCC_data <- rank_data %>%
+#   pivot_longer(cols = lQ:pG, names_to = "input", values_to = "input_value") %>%
+#   pivot_longer(cols = GCD:R0, names_to = "output", values_to = "output_value") %>%
+#   group_by(type, input, output) %>%
+#   summarise(
+#     PRCC = cor(input_value, output_value),
+#     .groups = "drop"
+#   )
+# 
+# # Save the final PRCC results
+# write_csv(PRCC_data, "data/PRCC_data.csv")
 
-rank_data = LHS_data %>% 
-  group_by(type) %>% 
-  mutate(across(lQ:R0, ~ rank(.x)))
-
-PRCC_data <- rank_data %>%
-  pivot_longer(cols = lQ:pG, names_to = "input", values_to = "input_value") %>%
-  pivot_longer(cols = GCD:R0, names_to = "output", values_to = "output_value") %>%
-  group_by(type, input, output) %>%
-  summarise(
-    PRCC = cor(input_value, output_value),
-    .groups = "drop"
-  )
-
-# Save the final PRCC results
-write_csv(PRCC_data, "data/PRCC_data.csv")
-
+# Load in final PRCC results
 PRCC_data <- read_csv("data/PRCC_data.csv")
 
 plot_data <- PRCC_data %>% 
@@ -480,12 +483,12 @@ PRCC_plots <- plot_data %>%
   scale_fill_manual(
     name = "Parameter set:",
     values = c(c4a("met.juarez",3))#, "black")
-    ) +
+  ) +
   scale_x_discrete(
     name = ""
-    ) +
+  ) +
   scale_y_continuous(
-    TeX("Partial Rank Correlation Coefficients"),
+    TeX("Partial Rank Correlation Coefficient"),
     limits = c(-1,1)
   ) +
   # theme_minimal_vgrid(11) +
@@ -501,12 +504,89 @@ PRCC_plots <- plot_data %>%
     legend.position = "top",
     legend.direction = "horizontal",
     # legend.justification = "center"
-    )
+  )
 
 PRCC_plots
 
-# [] Make a plot with just R0 as an output, comparing flighty/persistent baselines
 ggsave("figures/Figure4.pdf", PRCC_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
+
+PRCC_plots_row <- plot_data %>% 
+  arrange(input) %>% 
+  # filter(!(input %in% c("pP", "pG", "lP", "lG"))) %>% 
+  # filter(output == "R0") %>% 
+  filter(output %in% c("N_offspring","R0")) %>%
+  # filter(type %in% c("flighty", "persistent")) %>% 
+  ggplot(aes(x = Label, y = PRCC, fill = type_label)) +
+  geom_col(position = "dodge") +
+  # Add light grey lines to divide up categories
+  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
+             color = "grey60", linetype = "dashed", linewidth = 0.25) +
+  # Add zero line
+  geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
+  facet_wrap(~output_label, nrow = 1, scales = "free_x") +
+  scale_fill_manual(
+    name = "Parameter set:",
+    values = c(c4a("met.juarez",3))#, "black")
+  ) +
+  scale_x_discrete(
+    name = ""
+  ) +
+  scale_y_continuous(
+    TeX("Partial Rank Correlation Coefficient"),
+    limits = c(-1,1)
+  ) +
+  theme_half_open(11) +
+  theme(
+    axis.text.x = element_text(angle = 50, hjust = 1),
+    strip.background = element_rect(color = "white", fill = "white"),
+    legend.key.width = unit(0.4, "in"),
+    legend.position = "top",
+    legend.direction = "horizontal",
+    # legend.justification = "center"
+  )
+
+PRCC_plots_row
+
+ggsave("figures/Figure4_row.pdf", PRCC_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
+
+PRCC_plots_max_only <- plot_data %>% 
+  # Just keep maximum variation for now
+  filter(type == "max") %>%
+  arrange(input) %>% 
+  filter(output %in% c("N_offspring","R0")) %>%
+  # Plot
+  ggplot(aes(x = Label, y = PRCC, fill = output_label)) +
+  geom_col(position = "dodge") +
+  # Add light grey lines to divide up categories
+  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
+             color = "grey60", linetype = "dashed", linewidth = 0.25) +
+  # Add zero line
+  geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
+  # facet_wrap(~type_label, ncol = 1, scales = "free_y") +
+  scale_fill_manual(
+    name = "",
+    values = c(c4a("met.juarez",2))
+  ) +
+  scale_x_discrete(
+    name = ""
+  ) +
+  scale_y_continuous(
+    TeX("Partial Rank Correlation Coefficient"),
+    limits = c(-1,1)
+  ) +
+  theme_half_open(11) +
+  theme(
+    axis.text.x = element_text(angle = 50, hjust = 1),
+    strip.background = element_rect(color = "white", fill = "white"),
+    legend.key.width = unit(0.4, "in"),
+    legend.position = "top",
+    legend.direction = "horizontal",
+    # legend.justification = "center"
+  )
+
+PRCC_plots_max_only
+
+ggsave("figures/Figure4_max_only.pdf", PRCC_plots_max_only, width = 7, height = 3.25 * 9/6.5, units = "in")
 
 # Supplementary: theta vs. mechanistic parameters ----
 SuppFigure1 <- Figure3_df %>%
@@ -524,7 +604,7 @@ SuppFigure1 <- Figure3_df %>%
     expand = c(0,0)
   ) +
   scale_y_continuous(
-    name = TeX("Gonotrophic cylce duration \\, [Days]"),
+    name = TeX("Gonotrophic cycle duration \\, [Days]"),
     expand = c(0,0)
   ) +
   scale_color_discrete(

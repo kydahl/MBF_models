@@ -2634,7 +2634,7 @@ This system of equations clearly has a parasite-free equilibria given by
 
  and that this equilibrium is locally asymptotically stable in the absence of parasites.
  We then define the parasite-free equilibrium to be 
-\begin_inset Formula $\left(S_{H},I_{H},R_{H},J,\vec{S},\vec{E},\vec{I},S_{R},E_{R},I_{R}\right)=\left(K_{H},0,0,J^{\cdot},\vec{B^{*}},\vec{0},\vec{0},V^{*},0,0,R^{*},0,0\right)$
+\begin_inset Formula $\left(S_{H},I_{H},R_{H},J,\vec{S}_{B},\vec{E}_{B},\vec{I}_{B},S_{V},E_{V},I_{V}S_{R},E_{R},I_{R}\right)=\left(K_{H},0,0,J^{\cdot},\vec{B^{*}},\vec{0},\vec{0},V^{*},0,0,R^{*},0,0\right)$
 \end_inset
 
 .
@@ -2672,6 +2672,14 @@ This system of equations clearly has a parasite-free equilibria given by
 .
  This allows us to simplify the system substantially to 
 \lang american
+
+\begin_inset Formula 
+\[
+\left(I_{H},R_{H},\vec{E}_{B},\vec{I}_{B},E_{V},I_{V}E_{R},I_{R}\right)=\left(0,0,\vec{0},\vec{0},0,0,0,0\right).
+\]
+
+\end_inset
+
 
 \begin_inset Formula 
 \begin{align*}
@@ -2876,533 +2884,357 @@ Let
 
 \end_inset
 
-To write 
-\begin_inset Formula $\boldsymbol{F}$
-\end_inset
-
- and 
+The inverse of 
 \begin_inset Formula $\boldsymbol{V}$
 \end_inset
 
- in block-matrix form,
- we define the matrices
+ can be calculated formally by re-writing 
+\begin_inset Formula $\boldsymbol{V}$
+\end_inset
+
+ in block-matrix form.
+\begin_inset Formula 
+\begin{align*}
+\boldsymbol{V} & =\begin{bmatrix}\begin{bmatrix}\left(\mu_{H}+\gamma_{H}\right) & 0\\
+-\gamma_{H} & \mu_{H}
+\end{bmatrix} & \boldsymbol{0}_{2\times2n} & \boldsymbol{0}_{2\times4}\\
+\boldsymbol{0}_{2n\times2} & \begin{bmatrix}\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right) & \boldsymbol{0}_{n\times n}\\
+-\eta\boldsymbol{I} & \left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)
+\end{bmatrix} & \begin{bmatrix}\boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1} & -\gamma_{R}\vec{\alpha} & \boldsymbol{0}_{n\times1}\\
+\boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1} & -\gamma_{R}\vec{\alpha}
+\end{bmatrix}\\
+\boldsymbol{0}_{4\times2} & \begin{bmatrix}-\left(-\boldsymbol{A}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n}\\
+\boldsymbol{0}_{1\times n} & -\left(-\boldsymbol{A}\vec{1}\right)^{T}\\
+\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n}\\
+\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n}
+\end{bmatrix} & \begin{bmatrix}\left(\mu+\gamma_{V}+\eta\right) & 0 & 0 & 0\\
+-\eta & \left(\mu+\gamma_{V}\right) & 0 & 0\\
+-\gamma_{V} & 0 & \left(\mu+\gamma_{R}+\eta\right) & 0\\
+0 & -\gamma_{V} & -\eta & \left(\mu+\gamma_{R}\right)
+\end{bmatrix}
+\end{bmatrix}\\
+\boldsymbol{V} & =\begin{bmatrix}\boldsymbol{V}_{H} & \boldsymbol{0}_{2\times2n+2} & \boldsymbol{0}_{2\times4}\\
+\boldsymbol{0}_{2n+2\times2} & \boldsymbol{V}_{BB} & \boldsymbol{V}_{RB}\\
+\boldsymbol{0}_{4\times2} & \boldsymbol{V}_{BV} & \boldsymbol{V}_{VR}
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+where
 \begin_inset Formula 
 \begin{align*}
 \boldsymbol{V}_{H} & =\begin{bmatrix}\left(\mu_{H}+\gamma_{H}\right) & 0\\
 -\gamma_{H} & \mu_{H}
 \end{bmatrix}\\
-\boldsymbol{V}_{B} & =\begin{bmatrix}\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right) & \boldsymbol{0}_{n\times n} & \boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1}\\
--\eta\boldsymbol{I} & \left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right) & \boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1}\\
--\left(-\boldsymbol{A}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n} & \left(\mu+\gamma_{V}+\eta\right) & 0\\
-\boldsymbol{0}_{1\times n} & -\left(-\boldsymbol{A}\vec{1}\right)^{T} & -\eta & \left(\mu+\gamma_{V}\right)
+\boldsymbol{V}_{BB} & =\begin{bmatrix}\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right) & \boldsymbol{0}_{n\times n}\\
+-\eta\boldsymbol{I} & \left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)
 \end{bmatrix}\\
-\boldsymbol{V}_{V} & =\begin{bmatrix}\left(\mu+\gamma_{R}+\eta\right) & 0\\
--\eta & \left(\mu+\gamma_{R}\right)
+\boldsymbol{V}_{VR} & =\begin{bmatrix}\left(\mu+\gamma_{V}+\eta\right) & 0 & 0 & 0\\
+-\eta & \left(\mu+\gamma_{V}\right) & 0 & 0\\
+-\gamma_{V} & 0 & \left(\mu+\gamma_{R}+\eta\right) & 0\\
+0 & -\gamma_{V} & -\eta & \left(\mu+\gamma_{R}\right)
 \end{bmatrix}\\
-\boldsymbol{V}_{RB} & =\begin{bmatrix}-\gamma_{R}\vec{\alpha} & \boldsymbol{0}_{n\times1}\\
-\boldsymbol{0}_{n\times1} & -\gamma_{R}\vec{\alpha}\\
-0 & 0\\
-0 & 0
+\boldsymbol{V}_{RB} & =\begin{bmatrix}\boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1} & -\gamma_{R}\vec{\alpha} & \boldsymbol{0}_{n\times1}\\
+\boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1} & -\gamma_{R}\vec{\alpha}
 \end{bmatrix}\\
-\boldsymbol{V}_{VR} & =\begin{bmatrix}\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & -\gamma_{V} & 0\\
-\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & 0 & -\gamma_{V}
+\boldsymbol{V}_{BV} & =\begin{bmatrix}-\left(-\boldsymbol{A}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n}\\
+\boldsymbol{0}_{1\times n} & -\left(-\boldsymbol{A}\vec{1}\right)^{T}\\
+\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n}\\
+\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n}
 \end{bmatrix}
 \end{align*}
 
 \end_inset
 
-and
-\begin_inset Formula 
-\begin{align*}
-\boldsymbol{F}_{VH} & =\begin{bmatrix}\boldsymbol{0}_{1\times n} & \left(\frac{K_{H}}{K_{B}}\right)\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H} & 0 & 0\\
-\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & 0 & 0
-\end{bmatrix}\\
-\boldsymbol{F}_{HV} & =\begin{bmatrix}\frac{1}{K_{H}}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\vec{B}^{*} & \boldsymbol{0}_{n\times1}\\
-\boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1}\\
-0 & 0\\
-0 & 0
-\end{bmatrix}
-\end{align*}
-
+Similarly,
+ the matrix 
+\begin_inset Formula $\boldsymbol{F}$
 \end_inset
 
-so that
-\begin_inset Formula 
-\[
-\boldsymbol{F}=\begin{bmatrix}\boldsymbol{0}_{2\times2} & \boldsymbol{F}_{VH} & \boldsymbol{0}_{2\times2}\\
-\boldsymbol{F}_{HV} & \boldsymbol{0}_{2n+2\times2n+2} & \boldsymbol{0}_{2n+2\times2}\\
-\boldsymbol{0}_{2\times2} & \boldsymbol{0}_{2\times2n+2} & \boldsymbol{0}_{2\times2}
-\end{bmatrix}
-\]
-
-\end_inset
-
-and
-\begin_inset Formula 
-\[
-\boldsymbol{V}=\begin{bmatrix}\boldsymbol{V}_{H} & \boldsymbol{0}_{2\times2n+2} & \boldsymbol{0}_{2\times2}\\
-\boldsymbol{0}_{2n+2\times2} & \boldsymbol{V}_{B} & \boldsymbol{V}_{RB}\\
-\boldsymbol{0}_{2\times2} & \boldsymbol{V}_{VR} & \boldsymbol{V}_{V}
-\end{bmatrix}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-In order to calculate 
-\begin_inset Formula $\boldsymbol{V}^{-1}$
-\end_inset
-
-,
- we consider the inverse of 
+ can be re-written in block-matrix form to the block entries of 
 \begin_inset Formula $\boldsymbol{V}$
 \end_inset
 
- ins block matrix form:
-\begin_inset Formula 
-\begin{align*}
-\boldsymbol{V}^{-1} & =\begin{bmatrix}\boldsymbol{V}_{H}^{-1} & \boldsymbol{0}_{2\times2n+2} & \boldsymbol{0}_{2\times2}\\
-\boldsymbol{0}_{2n+2\times2} & \left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1} & -\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1}\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\\
-\boldsymbol{0}_{2\times2} & -\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1} & \boldsymbol{V}_{V}^{-1}+\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1}\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-We can now express 
-\begin_inset Formula $\boldsymbol{K}=\boldsymbol{F}\boldsymbol{V}^{-1}$
-\end_inset
-
-in block form as
-\begin_inset Formula 
-\begin{align*}
-\boldsymbol{K} & =\boldsymbol{F}\boldsymbol{V}^{-1}\\
-\boldsymbol{K} & =\begin{bmatrix}\boldsymbol{0}_{2\times2} & \boldsymbol{F}_{VH} & \boldsymbol{0}_{2\times2}\\
-\boldsymbol{F}_{HV} & \boldsymbol{0}_{2n+2\times2n+2} & \boldsymbol{0}_{2n+2\times2}\\
-\boldsymbol{0}_{2\times2} & \boldsymbol{0}_{2\times2n+2} & \boldsymbol{0}_{2\times2}
-\end{bmatrix}\begin{bmatrix}\boldsymbol{V}_{H}^{-1} & \boldsymbol{0}_{2\times2n+2} & \boldsymbol{0}_{2\times2}\\
-\boldsymbol{0}_{2n+2\times2} & \left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1} & -\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1}\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\\
-\boldsymbol{0}_{2\times2} & -\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1} & \boldsymbol{V}_{V}^{-1}+\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1}\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}
-\end{bmatrix}\\
-\boldsymbol{K} & =\begin{bmatrix}\boldsymbol{0}_{2\times2} & \boldsymbol{F}_{VH}\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1} & -\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1}\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\\
-\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1} & \boldsymbol{0}_{2n+2\times2n+2} & \boldsymbol{0}_{2n+2\times2}\\
-\boldsymbol{0}_{2\times2} & \boldsymbol{0}_{2\times2n+2} & \boldsymbol{0}_{2\times2}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-Then we can calculate the eigenvalues of 
-\begin_inset Formula $\boldsymbol{K}$
-\end_inset
-
- via
-\begin_inset Formula 
-\begin{align*}
-\left|\lambda\boldsymbol{I}-\boldsymbol{K}\right| & =\begin{vmatrix}\lambda\boldsymbol{I}_{2} & -\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1} & \boldsymbol{F}_{VH}\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1}\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\\
--\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1} & \lambda\boldsymbol{I}_{2n+2} & \boldsymbol{0}_{2n+2\times2}\\
-\boldsymbol{0}_{2\times2} & \boldsymbol{0}_{2\times2n+2} & \lambda\boldsymbol{I}_{2}
-\end{vmatrix}\\
-\left|\lambda\boldsymbol{I}-\boldsymbol{K}\right| & =\lambda^{2}\begin{vmatrix}\lambda\boldsymbol{I}_{2} & -\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1}\\
--\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1} & \lambda\boldsymbol{I}_{2n+2}
-\end{vmatrix}\\
-\left|\lambda\boldsymbol{I}-\boldsymbol{K}\right| & =\lambda^{2n+4}\det\left(\lambda\boldsymbol{I}_{2}-\frac{1}{\lambda}\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1}\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1}\right)\\
-\left|\lambda\boldsymbol{I}-\boldsymbol{K}\right| & =\lambda^{2n+2}\det\left(\lambda^{2}\boldsymbol{I}_{2}-\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1}\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1}\right)
-\end{align*}
-
-\end_inset
-
-Now we calculate the entries of the matrix 
-\begin_inset Formula $\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1}$
-\end_inset
-
 .
 \begin_inset Formula 
 \begin{align*}
-\boldsymbol{V}_{V}^{-1} & =\begin{bmatrix}\frac{1}{\mu+\gamma_{R}+\eta} & 0\\
-\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
+\boldsymbol{F} & =\begin{bmatrix}\boldsymbol{0}_{2\times2} & \begin{bmatrix}\boldsymbol{0}_{1\times n} & \left(\frac{K_{H}}{K_{B}}\right)\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\\
+\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n}
+\end{bmatrix} & \boldsymbol{0}_{2\times4}\\
+\begin{bmatrix}\frac{1}{K_{H}}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\vec{B}^{*} & \boldsymbol{0}_{n\times1}\\
+\boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1}
+\end{bmatrix} & \boldsymbol{0}_{2n\times2n} & \boldsymbol{0}_{2n\times4}\\
+\boldsymbol{0}_{4\times2} & \boldsymbol{0}_{4\times2n} & \boldsymbol{0}_{4\times4}
 \end{bmatrix}\\
-\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR} & =\begin{bmatrix}\frac{1}{\mu+\gamma_{R}+\eta} & 0\\
-\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
-\end{bmatrix}\begin{bmatrix}\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & -\gamma_{V} & 0\\
-\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & 0 & -\gamma_{V}
-\end{bmatrix}\\
-\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR} & =\begin{bmatrix}\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & -\gamma_{V}\frac{1}{\mu+\gamma_{R}+\eta} & 0\\
-\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & -\gamma_{V}\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & -\gamma_{V}\frac{1}{\mu+\gamma_{R}}
-\end{bmatrix}\\
-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR} & =\begin{bmatrix}-\gamma_{R}\vec{\alpha} & \boldsymbol{0}_{n\times1}\\
-\boldsymbol{0}_{n\times1} & -\gamma_{R}\vec{\alpha}\\
-0 & 0\\
-0 & 0
-\end{bmatrix}\begin{bmatrix}\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & -\gamma_{V}\frac{1}{\mu+\gamma_{R}+\eta} & 0\\
-\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & -\gamma_{V}\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & -\gamma_{V}\frac{1}{\mu+\gamma_{R}}
-\end{bmatrix}\\
-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR} & =\begin{bmatrix}\boldsymbol{0}_{n\times n} & \boldsymbol{0}_{n\times n} & \gamma_{V}\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha} & \boldsymbol{0}_{n\times1}\\
-\boldsymbol{0}_{n\times n} & \boldsymbol{0}_{n\times n} & \gamma_{V}\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha} & \gamma_{V}\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\\
-\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & 0 & 0\\
-\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & 0 & 0
-\end{bmatrix}\\
-\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR} & =\begin{bmatrix}\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right) & \boldsymbol{0}_{n\times n} & \boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1}\\
--\eta\boldsymbol{I} & \left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right) & \boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1}\\
--\left(-\boldsymbol{A}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n} & \left(\mu+\gamma_{V}+\eta\right) & 0\\
-\boldsymbol{0}_{1\times n} & -\left(-\boldsymbol{A}\vec{1}\right)^{T} & -\eta & \left(\mu+\gamma_{V}\right)
-\end{bmatrix}-\begin{bmatrix}\boldsymbol{0}_{n\times n} & \boldsymbol{0}_{n\times n} & \gamma_{V}\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha} & \boldsymbol{0}_{n\times1}\\
-\boldsymbol{0}_{n\times n} & \boldsymbol{0}_{n\times n} & \gamma_{V}\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha} & \gamma_{V}\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\\
-\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & 0 & 0\\
-\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & 0 & 0
-\end{bmatrix}\\
-\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR} & =\begin{bmatrix}\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right) & \boldsymbol{0}_{n\times n} & -\gamma_{V}\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha} & \boldsymbol{0}_{n\times1}\\
--\eta\boldsymbol{I} & \left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right) & -\gamma_{V}\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha} & -\gamma_{V}\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\\
--\left(-\boldsymbol{A}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n} & \left(\mu+\gamma_{V}+\eta\right) & 0\\
-\boldsymbol{0}_{1\times n} & -\left(-\boldsymbol{A}\vec{1}\right)^{T} & -\eta & \left(\mu+\gamma_{V}\right)
+\boldsymbol{F} & =\begin{bmatrix}\boldsymbol{0}_{2\times2} & \boldsymbol{F}_{VH} & \boldsymbol{0}_{2\times4}\\
+\boldsymbol{F}_{HV} & \boldsymbol{0}_{2n\times2n} & \boldsymbol{0}_{2n\times4}\\
+\boldsymbol{0}_{4\times2} & \boldsymbol{0}_{4\times2n} & \boldsymbol{0}_{4\times4}
 \end{bmatrix}
 \end{align*}
 
 \end_inset
 
+where
+\end_layout
 
+\begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
-\boldsymbol{F}_{VH}\boldsymbol{V}_{V}^{-1} & =\begin{bmatrix}\boldsymbol{0}_{1\times n} & \left(\frac{K_{H}}{K_{B}}\right)\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H} & 0 & 0\\
-\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n} & 0 & 0
-\end{bmatrix}\begin{bmatrix}\boldsymbol{X}_{1} & \boldsymbol{X}_{2}\\
-\boldsymbol{X}_{3} & \boldsymbol{X}_{4}
-\end{bmatrix}\\
-\left[\boldsymbol{F}_{VH}\boldsymbol{V}_{V}^{-1}\right]_{2\times2n+2} & =\begin{bmatrix}\begin{bmatrix}\boldsymbol{0}_{1\times n} & \frac{K_{H}}{K_{B}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\end{bmatrix}\boldsymbol{X}_{1} & \begin{bmatrix}\boldsymbol{0}_{1\times n} & \frac{K_{H}}{K_{B}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\end{bmatrix}\boldsymbol{X}_{2}\\
-\boldsymbol{0}_{1\times2n} & \boldsymbol{0}_{1\times2}
+\boldsymbol{F}_{VH} & =\begin{bmatrix}\boldsymbol{0}_{1\times n} & \left(\frac{K_{H}}{K_{B}}\right)\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\\
+\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n}
+\end{bmatrix},\boldsymbol{F}_{HV}=\begin{bmatrix}\frac{1}{K_{H}}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\vec{B}^{*} & \boldsymbol{0}_{n\times1}\\
+\boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1}
 \end{bmatrix}
 \end{align*}
 
 \end_inset
 
+The inverses of 
+\begin_inset Formula $\boldsymbol{V}_{H}$
+\end_inset
 
+ and 
+\begin_inset Formula $\boldsymbol{V}_{VR}$
+\end_inset
+
+ are trivial.
+ We can formally write the inverse of 
+\begin_inset Formula $\boldsymbol{V}$
+\end_inset
+
+ as
 \begin_inset Formula 
 \begin{align*}
-\boldsymbol{F}_{VH}\boldsymbol{V}_{V}^{-1}\boldsymbol{F}_{HV} & =\begin{bmatrix}\begin{bmatrix}\boldsymbol{0}_{1\times n} & \frac{K_{H}}{K_{B}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\end{bmatrix}\boldsymbol{X}_{1} & \begin{bmatrix}\boldsymbol{0}_{1\times n} & \frac{K_{H}}{K_{B}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\end{bmatrix}\boldsymbol{X}_{2}\\
-\boldsymbol{0}_{1\times2n} & \boldsymbol{0}_{1\times2}
-\end{bmatrix}\begin{bmatrix}\frac{1}{K_{H}}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\vec{B}^{*} & \boldsymbol{0}_{n\times1}\\
-\boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1}\\
-0 & 0\\
-0 & 0
-\end{bmatrix}\\
-\left[\boldsymbol{F}_{VH}\boldsymbol{V}_{V}^{-1}\boldsymbol{F}_{HV}\right]_{2\times2} & =\begin{bmatrix}\begin{bmatrix}\boldsymbol{0}_{1\times n} & \frac{K_{H}}{K_{B}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\end{bmatrix}\boldsymbol{X}_{1}\begin{bmatrix}\frac{1}{K_{H}}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\vec{B}^{*}\\
-\boldsymbol{0}_{n\times1}
-\end{bmatrix} & 0\\
-0 & 0
+\boldsymbol{V}^{-1} & =\begin{bmatrix}\boldsymbol{V}_{H}^{-1} & \boldsymbol{0}_{2\times2n+2} & \boldsymbol{0}_{2\times2}\\
+\boldsymbol{0}_{2n+2\times2} & \left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1} & -\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\\
+\boldsymbol{0}_{2\times2} & -\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1} & \boldsymbol{V}_{VR}^{-1}+\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}
 \end{bmatrix}
 \end{align*}
 
 \end_inset
 
+Express 
+\begin_inset Formula $\boldsymbol{K}=\boldsymbol{F}\boldsymbol{V}^{-1}$
+\end_inset
 
+ with the block-matrix forms of 
+\begin_inset Formula $\boldsymbol{F}$
+\end_inset
+
+ and 
+\begin_inset Formula $\boldsymbol{V}^{-1}$
+\end_inset
+
+ leads to
 \begin_inset Formula 
 \begin{align*}
-\boldsymbol{F}_{VH}\boldsymbol{V}_{V}^{-1}\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1} & =\begin{bmatrix}\begin{bmatrix}\boldsymbol{0}_{1\times n} & \frac{K_{H}}{K_{B}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\end{bmatrix}\boldsymbol{X}_{1}\begin{bmatrix}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{H}}\\
-\boldsymbol{0}_{n\times1}
-\end{bmatrix} & 0\\
-0 & 0
-\end{bmatrix}\begin{bmatrix}\frac{1}{\mu_{H}+\gamma_{H}} & 0\\
-\frac{\gamma_{H}}{\mu_{H}+\gamma_{H}}\frac{1}{\mu_{H}} & \frac{1}{\mu_{H}}
-\end{bmatrix}\\
-\left[\boldsymbol{F}_{VH}\boldsymbol{V}_{V}^{-1}\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1}\right]_{2\times2} & =\begin{bmatrix}\frac{1}{\mu_{H}+\gamma_{H}}\begin{bmatrix}\boldsymbol{0}_{1\times n} & \frac{K_{H}}{K_{B}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\end{bmatrix}\boldsymbol{X}_{1}\begin{bmatrix}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{H}}\\
-\boldsymbol{0}_{n\times1}
-\end{bmatrix} & 0\\
-0 & 0
+\boldsymbol{K} & =\begin{bmatrix}\boldsymbol{0}_{2\times2} & \boldsymbol{F}_{VH}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1} & -\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\\
+\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1} & \boldsymbol{0}_{2n\times2n} & \boldsymbol{0}_{2n+2\times4}\\
+\boldsymbol{0}_{4\times2} & \boldsymbol{0}_{4\times2n} & \boldsymbol{0}_{4\times4}
 \end{bmatrix}
 \end{align*}
 
 \end_inset
 
-Therefore we need only find 
-\begin_inset Formula $\tilde{W}_{1}=\left(W_{1}-W_{2}W_{4}^{-1}W_{3}\right)^{-1}$
-\end_inset
-
- to determine the non-zero eigenvalues of 
+Thus the eigenvalues of 
 \begin_inset Formula $\boldsymbol{K}$
+\end_inset
+
+ are determined as follows
+\begin_inset Formula 
+\begin{align*}
+\left|\lambda\boldsymbol{I}-\boldsymbol{K}\right| & =\begin{vmatrix}\lambda\boldsymbol{I}_{2} & -\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1} & \boldsymbol{F}_{VH}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\\
+-\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1} & \lambda\boldsymbol{I}_{2n+2} & \boldsymbol{0}_{2n+2\times2}\\
+\boldsymbol{0}_{2\times2} & \boldsymbol{0}_{2\times2n+2} & \lambda\boldsymbol{I}_{2}
+\end{vmatrix}\\
+\left|\lambda\boldsymbol{I}-\boldsymbol{K}\right| & =\lambda^{2}\begin{vmatrix}\lambda\boldsymbol{I}_{2} & -\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\\
+-\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1} & \lambda\boldsymbol{I}_{2n+2}
+\end{vmatrix}\\
+\left|\lambda\boldsymbol{I}-\boldsymbol{K}\right| & =\lambda^{2n+2}\det\left(\lambda^{2}\boldsymbol{I}_{2}-\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1}\right)
+\end{align*}
+
+\end_inset
+
+Therefore the eigenvalues of 
+\begin_inset Formula $\boldsymbol{K}$
+\end_inset
+
+ are zero (multiplicity 
+\begin_inset Formula $2n+2$
+\end_inset
+
+) and the square root of the eigenvalues of 
+\begin_inset Formula $\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1}$
+\end_inset
+
+.
+ We now proceed to calculate 
+\begin_inset Formula $\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}$
 \end_inset
 
 .
  
-\begin_inset Formula 
-\[
-\boldsymbol{W}_{4}^{-1}=\begin{bmatrix}\frac{1}{\mu+\gamma_{R}+\eta} & 0\\
-\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
-\end{bmatrix}
-\]
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\boldsymbol{W}_{4}^{-1}\boldsymbol{W}_{3} & =\begin{bmatrix}\frac{1}{\mu+\gamma_{R}+\eta} & 0\\
-\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
-\end{bmatrix}\begin{bmatrix}-\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n}\\
-\boldsymbol{0}_{1\times n} & -\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}
-\end{bmatrix}\\
-\left[\boldsymbol{W}_{4}^{-1}\boldsymbol{W}_{3}\right]_{2\times2n} & =\begin{bmatrix}-\frac{1}{\mu+\gamma_{R}+\eta}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n}\\
--\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T} & -\frac{1}{\mu+\gamma_{R}}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\boldsymbol{W}_{2}\boldsymbol{W}_{4}^{-1}\boldsymbol{W}_{3} & =\begin{bmatrix}-\gamma_{R}\vec{\alpha} & \boldsymbol{0}_{n\times1}\\
-\boldsymbol{0}_{n\times1} & -\gamma_{R}\vec{\alpha}
-\end{bmatrix}\begin{bmatrix}-\frac{1}{\mu+\gamma_{R}+\eta}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n}\\
--\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T} & -\frac{1}{\mu+\gamma_{R}}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}
-\end{bmatrix}\\
-\left[\boldsymbol{W}_{2}\boldsymbol{W}_{4}^{-1}\boldsymbol{W}_{3}\right]_{2n\times2n} & =\begin{bmatrix}\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T} & \boldsymbol{0}_{n\times n}\\
-\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T} & \left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\boldsymbol{W}_{1}-\boldsymbol{W}_{2}\boldsymbol{W}_{4}^{-1}\boldsymbol{W}_{3} & =\begin{bmatrix}\left(\left(\mu+\eta\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right) & \boldsymbol{0}_{n\times n}\\
--\eta\boldsymbol{I} & \left(\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right)
-\end{bmatrix}-\begin{bmatrix}\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T} & \boldsymbol{0}_{n\times n}\\
-\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T} & \left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}
-\end{bmatrix}\\
-\left[\boldsymbol{W}_{1}-\boldsymbol{W}_{2}\boldsymbol{W}_{4}^{-1}\boldsymbol{W}_{3}\right]_{2n\times2n} & =\begin{bmatrix}\left(\left(\mu+\eta\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right)-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T} & \boldsymbol{0}_{n\times n}\\
--\eta\boldsymbol{I}-\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T} & \left(\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right)-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\left(\boldsymbol{W}_{1}-\boldsymbol{W}_{2}\boldsymbol{W}_{4}^{-1}\boldsymbol{W}_{3}\right)^{-1} & =\begin{bmatrix}\left[\left(\left(\mu+\eta\right)\boldsymbol{I}-\left(\boldsymbol{A}^{'}\right)^{T}\right)-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{A}^{'}\vec{1}\right)^{T}\right]^{-1} & \boldsymbol{0}_{n\times n}\\
-\left[\left(\mu\boldsymbol{I}-\left(\boldsymbol{A}^{'}\right)^{T}\right)-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}^{'}\vec{1}\right)^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}^{'}\vec{1}\right)^{T}\right]\left[\left(\left(\mu+\eta\right)\boldsymbol{I}-\left(\boldsymbol{A}^{'}\right)^{T}\right)-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{A}^{'}\vec{1}\right)^{T}\right]^{-1} & \left[\left(\mu\boldsymbol{I}-\left(\boldsymbol{A}^{'}\right)^{T}\right)-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}^{'}\vec{1}\right)^{T}\right]^{-1}
-\end{bmatrix}\\
- & =\begin{bmatrix}\boldsymbol{\Gamma_{E}} & \boldsymbol{0}_{n\times n}\\
-\boldsymbol{\Gamma_{I}}\boldsymbol{\tau_{E}} & \boldsymbol{\Gamma_{I}}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-Now we can proceed to compute 
-\begin_inset Formula $\frac{1}{\mu_{H}+\gamma_{H}}\begin{bmatrix}\boldsymbol{0}_{1\times n} & \frac{K_{H}}{K_{B}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\end{bmatrix}\tilde{W}_{1}\begin{bmatrix}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{H}}\\
-\boldsymbol{0}_{n\times1}
-\end{bmatrix}$
-\end_inset
-
-.
-\begin_inset Formula 
-\begin{align*}
-\tilde{W}_{1}\begin{bmatrix}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{H}}\\
-\boldsymbol{0}_{n\times1}
-\end{bmatrix} & =\begin{bmatrix}\left[\left(\left(\mu+\eta\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right)-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1} & \boldsymbol{0}_{n\times n}\\
-\left[\left(\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right)-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]\left[\left(\left(\mu+\eta\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right)-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1} & \left[\left(\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right)-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1}
-\end{bmatrix}\begin{bmatrix}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{H}}\\
-\boldsymbol{0}_{n\times1}
-\end{bmatrix}\\
-\tilde{W}_{1}\begin{bmatrix}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{H}}\\
-\boldsymbol{0}_{n\times1}
-\end{bmatrix} & =\begin{bmatrix}\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{H}}\\
-\left[\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{H}}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\begin{bmatrix}\boldsymbol{0}_{1\times n} & \frac{K_{H}}{K_{B}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\end{bmatrix}\tilde{W}_{1}\begin{bmatrix}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{H}}\\
-\boldsymbol{0}_{n\times1}
-\end{bmatrix} & =\begin{bmatrix}\boldsymbol{0}_{1\times n} & \frac{K_{H}}{K_{B}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\end{bmatrix}\begin{bmatrix}\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{H}}\\
-\left[\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{H}}
-\end{bmatrix}\\
-\begin{bmatrix}\boldsymbol{0}_{1\times n} & \frac{K_{H}}{K_{B}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\end{bmatrix}\tilde{W}_{1}\begin{bmatrix}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{H}}\\
-\boldsymbol{0}_{n\times1}
-\end{bmatrix} & =\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\left[\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}-\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{B}}
-\end{align*}
-
-\end_inset
-
-Finally,
-\begin_inset Formula 
-\begin{align*}
-\left|\lambda\boldsymbol{I}-\boldsymbol{K}\right| & =\lambda^{2n}\left\{ \lambda^{2}-\frac{1}{\mu_{H}+\gamma_{H}}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\left[\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}-\frac{\gamma_{R}}{\mu+\gamma_{R}}\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}-\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\vec{\alpha}\left(-\boldsymbol{\tilde{A}}\vec{1}\right)^{T}\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B}^{*}}{K_{B}}\right\} \\
-\left|\lambda\boldsymbol{I}-\boldsymbol{K}\right| & =\lambda^{2n}\left\{ \lambda^{2}-\frac{1}{\mu_{H}+\gamma_{H}}\vec{1}^{T}\boldsymbol{\beta}_{H}^{'}\boldsymbol{\Lambda}_{H}^{'}\boldsymbol{\Gamma_{I}}\boldsymbol{\tau_{E}}\boldsymbol{\beta}_{V}^{'}\boldsymbol{\Lambda}_{V}^{'}\frac{\vec{B}^{'*}}{K_{B}}\right\} 
-\end{align*}
-
-\end_inset
-
-We define the largest eigenvalue of 
-\begin_inset Formula $\boldsymbol{K}$
-\end_inset
-
- to be the basic reproduction number 
-\begin_inset Formula $\mathcal{R}_{0}$
-\end_inset
-
-.
- Thus
-\begin_inset Formula 
-\begin{align*}
-\mathcal{R}_{0} & =\sqrt{\frac{1}{\mu_{H}+\gamma_{H}}\vec{1}^{T}\boldsymbol{\beta}_{H}^{'}\boldsymbol{\Lambda}_{H}^{'}\left[\mu\boldsymbol{I}-\left(\boldsymbol{A}^{'}\right)^{T}-\frac{\gamma_{R}}{\mu+\gamma_{R}}\vec{{\alpha}}\,'\left(-\boldsymbol{A}^{'}\vec{1}\right)^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{{\alpha}}\,'\left(-\boldsymbol{A}^{'}\vec{1}\right)^{T}\right]\left[\left(\eta+\mu\right)\boldsymbol{I}-\left(\boldsymbol{A}^{'}\right)^{T}-\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\vec{{\alpha}}\,'\left(-\boldsymbol{A}^{'}\vec{1}\right)^{T}\right]^{-1}\boldsymbol{\beta}_{V}\boldsymbol{\Lambda}_{V}\frac{\vec{B^{'}}^{*}}{K_{B}}}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\mathcal{R}_{0} & =\sqrt{\frac{1}{\mu_{H}+\gamma_{H}}\beta_{H}b\frac{K_{B}}{K_{H}}\frac{1}{\mu}\frac{\eta}{\eta+\mu}\beta_{V}b}
-\end{align*}
-
-\end_inset
-
-(Note that 
-\begin_inset Formula $\mathcal{R}_{0}$
-\end_inset
-
- is independent of 
-\begin_inset Formula $V^{*}$
-\end_inset
-
- but this needs to be shown explicitly.)
-\begin_inset Formula 
-\[
-\mathcal{R}_{0}=\frac{1}{\textrm{GCD}}\sqrt{\beta_{H}\left(\frac{\eta}{\mu+\eta}\right)\left(\frac{\textrm{GCD}}{\mu+\gamma_{R}+\gamma_{V}+\textrm{GCD}}\frac{1}{\mu}\right)\left(\frac{1}{\mu_{H}+\gamma_{H}}\right)\beta_{B}\left(\frac{B_{\textrm{total}}}{B_{\textrm{total}}+V^{*}+R^{*}}\right)}
-\]
-
-\end_inset
-
- Some notes on the some of the quantities appearing in 
-\begin_inset Formula $\mathcal{R}_{0}$
-\end_inset
-
-:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
-\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T} & =\begin{bmatrix}1\\
-0\\
-0\\
-0\\
-0
-\end{bmatrix}\begin{bmatrix}0 & 0 & 0 & 0 & -\gamma_{V}\end{bmatrix}=\begin{bmatrix}0 & 0 & 0 & 0 & -\gamma_{V}\\
-0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0
+\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR} & =\begin{bmatrix}\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T} & \boldsymbol{0}_{n\times n}\\
+-\eta\boldsymbol{I}-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T} & \left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}
 \end{bmatrix}
 \end{align*}
 
 \end_inset
 
+Letting 
+\series bold
 
-\begin_inset Formula 
-\begin{align*}
-\left[\left(\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right)+\frac{\gamma_{R}}{\mu+\gamma_{R}}\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right] & =\begin{bmatrix}\mu+\lambda_{Q} & -f\left(1-p_{L}\right)\lambda_{L} & -f\left(1-p_{P}\right)\lambda_{P} & -f\left(1-p_{G}\right)\lambda_{G} & -\frac{\gamma_{R}}{\mu+\gamma_{R}}\gamma_{V}\\
--\lambda_{Q} & \mu+\lambda_{L}-\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & -\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0\\
-0 & -p_{L}\lambda_{L} & \mu+\lambda_{P} & 0 & 0\\
-0 & 0 & -p_{P}\lambda_{P} & \mu+\lambda_{G} & 0\\
-0 & 0 & 0 & -p_{G}\lambda_{G} & \mu+\gamma_{V}
-\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\[
-\left[\left(\eta+\mu\right)\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}+\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\vec{\alpha}\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right]=\begin{bmatrix}\eta+\mu+\lambda_{Q} & -f\left(1-p_{L}\right)\lambda_{L} & -f\left(1-p_{P}\right)\lambda_{P} & -f\left(1-p_{G}\right)\lambda_{G} & -\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\gamma_{V}\\
--\lambda_{Q} & \eta+\mu+\lambda_{L}-\left(1-f\right)\left(1-p_{L}\right)\lambda_{L} & -\left(1-f\right)\left(1-p_{P}\right)\lambda_{P} & -\left(1-f\right)\left(1-p_{G}\right)\lambda_{G} & 0\\
-0 & -p_{L}\lambda_{L} & \eta+\mu+\lambda_{P} & 0 & 0\\
-0 & 0 & -p_{P}\lambda_{P} & \eta+\mu+\lambda_{G} & 0\\
-0 & 0 & 0 & -p_{G}\lambda_{G} & \eta+\mu+\gamma_{V}
-\end{bmatrix}
-\]
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\vec{1}^{T}\left[\left(\mu\boldsymbol{I}-\tilde{\boldsymbol{A}}^{T}\right)-\frac{\gamma_{R}}{\mu+\gamma_{R}}\vec{\alpha}\left(-\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right)\right] & =\begin{bmatrix}\mu & \mu & \mu & \mu & \mu+\left(\frac{\mu}{\mu+\gamma_{R}}\right)\gamma_{V}\end{bmatrix}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
--\frac{\gamma_{R}}{\mu+\gamma_{R}}\gamma_{V}+\mu+\gamma_{V} & =\left(\frac{\mu}{\mu+\gamma_{R}}\right)\gamma_{V}+\mu\\
-\frac{1}{\mu+\gamma_{V}}\left[-\frac{\gamma_{R}}{\mu+\gamma_{R}}\gamma_{V}+\mu+\gamma_{V}\right] & =\left(\frac{\mu}{\mu+\gamma_{R}}\right)\frac{\gamma_{V}}{\mu+\gamma_{V}}+\frac{\mu}{\mu+\gamma_{V}}\\
-1-\frac{1}{\mu+\gamma_{V}}\left[-\frac{\gamma_{R}}{\mu+\gamma_{R}}\gamma_{V}+\mu+\gamma_{V}\right] & =1-\left(\frac{\mu}{\mu+\gamma_{R}}\right)\frac{\gamma_{V}}{\mu+\gamma_{V}}-\frac{\mu}{\mu+\gamma_{V}}\\
-1-\frac{1}{\mu+\gamma_{V}}\left[-\frac{\gamma_{R}}{\mu+\gamma_{R}}\gamma_{V}+\mu+\gamma_{V}\right] & =\frac{\gamma_{R}}{\mu+\gamma_{R}}\frac{\gamma_{V}}{\mu+\gamma_{V}}
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Formula 
-\[
--\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\gamma_{V}+\eta+\mu+\gamma_{V}=\left(\frac{\mu+\eta}{\mu+\eta+\gamma_{R}}\right)\gamma_{V}+\eta+\mu
-\]
-
-\end_inset
-
-
-\begin_inset Formula 
-\[
-\eta\boldsymbol{I}+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}}\vec{\alpha}\left(-\vec{1}^{T}\boldsymbol{\tilde{A}}^{T}\right)=\begin{bmatrix}\eta & 0 & 0 & 0 & \gamma_{V}\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}}\\
-0 & \eta & 0 & 0 & 0\\
-0 & 0 & \eta & 0 & 0\\
-0 & 0 & 0 & \eta & 0\\
-0 & 0 & 0 & 0 & \eta
-\end{bmatrix}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-In the case that we ignore the oviposition and resting stages and assume that the blood-feeding dwell-time distribution is exponential with mean 
-\begin_inset Formula $1/b$
+\begin_inset Formula $\boldsymbol{\Gamma}_{I}=\left[\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right]^{-1}$
 \end_inset
 
 ,
  
-\begin_inset Formula $\mathcal{R}_{0}$
+\begin_inset Formula $\boldsymbol{\Gamma}_{E}=\left[\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right]^{-1}$
 \end_inset
 
- is given by
+,
+ 
+\begin_inset Formula $\boldsymbol{\tau}_{E}=\left\{ \eta\boldsymbol{I}+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right\} \boldsymbol{\Gamma}_{E}$
+\end_inset
+
+
+\series default
+,
+ the inverse of 
+\begin_inset Formula $\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}$
+\end_inset
+
+ is 
+\begin_inset Formula $\left(\boldsymbol{V}_{B}-\boldsymbol{V}_{RB}\boldsymbol{V}_{V}^{-1}\boldsymbol{V}_{VR}\right)^{-1}=\begin{bmatrix}\boldsymbol{\Gamma}_{E} & \boldsymbol{0}_{n\times n}\\
+\boldsymbol{\Gamma}_{E}\boldsymbol{\tau}_{E} & \boldsymbol{\Gamma}_{I}
+\end{bmatrix}$
+\end_inset
+
+
 \begin_inset Formula 
 \begin{align*}
-\mathcal{R}_{0}^{RM} & =\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\beta_{H}b\frac{K_{B}}{K_{H}}\frac{1}{\mu}\frac{\eta}{\mu+\eta}\beta_{V}b}\\
-\mathcal{R}_{0}\left(\textrm{GCD}\right) & =\frac{1}{\textrm{GCD}}\sqrt{\beta_{H}\left(\frac{\eta}{\mu+\eta}\right)\left(\frac{1}{\mu}\right)\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\beta_{B}\frac{B_{\textrm{total}}}{K_{H}}}\\
-\mathcal{R}_{0}^{C} & =\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\beta_{H}\frac{bK_{B}\sigma_{H}}{bK_{B}+\sigma_{H}K_{H}}\frac{1}{\mu}\frac{\eta}{\mu+\eta}\beta_{V}\frac{b\sigma_{H}K_{H}}{bK_{B}+\sigma_{H}K_{H}}}\\
-\mathcal{R}_{0}^{C} & =\frac{b\sigma_{H}}{bK_{B}+\sigma_{H}K_{H}}\sqrt{\frac{1}{\gamma_{H}+\mu_{H}}\beta_{H}K_{B}\frac{1}{\mu}\frac{\eta}{\mu+\eta}\beta_{V}K_{H}}
+\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\boldsymbol{F}_{HV} & =\begin{bmatrix}\boldsymbol{\Gamma}_{E} & \boldsymbol{0}_{n\times n}\\
+\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E} & \boldsymbol{\Gamma}_{I}
+\end{bmatrix}\begin{bmatrix}\frac{1}{K_{H}}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\vec{B}^{*} & \boldsymbol{0}_{n\times1}\\
+\boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1}
+\end{bmatrix}\\
+\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\boldsymbol{F}_{HV} & =\begin{bmatrix}\frac{1}{K_{H}}\boldsymbol{\Gamma}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\vec{B}^{*} & \boldsymbol{0}_{n\times1}\\
+\frac{1}{K_{H}}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\vec{B}^{*} & \boldsymbol{0}_{n\times1}
+\end{bmatrix}
 \end{align*}
 
 \end_inset
 
+
+\begin_inset Formula 
+\begin{align*}
+\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\boldsymbol{F}_{HV} & =\begin{bmatrix}\boldsymbol{0}_{1\times n} & \left(\frac{K_{H}}{K_{B}}\right)\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\\
+\boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n}
+\end{bmatrix}\begin{bmatrix}\frac{1}{K_{H}}\boldsymbol{\Gamma}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\vec{B}^{*} & \boldsymbol{0}_{n\times1}\\
+\frac{1}{K_{H}}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\vec{B}^{*} & \boldsymbol{0}_{n\times1}
+\end{bmatrix}\\
+\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\boldsymbol{F}_{HV} & =\begin{bmatrix}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\frac{\vec{B}}{K_{B}}^{*} & 0\\
+0 & 0
+\end{bmatrix}
+\end{align*}
+
+\end_inset
+
+Thus the eigenvalues of 
+\begin_inset Formula $\boldsymbol{K}$
+\end_inset
+
+ are zero (multiplicity 
+\begin_inset Formula $2n+4$
+\end_inset
+
+) and 
+\begin_inset Formula $\pm\sqrt{\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\frac{\vec{B}}{K_{B}}^{*}}$
+\end_inset
+
+.
+ Therefore,
  
+\begin_inset Formula $\mathcal{R}_{0}=\rho\left(\boldsymbol{K}\right)$
+\end_inset
+
+ is
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\mathcal{R}_{0} & =\sqrt{\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\frac{\vec{B}}{K_{B}}^{*}}\\
+\mathcal{R}_{0} & =\sqrt{\frac{\vec{B^{*}}^{T}}{K_{B}}\boldsymbol{\Lambda}_{B}^{T}\boldsymbol{\beta}_{B}^{T}\boldsymbol{\tau}_{E}^{T}\boldsymbol{\Gamma}_{I}^{T}\boldsymbol{\Lambda}_{H}^{T}\boldsymbol{\beta}_{H}^{T}\vec{1}\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\vec{1}^{T}\boldsymbol{\Gamma}_{I}\vec{\alpha} & =\vec{1}^{T}\left[\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right]^{-1}\vec{\alpha}\\
+\vec{1}^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha} & =\vec{1}^{T}\left[\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right]^{-1}\vec{\alpha}\\
+\vec{1}^{T}\boldsymbol{\tau}_{E}\vec{\alpha} & =\eta\left(\vec{1}^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}\right)+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\left(-\boldsymbol{A}\vec{1}\right)^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}\right)
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\vec{1}^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}$
+\end_inset
+
+ is the average amount of time an exposed mosquito spends in the biting compartments and 
+\begin_inset Formula $\left(-\boldsymbol{A}\vec{1}\right)^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}$
+\end_inset
+
+ is the probability that an exposed mosquito survives the biting stages.
+ Thus,
+ 
+\begin_inset Formula $\eta\left(\vec{1}^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}\right)$
+\end_inset
+
+ is the probability that an exposed mosquito becomes infectious while in the biting stages and 
+\begin_inset Formula $\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(\left(-\boldsymbol{A}\vec{1}\right)^{T}\boldsymbol{\Gamma}_{E}\vec{\alpha}\right)$
+\end_inset
+
+ is the probability that an exposed mosquito exits the biting stages (without dying or becoming infectious) and then becomes infectious in either the oviposition or resting stage.
+\begin_inset Formula 
+\begin{align*}
+\boldsymbol{\Gamma}_{I}^{T} & =\left[\left(\mu\boldsymbol{I}-\boldsymbol{A}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(-\boldsymbol{A}\vec{1}\right)\vec{\alpha}^{T}\right]^{-1}\\
+\vec{\alpha}^{T}\boldsymbol{\Gamma}_{I}^{T}\vec{1} & =\vec{\alpha}^{T}\left[\mu\boldsymbol{I}-\boldsymbol{A}\left(\boldsymbol{I}-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{1}\vec{\alpha}^{T}\right)\right]^{-1}\vec{1}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\boldsymbol{\Gamma}_{E}^{T}=\left[\left(\left(\mu+\eta\right)\boldsymbol{I}\right)-\boldsymbol{A}\left[\boldsymbol{I}-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{1}\vec{\alpha}^{T}\right]\right]^{-1}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\boldsymbol{\tau}_{E} & =\left\{ \eta\boldsymbol{I}+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right\} \boldsymbol{\Gamma}_{E}\\
+\boldsymbol{\tau}_{E}^{T} & =\boldsymbol{\Gamma}_{E}^{T}\left\{ \eta\boldsymbol{I}+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(-\boldsymbol{A}\vec{1}\right)\vec{\alpha}^{T}\right\} \\
+\boldsymbol{\tau}_{E}^{T} & =\eta\left[\left(\left(\mu+\eta\right)\boldsymbol{I}\right)-\boldsymbol{A}\left[\boldsymbol{I}-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{1}\vec{\alpha}^{T}\right]\right]^{-1}+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left[\left(\left(\mu+\eta\right)\boldsymbol{I}\right)-\boldsymbol{A}\left[\boldsymbol{I}-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{1}\vec{\alpha}^{T}\right]\right]^{-1}\left(-\boldsymbol{A}\vec{1}\right)\vec{\alpha}^{T}\\
+\vec{\alpha}^{T}\boldsymbol{\tau}_{E}^{T}\vec{1} & =\vec{\alpha}^{T}\eta\left[\left(\left(\mu+\eta\right)\boldsymbol{I}\right)-\boldsymbol{A}\left[\boldsymbol{I}-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{1}\vec{\alpha}^{T}\right]\right]^{-1}\vec{1}+\vec{\alpha}^{T}\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left[\left(\left(\mu+\eta\right)\boldsymbol{I}\right)-\boldsymbol{A}\left[\boldsymbol{I}-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{1}\vec{\alpha}^{T}\right]\right]^{-1}\left(-\boldsymbol{A}\vec{1}\right)\vec{\alpha}^{T}\vec{1}\\
+\vec{\alpha}^{T}\boldsymbol{\tau}_{E}^{T}\vec{1} & =\eta\vec{\alpha}^{T}\left[\left(\left(\mu+\eta\right)\boldsymbol{I}\right)-\boldsymbol{A}\left[\boldsymbol{I}-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{1}\vec{\alpha}^{T}\right]\right]^{-1}\vec{1}+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}^{T}\left[\left(\left(\mu+\eta\right)\boldsymbol{I}\right)-\boldsymbol{A}\left[\boldsymbol{I}-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{1}\vec{\alpha}^{T}\right]\right]^{-1}\left(-\boldsymbol{A}\vec{1}\right)\vec{\alpha}^{T}\vec{1}\\
+\vec{\alpha}^{T}\boldsymbol{\tau}_{E}^{T}\vec{1} & =\eta\vec{\alpha}^{T}\left[\left(\left(\mu+\eta\right)\boldsymbol{I}\right)-\boldsymbol{A}\left[\boldsymbol{I}-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{1}\vec{\alpha}^{T}\right]\right]^{-1}\vec{1}+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}^{T}\left[\left(\left(\mu+\eta\right)\boldsymbol{I}\right)-\boldsymbol{A}\left[\boldsymbol{I}-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{1}\vec{\alpha}^{T}\right]\right]^{-1}\left(-\boldsymbol{A}\vec{1}\right)
+\end{align*}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection*

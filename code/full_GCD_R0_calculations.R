@@ -65,7 +65,7 @@ standard_R0_calc <- function(b) {
   B_star = as.list(get_standard_stable_pop(b))$B_star
   standard_beta = betaH / sqrt(60) #2 * betaH / 400 #369.5324 * betaH / 4000# / (1000*sqrt(3))
   host_infectious_period = (1 / (muH + gammaH))
-  standard_beta = 1 * 1440 / sqrt(host_infectious_period * (eta / (mu + eta)) * (1 / mu) * KJ / KH)
+  standard_beta = 0.2 # which is approximately = 1 * 1440 / sqrt(host_infectious_period * (eta / (mu + eta)) * (1 / mu) * KJ / KH)
   # 
   # b_vec = seq(1 / (20 * 1440), 1 / (2 * 1440), length.out = 10)
   
@@ -210,7 +210,7 @@ emp_EpiTerms <- function(A_matrix, v_alpha) {
 get_phenom_A <- function(theta) {
   b = 1 / theta
   
-  v_alpha = matrix(c(1/3, 1/3, 0, 1/3, 0, 0), ncol = 1)
+  v_alpha = matrix(c(0.53, 0.42, 0, 0.05, 0, 0), ncol = 1)
   
   temp_matrix = matrix(rep(0, 36), nrow = 6, ncol = 6 )
   diag(temp_matrix) = c(-b, -2*b, -2*b, -3*b, -3*b, -3*b)
@@ -467,7 +467,7 @@ theta_min = 0 # minimum biting duration of 3 minutes
 theta_max = 1 / mu #21 * 24 * 60 # maximum biting duration of 3 days
 theta_vec = seq(theta_min, theta_max, length.out = resolution)
 theta_vec = theta_vec[-1]
-inv_theta_vec = seq(1/theta_max, 1/theta_vec[1], length.out = resolution)
+inv_theta_vec = seq(1e-9, 3, length.out = resolution)
 theta_vec = sort(unique(c(theta_vec, 1/inv_theta_vec, (1/3) * 1440, (1/2) * 1440, 1 * 1440, 2 * 1440)))
 
 
