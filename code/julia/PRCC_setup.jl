@@ -2,10 +2,10 @@
 include("GCD_R0_num_calc.jl")
 
 # Rates
-# (lQ, lL, lP, lG, sigma, pL, pP, pG)
-const base_params_flighty = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.9f0, 0.5f0, 0.5f0, 0.5f0]
+# (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG)
+const base_params_flighty = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.9f0, 1f0, 0.5f0, 0.5f0, 0.5f0]
 
-const base_params_persistent = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.66f0, 0.7f0, 0.8f0, 0.9f0]
+const base_params_persistent = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.66f0, 1f0, 0.7f0, 0.8f0, 0.9f0]
     
 
 function parameter_setup(baseline_vals, stretch_val) 
@@ -20,13 +20,11 @@ persistent_lbs, persistent_ubs = parameter_setup(base_params_persistent, 0.1)
 flighty_lbs, flighty_ubs = parameter_setup(base_params_flighty, 0.1)
 
 # Set up LHC sampling
-pQ_range = [1.0f0]
-
 using LatinHypercubeSampling
 
-# (lQ, lL, lP, lG, sigma, pL, pP, pG) = B_vals_in
-min_lbs = [1/(3*1440.0f0), 1/10.0f0, 1/10.0f0, 1/10.0f0, 0.0f0, 0.0f0, 0.0f0, 0.0f0]
-max_ubs = [60.0f0, 60.0f0, 60.0f0, 60.0f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0]
+# (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG) = B_vals_in
+min_lbs = [1/(3*1440.0f0), 1/(3*1440.0f0), 1/(3*1440.0f0), 1/(3*1440.0f0), 0.0f0, 0.0f0, 0.0f0, 0.0f0, 0.0f0]
+max_ubs = [60.0f0, 60.0f0, 60.0f0, 60.0f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0]
 
 # Set number of LHC samples
 n_samples = 10_000_000::Int
@@ -62,10 +60,10 @@ function output_calc(LHS_samples)
 
         # R0 values
         # LVBEpiHost_vals = [LVB_vals; Epi_vals; Host_vals]
-        R0_results[idx] = R0_func(B_vals, curr_N_offspring)
+        R0_results[idx] = R0_func(B_vals)
 
     end
-    scaled_plan_df = DataFrame(transpose(LHS_samples), [:lQ, :lL, :lP, :lG, :sigma, :pL, :pP, :pG])
+    scaled_plan_df = DataFrame(transpose(LHS_samples), [:lQ, :lL, :lP, :lG, :sigma, :pQ, :pL, :pP, :pG])
     output_df = scaled_plan_df
     output_df[!,:GCD] = GCD_results
     output_df[!,:N_offspring] = N_offspring_results

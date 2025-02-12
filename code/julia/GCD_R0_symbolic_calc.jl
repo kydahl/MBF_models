@@ -12,17 +12,15 @@ using Serialization
 #### Create mean GCD functions ####
 
 # Define fixed parameters
-const (KJ, rhoJ, muJ, varPhi) = [3E8, (1/(12 * 1440)), (1 / (20 * 1440)), (300 / 1440)]
-const (gV, gR, mu) = [(1/(2 * 1440)), (1/(2 * 1440)), (1/(20 * 1440))]
-const (bH, bB, eta, gH) = [1, 1, (1/(6 * 1440)), (1/(7 * 1440))]
-const (muH, KH) = [1/(365.25 * 65 * 1440), 1E8]
-const pQ = 1.0f0
-const (bH, bB, eta, gH) = [1f0, 1f0, 1 / (6 * 1440), 1 / (7 * 1440)]
-
+const (KJ, rhoJ, muJ, varPhi) = [0.75 * 1E3, (1/(12 * 1440)), (1 / (20 * 1440)), (3 / 1440)]
+const (gV, gR, mu) = [(1/(5 * 1440)), (1/(2 * 1440)), (1/(21 * 1440))]
+const (muH, KH) = [1/(365.25 * 65 * 1440), 1E3]
+# const pQ = 1.0f0
+const (bH, bB, eta, gH) = [1f0, 1f0, 1 / (7 * 1440), 1 / (2 * 1440)]
 
 # Give variables appropriate names
 @variables B_vars[1:9] # V_vars[1:3] J_vars[1:4]
-(invlQ_minute, invlL_minute, invlP_minute, invlG_minute, sigma, pL, pP, pG) = B_vars
+(invlQ_minute, invlL_minute, invlP_minute, invlG_minute, sigma, pQ, pL, pP, pG) = B_vars
 
 
 lQ = 1 / (invlQ_minute)
@@ -30,13 +28,13 @@ lL = 1 / (invlL_minute)
 lP = 1 / (invlP_minute)
 lG = 1 / (invlG_minute)
 
-f = 1 - sigma
-
 # Define subintensity matrix
-A_mat = [-lQ lQ 0 0
-    f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0
-    f*(1-pP)*lP (1-f)*(1-pP)*lP -lP pP*lP
-    f*(1-pG)*lG (1-f)*(1-pG)*lG 0 -lG]
+A_mat = [
+    -lQ+(1-pQ)*lQ         pQ*lQ                  0f0   0f0   
+    (1-sigma)*(1-pL)*lL -lL+sigma*(1-pL)*lL pL*lL 0f0 
+    (1-sigma)*(1-pP)*lP sigma*(1-pP)*lP     -lP   pP*lP
+    (1-sigma)*(1-pG)*lG sigma*(1-pG)*lG     0f0   -lG
+]
 
 tA_inv = inv(transpose(-A_mat))
 
@@ -72,15 +70,15 @@ Serialization.serialize("GCD_mu_zero_func.jls", GCD_mu_zero_func)
 # (bH, bB, eta, gH) = Epi_vars
 # (muH, KH) = Host_vars
 
-A_tilde = [-lQ lQ 0.0f0 0.0f0 0.0f0
-    f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0.0f0 0.0f0
-    f*(1-pP)*lP (1-f)*(1-pP)*lP -lP pP*lP 0.0f0
-    f*(1-pG)*lG (1-f)*(1-pG)*lG 0.0f0 -lG pG*lG
-    0.0f0 0.0f0 0.0f0 0.0f0 -gV
-]
+# A_tilde = [-lQ lQ 0.0f0 0.0f0 0.0f0
+#     f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0.0f0 0.0f0
+#     f*(1-pP)*lP (1-f)*(1-pP)*lP -lP pP*lP 0.0f0
+#     f*(1-pG)*lG (1-f)*(1-pG)*lG 0.0f0 -lG pG*lG
+#     0.0f0 0.0f0 0.0f0 0.0f0 -gV
+# ]
 
-one_vec_five = [1.0f0 1.0f0 1.0f0 1.0f0 1.0f0]
-alpha_vec_five = [1.0f0; 0.0f0; 0.0f0; 0.0f0; 0.0f0]
+# one_vec_five = [1.0f0 1.0f0 1.0f0 1.0f0 1.0f0]
+# alpha_vec_five = [1.0f0; 0.0f0; 0.0f0; 0.0f0; 0.0f0]
 one_vec_four = [1.0f0 1.0f0 1.0f0 1.0f0]
 alpha_vec_four = [1.0f0; 0.0f0; 0.0f0; 0.0f0]
 
@@ -184,65 +182,68 @@ R0_exp_func = Symbolics.build_function(eigen_K_mat, b, expression=Val{false})
 Serialization.serialize("R0_exp_func.jls", R0_exp_func)
 
 
-# # r
-# r = (N_offspring - 1) * KJ * ((rhoJ + muJ)/ varPhi) * (mu + gV)
+# r
+r = (N_offspring - 1) * KJ * ((rhoJ + muJ)/ varPhi) * (mu + gV)
 
-# # Distribution of mosquitoes across states at equilibrium
-# # B_prefactor = ((N_offspring - 1.0f0) * KJ * rhoJ / N_offspring) * (1f0 + (gR / (mu + gR)) * (gV / (mu + gV)) * nG * tau) * (inv(mu * I - transpose(A_mat)))
+# Distribution of mosquitoes across states at equilibrium
+# B_prefactor = ((N_offspring - 1.0f0) * KJ * rhoJ / N_offspring) * (1f0 + (gR / (mu + gR)) * (gV / (mu + gV)) * nG * tau) * (inv(mu * I - transpose(A_mat)))
 # B_prefactor = (N_offspring - 1) * KJ * ((rhoJ / N_offspring) + (gR / (mu+gR) * gV * (rhoJ + muJ) / varPhi))
-# # B_prefactor = simplify(B_prefactor)
-# J_star = (KJ / N_offspring) * (N_offspring - 1)
-# # B_prefactor = B_prefactor[1]
-# # B_postfactor = B_prefactor * alpha_vec_four
-# B_postfactor = temp_inv * alpha_vec_four
+B_prefactor = rhoJ * KJ *(N_offspring - 1) * nG / N_offspring
+# B_prefactor = simplify(B_prefactor)
+J_star = (KJ / N_offspring) * (N_offspring - 1)
+# B_prefactor = B_prefactor[1]
+# B_postfactor = B_prefactor * alpha_vec_four
+B_postfactor = temp_inv * alpha_vec_four
 
-# # temp_inv = simplify(inv(mu * I - transpose(A_mat)))
-# B_star = Vector{Num}(undef, 4::Int)
-# # B_star = B_prefactor * B_postfactor
-# B_star[1] = B_prefactor * B_postfactor[1]
-# B_star[2] = B_prefactor * B_postfactor[2]
-# B_star[3] = B_prefactor * B_postfactor[3]
-# B_star[4] = B_prefactor * B_postfactor[4]
-# # B_star = (inv(mu * I - transpose(A_mat))) * B_postfactor
-# V_star = r / (mu + gV)
+# temp_inv = simplify(inv(mu * I - transpose(A_mat)))
+B_star = Vector{Num}(undef, 4::Int)
+# B_star = B_prefactor * B_postfactor
+B_star[1] = B_prefactor * B_postfactor[1]
+B_star[2] = B_prefactor * B_postfactor[2]
+B_star[3] = B_prefactor * B_postfactor[3]
+B_star[4] = B_prefactor * B_postfactor[4]
+# B_star = (inv(mu * I - transpose(A_mat))) * B_postfactor
+V_star = (rhoJ * KJ *(N_offspring - 1) * tau * nG) / (N_offspring * (mu * gV))
 
-# B_vec = [B_star; V_star]
+B_vec = [B_star; V_star]
 
-# betaH_mat = zeros(Num, 5, 5); betaV_mat = zeros(Num, 5, 5); LambdaH = zeros(Num, 5, 5); LambdaV = zeros(Num, 5, 5)
+betaH_mat = zeros(Num, 4, 4); betaV_mat = zeros(Num, 4, 4); LambdaH = zeros(Num, 4, 4); LambdaV = zeros(Num, 4, 4)
 
-# # # Rate of contact is rate of entrance into transmission compartments
-# LambdaH[3,3] = -A_mat[3,3]
-# LambdaV[4,4] = -A_mat[4,4]
-# betaH_mat[3,3] = bH
-# betaV_mat[4,4] = bB
+# # Rate of contact is rate of entrance into transmission compartments
+LambdaH[3,3] = -A_mat[3,3]
+LambdaV[4,4] = -A_mat[4,4]
+betaH_mat[3,3] = bH
+betaV_mat[4,4] = bB
 
-# # temp_mat = (-one_vec_five) * transpose(A_tilde)
+# temp_mat = (-one_vec_five) * transpose(A_tilde)
 
-# # spec_mat = alpha_vec_five * temp_mat
-# # M1 = mu * I - (A_tilde) - (gR / (mu + gR)) * spec_mat
-# # M2 = eta * I + (eta / (mu + gR + eta)) * (1 / (mu + gR)) * spec_mat
-# # M3 = (eta + mu) * I - (A_tilde) - (gR / (mu + gR + eta)) * spec_mat
-# # Q = inv(M1) * M2 * inv(M3)
+# spec_mat = alpha_vec_five * temp_mat
+# M1 = mu * I - (A_tilde) - (gR / (mu + gR)) * spec_mat
+# M2 = eta * I + (eta / (mu + gR + eta)) * (1 / (mu + gR)) * spec_mat
+# M3 = (eta + mu) * I - (A_tilde) - (gR / (mu + gR + eta)) * spec_mat
+# Q = inv(M1) * M2 * inv(M3)
 
-# spec_mat = alpha_vec_five * one_vec_five * transpose(A_tilde)
+spec_mat = alpha_vec_four * one_vec_four * transpose(A_mat)
 
-# GammaI = inv(mu * I - transpose(A_tilde) + (gR / (mu + gR)) * spec_mat)
-# GammaE = inv((eta + mu) * I - transpose(A_tilde) + (gR / (mu + gR + eta)) * spec_mat)
-# tauE = (eta * I + (eta / (mu + gR + eta)) * (gR / (mu + gR)) * spec_mat) * inv(GammaE)
+GammaI = inv(mu * I - transpose(A_mat) + (gV / (mu + gV)) * (gR / (mu + gR)) * spec_mat)
+GammaE = inv((eta + mu) * I - transpose(A_mat) + (gR / (mu + gR + eta)) * (gV / (mu + gV + eta)) * spec_mat)
 
-# sum_B_star = sum(B_vec)
+complicated_probability = (gV/(mu+gV)) * ((eta / (mu+gV+eta)) * (gR/(mu+gR+eta)) + (eta/(mu+gR+eta) * (gR/(mu+gR))))
+tauE = (eta * I + complicated_probability * spec_mat) * GammaE
 
-# R02 = one_vec_five * betaH_mat * LambdaH * GammaI * tauE * (1 / (gH + muH)) * betaV_mat * LambdaV * (B_vec / (sum(B_vec)))
+sum_B_star = sum(B_star)
+
+R02 = (1 / (gH + muH)) * one_vec_four * betaH_mat * LambdaH * GammaI * tauE * betaV_mat * LambdaV * (B_star / sum_B_star)
 
 
-# # R02 = one_vec_five * betaH_mat * transpose(LambdaH) * Q * betaV_mat * transpose(LambdaV) * B_vec / (sum_B_star * (muH + gH))
-# R02 = R02[1]
+# R02 = one_vec_five * betaH_mat * transpose(LambdaH) * Q * betaV_mat * transpose(LambdaV) * B_vec / (sum_B_star * (muH + gH))
+R02 = R02[1]
 
-# R0 = sqrt(R02)
+R0 = sqrt(R02)
 
 # Generate a Julia function from the symbolic expression
 # LVBEpiHost_vars = [L_vars; V_vars; B_vars; Epi_vars; Host_vars]
-# R0_func = Symbolics.build_function(R0[1], B_vars, expression=Val{false})
+R0_func = Symbolics.build_function(R0[1], B_vars, expression=Val{false})
 
 # Save the basic offspring number function to a file
-# Serialization.serialize("R0_func.jls", R0_func)
+Serialization.serialize("R0_func.jls", R0_func)

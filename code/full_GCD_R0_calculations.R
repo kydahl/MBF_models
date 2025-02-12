@@ -82,14 +82,14 @@ exp_EpiTerms <- function(A_matrix, v_alpha) {
   out_rates = -as.matrix(A_matrix) %*% v_ones
   
   LambdaB = diag(as.vector(out_rates), nrow = length(out_rates)) %>%
-    cbind(matrix(rep(0, A_dim))) %>% # need to add in zeros because oviposition class is added in
-    rbind(matrix(rep(0, A_dim+1), nrow = 1)) %>%
+    # cbind(matrix(rep(0, A_dim))) %>% # need to add in zeros because oviposition class is added in
+    # rbind(matrix(rep(0, A_dim+1), nrow = 1)) %>%
     list()
   LambdaH = (LambdaB[[1]] * KB / KH) %>% list()
   
   BetaH = (betaH * diag(A_dim)) %>%
-    cbind(matrix(rep(0, A_dim))) %>% # need to add in zeros because oviposition class is added in
-    rbind(matrix(rep(0, A_dim+1), nrow = 1)) %>%
+    # cbind(matrix(rep(0, A_dim))) %>% # need to add in zeros because oviposition class is added in
+    # rbind(matrix(rep(0, A_dim+1), nrow = 1)) %>%
     list()
   BetaB = (betaB * BetaH[[1]] / betaH) %>% list()
   
@@ -186,14 +186,14 @@ emp_EpiTerms <- function(A_matrix, v_alpha) {
   out_rates = zero_out(-as.matrix(A_matrix) %*% v_ones)
   
   LambdaB = diag(as.vector(out_rates)) %>%
-    cbind(matrix(rep(0, A_dim))) %>% # need to add in zeros because oviposition class is added in
-    rbind(matrix(rep(0, A_dim+1), nrow = 1)) %>%
+    # cbind(matrix(rep(0, A_dim))) %>% # need to add in zeros because oviposition class is added in
+    # rbind(matrix(rep(0, A_dim+1), nrow = 1)) %>%
     zero_out() %>%  list()
   LambdaH = (LambdaB[[1]] * KB / KH) %>% zero_out() %>%  list()
   
   BetaH = diag(A_dim) %>%
-    cbind(matrix(rep(0, A_dim))) %>% # need to add in zeros because oviposition class is added in
-    rbind(matrix(rep(0, A_dim+1), nrow = 1)) %>%
+    # cbind(matrix(rep(0, A_dim))) %>% # need to add in zeros because oviposition class is added in
+    # rbind(matrix(rep(0, A_dim+1), nrow = 1)) %>%
     zero_out() %>%  list()
   BetaB = BetaH
   
@@ -235,14 +235,14 @@ phenom_EpiTerms <- function(A_matrix, v_alpha) {
   out_rates = -as.matrix(A_matrix) %*% v_ones
   
   LambdaB = -diag(diag(A_matrix)) %>%
-    cbind(matrix(rep(0, A_dim))) %>% # need to add in zeros because oviposition class is added in
-    rbind(matrix(rep(0, A_dim+1), nrow = 1)) %>%
+    # cbind(matrix(rep(0, A_dim))) %>% # need to add in zeros because oviposition class is added in
+    # rbind(matrix(rep(0, A_dim+1), nrow = 1)) %>%
     list()
   LambdaH = (LambdaB[[1]] * KB / KH) %>% list()
   
   BetaH = (betaH * diag(A_dim)) %>%
-    cbind(matrix(rep(0, A_dim))) %>% # need to add in zeros because oviposition class is added in
-    rbind(matrix(rep(0, A_dim+1), nrow = 1)) %>%
+    # cbind(matrix(rep(0, A_dim))) %>% # need to add in zeros because oviposition class is added in
+    # rbind(matrix(rep(0, A_dim+1), nrow = 1)) %>%
     list()
   BetaB = (BetaH[[1]] * betaB / betaH) %>% list()
   
@@ -273,7 +273,7 @@ get_mech_A <- function(lQ, pQ, pL, lL, pP, lP, pG, lG, sigma){
 mech_EpiTerms <- function(v_B_star, lP, lG, varied_parameter) {
   
   if (varied_parameter == "pG") {
-    correction_for_plot = 0.2
+    correction_for_plot = 0.175
   } else {
     correction_for_plot = 1
   }
@@ -281,35 +281,31 @@ mech_EpiTerms <- function(v_B_star, lP, lG, varied_parameter) {
   KB = sum(unlist(v_B_star))
   v_ones = matrix(rep(1, 4), ncol = 1)
   
-  LambdaH = matrix(c(0, 0, 0,            0, 0,
-                     0, 0, 0,            0, 0,
-                     0, 0, correction_for_plot * lP * KB / KH, 0, 0,
-                     0, 0, 0,            0, 0,
-                     0, 0, 0,            0, 0
+  LambdaH = matrix(c(0, 0, 0,            0,
+                     0, 0, 0,            0,
+                     0, 0, lP * KB / KH, 0,
+                     0, 0, 0,            0
   ),
-  nrow = 5) %>% list()
-  LambdaB = matrix(c(0, 0, 0, 0,  0,
-                     0, 0, 0, 0,  0,
-                     0, 0, 0, 0,  0,
-                     0, 0, 0, lG, 0,
-                     0, 0, 0, 0,  0
+  nrow = 4) %>% list()
+  LambdaB = matrix(c(0, 0, 0, 0,
+                     0, 0, 0, 0,
+                     0, 0, 0, 0,
+                     0, 0, 0, lG
   ),
-  nrow = 5) %>% list()
+  nrow = 4) %>% list()
   
-  BetaH = matrix(c(0, 0, 0,     0, 0,
-                   0, 0, 0,     0, 0,
-                   0, 0, betaH, 0, 0,
-                   0, 0, 0,     0, 0,
-                   0, 0, 0,     0, 0
+  BetaH = matrix(c(0, 0, 0,                           0,
+                   0, 0, 0,                           0,
+                   0, 0, correction_for_plot * betaH, 0,
+                   0, 0, 0,                           0
   ),
-  nrow = 5) %>% list()
-  BetaB = matrix(c(0, 0, 0, 0,     0,
-                   0, 0, 0, 0,     0,
-                   0, 0, 0, 0,     0,
-                   0, 0, 0, correction_for_plot * betaB, 0,
-                   0, 0, 0, 0,     0
-  ),
-  nrow = 5) %>% list()
+  nrow = 4) %>% list()
+  BetaB = matrix(c(0, 0, 0, 0,     
+                   0, 0, 0, 0,     
+                   0, 0, 0, 0,     
+                   0, 0, 0, correction_for_plot * betaB
+                   ),
+  nrow = 4) %>% list()
   return(
     c(
       LambdaB = LambdaB,
@@ -423,30 +419,38 @@ R0_calc <- function(A_matrix, v_alpha, LambdaH, LambdaB, BetaH, BetaB) {
     R0 = 0
   } else {
     
-  KB = sum(stable_pop$v_B_star)
-  C_vec = rbind(stable_pop$v_B_star, stable_pop$V_star)
-  A_dim = dim(A_matrix)[1]
-  v_ones = matrix(rep(1, A_dim), ncol = 1)
-  tilde_v_alpha = v_alpha %>% rbind(0)
-  tilde_v_ones = v_ones %>% rbind(1)
-  out_rates = zero_out(-as.matrix(A_matrix) %*% v_ones)
-  # Independent terms
-  host_infectious_period = 1/(gammaH + muH)
-  
-  # Form tilde_A
-  tilde_A = get_tilde_A(A_matrix)
-  tilde_out_rates = zero_out(-as.matrix(tilde_A) %*% tilde_v_ones)
-  
-  # Intermediate terms
-  spec_mat = tilde_v_alpha %*% t(tilde_out_rates)
-  GammaI = inv(mu * diag(A_dim + 1) - t(tilde_A) - (gammaR / (mu + gammaR)) * spec_mat)
-  GammaE = inv((eta + mu) * diag(A_dim + 1) - t(tilde_A) - (gammaR / (mu + eta + gammaR)) * spec_mat)
-  
-  tauE = (eta * diag(A_dim + 1) + (eta / (mu + eta + gammaR)) * (gammaR / (mu + gammaR)) * spec_mat) %*% GammaE
-  
-  R02 = host_infectious_period * t(tilde_v_ones) %*% BetaH %*% LambdaH %*% GammaI %*% tauE %*% BetaB %*% LambdaB %*% C_vec  / KB
-  R0 = sqrt(as.double(R02))
-  
+    KB = sum(stable_pop$v_B_star)
+    # C_vec = rbind(stable_pop$v_B_star, stable_pop$V_star)
+    A_dim = dim(A_matrix)[1]
+    v_ones = matrix(rep(1, A_dim), ncol = 1)
+    # tilde_v_alpha = v_alpha %>% rbind(0)
+    # tilde_v_ones = v_ones %>% rbind(1)
+    out_rates = zero_out(-as.matrix(A_matrix) %*% v_ones)
+    # Independent terms
+    host_infectious_period = 1/(gammaH + muH)
+    
+    # # Form tilde_A
+    # tilde_A = get_tilde_A(A_matrix)
+    # tilde_out_rates = zero_out(-as.matrix(tilde_A) %*% tilde_v_ones)
+    
+    # Intermediate terms
+    spec_mat = v_alpha %*% t(out_rates)
+    
+    if (dim(A_matrix)[1] == 1) {
+      GammaI = 1/(mu * diag(A_dim) - t(A_matrix) - (gammaV / (mu + gammaV)) * (gammaR / (mu + gammaR)) * spec_mat)
+      GammaE = 1/((eta + mu) * diag(A_dim) - t(A_matrix) - (gammaV / (mu + eta + gammaV)) * (gammaR / (mu + eta + gammaR)) * spec_mat)
+    } else {
+      GammaI = inv(mu * diag(A_dim) - t(A_matrix) - (gammaV / (mu + gammaV)) * (gammaR / (mu + gammaR)) * spec_mat)
+      GammaE = inv((eta + mu) * diag(A_dim) - t(A_matrix) - (gammaV / (mu + eta + gammaV)) * (gammaR / (mu + eta + gammaR)) * spec_mat)
+    }
+    
+    complicated_probability = (gammaV/(mu+gammaV)) * ((eta / (mu+gammaV+eta)) * (gammaR/(mu+gammaR+eta)) + (eta/(mu+gammaR+eta) * (gammaR/(mu+gammaR))))
+    
+    tauE = (eta * diag(A_dim) + complicated_probability * spec_mat) %*% GammaE
+    
+    R02 = host_infectious_period * t(v_ones) %*% BetaH %*% LambdaH %*% GammaI %*% tauE %*% BetaB %*% LambdaB %*% stable_pop$v_B_star  / KB
+    R0 = sqrt(as.double(R02))
+    
   }
   
   return(R0)
@@ -494,9 +498,14 @@ Exponential_df <- tibble(theta = theta_vec) %>%
   rowwise() %>%
   mutate(stable_pops = list(get_stable_pop(A_matrix, v_alpha))) %>% unnest_wider(stable_pops) %>%
   # epidemiological terms
-  # epidemiological terms
   rowwise() %>%
   mutate(EpiTerms = list(exp_EpiTerms(A_matrix, v_alpha))) %>% unnest_wider(EpiTerms) %>%
+  mutate(
+    LambdaB = as.list(LambdaB),
+    LambdaH = as.list(LambdaH),
+    BetaB = as.list(BetaB),
+    BetaH = as.list(BetaH),
+  ) %>% 
   # basic reproduction number
   rowwise() %>%
   mutate(R0 = R0_calc(A_matrix, v_alpha, LambdaH, LambdaB, BetaH, BetaB))
@@ -568,7 +577,7 @@ flighty_parameters = tibble(
   pG = 0.5,
   lG = 1, # 1 minutes
   # Fleeing
-  sigma = 1 - 0.1
+  sigma = 1 - 0.9
 )
 persistent_parameters = tibble(
   mosquito_type = "persistent",
@@ -652,7 +661,7 @@ Mech_df <- full_variation_df %>%
   # Transform parameters into A matrix
   rowwise() %>%
   mutate(A_matrix = list(matrix(c(
-    -lQ,                                           pQ * lQ,       0,       0,
+    -lQ+(1-pQ)*lQ,                                 pQ * lQ,       0,       0,
     (1 - sigma) * (1- pL) * lL, -lL + sigma * (1- pL) * lL, pL * lL,       0,
     (1 - sigma) * (1 - pP) * lP,     sigma * (1 - pP) * lP,     -lP, pP * lP,
     (1 - sigma) * (1 - pG) * lG,     sigma * (1 - pG) * lG,       0,      -lG

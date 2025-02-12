@@ -21,6 +21,29 @@ Full_df = read_rds("data/GCD_R0_data.rds") %>%
     paste0(`Model type`, " (", varied_parameter,")"),
     `Model type`))
 
+# Dictionary for labeling
+param_table = tibble(
+  Symbol = c("$p_Q$", "$\\lambda_Q$", "$p_L$", "$\\lambda_L$", "$p_P$", "$\\lambda_P$", "$p_G$", "$\\lambda_G$", "$\\sigma$", "$b$"),
+  Description = c(
+    "Probability of progressing from seeking to landing",
+    "Exit rate from seeking stage (per minute)", 
+    "Probability of progressing from landing to probing",
+    "Exit rate from landing stage (per minute)", 
+    "Probability of progressing from probing to ingesting",
+    "Exit rate from probing stage (per minute)",
+    "Probability of progressing from ingesting to ovipositing",
+    "Exit rate from ingestion stage (per minute)",
+    "Probability of seeking a new host given feeding failure",
+    "Biting rate (exponential model)"
+    
+  ),
+  Label = c("Seeking success probability", "Seeking rate", "Landing success probability", "Landing rate", "Probing success probability", "Probing rate", "Ingestion success probability", "Ingesting rate", "Persistence probability", "Biting rate (exponential)"), 
+  Type = c("B Probabilities", "A Rates", "B Probabilities", "A Rates", "B Probabilities", "A Rates", "B Probabilities", "A Rates", "B Probabilities", "A Rates"),
+  Prefix = c("Seeking", "Seeking", "Landing", "Landing", "Probing", "Probing", "Ingesting",  "Ingesting", "Persistence", "Exponential"), 
+  short_label = c("pQ", "lQ", "pL", "lL", "pP", "lP", "pG", "lG", "sigma", "b")
+)
+
+
 # Set varied_parameter levels
 Full_df$varied_parameter = factor(Full_df$varied_parameter, 
                                   levels = c("none", "lQ", "pP", "pG"))
@@ -131,7 +154,7 @@ Figure1_df <- Full_df %>%
 
 Figure1_df$Type = factor(
   Figure1_df$Type,
-  levels = c("Empirical", "Phenomenological", "Mechanistic (lQ, pP, pG)","Standard / Exponential"))
+  levels = c("Empirical", "Phenomenological", "Mechanistic (lQ)","Standard / Exponential"))
 
 Figure1_labels = c(expression("Standard / Exponential"), expression("Empirical"), expression("Phenomenological"), 
                    expression("Mechanistic " (lambda[Q]))
@@ -141,20 +164,11 @@ Fig1_color_vals = c("Standard / Exponential" = "black",
                     # "Exponential" = c4a("brewer.dark2", 4)[2],
                     "Empirical" = c4a("brewer.dark2", 3)[1],
                     "Phenomenological" = c4a("brewer.dark2", 3)[2],
-                    "Mechanistic (lQ, pP, pG)" = c4a("brewer.dark2", 3)[3]#,
+                    "Mechanistic (lQ)" = c4a("brewer.dark2", 3)[3]#,
                     # "Mechanistic (lQ)" = c4a("brewer.dark2", 4)[3],
                     # "Mechanistic (pP)" = c4a("brewer.dark2", 4)[3],
                     # "Mechanistic (pG)" = c4a("brewer.dark2", 4)[3]
 )
-
-Fig1_lty_vals = c("Standard / Exponential" = 1,
-                  # "Exponential" = 1,
-                  "Empirical" = 1,
-                  "Phenomenological" = 1,
-                  "Mechanistic (lQ)" = 2,
-                  "Mechanistic (pP)" = 3,
-                  "Mechanistic (pG)" = 4)
-
 
 Figure1 = Figure1_df %>%
   ggplot(aes(x = x / 1440, y = pdf_val, color = Type)) +
@@ -254,7 +268,6 @@ Figure2_labels = c(expression("Standard"), expression("Exponential"), expression
 )
 
 
-
 Figure2 <- Figure2_df %>% 
   ggplot(aes(x = 1440 / theta, y = R0, color = Type, lty = Type)) +
   geom_hline(aes(yintercept = 1), color = "grey", lwd = 2) +
@@ -312,34 +325,18 @@ Mech_df <- read_rds("data/Mechanistic_results.rds")
 
 
 # Distinguish parameters by color -- different from 2.
-# Distinguish sets by linetype (flighty vs. persistent)
 
 nice_mech_labels = data.frame(
-  pQ = "Questing~success~probability~(p[Q])",
+  pQ = "Seeking~success~probability~(p[Q])",
   pL = "Landing~success~probability~(p[L])",
   pP = "Probing~success~probability~(p[P])",
   pG = "Ingesting~success~probability~(p[G])",
   sigma = "Persistence~probability~(sigma)",
-  lQ = "Questing~rate~(lambda[Q])",
+  lQ = "Seeking~rate~(lambda[Q])",
   lL = "Landing~rate~(lambda[P])",
   lP = "Probing~rate~(lambda[P])",
   lG = "Ingesting~rate~(lambda[G])"
 ) %>% pivot_longer(everything(), values_to = "nice_labels")
-
-# Define a labeller function that applies TeX()
-TeX_labeller <- function(x) {
-  sapply(x, function(label) {
-    # Escape underscores for LaTeX
-    label <- gsub("_", "\\\\_", label)  
-    
-    # Replace spaces with LaTeX-friendly spacing
-    label <- gsub(" ", "~", label)      
-    
-    # Convert label to expression string
-    paste0("expression(", label, ")")
-  })
-}
-
 
 Figure3_df <- Mech_df %>% 
   filter(parameter_type == "varied") %>% 
@@ -373,27 +370,146 @@ Figure3 <- Figure3_df %>%
   ) +
   scale_x_continuous(
     name = "Parameter value",
+    breaks = waiver(),
+    n.breaks = 5,
     expand = c(0,0)
   ) +
   scale_y_continuous(
     name = TeX("Basic reproduction number \\, [$R_0$]"),
     expand = c(0,0)
   ) +
-  scale_color_discrete(
-    name = "Parameter type:"
+  scale_color_manual(
+    name = "Parameter type:",
+    values = c4a("met.egypt",4)[1:2]
+    # values = c("#1B9E77", "#D95F02")
   ) +
   scale_linetype_discrete(
-    name = "Mosquito type:"
+    name = "Mosquito type:",
+    labels = c("Flighty", "Persistent")
   ) +
-  theme_half_open(18)
+  theme_half_open(11) +
+  guides(
+    color = guide_none()
+  ) +
+  theme(
+    strip.background = element_rect(color = "white", fill = "white"),
+    legend.key.width = unit(0.4, "in")
+  )
 
 shift_legend(Figure3)
-ggsave("figures/Figure3.pdf", shift_legend(Figure3), width = 20, height = 8, units = "in")
+
+ggsave("figures/Figure3.pdf", shift_legend(Figure3), width = 12, height = 3.25 * 9/6.5, units = "in")
+
+# 4. PRCCs of R0 against mechanistic parameters ----
+# Load in data
+LHS_data = read_csv("data/julia_outputs.csv.gz")
+
+rank_data = LHS_data %>% 
+  group_by(type) %>% 
+  mutate(across(lQ:R0, ~ rank(.x)))
+
+PRCC_data <- rank_data %>%
+  pivot_longer(cols = lQ:pG, names_to = "input", values_to = "input_value") %>%
+  pivot_longer(cols = GCD:R0, names_to = "output", values_to = "output_value") %>%
+  group_by(type, input, output) %>%
+  summarise(
+    PRCC = cor(input_value, output_value),
+    .groups = "drop"
+  )
+
+# Save the final PRCC results
+write_csv(PRCC_data, "data/PRCC_data.csv")
+
+PRCC_data <- read_csv("data/PRCC_data.csv")
+
+plot_data <- PRCC_data %>% 
+  right_join(
+    param_table %>% 
+      rename(input = short_label)
+  ) %>% 
+  mutate(
+    output_label = case_when(
+      output == "R0" ~ "Basic reproduction number",
+      output == "GCD" ~ "Gonotrophic cycle duration",
+      output == "N_offspring" ~ "Basic offspring number",
+    )
+  ) %>% 
+  mutate(
+    type_label = case_when(
+      type == "flighty" ~ "Flighty",
+      type == "persistent" ~ "Persistent",
+      type == "max" ~ "Maximum variation",
+    )
+  ) %>% 
+  filter(!is.na(output))
+
+plot_data$type = factor(plot_data$type, levels = c("flighty", "persistent", "max"))
+plot_data$input = factor(plot_data$input, levels = c(
+  "pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG"
+))
+plot_data$output_label = factor(plot_data$output_label, levels = c(
+  "Gonotrophic cycle duration", "Basic offspring number","Basic reproduction number"
+))
+
+plot_data$type_label = factor(plot_data$type_label, levels = c(
+  "Flighty","Persistent","Maximum variation"
+))
+
+
+plot_data$Label = factor(plot_data$Label, levels = c(
+  c("Seeking success probability",
+    "Landing success probability",  "Probing success probability", "Ingestion success probability"),
+  "Persistence probability", 
+  "Seeking rate", "Landing rate", "Probing rate", "Ingesting rate"
+))
+
+PRCC_plots <- plot_data %>% 
+  arrange(input) %>% 
+  # filter(!(input %in% c("pP", "pG", "lP", "lG"))) %>% 
+  # filter(output == "R0") %>% 
+  filter(output %in% c("N_offspring","R0")) %>%
+  # filter(type %in% c("flighty", "persistent")) %>% 
+  ggplot(aes(x = Label, y = PRCC, fill = type_label)) +
+  geom_col(position = "dodge") +
+  # Add light grey lines to divide up categories
+  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
+             color = "grey60", linetype = "dashed", linewidth = 0.25) +
+  # Add zero line
+  geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
+  facet_wrap(~output_label, ncol = 1, scales = "free_y") +
+  scale_fill_manual(
+    name = "Parameter set:",
+    values = c(c4a("met.juarez",3))#, "black")
+    ) +
+  scale_x_discrete(
+    name = ""
+    ) +
+  scale_y_continuous(
+    TeX("Partial Rank Correlation Coefficients"),
+    limits = c(-1,1)
+  ) +
+  # theme_minimal_vgrid(11) +
+  theme_half_open(11) +
+  theme(
+    # panel.grid.minor.x = element_line(
+    #   color = "grey",
+    #   linewidth = 0.5
+    # ),
+    axis.text.x = element_text(angle = 50, hjust = 1),
+    strip.background = element_rect(color = "white", fill = "white"),
+    legend.key.width = unit(0.4, "in"),
+    legend.position = "top",
+    legend.direction = "horizontal",
+    # legend.justification = "center"
+    )
+
+PRCC_plots
+
+# [] Make a plot with just R0 as an output, comparing flighty/persistent baselines
+ggsave("figures/Figure4.pdf", PRCC_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
 
 # Supplementary: theta vs. mechanistic parameters ----
-
-
-Figure4 <- Figure3_df %>%
+SuppFigure1 <- Figure3_df %>%
   filter(theta < 21 * 1440) %>% 
   ggplot(aes(x = value, y = theta / 1440, linetype = mosquito_type, color = parameter_type)) +
   geom_line(lwd = 1) +
@@ -419,7 +535,6 @@ Figure4 <- Figure3_df %>%
   ) +
   theme_half_open(18)
 
-shift_legend(Figure4)
-ggsave("figures/SuppFigure.pdf", shift_legend(Figure4), width = 20, height = 8, units = "in")
+shift_legend(SuppFigure1)
+ggsave("figures/SuppFigure.pdf", shift_legend(SuppFigure1), width = 20, height = 8, units = "in")
 # Distinguish parameters by color
-# Distinguish sets by linetype (flighty vs. persistent)
