@@ -3,9 +3,9 @@ include("GCD_R0_num_calc.jl")
 
 # Rates
 # (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG)
-const base_params_flighty = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.9f0, 1f0, 0.5f0, 0.5f0, 0.5f0]
+const base_params_flighty = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.9f0, 1.0f0, 0.5f0, 0.5f0, 0.5f0]
 
-const base_params_persistent = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.66f0, 1f0, 0.7f0, 0.8f0, 0.9f0]
+const base_params_persistent = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.66f0, 1.0f0, 0.7f0, 0.8f0, 0.9f0]
     
 
 function parameter_setup(baseline_vals, stretch_val) 
@@ -95,95 +95,95 @@ open(joinpath(dirname(dirname(pwd())), "data", "julia_outputs.csv.gz"), "w") do 
     close(gzip_io)
 end
 
-using Plots
-# plot(all_results[!,:sigma],all_results[!,:R0], seriestype=:scatter, markersize =1, alpha = 0.5, color=:blue)
-using Measures
-input_names = names(all_results[!,1:8])
-output_names = names(all_results[!,9:11])
+# using Plots
+# # plot(all_results[!,:sigma],all_results[!,:R0], seriestype=:scatter, markersize =1, alpha = 0.5, color=:blue)
+# using Measures
+# input_names = names(all_results[!,1:8])
+# output_names = names(all_results[!,9:11])
 
-# Iterate over output variables
-for output_name in output_names
-    output_label = join(["Log10 of", output_name], " ")  # Get the name of the output variable
-    # Create a grid of 8 plots for the current output variable
-    p = plot(layout=(2, 4), size = (1600, 1200), margin = 10mm)
-    subplot_index = 1
-    for input_name in input_names
-        # Extract data for the current pair of columns
-        x = all_results[!, input_name]
-        y = all_results[!, output_name]
-        # Transform y to base-10 logarithm
-        log_y = log10.(y)
-        # Add subplot for the current input variable
-        scatter!(x, log_y, subplot=subplot_index,
-                 xlabel=input_name, ylabel=output_label, markersize=1, legend = false)
-        subplot_index = subplot_index + 1
-    end
+# # Iterate over output variables
+# for output_name in output_names
+#     output_label = join(["Log10 of", output_name], " ")  # Get the name of the output variable
+#     # Create a grid of 8 plots for the current output variable
+#     p = plot(layout=(2, 4), size = (1600, 1200), margin = 10mm)
+#     subplot_index = 1
+#     for input_name in input_names
+#         # Extract data for the current pair of columns
+#         x = all_results[!, input_name]
+#         y = all_results[!, output_name]
+#         # Transform y to base-10 logarithm
+#         log_y = log10.(y)
+#         # Add subplot for the current input variable
+#         scatter!(x, log_y, subplot=subplot_index,
+#                  xlabel=input_name, ylabel=output_label, markersize=1, legend = false)
+#         subplot_index = subplot_index + 1
+#     end
 
-    # Save the grid of plots
-    savefig(p, joinpath(dirname(dirname(pwd())), "figures", "grid_output_var$output_name.png"))
-end
+#     # Save the grid of plots
+#     savefig(p, joinpath(dirname(dirname(pwd())), "figures", "grid_output_var$output_name.png"))
+# end
 
-# Calculate PRCCs ----
-using StatsBase
-# Function to rank transform a DataFrame column by column
-function rank_transform_df(df::DataFrame)
-    rank_df = copy(df)  # Create a copy of the DataFrame
-    for col in names(df)
-        rank_df[!, col] = sortperm(sortperm(df[!, col]))  # Apply rank transform
-    end
-    return rank_df
-end
-
-
-# Rank transform inputs and outputs
-max_rank_df = rank_transform_df(max_results)
-flighty_rank_df = rank_transform_df(flighty_results)
-persistent_rank_df = rank_transform_df(persistent_results)
-
-function PRCC_calc(df::DataFrame)
-    input_names = names(df[!,1:8])
-    output_names = names(df[!,9:11])
-    # Compute correlations and store in a results DataFrame
-    results = DataFrame(Input = String[], Output = String[], Correlation = Float64[])
-
-    rank_df = rank_transform_df(df)
-    # Iterate over output variables
-    for output_name in output_names
-        for input_name in input_names
-            corr_value = cor(rank_df[!,input_name], rank_df[!,output_name])
-            println("Correlation between $input_name and $output_name: $corr_value")
-            push!(results, (string(input_name), string(output_name), corr_value))
-        end
-
-    end
-end
-
-# Save PRCC results
-CSV.write(joinpath(dirname(dirname(pwd())), "data", "PRCC_results.csv"), results)
+# # Calculate PRCCs ----
+# using StatsBase
+# # Function to rank transform a DataFrame column by column
+# function rank_transform_df(df::DataFrame)
+#     rank_df = copy(df)  # Create a copy of the DataFrame
+#     @threads for col in ProgressBar(names(df))
+#         rank_df[!, col] = sortperm(sortperm(df[!, col]))  # Apply rank transform
+#     end
+#     return rank_df
+# end
 
 
-# Plot correlations for each output
-for output_name in output_names
-    # Filter the results for the current output
-    current_results = filter(row -> row.Output == string(output_name), results)
-    p = plot(size = (3200, 2400), margin = 10mm)
+# # Rank transform inputs and outputs
+# max_rank_df = rank_transform_df(max_results)
+# flighty_rank_df = rank_transform_df(flighty_results)
+# persistent_rank_df = rank_transform_df(persistent_results)
 
-    # Extract values for the bar plot
-    x_labels = current_results.Input
-    y_values = current_results.Correlation
+# function PRCC_calc(df::DataFrame)
+#     input_names = names(df[!,1:8])
+#     output_names = names(df[!,9:11])
+#     # Compute correlations and store in a results DataFrame
+#     results = DataFrame(Input = String[], Output = String[], Correlation = Float64[])
 
-    # Create the bar plot
-    p = bar(
-        x_labels,
-        y_values,
-        title = "Correlations with $output_name",
-        xlabel = "Input Variables",
-        ylabel = "Correlation",
-        legend = false
-    )
+#     rank_df = rank_transform_df(df)
+#     # Iterate over output variables
+#     for output_name in output_names
+#         for input_name in input_names
+#             corr_value = cor(rank_df[!,input_name], rank_df[!,output_name])
+#             println("Correlation between $input_name and $output_name: $corr_value")
+#             push!(results, (string(input_name), string(output_name), corr_value))
+#         end
 
-    # Display the plot
-    display(plot())
-    # Save the grid of plots
-    savefig(p, joinpath(dirname(dirname(pwd())), "figures", "PRCC_$output_name.png"))
-end
+#     end
+# end
+
+# # Save PRCC results
+# CSV.write(joinpath(dirname(dirname(pwd())), "data", "PRCC_results.csv"), results)
+
+
+# # Plot correlations for each output
+# for output_name in output_names
+#     # Filter the results for the current output
+#     current_results = filter(row -> row.Output == string(output_name), results)
+#     p = plot(size = (3200, 2400), margin = 10mm)
+
+#     # Extract values for the bar plot
+#     x_labels = current_results.Input
+#     y_values = current_results.Correlation
+
+#     # Create the bar plot
+#     p = bar(
+#         x_labels,
+#         y_values,
+#         title = "Correlations with $output_name",
+#         xlabel = "Input Variables",
+#         ylabel = "Correlation",
+#         legend = false
+#     )
+
+#     # Display the plot
+#     display(plot())
+#     # Save the grid of plots
+#     savefig(p, joinpath(dirname(dirname(pwd())), "figures", "PRCC_$output_name.png"))
+# end

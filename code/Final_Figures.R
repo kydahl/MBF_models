@@ -192,7 +192,7 @@ Figure1 = Figure1_df %>%
   scale_x_continuous(
     name = "Gonotrophic cycle duration [Days]",
     limits =  c(0, 3),
-    expand = c(0.01,0),
+    expand = c(0.0,0),
     breaks = seq(0,10)
   ) +
   scale_y_continuous(
@@ -214,9 +214,9 @@ Figure1 = Figure1_df %>%
   ) +
   guides(
     color = guide_legend(
-      position = "top",
-      direction = "horizontal",
-      nrow = 2
+      # position = "top",
+      # direction = "horizontal",
+      # nrow = 2
     )
   ) +
   theme_half_open(11) +
@@ -230,7 +230,7 @@ Figure1
 
 # shift_legend(Figure1)
 
-ggsave("figures/Figure1.pdf", Figure1, width = 4.25, height = 3.25 * 9/6.5, units = "in")
+ggsave("figures/Figure1.pdf", Figure1, width = 6.5, height = 3.25 * 9/6.5, units = "in")
 
 # 2. R0 vs. standard biting rates ----
 
@@ -255,7 +255,7 @@ Fig2_lty_vals = c("Standard" = 1,
                   "Mechanistic~(p[G])" = 4)
 
 Figure2_df = Full_df %>%
-  filter(theta > (1/2) * 1440) %>%
+  filter(theta > (1/2.01) * 1440) %>%
   mutate(Type = case_when(
     Type == "Mechanistic (lQ)" ~ "Mechanistic~(lambda[Q])",
     Type == "Mechanistic (pP)" ~ "Mechanistic~(p[P])",
@@ -263,18 +263,39 @@ Figure2_df = Full_df %>%
     TRUE ~ Type
   ))
 
+Figure2_ticks <- Figure2_df %>% 
+  # Get x-coordinate where R0 first exceeds/is less than one
+  group_by(Type) %>% 
+  mutate(sbr = 1440/theta) %>%  # standard biting rate
+  arrange(sbr) %>% 
+  summarise(
+    first_R0_greater_1 = sbr[R0 > 1][1],
+    # first_R0_less_1 = sbr[R0 < 1][1]
+  ) %>% 
+  # select(-sbr) %>% 
+  unique()
+
 Figure2_labels = c(expression("Standard"), expression("Exponential"), expression("Empirical"), expression("Phenomenological"), 
                    expression("Mechanistic " (lambda[Q])), expression("Mechanistic " (p[P])),expression("Mechanistic " (p[G]))
 )
 
 
 Figure2 <- Figure2_df %>% 
-  ggplot(aes(x = 1440 / theta, y = R0, color = Type, lty = Type)) +
+  ggplot(aes(color = Type, lty = Type)) +
   geom_hline(aes(yintercept = 1), color = "grey", lwd = 2) +
-  geom_line(lwd = 0.75) +
+  geom_line(aes(x = 1440 / theta, y = R0),
+            lwd = 0.75) +
+  geom_rug(
+    data = Figure2_ticks,
+    aes(x = first_R0_greater_1),
+    sides = "b", size = 0.75, outside = TRUE,
+    length = unit(0.3, "in"),
+    show.legend = F
+    ) +
   scale_x_continuous(
     name = TeX("Standard biting rate [Days$^{-1}$]"),
-    expand = c(0,0)
+    expand = c(0,0),
+    breaks = seq(0,2, by = 0.25)
   ) +
   scale_y_continuous(
     name = TeX("Basic reproduction number \\, [$R_0$]"),
@@ -292,8 +313,10 @@ Figure2 <- Figure2_df %>%
     breaks = unique(Figure2_df$Type),
     labels = Figure2_labels
   ) +
+  coord_cartesian(clip = "off") +
   theme_half_open(11) + 
   theme(
+    axis.title.x = element_text(margin = margin(t = 10)),
     legend.key.width = unit(0.4, "in")
   )
 
@@ -406,17 +429,18 @@ ggsave("figures/Figure3.pdf", shift_legend(Figure3), width = 12, height = 3.25 *
 # # Load in data
 # LHS_data = read_csv("data/julia_outputs.csv.gz")
 # 
-# rank_data = LHS_data %>% 
-#   group_by(type) %>% 
+# rank_data = LHS_data %>%
+#   group_by(type) %>%
 #   mutate(across(lQ:R0, ~ rank(.x)))
 # 
 # PRCC_data <- rank_data %>%
 #   pivot_longer(cols = lQ:pG, names_to = "input", values_to = "input_value") %>%
 #   pivot_longer(cols = GCD:R0, names_to = "output", values_to = "output_value") %>%
-#   group_by(type, input, output) %>%
+#   ungroup() %>% 
+#   # group_by(type, input, output) %>%
 #   summarise(
 #     PRCC = cor(input_value, output_value),
-#     .groups = "drop"
+#     .by = c(type, input, output)
 #   )
 # 
 # # Save the final PRCC results
@@ -478,7 +502,7 @@ PRCC_plots <- plot_data %>%
   geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
-  geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
+  geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
   facet_wrap(~output_label, ncol = 1, scales = "free_y") +
   scale_fill_manual(
     name = "Parameter set:",
@@ -561,18 +585,18 @@ PRCC_plots_max_only <- plot_data %>%
   geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
-  geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
+  geom_hline(yintercept = 0, color = "black") +
   # facet_wrap(~type_label, ncol = 1, scales = "free_y") +
   scale_fill_manual(
     name = "",
-    values = c(c4a("met.juarez",2))
+    values = c(c4a("met.juarez",3))
   ) +
   scale_x_discrete(
     name = ""
   ) +
   scale_y_continuous(
     TeX("Partial Rank Correlation Coefficient"),
-    limits = c(-1,1)
+    # limits = c(-1,1)
   ) +
   theme_half_open(11) +
   theme(

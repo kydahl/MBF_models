@@ -16,7 +16,7 @@ const (KJ, rhoJ, muJ, varPhi) = [0.75 * 1E3, (1/(12 * 1440)), (1 / (20 * 1440)),
 const (gV, gR, mu) = [(1/(5 * 1440)), (1/(2 * 1440)), (1/(21 * 1440))]
 const (muH, KH) = [1/(365.25 * 65 * 1440), 1E3]
 # const pQ = 1.0f0
-const (bH, bB, eta, gH) = [1f0, 1f0, 1 / (7 * 1440), 1 / (2 * 1440)]
+const (bH, bB, eta, gH) = [0.85f0, 0.85f0, 1 / (7 * 1440), 1 / (5 * 1440)]
 
 # Give variables appropriate names
 @variables B_vars[1:9] # V_vars[1:3] J_vars[1:4]
@@ -30,7 +30,7 @@ lG = 1 / (invlG_minute)
 
 # Define subintensity matrix
 A_mat = [
-    -lQ+(1-pQ)*lQ         pQ*lQ                  0f0   0f0   
+    -pQ*lQ         pQ*lQ                  0f0   0f0   
     (1-sigma)*(1-pL)*lL -lL+sigma*(1-pL)*lL pL*lL 0f0 
     (1-sigma)*(1-pP)*lP sigma*(1-pP)*lP     -lP   pP*lP
     (1-sigma)*(1-pG)*lG sigma*(1-pG)*lG     0f0   -lG
