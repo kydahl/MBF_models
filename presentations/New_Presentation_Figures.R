@@ -200,11 +200,6 @@ Figure_half = Figure1_df %>%
     limits = c(0, NA),
     expand = c(0.01,0)
   ) +
-  # scale_linetype_manual(
-  #   name = "Model type",
-  #   values = Fig1_lty_vals,
-  #   breaks = unique(Figure1_df$Type)
-  # ) +
   scale_color_manual(
     name = "Model type:",
     values = Fig1_color_vals,
@@ -228,7 +223,9 @@ Figure_half = Figure1_df %>%
 
 Figure_half
 
-ggsave("presentations/figures/Distribution_half.pdf", Figure_half, width = 13.333, height = 7.5, units = "in")
+ggsave("presentations/figures/Distribution_half.png", Figure_half, 
+       width = 13.333, height = 7.5, units = "in",
+       dpi = 1200)
 
 
 
@@ -286,8 +283,9 @@ Figure_one = Figure1_df %>%
 
 Figure_one
 
-ggsave("presentations/figures/Distribution_one.pdf", Figure_one, width = 13.333, height = 7.5, units = "in")
-
+ggsave("presentations/figures/Distribution_one.png", 
+       width = 13.333, height = 7.5, units = "in",
+       dpi = 1200)
 
 Figure_two = Figure1_df %>%
   filter(closest_theta == 2880) %>% 
@@ -343,8 +341,9 @@ Figure_two = Figure1_df %>%
 
 Figure_two
 
-ggsave("presentations/figures/Distribution_two.pdf", Figure_two, width = 13.333, height = 7.5, units = "in")
-
+ggsave("presentations/figures/Distribution_two.png", 
+       width = 13.333, height = 7.5, units = "in",
+       dpi = 1200)
 
 
 
@@ -396,70 +395,80 @@ Figure2_labels = c(expression("Standard"), expression("Exponential"), expression
                    expression("Mechanistic " (lambda[Q])), expression("Mechanistic " (p[P])),expression("Mechanistic " (p[G]))
 )
 
-
-Figure2 <- Figure2_df %>% 
-  ggplot(aes(color = Type, lty = Type)) +
-  geom_hline(aes(yintercept = 1), color = "grey", lwd = 2) +
-  geom_line(aes(x = 1440 / theta, y = R0),
-            lwd = 0.75) +
-  geom_rug(
-    data = Figure2_ticks,
-    aes(x = first_R0_greater_1),
-    sides = "b", size = 0.75, outside = TRUE,
-    length = unit(0.3, "in"),
-    show.legend = F
-  ) +
-  scale_x_continuous(
-    name = TeX("Standard biting rate [Days$^{-1}$]"),
-    expand = c(0,0),
-    breaks = seq(0,2, by = 0.25)
-  ) +
-  scale_y_continuous(
-    name = TeX("Basic reproduction number \\, [$R_0$]"),
-    expand = c(0,0)
-  ) +
-  scale_linetype_manual(
-    name = "Model type:",
-    values = Fig2_lty_vals,
-    breaks = unique(Figure2_df$Type),
-    labels = Figure2_labels
-  ) +
-  scale_color_manual(
-    name = "Model type:",
-    values = Fig2_color_vals,
-    breaks = unique(Figure2_df$Type),
-    labels = Figure2_labels
-  ) +
-  coord_cartesian(clip = "off") +
-  theme_half_open(11) + 
-  theme(
-    axis.title.x = element_text(margin = margin(t = 10)),
-    legend.key.width = unit(0.4, "in")
-  )
-
-Figure2
-
-ggsave("figures/Figure2.pdf", Figure2, width = 7.5, height = 3.25 * 9/6.5, units = "in")
-
-Figure2_alt <- Figure2 +
-  guides(
-    color = guide_legend(
-      position = "top",
-      direction = "horizontal",
-      nrow = 2,
-      byrow = T
-    ),
-    linetype = guide_legend(
-      position = "top",
-      direction = "horizontal",
-      nrow = 2,
-      byrow = T
+quick_fig_two <- function(keep_names) {
+  Figure2_df %>% 
+    filter(Type %in% keep_names) %>% 
+    ggplot(aes(color = Type, lty = Type)) +
+    geom_hline(aes(yintercept = 1), color = "grey", lwd = 2) +
+    geom_line(aes(x = 1440 / theta, y = R0),
+              lwd = 0.75) +
+    geom_rug(
+      data = Figure2_ticks,
+      aes(x = first_R0_greater_1),
+      sides = "b", size = 0.75, outside = TRUE,
+      length = unit(0.3, "in"),
+      show.legend = F
+    ) +
+    scale_x_continuous(
+      name = TeX("Standard biting rate [Days$^{-1}$]"),
+      expand = c(0,0),
+      breaks = seq(0,2, by = 0.25)
+    ) +
+    scale_y_continuous(
+      name = TeX("Basic reproduction number \\, [$R_0$]"),
+      expand = c(0,0)
+    ) +
+    scale_linetype_manual(
+      name = "Model type:",
+      values = Fig2_lty_vals,
+      breaks = unique(Figure2_df$Type),
+      labels = Figure2_labels
+    ) +
+    scale_color_manual(
+      name = "Model type:",
+      values = Fig2_color_vals,
+      breaks = unique(Figure2_df$Type),
+      labels = Figure2_labels
+    ) +
+    coord_cartesian(clip = "off") +
+    theme_half_open(11) + 
+    theme(
+      axis.title.x = element_text(margin = margin(t = 10)),
+      legend.key.width = unit(0.4, "in")
+    )  +
+    guides(
+      color = guide_legend(
+        position = "top",
+        direction = "horizontal",
+        nrow = 2,
+        byrow = T
+      ),
+      linetype = guide_legend(
+        position = "top",
+        direction = "horizontal",
+        nrow = 2,
+        byrow = T
+      )
     )
-  )
+}
 
-Figure2_alt
+R0theta_one <- quick_fig_two("Standard")
+R0theta_two <- quick_fig_two(c("Standard", "Exponential"))
+R0theta_three <- quick_fig_two(c("Standard", "Exponential", "Empirical"))
+R0theta_four <- quick_fig_two(c("Standard", "Exponential", "Empirical",
+                                "Phenomenological"))
+R0theta_five <- quick_fig_two(unique(Figure2_df$Type))
 
-ggsave("figures/Figure2_alt.pdf", Figure2_alt, width = 7.5, height = 3.25 * 9/6.5, units = "in")
+ggsave("presentations/figures/R0theta_1.png", R0theta_one,
+       width = 13.333, height = 7.5, units = "in")
+ggsave("presentations/figures/R0theta_2.png", R0theta_two,
+       width = 13.333, height = 7.5, units = "in")
+ggsave("presentations/figures/R0theta_3.png", R0theta_three,
+       width = 13.333, height = 7.5, units = "in")
+ggsave("presentations/figures/R0theta_4.png", R0theta_four,
+       width = 13.333, height = 7.5, units = "in")
+ggsave("presentations/figures/R0theta_5.png", R0theta_five,
+       width = 13.333, height = 7.5, units = "in")
 
 # 3. R0 vs. mechanistic parameters ----
 
