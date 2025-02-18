@@ -29,9 +29,9 @@ library(matlib)
 gammaV = 1 / (5 * 1440) # 1/(5 * 1440) # exit rate from oviposition to resting, including bloodmeal digestion and site search (5 days)
 gammaR = 1/ (2 * 1440) # exit rate from resting to return to blood-feeding (2 days)
 # Transmission parameters
-betaH = betaB = 0.75
+betaH = betaB = 0.5 #0.75
 eta = 1/(7 * 1440) # 6 days for infection to develop in vector
-mu = 1/(21 * 1440) # 20 day lifespan for vector
+mu = 1/(20 * 1440) # 20 day lifespan for vector
 gammaH = 1/(5 * 1440) # rate of recovery in hosts (5 days)
 muH = 1/(365.25 * 65 * 1440) # host mortality rate (65 years)
 KH = 1E3 # host population density
@@ -65,7 +65,7 @@ standard_R0_calc <- function(b) {
   B_star = as.list(get_standard_stable_pop(b))$B_star
   # standard_beta = betaH / sqrt(60) #2 * betaH / 400 #369.5324 * betaH / 4000# / (1000*sqrt(3))
   host_infectious_period = (1 / (muH + gammaH))
-  standard_beta = 0.175 * betaB # which is approximately = 1 * 1440 / sqrt(host_infectious_period * (eta / (mu + eta)) * (1 / mu) * KJ / KH)
+  standard_beta = 0.175 * betaB # which is approximately = betaB * 1440 / sqrt(host_infectious_period * (eta / (mu + eta)) * (1 / mu) * KJ / KH)
   # 
   # b_vec = seq(1 / (20 * 1440), 1 / (2 * 1440), length.out = 10)
   
@@ -468,7 +468,7 @@ theta_max = 1 / mu #21 * 24 * 60 # maximum biting duration of 3 days
 theta_vec = seq(theta_min, theta_max, length.out = resolution)
 theta_vec = theta_vec[-1]
 inv_theta_vec = seq(1e-9, 3, length.out = resolution)
-theta_vec = sort(unique(c(theta_vec, 1/inv_theta_vec, (1/3) * 1440, (1/2) * 1440, 1 * 1440, 2 * 1440)))
+theta_vec = sort(unique(c(theta_vec, 1/inv_theta_vec, (1/8) * 1440, (1/4) * 1440, (1/3) * 1440, (1/2) * 1440, 1 * 1440, 2 * 1440, 3 * 1440)))
 
 
 GCD_vec = theta_vec + (1/gammaR) + (1/gammaV)
