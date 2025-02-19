@@ -288,7 +288,7 @@ Figure2_ticks <- Figure2_df %>%
   arrange(sbr) %>% 
   summarise(
     first_R0_greater_1 = sbr[R0 > 1][1],
-    # first_R0_less_1 = sbr[R0 < 1][1]
+    first_R0_less_1 = max(sbr[R0 > 1])
   ) %>% 
   # select(-sbr) %>% 
   unique()
@@ -296,6 +296,27 @@ Figure2_ticks <- Figure2_df %>%
 Figure2_labels = c(expression("Standard"), expression("Exponential"), expression("Empirical"), expression("Phenomenological"), 
                    expression("Mechanistic " (lambda[Q])), expression("Mechanistic " (p[P])),expression("Mechanistic " (p[G]))
 )
+
+Figure2_arrows = Figure2_df %>%
+  filter(`Model type` == "Mechanistic") %>% 
+  pivot_longer(cols = lQ:sigma) %>% 
+  filter(varied_parameter == name) %>% 
+  group_by(varied_parameter) %>%
+  arrange(value) %>% 
+  mutate(sbr = 1440 / theta) %>% 
+  filter(between(sbr, 1.36, 1.42)) %>% 
+  group_by(varied_parameter) %>% 
+  mutate(
+    x_first = min(sbr),
+    x_last = max(sbr)
+  ) %>% 
+  group_by(varied_parameter) %>% 
+  filter(sbr %in% c(x_first, x_last)) %>% 
+  mutate(
+    R0_first = R0[sbr == min(sbr)],
+    R0_last = R0[sbr == max(sbr)]
+  ) %>% ungroup() %>% 
+  select(Type, x_first, x_last, R0_first, R0_last) %>% distinct()
 
 
 Figure2 <- Figure2_df %>% 
@@ -314,18 +335,12 @@ Figure2 <- Figure2_df %>%
     show.legend = F
   ) +
   # Arrows showing direction of increasing parameter values
-  geom_line(
-    data = Figure2_df %>%
-      filter(`Model type` == "Mechanistic") %>% 
-      pivot_longer(cols = lQ:sigma) %>% 
-      filter(varied_parameter == name) %>% 
-      group_by(varied_parameter) %>%
-      arrange(value) %>% 
-      mutate(mean_GCD_day = mean(1440 / theta)) %>% 
-      filter(between(theta, 1440/1.75,1440/1.5)),
-    aes(x = 1440 / theta, y = R0, color = Type),
-    lwd = 1,
-    arrow = arrow(ends = "first", type = "closed"),
+  geom_segment(
+    data = Figure2_arrows,
+    aes(x = x_first, y = R0_first, xend = x_last, yend = R0_last, color = Type),
+    lwd = 0, 
+    # alpha = 0,
+    arrow = arrow(length = unit(0.2, "inches"), ends = "last", type = "closed"),
     show.legend = F,
     inherit.aes = F
   ) +
@@ -438,13 +453,15 @@ Figure3 <- Figure3_df %>%
     scales = "free_x"
   ) +
   scale_x_continuous(
-    name = "Parameter value",
+    name = "",
     breaks = waiver(),
     n.breaks = 5,
+    labels = function(x) sub("\\.?0+$", "", format(x, nsmall = 2)),
     expand = c(0,0)
   ) +
   scale_y_continuous(
     name = TeX("Basic reproduction number \\, [$R_0$]"),
+    labels = function(x) sub("\\.?0+$", "", format(x, nsmall = 2)),
     expand = c(0,0)
   ) +
   scale_color_manual(
@@ -548,7 +565,7 @@ shift_legend(Figure3_alt)
 ggsave("figures/Figure3_alt.pdf", shift_legend(Figure3_alt), width = 6.5, height = 3.25, units = "in")
 
 # 4. PRCCs of R0 against mechanistic parameters ----
-# # Load in data
+# Load in data
 # LHS_data = read_csv("data/julia_outputs.csv.gz")
 # 
 # rank_data = LHS_data %>%
@@ -558,7 +575,7 @@ ggsave("figures/Figure3_alt.pdf", shift_legend(Figure3_alt), width = 6.5, height
 # PRCC_data <- rank_data %>%
 #   pivot_longer(cols = lQ:pG, names_to = "input", values_to = "input_value") %>%
 #   pivot_longer(cols = GCD:R0, names_to = "output", values_to = "output_value") %>%
-#   ungroup() %>% 
+#   ungroup() %>%
 #   # group_by(type, input, output) %>%
 #   summarise(
 #     PRCC = cor(input_value, output_value),
@@ -715,7 +732,7 @@ PRCC_plots_max_only <- plot_data %>%
   geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
              color = "grey60", linetype = "dashed", linewidth = 0.125) +
   # Add zero line
-  geom_vline(xintercept = 0, color = "black") +
+  geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
   scale_fill_manual(
     name = "",
     values = c(c4a("met.juarez",3))
