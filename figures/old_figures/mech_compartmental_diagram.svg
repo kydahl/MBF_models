@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1151.0435"
+   height="484.54401"
+   overflow="hidden"
+   version="1.1"
+   id="svg29"
+   sodipodi:docname="SMB_2024.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs29">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath30">
+      <rect
+         style="fill:#000000;fill-rule:evenodd;stroke-width:0"
+         id="rect31"
+         width="9.9597988"
+         height="4.9798994"
+         x="679.75623"
+         y="338.63315" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath31">
+      <rect
+         style="fill:#000000;fill-rule:evenodd;stroke-width:0"
+         id="rect32"
+         width="9.9597988"
+         height="4.9798994"
+         x="679.75623"
+         y="338.63315" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="namedview29"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.80322911"
+     inkscape:cx="703.41076"
+     inkscape:cy="435.11869"
+     inkscape:window-width="1920"
+     inkscape:window-height="1129"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg29" />
+  <g
+     id="g29"
+     transform="translate(-47.222166,-154)">
+    <rect
+       x="0"
+       y="0"
+       width="1280"
+       height="720"
+       fill="#ffffff"
+       id="rect1"
+       clip-path="url(#clipPath31)" />
+    <path
+       d="M 246,178.167 C 246,167.029 255.029,158 266.167,158 h 143.666 c 11.138,0 20.167,9.029 20.167,20.167 v 80.666 C 430,269.971 420.971,279 409.833,279 H 266.167 C 255.029,279 246,269.971 246,258.833 Z"
+       stroke="#000000"
+       stroke-width="8"
+       stroke-miterlimit="8"
+       fill="none"
+       fill-rule="evenodd"
+       id="path1" />
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="24px"
+       transform="translate(275.999,213)"
+       id="text1">Locate host</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="24px"
+       transform="translate(281.999,242)"
+       id="text2">“Questing”</text>
+    <path
+       d="m 422,289 c 0,-11.046 8.954,-20 20,-20 h 145 c 11.046,0 20,8.954 20,20 v 80 c 0,11.046 -8.954,20 -20,20 H 442 c -11.046,0 -20,-8.954 -20,-20 z"
+       stroke="#000000"
+       stroke-width="8"
+       stroke-miterlimit="8"
+       fill="none"
+       fill-rule="evenodd"
+       id="path2" />
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="24px"
+       transform="translate(471.884,338)"
+       id="text3">Landing</text>
+    <path
+       d="m 599,400 c 0,-11.046 8.954,-20 20,-20 h 144 c 11.046,0 20,8.954 20,20 v 80 c 0,11.046 -8.954,20 -20,20 H 619 c -11.046,0 -20,-8.954 -20,-20 z"
+       stroke="#000000"
+       stroke-width="8"
+       stroke-miterlimit="8"
+       fill="none"
+       fill-rule="evenodd"
+       id="path3" />
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="24px"
+       transform="translate(649.769,449)"
+       id="text4">Probing</text>
+    <path
+       d="m 775,510 c 0,-11.046 8.954,-20 20,-20 h 145 c 11.046,0 20,8.954 20,20 v 80 c 0,11.046 -8.954,20 -20,20 H 795 c -11.046,0 -20,-8.954 -20,-20 z"
+       stroke="#000000"
+       stroke-width="8"
+       stroke-miterlimit="8"
+       fill="none"
+       fill-rule="evenodd"
+       id="path4" />
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="24px"
+       transform="translate(818.942,559)"
+       id="text5">Ingesting</text>
+    <path
+       d="m 607,325 h 88.414 v 34.735 h -8 V 329 l 4,4 H 607 Z m 96.414,30.735 -12,24 -12,-24 z"
+       id="path5" />
+    <path
+       d="m 430,214 h 88.414 v 34.735 h -8 V 218 l 4,4 H 430 Z m 96.414,30.735 -12,24 -12,-24 z"
+       id="path6" />
+    <path
+       d="m 783,436 h 88.369 v 33.659 h -8 V 440 l 4,4 H 783 Z m 96.369,29.659 -12,24 -12,-24 z"
+       id="path7" />
+    <path
+       d="M 422.414,333.735 H 334 V 299 h 8 v 30.735 l -4,-4 h 84.414 z M 326,303 l 12,-24 12,24 z"
+       fill="#ff0000"
+       id="path8" />
+    <path
+       d="M 599.414,443.735 H 511 V 409 h 8 v 30.735 l -4,-4 h 84.414 z M 503,413 l 12,-24 12,24 z"
+       fill="#92d050"
+       id="path9" />
+    <path
+       d="m 0,4 h -20.6888 l 4,-4 v 353.103 l -4,-4 H 201.747 v 8 H -24.6888 V -4 H 0 Z m 197.747,337.103 24,12 -24,12 z"
+       fill="#ff0000"
+       transform="matrix(0,-1,-1,0,691.103,500.747)"
+       id="path10" />
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="21px"
+       transform="translate(1014.69,557)"
+       id="text10">To oviposition stage</text>
+    <path
+       d="M 0.0405317,-1.99959 35.3884,-1.28309 35.3074,2.71609 -0.0405317,1.99959 Z M 33.4699,-5.3228 45.3458,0.91916 33.2267,6.67474 Z"
+       transform="matrix(1,0,0,-1,960,549.919)"
+       id="path11" />
+    <path
+       d="M 775.92,553.533 H 511 V 409 h 8 v 140.533 l -4,-4 H 775.92 Z M 503,413 l 12,-24 12,24 z"
+       fill="#92d050"
+       id="path12" />
+    <path
+       d="m 0,4 h -24.0004 l 4,-4 v 529.61 l -4,-4 H 311.544 v 8 H -28.0004 V -4 H 0 Z m 307.544,513.61 24,12 -24,12 z"
+       fill="#ff0000"
+       transform="matrix(0,-1,-1,0,867.61,610.544)"
+       id="path13" />
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="700"
+       font-size="53px"
+       transform="rotate(-90,440.3305,137.6695)"
+       id="text13">Failure</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="24px"
+       transform="translate(349.268,449)"
+       id="text14">Depart and</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="24px"
+       transform="translate(349.268,478)"
+       id="text15">quest for</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="24px"
+       transform="translate(349.268,507)"
+       id="text16">new host</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="24px"
+       transform="translate(531.3,575)"
+       id="text17">Persist on same host</text>
+    <path
+       d="m 194,216 h 41.378 v 4 H 194 Z m 39.378,-4 12,6 -12,6 z"
+       id="path17" />
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="21px"
+       transform="translate(46.5249,175)"
+       id="text18">Newly</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="21px"
+       transform="translate(104.358,175)"
+       id="text19">-</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="21px"
+       transform="translate(111.525,175)"
+       id="text20">emerged</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="21px"
+       transform="translate(46.5249,200)"
+       id="text21">mosquitoes</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="21px"
+       transform="translate(46.5249,226)"
+       id="text22">and adults that</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="21px"
+       transform="translate(46.5249,252)"
+       id="text23">recently finished</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="21px"
+       transform="translate(46.5249,277)"
+       id="text24">ovipositing</text>
+    <rect
+       x="604.5"
+       y="455.5"
+       width="173"
+       height="27"
+       stroke="#fcd530"
+       stroke-width="0"
+       stroke-linejoin="round"
+       stroke-miterlimit="10"
+       fill="#fcd530"
+       id="rect24" />
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="15px"
+       transform="translate(620.299,473)"
+       id="text25">Transmission</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="700"
+       font-size="15px"
+       transform="translate(711.633,473)"
+       id="text26">to host</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="700"
+       font-size="53px"
+       transform="rotate(38.662367,-1.129324,1105.5648)"
+       id="text27">Success</text>
+    <rect
+       x="781.5"
+       y="565.5"
+       width="173"
+       height="28"
+       stroke="#fcd530"
+       stroke-width="0"
+       stroke-linejoin="round"
+       stroke-miterlimit="10"
+       fill="#fcd530"
+       id="rect27" />
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="400"
+       font-size="15px"
+       transform="translate(791.196,584)"
+       id="text28">Transmission</text>
+    <text
+       font-family="Arial, Arial_MSFontService, sans-serif"
+       font-weight="700"
+       font-size="15px"
+       transform="translate(882.53,584)"
+       id="text29">to vector</text>
+  </g>
+  <rect
+     style="fill:#000000;fill-rule:evenodd;stroke-width:0"
+     id="rect29"
+     width="1165.2964"
+     height="521.64447"
+     x="43.57412"
+     y="149.39697"
+     clip-path="url(#clipPath30)"
+     transform="translate(-47.222166,-154)" />
+</svg>
