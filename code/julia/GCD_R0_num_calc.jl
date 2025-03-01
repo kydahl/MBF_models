@@ -16,9 +16,55 @@ const (muH, KH) = [1/(365.25 * 65 * 1440), 1E3]
 const (bH, bB, eta, gH) = [0.5f0, 0.5f0, 1 / (7 * 1440), 1 / (5 * 1440)]
 
 # Load in output functions
-GCD_func = Serialization.deserialize("GCD_func.jls");
-N_offspring_func = Serialization.deserialize("N_offspring_func.jls");
+# GCD_func = Serialization.deserialize("GCD_func.jls");
+# N_offspring_func = Serialization.deserialize("N_offspring_func.jls");
 # R0_func = Serialization.deserialize("R0_func.jls");
+
+function GCD_func(B_vals_in)
+    (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG) = B_vals_in
+
+    # one_vec_five = [1.0f0 1.0f0 1.0f0 1.0f0 1.0f0]
+    # alpha_vec_five = [1.0f0; 0.0f0; 0.0f0; 0.0f0; 0.0f0]
+    one_vec_four = [1.0f0; 1.0f0; 1.0f0; 1.0f0]
+    alpha_vec_four = [1.0f0; 0.0f0; 0.0f0; 0.0f0]
+
+    # Define subintensity matrices
+    A_mat = [
+        -lQ+(1-pQ)*lQ       pQ*lQ               0f0   0f0   
+        (1-sigma)*(1-pL)*lL -lL+sigma*(1-pL)*lL pL*lL 0f0 
+        (1-sigma)*(1-pP)*lP sigma*(1-pP)*lP     -lP   pP*lP
+        (1-sigma)*(1-pG)*lG sigma*(1-pG)*lG     0f0   -lG
+    ]
+
+    GCD = transpose(alpha_vec_four) * transpose(A_mat) * one_vec_four
+
+    return(GCD)
+end
+
+function N_offspring_func(B_vals_in)
+    (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG) = B_vals_in
+
+    # one_vec_five = [1.0f0 1.0f0 1.0f0 1.0f0 1.0f0]
+    # alpha_vec_five = [1.0f0; 0.0f0; 0.0f0; 0.0f0; 0.0f0]
+    one_vec_four = [1.0f0; 1.0f0; 1.0f0; 1.0f0]
+    alpha_vec_four = [1.0f0; 0.0f0; 0.0f0; 0.0f0]
+
+    # Define subintensity matrices
+    A_mat = [
+        -lQ+(1-pQ)*lQ       pQ*lQ               0f0   0f0   
+        (1-sigma)*(1-pL)*lL -lL+sigma*(1-pL)*lL pL*lL 0f0 
+        (1-sigma)*(1-pP)*lP sigma*(1-pP)*lP     -lP   pP*lP
+        (1-sigma)*(1-pG)*lG sigma*(1-pG)*lG     0f0   -lG
+    ]
+
+    tau = transpose(-A_mat * one_vec_four) * inv(mu * I - transpose(A_mat)) * alpha_vec_four
+    tau = tau[1]
+    rho = (gV / (mu + gV)) * (gR / (mu + gR)) * tau
+    nG = 1.0f0 / (1.0f0 - rho)
+    # Basic offspring number
+    N_offspring = tau * (varPhi / (mu + gV)) * (rhoJ / (rhoJ + muJ)) * nG
+    return(N_offspring)
+end
 
 function R0_func(B_vals_in)
     (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG) = B_vals_in
@@ -28,22 +74,13 @@ function R0_func(B_vals_in)
     one_vec_four = [1.0f0; 1.0f0; 1.0f0; 1.0f0]
     alpha_vec_four = [1.0f0; 0.0f0; 0.0f0; 0.0f0]
 
-    f = 1 - sigma
     # Define subintensity matrices
     A_mat = [
-        -lQ+(1-pQ)*lQ         pQ*lQ                  0f0   0f0   
-        f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0f0 
-        f*(1-pP)*lP (1-f)*(1-pP)*lP     -lP   pP*lP
-        f*(1-pG)*lG (1-f)*(1-pG)*lG     0f0   -lG
+        -lQ+(1-pQ)*lQ       pQ*lQ               0f0   0f0   
+        (1-sigma)*(1-pL)*lL -lL+sigma*(1-pL)*lL pL*lL 0f0 
+        (1-sigma)*(1-pP)*lP sigma*(1-pP)*lP     -lP   pP*lP
+        (1-sigma)*(1-pG)*lG sigma*(1-pG)*lG     0f0   -lG
     ]
-
-    # A_tilde = [
-    #     -lQ         lQ                  0f0   0f0   0f0
-    #     f*(1-pL)*lL -lL+(1-f)*(1-pL)*lL pL*lL 0f0   0f0
-    #     f*(1-pP)*lP (1-f)*(1-pP)*lP     -lP   pP*lP 0f0
-    #     f*(1-pG)*lG (1-f)*(1-pG)*lG     0f0   -lG   pG*lG
-    #     0f0         0f0                 0f0   0f0   -gV
-    # ]
 
     tau = transpose(-A_mat * one_vec_four) * inv(mu * I - transpose(A_mat)) * alpha_vec_four
     tau = tau[1]

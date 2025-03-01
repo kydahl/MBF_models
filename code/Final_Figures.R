@@ -273,18 +273,20 @@ Fig2_lty_vals = c("Standard" = 1,
                   "Mechanistic~(p[G])" = 4)
 
 Figure2_df = Full_df %>%
-  filter(theta > (1/2.01) * 1440) %>%
-  mutate(Type = case_when(
-    Type == "Mechanistic (lQ)" ~ "Mechanistic~(lambda[Q])",
-    Type == "Mechanistic (pP)" ~ "Mechanistic~(p[P])",
-    Type == "Mechanistic (pG)" ~ "Mechanistic~(p[G])",
-    TRUE ~ Type
-  ))
+  mutate(
+    Type = case_when(
+      Type == "Mechanistic (lQ)" ~ "Mechanistic~(lambda[Q])",
+      Type == "Mechanistic (pP)" ~ "Mechanistic~(p[P])",
+      Type == "Mechanistic (pG)" ~ "Mechanistic~(p[G])",
+      TRUE ~ Type
+    ),
+    sbr = 1440/theta  # standard biting rate
+  )
 
 Figure2_ticks <- Figure2_df %>% 
+  filter(sbr < 2.01) %>% # only keep values up to 2 bites per day
   # Get x-coordinate where R0 first exceeds/is less than one
   group_by(Type) %>% 
-  mutate(sbr = 1440/theta) %>%  # standard biting rate
   arrange(sbr) %>% 
   summarise(
     first_R0_greater_1 = sbr[R0 > 1][1],
@@ -320,6 +322,7 @@ Figure2_arrows = Figure2_df %>%
 
 
 Figure2 <- Figure2_df %>% 
+  filter(sbr < 2.01) %>% # only keep values up to 2 bites per day
   ggplot(aes(color = Type, lty = Type)) +
   # Grey line for R0 = 1
   geom_hline(aes(yintercept = 1), color = "grey", lwd = 1) +
@@ -369,7 +372,7 @@ Figure2 <- Figure2_df %>%
     labels = Figure2_labels
   ) +
   coord_cartesian(
-    xlim = c(0, 1.85),
+    xlim = c(0, 1.8),
     clip = "off" # needed to let ticks get plotted out of the axes
   ) + 
   theme_half_open(11) + 
@@ -401,6 +404,32 @@ Figure2_alt <- Figure2 +
 Figure2_alt
 
 ggsave("figures/Figure2_alt.pdf", Figure2_alt, width = 7.5, height = 3.25 * 9/6.5, units = "in")
+
+# Table: Characteristics of R0 curves ----
+R0_characteristics_table <- Full_df %>%
+  filter(between(theta, 1, 20*1440)) %>% # remove unrealistically short GCD (less than 1 second)
+  mutate(sbr = 1440/theta) %>%  # standard biting rate
+  arrange(sbr) %>% 
+  mutate(
+    Type = case_when(
+      Type == "Mechanistic (lQ)" ~ "Mechanistic~(lambda[Q])",
+      Type == "Mechanistic (pP)" ~ "Mechanistic~(p[P])",
+      Type == "Mechanistic (pG)" ~ "Mechanistic~(p[G])",
+      TRUE ~ Type
+    )
+  ) %>% 
+  # Get x-coordinate where R0 first exceeds/is less than one
+  group_by(Type) %>% 
+  summarise(
+    max_sbr = max(sbr),
+    crit_min_sbr = sbr[R0 > 1][1],
+    max_test = length(sbr[R0>1]),
+    temp_max = max(sbr[R0 > 1], na.rm = T),
+    crit_max_sbr = ifelse(temp_max > 0.99*max_sbr | max_test == 0, NA, temp_max),
+    max_R0 = max(R0)
+  ) %>% 
+  select(-c(max_sbr, max_test, temp_max)) %>% 
+  unique()
 
 # 3. R0 vs. mechanistic parameters ----
 
@@ -566,53 +595,58 @@ ggsave("figures/Figure3_alt.pdf", shift_legend(Figure3_alt), width = 6.5, height
 
 # 4. PRCCs of R0 against mechanistic parameters ----
 # Load in data
-# LHS_data = read_csv("data/julia_outputs.csv.gz")
-# 
-# rank_data = LHS_data %>%
-#   group_by(type) %>%
-#   mutate(across(lQ:R0, ~ rank(.x)))
-# 
-# PRCC_data <- rank_data %>%
-#   pivot_longer(cols = lQ:pG, names_to = "input", values_to = "input_value") %>%
-#   pivot_longer(cols = GCD:R0, names_to = "output", values_to = "output_value") %>%
-#   ungroup() %>%
-#   # group_by(type, input, output) %>%
-#   summarise(
-#     PRCC = cor(input_value, output_value),
-#     .by = c(type, input, output)
-#   )
-# 
-# # Save the final PRCC results
-# write_csv(PRCC_data, "data/PRCC_data.csv")
+LHS_data = read_csv("data/julia_outputs.csv.gz") %>%
+  filter(type == "max")
+
+rank_data = LHS_data %>%
+  group_by(type) %>%
+  mutate(across(lQ:R0, ~ rank(.x)))
+
+PRCC_data <- rank_data %>%
+  pivot_longer(cols = lQ:dummy, names_to = "input", values_to = "input_value") %>%
+  pivot_longer(cols = GCD:R0, names_to = "output", values_to = "output_value") %>%
+  ungroup() %>%
+  # group_by(type, input, output) %>%
+  summarise(
+    PRCC = cor(input_value, output_value),
+    .by = c(type, input, output)
+  )
+
+# Save the final PRCC results
+write_csv(PRCC_data, "data/PRCC_data.csv")
 
 # Load in final PRCC results
 PRCC_data <- read_csv("data/PRCC_data.csv")
 
 plot_data <- PRCC_data %>% 
-  right_join(
+  group_by(type, output) %>% 
+  # Add in nice labels
+  left_join(
     param_table %>% 
       rename(input = short_label)
-  ) %>% 
+  ) %>%
+  left_join(rename(nice_mech_labels, input = name), by = "input")  %>% 
   mutate(
     output_label = case_when(
       output == "R0" ~ "Basic reproduction number",
       output == "GCD" ~ "Gonotrophic cycle duration",
       output == "N_offspring" ~ "Basic offspring number",
-    )
-  ) %>% 
-  mutate(
+    ),
     type_label = case_when(
       type == "flighty" ~ "Flighty",
       type == "persistent" ~ "Persistent",
       type == "max" ~ "Maximum variation",
-    )
+    ),
+    dummy_min = -abs(PRCC[input == "dummy"]),
+    dummy_max = abs(PRCC[input == "dummy"])
   ) %>% 
-  filter(!is.na(output)) %>% 
-  right_join(rename(nice_mech_labels, input = name), by = "input")
+  filter(!is.na(output), input != "dummy") %>% 
+  mutate(input_num = as.numeric(factor(input)))
+  
 
 plot_data$type = factor(plot_data$type, levels = c("flighty", "persistent", "max"))
 plot_data$input = factor(plot_data$input, levels = c(
-  "pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG"
+  "pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG", "dummy"
 ))
 plot_data$output_label = factor(plot_data$output_label, levels = c(
   "Gonotrophic cycle duration", "Basic offspring number","Basic reproduction number"
@@ -627,28 +661,58 @@ plot_data$Label = factor(plot_data$Label, levels = rev(c(
   c("Seeking success",
     "Landing success",  "Probing success", "Ingesting success"),
   "Persistence probability", 
-  "Seeking rate", "Landing rate", "Probing rate", "Ingesting rate"
+  "Seeking rate", "Landing rate", "Probing rate", "Ingesting rate", "Dummy variable"
 )))
 
 plot_data$nice_labels <- factor(
   plot_data$nice_labels,
-  levels = rev(nice_mech_labels$nice_labels))
+  levels = c(rev(nice_mech_labels$nice_labels), "Dummy~variable"))
 
+plot_ribbon <- plot_data %>%
+  group_by(type, output_label) %>% 
+  group_modify( ~ bind_rows(
+    tibble(
+      input_num = min(.x$input_num) - 0.5,
+      dummy_min = .x$dummy_min[1],
+      dummy_max = .x$dummy_max[1],
+      type = .x$type[1],
+      output_label = .x$output_label[1],
+    ),
+    .x,
+    tibble(
+      input_num = max(.x$input_num) + 0.5,
+      dummy_min = .x$dummy_min[nrow(.x)],
+      dummy_max = .x$dummy_max[nrow(.x)],
+      type = .x$type[nrow(.x)],
+      output_label = .x$output_label[nrow(.x)],
+    )
+  )
+  ) %>% ungroup() %>% 
+  select(input_num, dummy_min, dummy_max, type, output_label) %>% distinct()
 
 PRCC_plots <- plot_data %>% 
   arrange(input) %>% 
-  # filter(!(input %in% c("pP", "pG", "lP", "lG"))) %>% 
-  # filter(output == "R0") %>% 
+  # filter((input %in% c("lP"))) %>%
   filter(output %in% c("N_offspring","R0")) %>%
   # filter(type %in% c("flighty", "persistent")) %>% 
-  ggplot(aes(x = nice_labels, y = PRCC, fill = type_label)) +
-  geom_col(position = "dodge") +
+  ggplot() +
+  geom_col(
+    aes(x = nice_labels, y = PRCC, fill = type_label),
+    position = "dodge", alpha = 0.75
+    ) +
   # Add light grey lines to divide up categories
-  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
+  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1),
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
-  facet_wrap(~output_label, ncol = 1, scales = "free_y") +
+  # Add grey ribbon to show dummy variable values
+  geom_ribbon(
+    data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+    aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
+    color = NA, fill = "grey60",
+    alpha = 0.5
+  ) +
+  facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
   scale_fill_manual(
     name = "Parameter set:",
     values = c(c4a("met.juarez",3))#, "black")
@@ -661,20 +725,15 @@ PRCC_plots <- plot_data %>%
     TeX("Partial Rank Correlation Coefficient"),
     limits = c(-1,1)
   ) +
-  # theme_minimal_vgrid(11) +
   theme_half_open(11) +
   theme(
-    # panel.grid.minor.x = element_line(
-    #   color = "grey",
-    #   linewidth = 0.5
-    # ),
     axis.text.x = element_text(angle = 50, hjust = 1),
     strip.background = element_rect(color = "white", fill = "white"),
     legend.key.width = unit(0.4, "in"),
     legend.position = "top",
-    legend.direction = "horizontal",
-    # legend.justification = "center"
-  ) 
+    legend.direction = "horizontal"
+  ) +
+  coord_cartesian(xlim = c(1.1, 8.9))
 
 PRCC_plots
 
@@ -682,17 +741,21 @@ ggsave("figures/Figure4.pdf", PRCC_plots, width = 7, height = 3.25 * 9/6.5, unit
 
 PRCC_plots_row <- plot_data %>% 
   arrange(input) %>% 
-  # filter(!(input %in% c("pP", "pG", "lP", "lG"))) %>% 
-  # filter(output == "R0") %>% 
   filter(output %in% c("N_offspring","R0")) %>%
-  # filter(type %in% c("flighty", "persistent")) %>% 
-  ggplot(aes(x = nice_labels, y = PRCC, fill = type_label)) +
-  geom_col(position = "dodge") +
+  ggplot() +
+  geom_col(aes(x = nice_labels, y = PRCC, fill = type_label), position = "dodge") +
   # Add light grey lines to divide up categories
   geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
+  # Add grey ribbon to show dummy variable values
+  geom_ribbon(
+    data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+    aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
+    color = NA, fill = "grey60",
+    alpha = 0.5
+  ) +
   facet_wrap(~output_label, nrow = 1, scales = "free_x") +
   scale_fill_manual(
     name = "Parameter set:",
@@ -725,9 +788,12 @@ PRCC_plots_max_only <- plot_data %>%
   filter(type == "max") %>%
   arrange(input) %>% 
   filter(output %in% c("N_offspring","R0")) %>%
+  group_by(type, output) %>% 
+  mutate(star_flag = abs(PRCC) < abs(dummy_min),
+         star_xpos = PRCC + sign(PRCC) * 0.025) %>% 
   # Plot
-  ggplot(aes(y = nice_labels, x = PRCC, fill = output_label)) +
-  geom_col(position = "dodge", width = 0.75) +
+  ggplot() +
+  geom_col(aes(y = nice_labels, x = PRCC, fill = output_label), position = "dodge", width = 0.75) +
   # Add light grey lines to divide up categories
   geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
              color = "grey60", linetype = "dashed", linewidth = 0.125) +
@@ -736,6 +802,13 @@ PRCC_plots_max_only <- plot_data %>%
   scale_fill_manual(
     name = "",
     values = c(c4a("met.juarez",3))
+  ) +
+  # Add stars to flagged bars
+  geom_text(
+    data = . %>% filter(star_flag),
+    aes(y = nice_labels, x = star_xpos, label = "*"),
+    position = position_dodge(width = 0.75),
+    size = 5, vjust = 0.45
   ) +
   scale_y_discrete(
     name = "",
@@ -753,8 +826,7 @@ PRCC_plots_max_only <- plot_data %>%
     legend.key.width = unit(0.25, "in"),
     legend.key.height = unit(0.03125, "in"),
     legend.position = "top",
-    legend.direction = "horizontal",
-    # legend.justification = "center"
+    legend.direction = "horizontal"
   )
 
 PRCC_plots_max_only

@@ -473,8 +473,8 @@ theta_vec = sort(unique(c(theta_vec, 1/inv_theta_vec, (1/8) * 1440, (1/4) * 1440
 
 GCD_vec = theta_vec + (1/gammaR) + (1/gammaV)
 # Standard exponential model ----
-Standard_vec = seq(0, min(GCD_vec), length.out = resolution)
-Standard_vec = Standard_vec[-1]
+Standard_vec = seq(1/(3 * 1440), min(GCD_vec), length.out = resolution)
+# Standard_vec = Standard_vec[-1]
 Standard_vec = c(Standard_vec, GCD_vec, (1/2) * 1440, 1440, 2 * 1440)
 
 Standard_df <- tibble(theta = Standard_vec) %>%

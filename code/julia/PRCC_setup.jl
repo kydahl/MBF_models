@@ -3,9 +3,9 @@ include("GCD_R0_num_calc.jl")
 
 # Rates
 # (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG)
-const base_params_flighty = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.9f0, 1.0f0, 0.5f0, 0.5f0, 0.5f0]
+const base_params_flighty = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.9f0, 1.0f0, 0.5f0, 0.5f0, 0.5f0, 0.5f0]
 
-const base_params_persistent = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.66f0, 1.0f0, 0.7f0, 0.8f0, 0.9f0]
+const base_params_persistent = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.66f0, 1.0f0, 0.7f0, 0.8f0, 0.9f0, 0.5f0]
     
 
 function parameter_setup(baseline_vals, stretch_val) 
@@ -23,11 +23,11 @@ flighty_lbs, flighty_ubs = parameter_setup(base_params_flighty, 0.1)
 using LatinHypercubeSampling
 
 # (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG) = B_vals_in
-min_lbs = [1/(3*1440.0f0), 1/(3*1440.0f0), 1/(3*1440.0f0), 1/(3*1440.0f0), 0.0f0, 0.0f0, 0.0f0, 0.0f0, 0.0f0]
-max_ubs = [60.0f0, 60.0f0, 60.0f0, 60.0f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0]
+min_lbs = [1/(3*1440.0f0), 1/(3*1440.0f0), 1/(3*1440.0f0), 1/(3*1440.0f0), 0.2f0, 0.2f0, 0.2f0, 0.2f0, 0.2f0, 0.0f0]
+max_ubs = [60.0f0, 60.0f0, 60.0f0, 60.0f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0, 100.0f0]
 
 # Set number of LHC samples
-n_samples = 10_000_000::Int
+n_samples = 10_000::Int
 
 # Set up initial grid
 using QuasiMonteCarlo
@@ -51,7 +51,7 @@ function output_calc(LHS_samples)
     @threads for idx in ProgressBar(1:n_samples)#(i, (sigma, lQ, lL, lP, lG, pQ, pL, pP, pG)) in ProgressBar(enumerate(parameter_grid))
         # grid_point = LHS_samples[:,idx]
         # (lQ, lL, lP, lG, sigma, pL, pP, pG) = grid_point
-        B_vals = LHS_samples[:,idx]
+        B_vals = LHS_samples[1:9,idx]
         # GCD values
         GCD_results[idx] = GCD_func(B_vals)
         # Basic offspring number values
@@ -63,7 +63,7 @@ function output_calc(LHS_samples)
         R0_results[idx] = R0_func(B_vals)
 
     end
-    scaled_plan_df = DataFrame(transpose(LHS_samples), [:lQ, :lL, :lP, :lG, :sigma, :pQ, :pL, :pP, :pG])
+    scaled_plan_df = DataFrame(transpose(LHS_samples), [:lQ, :lL, :lP, :lG, :sigma, :pQ, :pL, :pP, :pG, :dummy])
     output_df = scaled_plan_df
     output_df[!,:GCD] = GCD_results
     output_df[!,:N_offspring] = N_offspring_results
@@ -77,14 +77,14 @@ output_calc(QuasiMonteCarlo.sample(100, min_lbs, max_ubs, LatinHypercubeSample()
 
 # Get outputs for each type then join them
 max_results = output_calc(max_scaled_plan)
-flighty_results = output_calc(flighty_scaled_plan)
-persistent_results = output_calc(persistent_scaled_plan)
+# flighty_results = output_calc(flighty_scaled_plan)
+# persistent_results = output_calc(persistent_scaled_plan)
 
 max_results[!, :type] .= "max"
-flighty_results[!, :type] .= "flighty"
-persistent_results[!, :type] .= "persistent"
+# flighty_results[!, :type] .= "flighty"
+# persistent_results[!, :type] .= "persistent"
 
-all_results = vcat(max_results, flighty_results, persistent_results)
+all_results = vcat(max_results) #, flighty_results, persistent_results)
 
 # Save outputs ----
 # Parameter grid and outputs
