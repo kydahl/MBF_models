@@ -99,20 +99,19 @@ shift_legend <- function(p) {
 
 # Plot parameters ----
 
-# Colors for the model types
 type_colors = c("black", c4a("brewer.dark2",4))
 
 # 1. Pdfs of distributions ----
 
 # Plot the pdf (using the actual function!) of each model type for a couple 
 # values of theta: 1/3 days, 1/2 days, 1 days, 2 days
-theta_vals = c((1/2) * 1440, 1440, 2 * 1440)
+theta_vals = c((1/4) * 1440, (1/2) * 1440, 1440, 2 * 1440)
 tolerance = 4.5
 
-pdf_max = 4 * 1440
+pdf_max = 8 * 1440
 resolution = 10000
 
-Fig1_labeller <- function(value) TeX(paste0("Mean of ", as.double(value)/1440, " days"))
+Fig1_labeller <- function(value) TeX(paste0("Mean = ", as.double(value)/1440, " days"))
 
 # For mechanistic model, we can't guarantee these values so choose the closest ones
 Mech_df_filtered <- Full_df %>% 
@@ -139,18 +138,27 @@ Figure1_df <- Full_df %>%
   bind_rows(Mech_df_filtered) %>% 
   # Assign the closest theta to each row (to relate Mechanistic with the rest)
   group_by(Type) %>% 
-  mutate(closest_theta = theta_vals[sapply(theta, function(x) which.min(abs(x - theta_vals)))]) %>%
+  mutate(closest_theta = theta_vals[sapply(theta, function(x) which.min(abs(x - theta_vals)))]) %>% 
   ungroup() %>% 
   # Select only relevant rows
   dplyr::select(Type, theta, closest_theta, v_alpha, A_matrix) %>% 
+  mutate(theta_label = case_when(
+    closest_theta == 360 ~ "A",
+    closest_theta == 720 ~ "B",
+    closest_theta == 1440 ~ "C",
+    closest_theta == 2880 ~ "D"
+  )) %>%
   # Add in values to plug into the pdf
-  cross_join(tibble(x = seq(0, pdf_max, length.out = resolution))) %>% 
+  cross_join(tibble(x = seq(0, pdf_max, length.out = resolution)))  %>% 
+  filter(case_when(
+    closest_theta == 360 ~ x < 0.75 * 1440,
+    closest_theta == 720 ~ x < 1.5 * 1440,
+    closest_theta == 1440 ~ x < 3 * 1440,
+    closest_theta == 2880 ~ x < 6 * 1440
+  )) %>%
   # Calculate values of the pdf
   rowwise() %>% 
   mutate(pdf_val = PH_pdf(x, A_matrix, v_alpha))
-# Cut off when pdf_val is really small
-# group_by(Type, closest_theta)# %>% 
-# filter(pdf_val > 1e-5) %>% 
 
 Figure1_df$Type = factor(
   Figure1_df$Type,
@@ -161,53 +169,122 @@ Figure1_labels = c(expression("Standard / Exponential"), expression("Empirical")
 )
 
 Fig1_color_vals = c("Standard / Exponential" = "black",
-                    # "Exponential" = c4a("brewer.dark2", 4)[2],
                     "Empirical" = c4a("brewer.dark2", 3)[1],
                     "Phenomenological" = c4a("brewer.dark2", 3)[2],
                     "Mechanistic (lQ)" = c4a("brewer.dark2", 3)[3]#
 )
 
-Figure_half = Figure1_df %>%
-  filter(closest_theta == 720) %>% 
-  ggplot(aes(x = x / 1440, y = pdf_val, color = Type)) +
-  geom_path(
-    lwd = 0.75,
-    alpha = 0.9
-  ) + 
-  # Add line showing the means of the distributions (which are pretty much equal)
+facet_labels <- Figure1_df %>%
+  group_by(closest_theta) %>% 
+  filter(x > 0) %>% 
+  mutate(label = LETTERS[1:n()],  # Assign "A", "B", "C", ...
+         x_pos = 360*min(x, na.rm = TRUE)/1440,  # Align left
+         y_pos = max(pdf_val, na.rm = TRUE) * .95) %>%  # Slightly above max y
+  distinct(closest_theta, x_pos, y_pos, theta_label)
+
+
+quick_fig_1 <- function(keep_names) {
+  Fig_out = Figure1_df %>%
+    filter(Type %in% keep_names) %>% 
+    filter(closest_theta == 360) %>% 
+    # filter(closest_theta < 2 * 1440) %>% 
+    ggplot(aes(x = 24 * x / (1440), y = pdf_val, color = Type)) +
+    # Plot grey dotted line showing the mean
+    geom_vline(
+      aes(xintercept = 24 * closest_theta/1440),
+      lwd = 0.5, color = "grey", lty = 2
+    ) +
+    # Plot pdfs
+    geom_line(
+      lwd = 1
+    ) + 
+    scale_x_continuous(
+      name = "Gonotrophic cycle duration [Hours]",
+      limits =  c(0, NA),
+      expand = c(0.0,0),
+      breaks = seq(0, 72, by = 6)
+    ) +
+    scale_y_continuous(
+      name = "Density",
+      limits = c(0, max(Figure1_df$pdf_val)),
+      expand = c(0.01,0),
+    ) +
+    scale_color_manual(
+      name = "Model type:",
+      values = Fig1_color_vals,
+      breaks = unique(Figure1_df$Type),
+      labels = Figure1_labels
+    ) +
+    guides(
+      # Put the color legend at the top of the plot
+      color = guide_legend(
+        position = "top",
+        direction = "horizontal",
+        nrow = 1
+      )
+    ) +
+    theme_half_open(18) +
+    theme(
+      strip.background = element_rect(color = "white", fill = "white"),
+      strip.text = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank()
+    )
+  
+  Fig_out
+}
+
+Figure_quarter_1 = quick_fig_1(unique(Figure1_df$Type)[1])
+Figure_quarter_2 = quick_fig_1(unique(Figure1_df$Type)[1:2])
+Figure_quarter_3 = quick_fig_1(unique(Figure1_df$Type)[1:3])
+Figure_quarter_4 = quick_fig_1(unique(Figure1_df$Type)[1:4])
+
+ggsave("presentations/figures/Distribution_quarter_1.png", Figure_quarter_1, 
+       width = 13.333, height = 7.5, units = "in",
+       dpi = 1200)
+ggsave("presentations/figures/Distribution_quarter_2.png", Figure_quarter_2, 
+       width = 13.333, height = 7.5, units = "in",
+       dpi = 1200)
+ggsave("presentations/figures/Distribution_quarter_3.png", Figure_quarter_3, 
+       width = 13.333, height = 7.5, units = "in",
+       dpi = 1200)
+ggsave("presentations/figures/Distribution_quarter_4.png", Figure_quarter_4, 
+       width = 13.333, height = 7.5, units = "in",
+       dpi = 1200)
+
+# pdf figure
+Figure_quarter = Figure1_df %>%
+  filter(closest_theta == 360) %>% 
+  # filter(closest_theta < 2 * 1440) %>% 
+  ggplot(aes(x = 24 * x / (1440), y = pdf_val, color = Type)) +
+  # Plot grey dotted line showing the mean
   geom_vline(
-    data = Figure1_df %>%
-      filter(closest_theta == 720) %>% 
-      select(-c(x, pdf_val)) %>% unique() %>%
-      # group_by(`Model type`, closest_theta) %>%
-      rowwise() %>%
-      mutate(mean = PH_mean(A_matrix, v_alpha)),
-    aes(xintercept = mean / 1440, color = Type),
-    lty = 2, alpha = 0.66, lwd = 1,
-    show.legend = F) +
-  facet_wrap( ~ closest_theta,
-              labeller = as_labeller(Fig1_labeller),
-              ncol = 1,
-              scales = "free_y") +
+    aes(xintercept = 24 * closest_theta/1440),
+    lwd = 0.5, color = "grey", lty = 2
+  ) +
+  # Plot pdfs
+  geom_line(
+    lwd = 1
+  ) + 
   scale_x_continuous(
-    name = "Gonotrophic cycle duration [Days]",
-    limits =  c(0, 3),
+    name = "Gonotrophic cycle duration [Hours]",
+    limits =  c(0, NA),
     expand = c(0.0,0),
-    breaks = seq(0,10)
+    breaks = seq(0, 72, by = 6)
   ) +
   scale_y_continuous(
     name = "Density",
     limits = c(0, NA),
-    expand = c(0.01,0)
+    expand = c(0.01,0),
   ) +
   scale_color_manual(
     name = "Model type:",
     values = Fig1_color_vals,
     breaks = unique(Figure1_df$Type),
     labels = Figure1_labels
-    # labels = scales::label_parse()
   ) +
   guides(
+    # Put the color legend at the top of the plot
     color = guide_legend(
       position = "top",
       direction = "horizontal",
@@ -217,6 +294,60 @@ Figure_half = Figure1_df %>%
   theme_half_open(18) +
   theme(
     strip.background = element_rect(color = "white", fill = "white"),
+    strip.text = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+
+Figure_quarter
+
+ggsave("presentations/figures/Distribution_quarter.png", Figure_quarter, 
+       width = 13.333, height = 7.5, units = "in",
+       dpi = 1200)
+
+# Distribution for half a day
+Figure_half = Figure1_df %>%
+  filter(closest_theta == 720) %>% 
+  # filter(closest_theta < 2 * 1440) %>% 
+  ggplot(aes(x = 24 * x / (1440), y = pdf_val, color = Type)) +
+  # Plot grey dotted line showing the mean
+  geom_vline(
+    aes(xintercept = 24 * closest_theta/1440),
+    lwd = 0.5, color = "grey", lty = 2
+  ) +
+  # Plot pdfs
+  geom_line(
+    lwd = 1
+  ) + 
+  scale_x_continuous(
+    name = "Gonotrophic cycle duration [Hours]",
+    limits =  c(0, NA),
+    expand = c(0.0,0),
+    breaks = seq(0, 72, by = 6)
+  ) +
+  scale_y_continuous(
+    name = "Density",
+    limits = c(0, NA),
+    expand = c(0.01,0),
+  ) +
+  scale_color_manual(
+    name = "Model type:",
+    values = Fig1_color_vals,
+    breaks = unique(Figure1_df$Type),
+    labels = Figure1_labels
+  ) +
+  guides(
+    # Put the color legend at the top of the plot
+    color = guide_legend(
+      position = "top",
+      direction = "horizontal",
+      nrow = 1
+    )
+  ) +
+  theme_half_open(18) +
+  theme(
+    strip.background = element_rect(color = "white", fill = "white"),
+    strip.text = element_blank(),
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank()
   )
@@ -227,39 +358,30 @@ ggsave("presentations/figures/Distribution_half.png", Figure_half,
        width = 13.333, height = 7.5, units = "in",
        dpi = 1200)
 
-
-
+# Distribution for one day
 Figure_one = Figure1_df %>%
   filter(closest_theta == 1440) %>% 
-  ggplot(aes(x = x / 1440, y = pdf_val, color = Type)) +
-  geom_path(
-    lwd = 0.75,
-    alpha = 0.9
-  ) + 
-  # Add line showing the means of the distributions (which are pretty much equal)
+  # filter(closest_theta < 2 * 1440) %>% 
+  ggplot(aes(x = 24 * x / (1440), y = pdf_val, color = Type)) +
+  # Plot grey dotted line showing the mean
   geom_vline(
-    data = Figure1_df %>%
-      filter(closest_theta == 1440) %>% 
-      select(-c(x, pdf_val)) %>% unique() %>%
-      rowwise() %>%
-      mutate(mean = PH_mean(A_matrix, v_alpha)),
-    aes(xintercept = mean / 1440, color = Type),
-    lty = 2, alpha = 0.66, lwd = 1,
-    show.legend = F) +
-  facet_wrap( ~ closest_theta,
-              labeller = as_labeller(Fig1_labeller),
-              ncol = 1,
-              scales = "free_y") +
+    aes(xintercept = 24 * closest_theta/1440),
+    lwd = 0.5, color = "grey", lty = 2
+  ) +
+  # Plot pdfs
+  geom_line(
+    lwd = 1
+  ) + 
   scale_x_continuous(
-    name = "Gonotrophic cycle duration [Days]",
-    limits =  c(0, 3),
+    name = "Gonotrophic cycle duration [Hours]",
+    limits =  c(0, NA),
     expand = c(0.0,0),
-    breaks = seq(0,10)
+    breaks = seq(0, 72, by = 6)
   ) +
   scale_y_continuous(
     name = "Density",
     limits = c(0, NA),
-    expand = c(0.01,0)
+    expand = c(0.01,0),
   ) +
   scale_color_manual(
     name = "Model type:",
@@ -268,6 +390,7 @@ Figure_one = Figure1_df %>%
     labels = Figure1_labels
   ) +
   guides(
+    # Put the color legend at the top of the plot
     color = guide_legend(
       position = "top",
       direction = "horizontal",
@@ -277,6 +400,7 @@ Figure_one = Figure1_df %>%
   theme_half_open(18) +
   theme(
     strip.background = element_rect(color = "white", fill = "white"),
+    strip.text = element_blank(),
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank()
   )
@@ -284,64 +408,6 @@ Figure_one = Figure1_df %>%
 Figure_one
 
 ggsave("presentations/figures/Distribution_one.png", 
-       width = 13.333, height = 7.5, units = "in",
-       dpi = 1200)
-
-Figure_two = Figure1_df %>%
-  filter(closest_theta == 2880) %>% 
-  ggplot(aes(x = x / 1440, y = pdf_val, color = Type)) +
-  geom_path(
-    lwd = 0.75,
-    alpha = 0.9
-  ) + 
-  # Add line showing the means of the distributions (which are pretty much equal)
-  geom_vline(
-    data = Figure1_df %>%
-      filter(closest_theta == 2880) %>% 
-      select(-c(x, pdf_val)) %>% unique() %>%
-      rowwise() %>%
-      mutate(mean = PH_mean(A_matrix, v_alpha)),
-    aes(xintercept = mean / 1440, color = Type),
-    lty = 2, alpha = 0.66, lwd = 1,
-    show.legend = F) +
-  facet_wrap( ~ closest_theta,
-              labeller = as_labeller(Fig1_labeller),
-              ncol = 1,
-              scales = "free_y") +
-  scale_x_continuous(
-    name = "Gonotrophic cycle duration [Days]",
-    limits =  c(0, 3),
-    expand = c(0.0,0),
-    breaks = seq(0,10)
-  ) +
-  scale_y_continuous(
-    name = "Density",
-    limits = c(0, NA),
-    expand = c(0.01,0)
-  ) +
-  scale_color_manual(
-    name = "Model type:",
-    values = Fig1_color_vals,
-    breaks = unique(Figure1_df$Type),
-    labels = Figure1_labels
-  ) +
-  guides(
-    color = guide_legend(
-      position = "top",
-      direction = "horizontal",
-      nrow = 1
-    )
-  ) +
-  theme_half_open(18) +
-  theme(
-    strip.background = element_rect(color = "white", fill = "white"),
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank()
-  )
-
-Figure_two
-
-ggsave("presentations/figures/Distribution_two.png", 
        width = 13.333, height = 7.5, units = "in",
        dpi = 1200)
 
@@ -401,9 +467,10 @@ quick_fig_two <- function(keep_names) {
     ggplot(aes(color = Type, lty = Type)) +
     geom_hline(aes(yintercept = 1), color = "grey", lwd = 2) +
     geom_line(aes(x = 1440 / theta, y = R0),
-              lwd = 0.75) +
+              lwd = 1) +
     geom_rug(
-      data = Figure2_ticks,
+      data = Figure2_ticks%>% 
+        filter(Type %in% keep_names),
       aes(x = first_R0_greater_1),
       sides = "b", size = 0.75, outside = TRUE,
       length = unit(0.3, "in"),
@@ -431,7 +498,7 @@ quick_fig_two <- function(keep_names) {
       labels = Figure2_labels
     ) +
     coord_cartesian(clip = "off") +
-    theme_half_open(11) + 
+    theme_half_open(18) + 
     theme(
       axis.title.x = element_text(margin = margin(t = 10)),
       legend.key.width = unit(0.4, "in")
@@ -458,6 +525,7 @@ R0theta_three <- quick_fig_two(c("Standard", "Exponential", "Empirical"))
 R0theta_four <- quick_fig_two(c("Standard", "Exponential", "Empirical",
                                 "Phenomenological"))
 R0theta_five <- quick_fig_two(unique(Figure2_df$Type))
+R0theta_mech_only <- quick_fig_two(c("Mechanistic~(lambda[Q])", "Mechanistic~(p[P])","Mechanistic~(p[G])"))
 
 ggsave("presentations/figures/R0theta_1.png", R0theta_one,
        width = 13.333, height = 7.5, units = "in")
@@ -469,6 +537,8 @@ ggsave("presentations/figures/R0theta_4.png", R0theta_four,
        width = 13.333, height = 7.5, units = "in")
 ggsave("presentations/figures/R0theta_5.png", R0theta_five,
        width = 13.333, height = 7.5, units = "in")
+ggsave("presentations/figures/R0theta_mech.png", R0theta_mech_only,
+       width = 13.333, height = 7.5, units = "in")
 
 # 3. R0 vs. mechanistic parameters ----
 
@@ -478,15 +548,15 @@ Mech_df <- read_rds("data/Mechanistic_results.rds")
 # Distinguish parameters by color -- different from 2.
 
 nice_mech_labels = data.frame(
-  pQ = "Seeking~success~probability~(p[Q])",
-  pL = "Landing~success~probability~(p[L])",
-  pP = "Probing~success~probability~(p[P])",
-  pG = "Ingesting~success~probability~(p[G])",
-  sigma = "Persistence~probability~(sigma)",
-  lQ = "Seeking~rate~(lambda[Q])",
-  lL = "Landing~rate~(lambda[P])",
-  lP = "Probing~rate~(lambda[P])",
-  lG = "Ingesting~rate~(lambda[G])"
+  pQ = "Seeking~success*','~p[Q]",
+  pL = "Landing~success*','~p[L]",
+  pP = "Probing~success*','~p[P]",
+  pG = "Ingesting~success*','~p[G]",
+  sigma = "Persistence~probability*','~sigma",
+  lQ = "Seeking~rate*','~lambda[Q]",
+  lL = "Landing~rate*','~lambda[L]",
+  lP = "Probing~rate*','~lambda[P]",
+  lG = "Ingesting~rate*','~lambda[G]"
 ) %>% pivot_longer(everything(), values_to = "nice_labels")
 
 Figure3_df <- Mech_df %>% 
@@ -522,7 +592,7 @@ Figure3 <- Figure3_df %>%
   scale_x_continuous(
     name = "Parameter value",
     breaks = waiver(),
-    n.breaks = 5,
+    n.breaks = 4,
     expand = c(0,0)
   ) +
   scale_y_continuous(
@@ -538,7 +608,7 @@ Figure3 <- Figure3_df %>%
     name = "Mosquito type:",
     labels = c("Flighty", "Persistent")
   ) +
-  theme_half_open(11) +
+  theme_half_open(18) +
   guides(
     color = guide_none()
   ) +
@@ -549,56 +619,43 @@ Figure3 <- Figure3_df %>%
 
 shift_legend(Figure3)
 
-ggsave("figures/Figure3.pdf", shift_legend(Figure3), width = 12, height = 3.25 * 9/6.5, units = "in")
-
+ggsave("presentations/figures/R0_vs_mech.png", shift_legend(Figure3),
+       width = 13.333, height = 7.5, units = "in")
 # 4. PRCCs of R0 against mechanistic parameters ----
-# # Load in data
-# LHS_data = read_csv("data/julia_outputs.csv.gz")
-# 
-# rank_data = LHS_data %>%
-#   group_by(type) %>%
-#   mutate(across(lQ:R0, ~ rank(.x)))
-# 
-# PRCC_data <- rank_data %>%
-#   pivot_longer(cols = lQ:pG, names_to = "input", values_to = "input_value") %>%
-#   pivot_longer(cols = GCD:R0, names_to = "output", values_to = "output_value") %>%
-#   ungroup() %>% 
-#   # group_by(type, input, output) %>%
-#   summarise(
-#     PRCC = cor(input_value, output_value),
-#     .by = c(type, input, output)
-#   )
-# 
-# # Save the final PRCC results
-# write_csv(PRCC_data, "data/PRCC_data.csv")
+
 
 # Load in final PRCC results
 PRCC_data <- read_csv("data/PRCC_data.csv")
 
 plot_data <- PRCC_data %>% 
-  right_join(
+  group_by(type, output) %>% 
+  # Add in nice labels
+  left_join(
     param_table %>% 
       rename(input = short_label)
-  ) %>% 
+  ) %>%
+  left_join(rename(nice_mech_labels, input = name), by = "input")  %>% 
   mutate(
     output_label = case_when(
       output == "R0" ~ "Basic reproduction number",
       output == "GCD" ~ "Gonotrophic cycle duration",
       output == "N_offspring" ~ "Basic offspring number",
-    )
-  ) %>% 
-  mutate(
+    ),
     type_label = case_when(
       type == "flighty" ~ "Flighty",
       type == "persistent" ~ "Persistent",
       type == "max" ~ "Maximum variation",
-    )
+    ),
+    dummy_min = -abs(PRCC[input == "dummy"]),
+    dummy_max = abs(PRCC[input == "dummy"])
   ) %>% 
-  filter(!is.na(output))
+  filter(!is.na(output), input != "dummy") %>% 
+  mutate(input_num = as.numeric(factor(input)))
+
 
 plot_data$type = factor(plot_data$type, levels = c("flighty", "persistent", "max"))
 plot_data$input = factor(plot_data$input, levels = c(
-  "pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG"
+  "pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG", "dummy"
 ))
 plot_data$output_label = factor(plot_data$output_label, levels = c(
   "Gonotrophic cycle duration", "Basic offspring number","Basic reproduction number"
@@ -609,162 +666,65 @@ plot_data$type_label = factor(plot_data$type_label, levels = c(
 ))
 
 
-plot_data$Label = factor(plot_data$Label, levels = c(
-  c("Seeking success probability",
-    "Landing success probability",  "Probing success probability", "Ingestion success probability"),
+plot_data$Label = factor(plot_data$Label, levels = rev(c(
+  c("Seeking success",
+    "Landing success",  "Probing success", "Ingesting success"),
   "Persistence probability", 
-  "Seeking rate", "Landing rate", "Probing rate", "Ingesting rate"
-))
+  "Seeking rate", "Landing rate", "Probing rate", "Ingesting rate", "Dummy variable"
+)))
 
-PRCC_plots <- plot_data %>% 
-  arrange(input) %>% 
-  # filter(!(input %in% c("pP", "pG", "lP", "lG"))) %>% 
-  # filter(output == "R0") %>% 
-  filter(output %in% c("N_offspring","R0")) %>%
-  # filter(type %in% c("flighty", "persistent")) %>% 
-  ggplot(aes(x = Label, y = PRCC, fill = type_label)) +
-  geom_col(position = "dodge") +
-  # Add light grey lines to divide up categories
-  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
-             color = "grey60", linetype = "dashed", linewidth = 0.25) +
-  # Add zero line
-  geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
-  facet_wrap(~output_label, ncol = 1, scales = "free_y") +
-  scale_fill_manual(
-    name = "Parameter set:",
-    values = c(c4a("met.juarez",3))#, "black")
-  ) +
-  scale_x_discrete(
-    name = ""
-  ) +
-  scale_y_continuous(
-    TeX("Partial Rank Correlation Coefficient"),
-    limits = c(-1,1)
-  ) +
-  # theme_minimal_vgrid(11) +
-  theme_half_open(11) +
-  theme(
-    # panel.grid.minor.x = element_line(
-    #   color = "grey",
-    #   linewidth = 0.5
-    # ),
-    axis.text.x = element_text(angle = 50, hjust = 1),
-    strip.background = element_rect(color = "white", fill = "white"),
-    legend.key.width = unit(0.4, "in"),
-    legend.position = "top",
-    legend.direction = "horizontal",
-    # legend.justification = "center"
-  )
+plot_data$nice_labels <- factor(
+  plot_data$nice_labels,
+  levels = c(rev(nice_mech_labels$nice_labels), "Dummy~variable"))
 
-PRCC_plots
-
-ggsave("figures/Figure4.pdf", PRCC_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
-
-PRCC_plots_row <- plot_data %>% 
-  arrange(input) %>% 
-  # filter(!(input %in% c("pP", "pG", "lP", "lG"))) %>% 
-  # filter(output == "R0") %>% 
-  filter(output %in% c("N_offspring","R0")) %>%
-  # filter(type %in% c("flighty", "persistent")) %>% 
-  ggplot(aes(x = Label, y = PRCC, fill = type_label)) +
-  geom_col(position = "dodge") +
-  # Add light grey lines to divide up categories
-  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
-             color = "grey60", linetype = "dashed", linewidth = 0.25) +
-  # Add zero line
-  geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
-  facet_wrap(~output_label, nrow = 1, scales = "free_x") +
-  scale_fill_manual(
-    name = "Parameter set:",
-    values = c(c4a("met.juarez",3))#, "black")
-  ) +
-  scale_x_discrete(
-    name = ""
-  ) +
-  scale_y_continuous(
-    TeX("Partial Rank Correlation Coefficient"),
-    limits = c(-1,1)
-  ) +
-  theme_half_open(11) +
-  theme(
-    axis.text.x = element_text(angle = 50, hjust = 1),
-    strip.background = element_rect(color = "white", fill = "white"),
-    legend.key.width = unit(0.4, "in"),
-    legend.position = "top",
-    legend.direction = "horizontal",
-    # legend.justification = "center"
-  )
-
-PRCC_plots_row
-
-ggsave("figures/Figure4_row.pdf", PRCC_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
 
 PRCC_plots_max_only <- plot_data %>% 
   # Just keep maximum variation for now
   filter(type == "max") %>%
   arrange(input) %>% 
   filter(output %in% c("N_offspring","R0")) %>%
+  group_by(type, output) %>% 
+  mutate(star_flag = abs(PRCC) < abs(dummy_min),
+         star_xpos = PRCC + sign(PRCC) * 0.025) %>% 
   # Plot
-  ggplot(aes(x = Label, y = PRCC, fill = output_label)) +
-  geom_col(position = "dodge") +
+  ggplot() +
+  geom_col(aes(y = nice_labels, x = PRCC, fill = output_label), position = "dodge", width = 0.75) +
   # Add light grey lines to divide up categories
-  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
-             color = "grey60", linetype = "dashed", linewidth = 0.25) +
+  geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
+             color = "grey60", linetype = "dashed", linewidth = 0.125) +
   # Add zero line
-  geom_hline(yintercept = 0, color = "black") +
-  # facet_wrap(~type_label, ncol = 1, scales = "free_y") +
+  geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
   scale_fill_manual(
     name = "",
     values = c(c4a("met.juarez",3))
   ) +
-  scale_x_discrete(
-    name = ""
+  # Add stars to flagged bars
+  geom_text(
+    data = . %>% filter(star_flag),
+    aes(y = nice_labels, x = star_xpos, label = "n.s."),
+    position = position_dodge(width = 0.75),
+    size = 4, vjust = -0.55
   ) +
-  scale_y_continuous(
+  scale_y_discrete(
+    name = "",
+    labels = function(x) parse(text = x)
+  ) +
+  scale_x_continuous(
     TeX("Partial Rank Correlation Coefficient"),
+    breaks = seq(-1,1,by = 0.25),
+    expand = c(0.05,0)
     # limits = c(-1,1)
   ) +
-  theme_half_open(11) +
+  theme_half_open(18) +
   theme(
-    axis.text.x = element_text(angle = 50, hjust = 1),
     strip.background = element_rect(color = "white", fill = "white"),
-    legend.key.width = unit(0.4, "in"),
+    legend.key.width = unit(0.25, "in"),
+    legend.key.height = unit(0.03125, "in"),
     legend.position = "top",
-    legend.direction = "horizontal",
-    # legend.justification = "center"
+    legend.direction = "horizontal"
   )
 
 PRCC_plots_max_only
 
-ggsave("figures/Figure4_max_only.pdf", PRCC_plots_max_only, width = 7, height = 3.25 * 9/6.5, units = "in")
-
-# Supplementary: theta vs. mechanistic parameters ----
-SuppFigure1 <- Figure3_df %>%
-  filter(theta < 21 * 1440) %>% 
-  ggplot(aes(x = value, y = theta / 1440, linetype = mosquito_type, color = parameter_type)) +
-  geom_line(lwd = 1) +
-  facet_wrap(
-    ~ nice_labels,
-    ncol = 5,
-    labeller = labeller(nice_labels = label_parsed),
-    scales = "free"
-  ) +
-  scale_x_continuous(
-    name = "Parameter value",
-    expand = c(0,0)
-  ) +
-  scale_y_continuous(
-    name = TeX("Gonotrophic cycle duration \\, [Days]"),
-    expand = c(0,0)
-  ) +
-  scale_color_discrete(
-    name = "Parameter type:"
-  ) +
-  scale_linetype_discrete(
-    name = "Mosquito type:"
-  ) +
-  theme_half_open(18)
-
-shift_legend(SuppFigure1)
-ggsave("figures/SuppFigure.pdf", shift_legend(SuppFigure1), width = 20, height = 8, units = "in")
-# Distinguish parameters by color
+ggsave("presentations/figures/PRCCs.png", PRCC_plots_max_only,
+       width = 13.333, height = 7.5, units = "in")
