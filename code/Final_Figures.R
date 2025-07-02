@@ -835,8 +835,45 @@ ggsave("figures/Figure4_max_only.pdf", PRCC_plots_max_only, width = 6.5, height 
 
 # 5. Sobol indices of N0 and R0 wrt parameters ----
 # Load in data
+
+eFAST_data = read_csv("data/eFAST_test.csv")
+eFAST_plot = eFAST_data |> 
+  filter(type == "max") |> 
+  group_by(input, output) |> 
+  arrange(sample_size) |> 
+  ggplot(aes(x = sample_size, y = value, color = input)) +
+  geom_path() +
+  facet_wrap(index_type~output, scales = "free")
+
+
 Sobol_data = read_csv("data/julia_sobol.csv") #%>%
   # filter(type == "max")
+
+# Testing stability of Sobol sensitivity indices
+iter = iter + 1
+test_row = filter(Sobol_data, type == "max", index_type == "ST") |> 
+  ungroup() |> 
+  select(input, output, value) |> 
+  group_by(output) |> 
+  mutate(rank = rank(-value)) |> 
+  select(-value) |> 
+  arrange(rank) |> 
+  pivot_wider(names_from = rank, names_prefix = "rank_", values_from = input) |> 
+  mutate(
+    iter_num = iter,
+    sample_size = 2^17) |>
+  relocate(iter_num, sample_size, output)
+
+sobol_test = rbind(sobol_test, test_row)
+
+R0_sobol_test = filter(sobol_test, output == "R0")
+N0_sobol_test = filter(sobol_test, output == "N_offspring")
+
+iter = 0
+sobol_test = tibble(iter_num = c(), sample_size = c(), output = c(),
+                    rank_1 = c(), rank_2 = c(), rank_3 = c(), rank_4 = c(), 
+                    rank_5 = c(), rank_6 = c(), rank_7 = c(), rank_8 = c(), 
+                    rank_9 = c())
 
 plot_data <- Sobol_data %>% 
   group_by(type, output, index_type) %>% 
