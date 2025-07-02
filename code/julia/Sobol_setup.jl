@@ -50,6 +50,7 @@ function gsa_func(sample_size)
     
     eFAST_persistent = gsa(output_func, eFAST(), [[persistent_lbs[i], persistent_ubs[i]] for i in 1:length(persistent_lbs)]; 
                        samples = n_samples)
+                       samples = n_samples)
     eFAST_flighty = gsa(output_func, eFAST(), [[flighty_lbs[i], flighty_ubs[i]] for i in 1:length(flighty_lbs)]; 
                        samples = n_samples)
     eFAST_max = gsa(output_func, eFAST(), [[min_lbs[i], max_ubs[i]] for i in 1:length(min_lbs)]; 
@@ -106,7 +107,7 @@ samples_results = DataFrame(
 
 using Base.Threads
 
-sample_sizes = 10000:1000:20000
+sample_sizes = 10^5::Int : 10^5::Int : 10^6::Int
 results_list = Vector{DataFrame}(undef, length(sample_sizes))
 
 @threads for idx in ProgressBar(eachindex(sample_sizes))
