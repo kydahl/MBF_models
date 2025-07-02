@@ -637,12 +637,12 @@ plot_data <- PRCC_data %>%
       type == "persistent" ~ "Persistent",
       type == "max" ~ "Maximum variation",
     ),
-    dummy_min = -abs(PRCC[input == "dummy"]),
-    dummy_max = abs(PRCC[input == "dummy"])
+    # dummy_min = -abs(PRCC[input == "dummy"]),
+    # dummy_max = abs(PRCC[input == "dummy"])
   ) %>% 
   filter(!is.na(output), input != "dummy") %>% 
   mutate(input_num = as.numeric(factor(input)))
-  
+
 
 plot_data$type = factor(plot_data$type, levels = c("flighty", "persistent", "max"))
 plot_data$input = factor(plot_data$input, levels = c(
@@ -699,7 +699,7 @@ PRCC_plots <- plot_data %>%
   geom_col(
     aes(x = nice_labels, y = PRCC, fill = type_label),
     position = "dodge", alpha = 0.75
-    ) +
+  ) +
   # Add light grey lines to divide up categories
   geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1),
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
@@ -836,18 +836,20 @@ ggsave("figures/Figure4_max_only.pdf", PRCC_plots_max_only, width = 6.5, height 
 # 5. Sobol indices of N0 and R0 wrt parameters ----
 # Load in data
 
-eFAST_data = read_csv("data/eFAST_test.csv")
+eFAST_data = read_csv("data/eFAST_test.csv") |> 
+  mutate(type = factor(type, levels = c("max", "flighty", "persistent")))
 eFAST_plot = eFAST_data |> 
-  filter(type == "max") |> 
+  # filter(type == "persistent") |> 
   group_by(input, output) |> 
   arrange(sample_size) |> 
   ggplot(aes(x = sample_size, y = value, color = input)) +
   geom_path() +
-  facet_wrap(index_type~output, scales = "free")
-
+  facet_wrap(output~type+index_type, scales = "free", ncol = 6) +
+  theme_minimal()
+eFAST_plot
 
 Sobol_data = read_csv("data/julia_sobol.csv") #%>%
-  # filter(type == "max")
+# filter(type == "max")
 
 # Testing stability of Sobol sensitivity indices
 iter = iter + 1
@@ -875,7 +877,7 @@ sobol_test = tibble(iter_num = c(), sample_size = c(), output = c(),
                     rank_5 = c(), rank_6 = c(), rank_7 = c(), rank_8 = c(), 
                     rank_9 = c())
 
-plot_data <- Sobol_data %>% 
+plot_data <- eFAST_data %>% 
   group_by(type, output, index_type) %>% 
   # Add in nice labels
   left_join(
@@ -893,8 +895,8 @@ plot_data <- Sobol_data %>%
       type == "persistent" ~ "Persistent",
       type == "max" ~ "Maximum variation",
     ),
-    dummy_min = -abs(value[input == "dummy"]),
-    dummy_max = abs(value[input == "dummy"])
+    # dummy_min = -abs(value[input == "dummy"]),
+    # dummy_max = abs(value[input == "dummy"])
   ) %>% 
   filter(!is.na(output), input != "dummy") %>% 
   mutate(input_num = as.numeric(factor(input)))
@@ -929,22 +931,22 @@ plot_ribbon <- plot_data %>%
   group_modify( ~ bind_rows(
     tibble(
       input_num = min(.x$input_num) - 0.5,
-      dummy_min = .x$dummy_min[1],
-      dummy_max = .x$dummy_max[1],
+      # dummy_min = .x$dummy_min[1],
+      # dummy_max = .x$dummy_max[1],
       type = .x$type[1],
       output_label = .x$output_label[1],
     ),
     .x,
     tibble(
       input_num = max(.x$input_num) + 0.5,
-      dummy_min = .x$dummy_min[nrow(.x)],
-      dummy_max = .x$dummy_max[nrow(.x)],
+      # dummy_min = .x$dummy_min[nrow(.x)],
+      # dummy_max = .x$dummy_max[nrow(.x)],
       type = .x$type[nrow(.x)],
       output_label = .x$output_label[nrow(.x)],
     )
   )
   ) %>% ungroup() %>% 
-  select(input_num, dummy_min, dummy_max, type, output_label) %>% distinct()
+  select(input_num, type, output_label) %>% distinct()
 
 FirstSobol_plots <- plot_data %>% 
   filter(index_type == "S1") |>
@@ -962,13 +964,13 @@ FirstSobol_plots <- plot_data %>%
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
-  # Add grey ribbon to show dummy variable values
-  geom_ribbon(
-    data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-    aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-    color = NA, fill = "grey60",
-    alpha = 0.5
-  ) +
+  # # Add grey ribbon to show dummy variable values
+  # geom_ribbon(
+  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
+  #   color = NA, fill = "grey60",
+  #   alpha = 0.5
+  # ) +
   facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
   scale_fill_manual(
     name = "Parameter set:",
@@ -1012,13 +1014,13 @@ TotalSobol_plots <- plot_data %>%
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
-  # Add grey ribbon to show dummy variable values
-  geom_ribbon(
-    data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-    aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-    color = NA, fill = "grey60",
-    alpha = 0.5
-  ) +
+  # # Add grey ribbon to show dummy variable values
+  # geom_ribbon(
+  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
+  #   color = NA, fill = "grey60",
+  #   alpha = 0.5
+  # ) +
   facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
   scale_fill_manual(
     name = "Parameter set:",
@@ -1057,13 +1059,13 @@ FirstSobol_plots_row <- plot_data %>%
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
-  # Add grey ribbon to show dummy variable values
-  geom_ribbon(
-    data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-    aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-    color = NA, fill = "grey60",
-    alpha = 0.5
-  ) +
+  # # Add grey ribbon to show dummy variable values
+  # geom_ribbon(
+  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
+  #   color = NA, fill = "grey60",
+  #   alpha = 0.5
+  # ) +
   facet_wrap(~output_label, nrow = 1, scales = "free_x") +
   scale_fill_manual(
     name = "Parameter set:",
@@ -1102,13 +1104,13 @@ TotalSobol_plots_row <- plot_data %>%
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
-  # Add grey ribbon to show dummy variable values
-  geom_ribbon(
-    data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-    aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-    color = NA, fill = "grey60",
-    alpha = 0.5
-  ) +
+  # # Add grey ribbon to show dummy variable values
+  # geom_ribbon(
+  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
+  #   color = NA, fill = "grey60",
+  #   alpha = 0.5
+  # ) +
   facet_wrap(~output_label, nrow = 1, scales = "free_x") +
   scale_fill_manual(
     name = "Parameter set:",
@@ -1143,8 +1145,10 @@ FirstSobol_plots_max_only <- plot_data %>%
   arrange(input) %>% 
   filter(output %in% c("N_offspring","R0")) %>%
   group_by(type, output) %>% 
-  mutate(star_flag = abs(value) < abs(dummy_min),
-         star_xpos = value + sign(value) * 0.025) %>% 
+  mutate(
+    # star_flag = abs(value) < abs(dummy_min),
+    # star_xpos = value + sign(value) * 0.025
+  ) %>% 
   # Plot
   ggplot() +
   geom_col(aes(y = nice_labels, x = value, fill = output_label), position = "dodge", width = 0.75) +
@@ -1157,13 +1161,13 @@ FirstSobol_plots_max_only <- plot_data %>%
     name = "",
     values = c(c4a("met.juarez",3))
   ) +
-  # Add stars to flagged bars
-  geom_text(
-    data = . %>% filter(star_flag),
-    aes(y = nice_labels, x = star_xpos, label = "n.s."),
-    position = position_dodge(width = 0.75),
-    size = 2, vjust = -0.55
-  ) +
+  # # Add stars to flagged bars
+  # geom_text(
+  #   data = . %>% filter(star_flag),
+  #   aes(y = nice_labels, x = star_xpos, label = "n.s."),
+  #   position = position_dodge(width = 0.75),
+  #   size = 2, vjust = -0.55
+  # ) +
   scale_y_discrete(
     name = "",
     labels = function(x) parse(text = x)
@@ -1194,8 +1198,10 @@ TotalSobol_plots_max_only <- plot_data %>%
   arrange(input) %>% 
   filter(output %in% c("N_offspring","R0")) %>%
   group_by(type, output) %>% 
-  mutate(star_flag = abs(value) < abs(dummy_min),
-         star_xpos = value + sign(value) * 0.025) %>% 
+  mutate(
+    # star_flag = abs(value) < abs(dummy_min),
+    # star_xpos = value + sign(value) * 0.025
+    ) %>% 
   # Plot
   ggplot() +
   geom_col(aes(y = nice_labels, x = value, fill = output_label), position = "dodge", width = 0.75) +
