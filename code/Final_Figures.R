@@ -838,13 +838,13 @@ ggsave("figures/Figure4_max_only.pdf", PRCC_plots_max_only, width = 6.5, height 
 
 eFAST_data = read_csv("data/eFAST_test.csv")
 eFAST_plot = eFAST_data |> 
-  filter(type == "max") |> 
+  filter(type == "flighty") |> 
   group_by(input, output) |> 
   arrange(sample_size) |> 
   ggplot(aes(x = sample_size, y = value, color = input)) +
   geom_path() +
   facet_wrap(index_type~output, scales = "free")
-
+eFAST_plot
 
 Sobol_data = read_csv("data/julia_sobol.csv") #%>%
   # filter(type == "max")
