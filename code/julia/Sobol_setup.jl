@@ -112,7 +112,7 @@ samples_results = DataFrame(
 
 using Base.Threads
 
-sample_sizes = 10^3::Int : 5*10^2::Int : 10^4::Int
+sample_sizes = 10^4::Int : 5*10^3::Int : 10^5::Int
 results_list = Vector{DataFrame}(undef, length(sample_sizes))
 
 @threads for idx in ProgressBar(eachindex(sample_sizes))

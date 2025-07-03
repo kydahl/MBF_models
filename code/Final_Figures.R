@@ -834,14 +834,14 @@ PRCC_plots_max_only
 
 ggsave("figures/Figure4_max_only.pdf", PRCC_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
 
-# 5. Sobol indices of N0 and R0 wrt parameters ----
+# 5. eFAST indices of N0 and R0 wrt parameters ----
 # Load in data
 
 eFAST_data = read_csv("data/eFAST_test.csv") |> 
   mutate(type = factor(type, levels = c("max", "flighty", "persistent")),
          param_type = ifelse(input %in% c("sigma", "pQ", "pL", "pP", "pG"), "probability", "rate")
          )
-eFAST_plot = eFAST_data |> 
+eFAST_stability_plot = eFAST_data |> 
   group_by(input, output) |> 
   arrange(sample_size) |> 
   ggplot(aes(x = sample_size, y = value, color = input)) +
@@ -855,7 +855,408 @@ eFAST_plot = eFAST_data |>
   scale_y_continuous("") + 
   scale_color_discrete("Parameter") +
   theme_minimal()
-eFAST_plot
+eFAST_stability_plot
+
+# eFAST sensitivity plots
+plot_data <- eFAST_data %>%
+  filter(sample_size == max(sample_size)) |> 
+  group_by(type, output, index_type) %>% 
+  # Add in nice labels
+  left_join(
+    param_table %>% 
+      rename(input = short_label)
+  ) %>%
+  left_join(rename(nice_mech_labels, input = name), by = "input")  %>% 
+  mutate(
+    output_label = case_when(
+      output == "R0" ~ "Basic reproduction number",
+      output == "N_offspring" ~ "Basic offspring number",
+    ),
+    type_label = case_when(
+      type == "flighty" ~ "Flighty",
+      type == "persistent" ~ "Persistent",
+      type == "max" ~ "Maximum variation",
+    ),
+    # dummy_min = -abs(value[input == "dummy"]),
+    # dummy_max = abs(value[input == "dummy"])
+  ) %>% 
+  filter(!is.na(output), input != "dummy") %>% 
+  mutate(input_num = as.numeric(factor(input)))
+
+
+plot_data$type = factor(plot_data$type, levels = c("flighty", "persistent", "max"))
+plot_data$input = factor(plot_data$input, levels = c(
+  "pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG", "dummy"
+))
+plot_data$output_label = factor(plot_data$output_label, levels = c(
+  "Gonotrophic cycle duration", "Basic offspring number","Basic reproduction number"
+))
+
+plot_data$type_label = factor(plot_data$type_label, levels = c(
+  "Flighty","Persistent","Maximum variation"
+))
+
+
+plot_data$Label = factor(plot_data$Label, levels = rev(c(
+  c("Seeking success",
+    "Landing success",  "Probing success", "Ingesting success"),
+  "Persistence probability", 
+  "Seeking rate", "Landing rate", "Probing rate", "Ingesting rate", "Dummy variable"
+)))
+
+plot_data$nice_labels <- factor(
+  plot_data$nice_labels,
+  levels = c(rev(nice_mech_labels$nice_labels), "Dummy~variable"))
+
+plot_ribbon <- plot_data %>%
+  group_by(type, output_label) %>% 
+  group_modify( ~ bind_rows(
+    tibble(
+      input_num = min(.x$input_num) - 0.5,
+      # dummy_min = .x$dummy_min[1],
+      # dummy_max = .x$dummy_max[1],
+      type = .x$type[1],
+      output_label = .x$output_label[1],
+    ),
+    .x,
+    tibble(
+      input_num = max(.x$input_num) + 0.5,
+      # dummy_min = .x$dummy_min[nrow(.x)],
+      # dummy_max = .x$dummy_max[nrow(.x)],
+      type = .x$type[nrow(.x)],
+      output_label = .x$output_label[nrow(.x)],
+    )
+  )
+  ) %>% ungroup() %>% 
+  select(input_num, type, output_label) %>% distinct()
+
+FirsteFAST_plots <- plot_data %>% 
+  filter(index_type == "S1") |>
+  arrange(input) %>% 
+  # filter((input %in% c("lP"))) %>%
+  filter(output %in% c("N_offspring","R0")) %>%
+  # filter(type %in% c("flighty", "persistent")) %>% 
+  ggplot() +
+  geom_col(
+    aes(x = nice_labels, y = value, fill = type_label),
+    position = "dodge", alpha = 0.75
+  ) +
+  # Add light grey lines to divide up categories
+  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1),
+             color = "grey60", linetype = "dashed", linewidth = 0.25) +
+  # Add zero line
+  geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
+  # # Add grey ribbon to show dummy variable values
+  # geom_ribbon(
+  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
+  #   color = NA, fill = "grey60",
+  #   alpha = 0.5
+  # ) +
+  facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
+  scale_fill_manual(
+    name = "Parameter set:",
+    values = c(c4a("met.juarez",3))#, "black")
+  ) +
+  scale_x_discrete(
+    name = "",
+    labels = function(x) parse(text = x),
+  ) +
+  scale_y_continuous(
+    TeX("First Order eFAST Sensitivity Index"),
+    expand = c(0.0,0)
+  ) +
+  theme_half_open(11) +
+  theme(
+    axis.text.x = element_text(angle = 50, hjust = 1),
+    strip.background = element_rect(color = "white", fill = "white"),
+    legend.key.width = unit(0.4, "in"),
+    legend.position = "top",
+    legend.direction = "horizontal"
+  ) +
+  coord_cartesian(xlim = c(1.1, 8.9))
+
+FirsteFAST_plots
+
+ggsave("figures/FirsteFASTFigure4.pdf", FirsteFAST_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
+
+TotaleFAST_plots <- plot_data %>% 
+  filter(index_type == "ST") |>
+  arrange(input) %>% 
+  # filter((input %in% c("lP"))) %>%
+  filter(output %in% c("N_offspring","R0")) %>%
+  # filter(type %in% c("flighty", "persistent")) %>% 
+  ggplot() +
+  geom_col(
+    aes(x = nice_labels, y = value, fill = type_label),
+    position = "dodge", alpha = 0.75
+  ) +
+  # Add light grey lines to divide up categories
+  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1),
+             color = "grey60", linetype = "dashed", linewidth = 0.25) +
+  # Add zero line
+  geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
+  # # Add grey ribbon to show dummy variable values
+  # geom_ribbon(
+  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
+  #   color = NA, fill = "grey60",
+  #   alpha = 0.5
+  # ) +
+  facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
+  scale_fill_manual(
+    name = "Parameter set:",
+    values = c(c4a("met.juarez",3))#, "black")
+  ) +
+  scale_x_discrete(
+    name = "",
+    labels = function(x) parse(text = x),
+  ) +
+  scale_y_continuous(
+    TeX("Total eFAST Sensitivity Index"),
+    expand = c(0.0,0)
+  ) +
+  theme_half_open(11) +
+  theme(
+    axis.text.x = element_text(angle = 50, hjust = 1),
+    strip.background = element_rect(color = "white", fill = "white"),
+    legend.key.width = unit(0.4, "in"),
+    legend.position = "top",
+    legend.direction = "horizontal"
+  ) +
+  coord_cartesian(xlim = c(1.1, 8.9))
+
+TotaleFAST_plots
+
+ggsave("figures/TotaleFASTFigure4.pdf", TotaleFAST_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
+
+FirsteFAST_plots_row <- plot_data %>% 
+  filter(index_type == "S1") |>
+  arrange(input) %>% 
+  filter(output %in% c("N_offspring","R0")) %>%
+  ggplot() +
+  geom_col(aes(x = nice_labels, y = value, fill = type_label), position = "dodge") +
+  # Add light grey lines to divide up categories
+  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
+             color = "grey60", linetype = "dashed", linewidth = 0.25) +
+  # Add zero line
+  geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
+  # # Add grey ribbon to show dummy variable values
+  # geom_ribbon(
+  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
+  #   color = NA, fill = "grey60",
+  #   alpha = 0.5
+  # ) +
+  facet_wrap(~output_label, nrow = 1, scales = "free_x") +
+  scale_fill_manual(
+    name = "Parameter set:",
+    values = c(c4a("met.juarez",3))#, "black")
+  ) +
+  scale_x_discrete(
+    name = "",
+    labels = function(x) parse(text = x)
+  ) +
+  scale_y_continuous(
+    TeX("First Order eFAST Sensitivity Index"),
+    expand = c(0.0,0)
+  ) +
+  theme_half_open(11) +
+  theme(
+    axis.text.x = element_text(angle = 50, hjust = 1),
+    strip.background = element_rect(color = "white", fill = "white"),
+    legend.key.width = unit(0.4, "in"),
+    legend.position = "top",
+    legend.direction = "horizontal",
+    # legend.justification = "center"
+  )
+
+FirsteFAST_plots_row
+
+ggsave("figures/FirsteFASTFigure4_row.pdf", FirsteFAST_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
+
+TotaleFAST_plots_row <- plot_data %>% 
+  filter(index_type == "ST") |>
+  arrange(input) %>% 
+  filter(output %in% c("N_offspring","R0")) %>%
+  ggplot() +
+  geom_col(aes(x = nice_labels, y = value, fill = type_label), position = "dodge") +
+  # Add light grey lines to divide up categories
+  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
+             color = "grey60", linetype = "dashed", linewidth = 0.25) +
+  # Add zero line
+  geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
+  # # Add grey ribbon to show dummy variable values
+  # geom_ribbon(
+  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
+  #   color = NA, fill = "grey60",
+  #   alpha = 0.5
+  # ) +
+  facet_wrap(~output_label, nrow = 1, scales = "free_x") +
+  scale_fill_manual(
+    name = "Parameter set:",
+    values = c(c4a("met.juarez",3))#, "black")
+  ) +
+  scale_x_discrete(
+    name = "",
+    labels = function(x) parse(text = x)
+  ) +
+  scale_y_continuous(
+    TeX("Total eFAST Sensitivity Index"),
+    expand = c(0.0,0)
+  ) +
+  theme_half_open(11) +
+  theme(
+    axis.text.x = element_text(angle = 50, hjust = 1),
+    strip.background = element_rect(color = "white", fill = "white"),
+    legend.key.width = unit(0.4, "in"),
+    legend.position = "top",
+    legend.direction = "horizontal",
+    # legend.justification = "center"
+  )
+
+TotaleFAST_plots_row
+
+ggsave("figures/TotaleFASTFigure4_row.pdf", TotaleFAST_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
+
+FirsteFAST_plots_max_only <- plot_data %>% 
+  filter(index_type == "S1") |>
+  # Just keep maximum variation for now
+  filter(type == "max") %>%
+  arrange(input) %>% 
+  filter(output %in% c("N_offspring","R0")) %>%
+  group_by(type, output) %>% 
+  mutate(
+    # star_flag = abs(value) < abs(dummy_min),
+    # star_xpos = value + sign(value) * 0.025
+  ) %>% 
+  # Plot
+  ggplot() +
+  geom_col(aes(y = nice_labels, x = value, fill = output_label), position = "dodge", width = 0.75) +
+  # Add light grey lines to divide up categories
+  geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
+             color = "grey60", linetype = "dashed", linewidth = 0.125) +
+  # Add zero line
+  geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
+  scale_fill_manual(
+    name = "",
+    values = c(c4a("met.juarez",3))
+  ) +
+  # # Add stars to flagged bars
+  # geom_text(
+  #   data = . %>% filter(star_flag),
+  #   aes(y = nice_labels, x = star_xpos, label = "n.s."),
+  #   position = position_dodge(width = 0.75),
+  #   size = 2, vjust = -0.55
+  # ) +
+  scale_y_discrete(
+    name = "",
+    labels = function(x) parse(text = x)
+  ) +
+  scale_x_continuous(
+    TeX("First Order eFAST Sensitivity Index"),
+    breaks = seq(-1,1,by = 0.25),
+    expand = c(0.0,0)
+  ) +
+  theme_half_open(11) +
+  theme(
+    strip.background = element_rect(color = "white", fill = "white"),
+    legend.key.width = unit(0.25, "in"),
+    legend.key.height = unit(0.03125, "in"),
+    legend.position = "top",
+    legend.direction = "horizontal"
+  )
+
+FirsteFAST_plots_max_only
+
+ggsave("figures/FirsteFASTFigure4_max_only.pdf", FirsteFAST_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
+
+TotaleFAST_plots_max_only <- plot_data %>% 
+  filter(index_type == "ST") |>
+  # Just keep maximum variation for now
+  filter(type == "max") %>%
+  arrange(input) %>% 
+  filter(output %in% c("N_offspring","R0")) %>%
+  group_by(type, output) %>% 
+  mutate(
+    # star_flag = abs(value) < abs(dummy_min),
+    # star_xpos = value + sign(value) * 0.025
+    ) %>% 
+  # Plot
+  ggplot() +
+  geom_col(aes(y = nice_labels, x = value, fill = output_label), position = "dodge", width = 0.75) +
+  # Add light grey lines to divide up categories
+  geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
+             color = "grey60", linetype = "dashed", linewidth = 0.125) +
+  # Add zero line
+  geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
+  scale_fill_manual(
+    name = "",
+    values = c(c4a("met.juarez",3))
+  ) +
+  # # Add stars to flagged bars
+  # geom_text(
+  #   data = . %>% filter(star_flag),
+  #   aes(y = nice_labels, x = star_xpos, label = "n.s."),
+  #   position = position_dodge(width = 0.75),
+  #   size = 2, vjust = -0.55
+  # ) +
+  scale_y_discrete(
+    name = "",
+    labels = function(x) parse(text = x)
+  ) +
+  scale_x_continuous(
+    TeX("Total eFAST Sensitivity Index"),
+    breaks = seq(-1,1,by = 0.25),
+    expand = c(0.0,0)
+  ) +
+  theme_half_open(11) +
+  theme(
+    strip.background = element_rect(color = "white", fill = "white"),
+    legend.key.width = unit(0.25, "in"),
+    legend.key.height = unit(0.03125, "in"),
+    legend.position = "top",
+    legend.direction = "horizontal"
+  )
+
+TotaleFAST_plots_max_only
+
+ggsave("figures/TotaleFASTFigure4_max_only.pdf", TotaleFAST_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
+
+# Supplementary: theta vs. mechanistic parameters ----
+SuppFigure1 <- Figure3_df %>%
+  filter(theta < 21 * 1440) %>% 
+  ggplot(aes(x = value, y = theta / 1440, linetype = mosquito_type, color = parameter_type)) +
+  geom_line(lwd = 1) +
+  facet_wrap(
+    ~ nice_labels,
+    ncol = 5,
+    labeller = labeller(nice_labels = label_parsed),
+    scales = "free"
+  ) +
+  scale_x_continuous(
+    name = "Parameter value",
+    expand = c(0,0)
+  ) +
+  scale_y_continuous(
+    name = TeX("Gonotrophic cycle duration \\, [Days]"),
+    expand = c(0,0)
+  ) +
+  scale_color_discrete(
+    name = "Parameter type:"
+  ) +
+  scale_linetype_discrete(
+    name = "Mosquito type:"
+  ) +
+  theme_half_open(18)
+
+shift_legend(SuppFigure1)
+ggsave("figures/SuppFigure.pdf", shift_legend(SuppFigure1), width = 20, height = 8, units = "in")
+# Distinguish parameters by color
+
+
+# Supplementary: Parameter set illustrations ------------------------------
 
 # Create plots illustrating the ranges for the three parameter sets
 
@@ -936,7 +1337,7 @@ paramset_rate_plot <- paramset_ranges |>
   scale_x_log10(
     "Minutes",
     expand = c(0,0)
-    ) +
+  ) +
   scale_y_discrete(
     "",
     labels = (paramset_ranges$param_name[16:27])
@@ -946,430 +1347,3 @@ paramset_rate_plot <- paramset_ranges |>
 
 paramset_plot = egg::ggarrange(paramset_prob_plot, paramset_rate_plot, nrow = 1)
 
-
-Sobol_data = read_csv("data/julia_sobol.csv") #%>%
-# filter(type == "max")
-
-# Testing stability of Sobol sensitivity indices
-iter = iter + 1
-test_row = filter(Sobol_data, type == "max", index_type == "ST") |> 
-  ungroup() |> 
-  select(input, output, value) |> 
-  group_by(output) |> 
-  mutate(rank = rank(-value)) |> 
-  select(-value) |> 
-  arrange(rank) |> 
-  pivot_wider(names_from = rank, names_prefix = "rank_", values_from = input) |> 
-  mutate(
-    iter_num = iter,
-    sample_size = 2^17) |>
-  relocate(iter_num, sample_size, output)
-
-sobol_test = rbind(sobol_test, test_row)
-
-R0_sobol_test = filter(sobol_test, output == "R0")
-N0_sobol_test = filter(sobol_test, output == "N_offspring")
-
-iter = 0
-sobol_test = tibble(iter_num = c(), sample_size = c(), output = c(),
-                    rank_1 = c(), rank_2 = c(), rank_3 = c(), rank_4 = c(), 
-                    rank_5 = c(), rank_6 = c(), rank_7 = c(), rank_8 = c(), 
-                    rank_9 = c())
-
-plot_data <- eFAST_data %>% 
-  group_by(type, output, index_type) %>% 
-  # Add in nice labels
-  left_join(
-    param_table %>% 
-      rename(input = short_label)
-  ) %>%
-  left_join(rename(nice_mech_labels, input = name), by = "input")  %>% 
-  mutate(
-    output_label = case_when(
-      output == "R0" ~ "Basic reproduction number",
-      output == "N_offspring" ~ "Basic offspring number",
-    ),
-    type_label = case_when(
-      type == "flighty" ~ "Flighty",
-      type == "persistent" ~ "Persistent",
-      type == "max" ~ "Maximum variation",
-    ),
-    # dummy_min = -abs(value[input == "dummy"]),
-    # dummy_max = abs(value[input == "dummy"])
-  ) %>% 
-  filter(!is.na(output), input != "dummy") %>% 
-  mutate(input_num = as.numeric(factor(input)))
-
-
-plot_data$type = factor(plot_data$type, levels = c("flighty", "persistent", "max"))
-plot_data$input = factor(plot_data$input, levels = c(
-  "pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG", "dummy"
-))
-plot_data$output_label = factor(plot_data$output_label, levels = c(
-  "Gonotrophic cycle duration", "Basic offspring number","Basic reproduction number"
-))
-
-plot_data$type_label = factor(plot_data$type_label, levels = c(
-  "Flighty","Persistent","Maximum variation"
-))
-
-
-plot_data$Label = factor(plot_data$Label, levels = rev(c(
-  c("Seeking success",
-    "Landing success",  "Probing success", "Ingesting success"),
-  "Persistence probability", 
-  "Seeking rate", "Landing rate", "Probing rate", "Ingesting rate", "Dummy variable"
-)))
-
-plot_data$nice_labels <- factor(
-  plot_data$nice_labels,
-  levels = c(rev(nice_mech_labels$nice_labels), "Dummy~variable"))
-
-plot_ribbon <- plot_data %>%
-  group_by(type, output_label) %>% 
-  group_modify( ~ bind_rows(
-    tibble(
-      input_num = min(.x$input_num) - 0.5,
-      # dummy_min = .x$dummy_min[1],
-      # dummy_max = .x$dummy_max[1],
-      type = .x$type[1],
-      output_label = .x$output_label[1],
-    ),
-    .x,
-    tibble(
-      input_num = max(.x$input_num) + 0.5,
-      # dummy_min = .x$dummy_min[nrow(.x)],
-      # dummy_max = .x$dummy_max[nrow(.x)],
-      type = .x$type[nrow(.x)],
-      output_label = .x$output_label[nrow(.x)],
-    )
-  )
-  ) %>% ungroup() %>% 
-  select(input_num, type, output_label) %>% distinct()
-
-FirstSobol_plots <- plot_data %>% 
-  filter(index_type == "S1") |>
-  arrange(input) %>% 
-  # filter((input %in% c("lP"))) %>%
-  filter(output %in% c("N_offspring","R0")) %>%
-  # filter(type %in% c("flighty", "persistent")) %>% 
-  ggplot() +
-  geom_col(
-    aes(x = nice_labels, y = value, fill = type_label),
-    position = "dodge", alpha = 0.75
-  ) +
-  # Add light grey lines to divide up categories
-  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1),
-             color = "grey60", linetype = "dashed", linewidth = 0.25) +
-  # Add zero line
-  geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
-  # # Add grey ribbon to show dummy variable values
-  # geom_ribbon(
-  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-  #   color = NA, fill = "grey60",
-  #   alpha = 0.5
-  # ) +
-  facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
-  scale_fill_manual(
-    name = "Parameter set:",
-    values = c(c4a("met.juarez",3))#, "black")
-  ) +
-  scale_x_discrete(
-    name = "",
-    labels = function(x) parse(text = x),
-  ) +
-  scale_y_continuous(
-    TeX("First Order Sobol Sensitivity Index"),
-    limits = c(-1,1)
-  ) +
-  theme_half_open(11) +
-  theme(
-    axis.text.x = element_text(angle = 50, hjust = 1),
-    strip.background = element_rect(color = "white", fill = "white"),
-    legend.key.width = unit(0.4, "in"),
-    legend.position = "top",
-    legend.direction = "horizontal"
-  ) +
-  coord_cartesian(xlim = c(1.1, 8.9))
-
-FirstSobol_plots
-
-ggsave("figures/FirstSobolFigure4.pdf", FirstSobol_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
-
-TotalSobol_plots <- plot_data %>% 
-  filter(index_type == "ST") |>
-  arrange(input) %>% 
-  # filter((input %in% c("lP"))) %>%
-  filter(output %in% c("N_offspring","R0")) %>%
-  # filter(type %in% c("flighty", "persistent")) %>% 
-  ggplot() +
-  geom_col(
-    aes(x = nice_labels, y = value, fill = type_label),
-    position = "dodge", alpha = 0.75
-  ) +
-  # Add light grey lines to divide up categories
-  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1),
-             color = "grey60", linetype = "dashed", linewidth = 0.25) +
-  # Add zero line
-  geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
-  # # Add grey ribbon to show dummy variable values
-  # geom_ribbon(
-  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-  #   color = NA, fill = "grey60",
-  #   alpha = 0.5
-  # ) +
-  facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
-  scale_fill_manual(
-    name = "Parameter set:",
-    values = c(c4a("met.juarez",3))#, "black")
-  ) +
-  scale_x_discrete(
-    name = "",
-    labels = function(x) parse(text = x),
-  ) +
-  scale_y_continuous(
-    TeX("Total Sobol Sensitivity Index"),
-    limits = c(-1,1)
-  ) +
-  theme_half_open(11) +
-  theme(
-    axis.text.x = element_text(angle = 50, hjust = 1),
-    strip.background = element_rect(color = "white", fill = "white"),
-    legend.key.width = unit(0.4, "in"),
-    legend.position = "top",
-    legend.direction = "horizontal"
-  ) +
-  coord_cartesian(xlim = c(1.1, 8.9))
-
-TotalSobol_plots
-
-ggsave("figures/TotalSobolFigure4.pdf", TotalSobol_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
-
-FirstSobol_plots_row <- plot_data %>% 
-  filter(index_type == "S1") |>
-  arrange(input) %>% 
-  filter(output %in% c("N_offspring","R0")) %>%
-  ggplot() +
-  geom_col(aes(x = nice_labels, y = value, fill = type_label), position = "dodge") +
-  # Add light grey lines to divide up categories
-  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
-             color = "grey60", linetype = "dashed", linewidth = 0.25) +
-  # Add zero line
-  geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
-  # # Add grey ribbon to show dummy variable values
-  # geom_ribbon(
-  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-  #   color = NA, fill = "grey60",
-  #   alpha = 0.5
-  # ) +
-  facet_wrap(~output_label, nrow = 1, scales = "free_x") +
-  scale_fill_manual(
-    name = "Parameter set:",
-    values = c(c4a("met.juarez",3))#, "black")
-  ) +
-  scale_x_discrete(
-    name = "",
-    labels = function(x) parse(text = x)
-  ) +
-  scale_y_continuous(
-    TeX("First Order Sobol Sensitivity Index"),
-    limits = c(-1,1)
-  ) +
-  theme_half_open(11) +
-  theme(
-    axis.text.x = element_text(angle = 50, hjust = 1),
-    strip.background = element_rect(color = "white", fill = "white"),
-    legend.key.width = unit(0.4, "in"),
-    legend.position = "top",
-    legend.direction = "horizontal",
-    # legend.justification = "center"
-  )
-
-FirstSobol_plots_row
-
-ggsave("figures/FirstSobolFigure4_row.pdf", FirstSobol_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
-
-TotalSobol_plots_row <- plot_data %>% 
-  filter(index_type == "ST") |>
-  arrange(input) %>% 
-  filter(output %in% c("N_offspring","R0")) %>%
-  ggplot() +
-  geom_col(aes(x = nice_labels, y = value, fill = type_label), position = "dodge") +
-  # Add light grey lines to divide up categories
-  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
-             color = "grey60", linetype = "dashed", linewidth = 0.25) +
-  # Add zero line
-  geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
-  # # Add grey ribbon to show dummy variable values
-  # geom_ribbon(
-  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-  #   color = NA, fill = "grey60",
-  #   alpha = 0.5
-  # ) +
-  facet_wrap(~output_label, nrow = 1, scales = "free_x") +
-  scale_fill_manual(
-    name = "Parameter set:",
-    values = c(c4a("met.juarez",3))#, "black")
-  ) +
-  scale_x_discrete(
-    name = "",
-    labels = function(x) parse(text = x)
-  ) +
-  scale_y_continuous(
-    TeX("Total Sobol Sensitivity Index"),
-    limits = c(-1,1)
-  ) +
-  theme_half_open(11) +
-  theme(
-    axis.text.x = element_text(angle = 50, hjust = 1),
-    strip.background = element_rect(color = "white", fill = "white"),
-    legend.key.width = unit(0.4, "in"),
-    legend.position = "top",
-    legend.direction = "horizontal",
-    # legend.justification = "center"
-  )
-
-TotalSobol_plots_row
-
-ggsave("figures/TotalSobolFigure4_row.pdf", TotalSobol_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
-
-FirstSobol_plots_max_only <- plot_data %>% 
-  filter(index_type == "S1") |>
-  # Just keep maximum variation for now
-  filter(type == "max") %>%
-  arrange(input) %>% 
-  filter(output %in% c("N_offspring","R0")) %>%
-  group_by(type, output) %>% 
-  mutate(
-    # star_flag = abs(value) < abs(dummy_min),
-    # star_xpos = value + sign(value) * 0.025
-  ) %>% 
-  # Plot
-  ggplot() +
-  geom_col(aes(y = nice_labels, x = value, fill = output_label), position = "dodge", width = 0.75) +
-  # Add light grey lines to divide up categories
-  geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
-             color = "grey60", linetype = "dashed", linewidth = 0.125) +
-  # Add zero line
-  geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
-  scale_fill_manual(
-    name = "",
-    values = c(c4a("met.juarez",3))
-  ) +
-  # # Add stars to flagged bars
-  # geom_text(
-  #   data = . %>% filter(star_flag),
-  #   aes(y = nice_labels, x = star_xpos, label = "n.s."),
-  #   position = position_dodge(width = 0.75),
-  #   size = 2, vjust = -0.55
-  # ) +
-  scale_y_discrete(
-    name = "",
-    labels = function(x) parse(text = x)
-  ) +
-  scale_x_continuous(
-    TeX("First Order Sobol Sensitivity Index"),
-    breaks = seq(-1,1,by = 0.25),
-    expand = c(0.05,0)
-    # limits = c(-1,1)
-  ) +
-  theme_half_open(11) +
-  theme(
-    strip.background = element_rect(color = "white", fill = "white"),
-    legend.key.width = unit(0.25, "in"),
-    legend.key.height = unit(0.03125, "in"),
-    legend.position = "top",
-    legend.direction = "horizontal"
-  )
-
-FirstSobol_plots_max_only
-
-ggsave("figures/FirstSobolFigure4_max_only.pdf", FirstSobol_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
-
-TotalSobol_plots_max_only <- plot_data %>% 
-  filter(index_type == "ST") |>
-  # Just keep maximum variation for now
-  filter(type == "max") %>%
-  arrange(input) %>% 
-  filter(output %in% c("N_offspring","R0")) %>%
-  group_by(type, output) %>% 
-  mutate(
-    # star_flag = abs(value) < abs(dummy_min),
-    # star_xpos = value + sign(value) * 0.025
-    ) %>% 
-  # Plot
-  ggplot() +
-  geom_col(aes(y = nice_labels, x = value, fill = output_label), position = "dodge", width = 0.75) +
-  # Add light grey lines to divide up categories
-  geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
-             color = "grey60", linetype = "dashed", linewidth = 0.125) +
-  # Add zero line
-  geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
-  scale_fill_manual(
-    name = "",
-    values = c(c4a("met.juarez",3))
-  ) +
-  # Add stars to flagged bars
-  geom_text(
-    data = . %>% filter(star_flag),
-    aes(y = nice_labels, x = star_xpos, label = "n.s."),
-    position = position_dodge(width = 0.75),
-    size = 2, vjust = -0.55
-  ) +
-  scale_y_discrete(
-    name = "",
-    labels = function(x) parse(text = x)
-  ) +
-  scale_x_continuous(
-    TeX("Total Sobol Sensitivity Index"),
-    breaks = seq(-1,1,by = 0.25),
-    expand = c(0.0,0)
-    # limits = c(-1,1)
-  ) +
-  theme_half_open(11) +
-  theme(
-    strip.background = element_rect(color = "white", fill = "white"),
-    legend.key.width = unit(0.25, "in"),
-    legend.key.height = unit(0.03125, "in"),
-    legend.position = "top",
-    legend.direction = "horizontal"
-  )
-
-TotalSobol_plots_max_only
-
-ggsave("figures/TotalSobolFigure4_max_only.pdf", TotalSobol_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
-
-# Supplementary: theta vs. mechanistic parameters ----
-SuppFigure1 <- Figure3_df %>%
-  filter(theta < 21 * 1440) %>% 
-  ggplot(aes(x = value, y = theta / 1440, linetype = mosquito_type, color = parameter_type)) +
-  geom_line(lwd = 1) +
-  facet_wrap(
-    ~ nice_labels,
-    ncol = 5,
-    labeller = labeller(nice_labels = label_parsed),
-    scales = "free"
-  ) +
-  scale_x_continuous(
-    name = "Parameter value",
-    expand = c(0,0)
-  ) +
-  scale_y_continuous(
-    name = TeX("Gonotrophic cycle duration \\, [Days]"),
-    expand = c(0,0)
-  ) +
-  scale_color_discrete(
-    name = "Parameter type:"
-  ) +
-  scale_linetype_discrete(
-    name = "Mosquito type:"
-  ) +
-  theme_half_open(18)
-
-shift_legend(SuppFigure1)
-ggsave("figures/SuppFigure.pdf", shift_legend(SuppFigure1), width = 20, height = 8, units = "in")
-# Distinguish parameters by color
