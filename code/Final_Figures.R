@@ -1156,7 +1156,6 @@ FirsteFAST_plots_max_only <- plot_data %>%
   ) +
   scale_x_continuous(
     TeX("First Order eFAST Sensitivity Index"),
-    breaks = seq(-1,1,by = 0.25),
     expand = c(0.0,0)
   ) +
   theme_half_open(11) +
@@ -1208,7 +1207,6 @@ TotaleFAST_plots_max_only <- plot_data %>%
   ) +
   scale_x_continuous(
     TeX("Total eFAST Sensitivity Index"),
-    breaks = seq(-1,1,by = 0.25),
     expand = c(0.0,0)
   ) +
   theme_half_open(11) +
