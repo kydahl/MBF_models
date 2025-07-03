@@ -9,6 +9,7 @@ library(expm)
 library(matlib)
 library(scales)
 library(ggh4x)
+library(varhandle) # to deal with factor problems in plotting
 
 # Load data ----
 Full_df = read_rds("data/GCD_R0_data.rds") %>% 
@@ -496,7 +497,7 @@ Figure3 <- Figure3_df %>%
   scale_color_manual(
     name = "Parameter type:",
     values = c4a("parks.saguaro",2)
-    # values = c("#1B9E77", "#D95F02")
+    # values = c("#1B9E77", "#D952")
   ) +
   scale_linetype_discrete(
     name = "Mosquito type:",
@@ -837,16 +838,114 @@ ggsave("figures/Figure4_max_only.pdf", PRCC_plots_max_only, width = 6.5, height 
 # Load in data
 
 eFAST_data = read_csv("data/eFAST_test.csv") |> 
-  mutate(type = factor(type, levels = c("max", "flighty", "persistent")))
+  mutate(type = factor(type, levels = c("max", "flighty", "persistent")),
+         param_type = ifelse(input %in% c("sigma", "pQ", "pL", "pP", "pG"), "probability", "rate")
+         )
 eFAST_plot = eFAST_data |> 
-  # filter(type == "persistent") |> 
   group_by(input, output) |> 
   arrange(sample_size) |> 
   ggplot(aes(x = sample_size, y = value, color = input)) +
-  geom_path() +
+  geom_path(lwd = 1, alpha = 0.75) +
   facet_wrap(output~type+index_type, scales = "free", ncol = 6) +
+  scale_x_continuous(
+    "Sample size for sensitivity analysis",
+    labels = scales::label_scientific(),
+    n.breaks = 4
+  ) +
+  scale_y_continuous("") + 
+  scale_color_discrete("Parameter") +
   theme_minimal()
 eFAST_plot
+
+# Create plots illustrating the ranges for the three parameter sets
+
+max_lbs = c(1/((1/2)*1440.0), 1/(30), 1/(30), 1/(30), 0.0, 0.0, 0.0, 0.0, 0.0)
+max_ubs = c(1/160, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+flighty_baseline = c(1/480, 1/10, 1/5, 1/1, 1 - 0.9, 1.0, 0.5, 0.5, 0.5)
+persistent_baseline = c(1/480, 1/10, 1/5, 1/1, 1 - 0.66, 1.0, 0.7, 0.8, 0.9)
+stretch_val = 0.2
+flighty_lbs = (1 - stretch_val) * flighty_baseline
+flighty_ubs = (1 + stretch_val) * flighty_baseline
+persistent_lbs = (1 - stretch_val) * persistent_baseline
+persistent_ubs = (1 + stretch_val) * persistent_baseline
+paramset_ranges <- expand_grid(
+  paramset = c("max", "flighty", "persistent"),
+  params = factor(unique(eFAST_data$input), levels = rev(unique(eFAST_data$input)))
+)
+paramset_ranges$lbs = c(max_lbs, flighty_lbs, persistent_lbs)
+paramset_ranges$ubs = c(max_ubs, flighty_ubs, persistent_ubs)
+
+paramset_ranges =  paramset_ranges |> 
+  rowwise() |> 
+  mutate(
+    paramset = factor(paramset, levels = c("max", "flighty", "persistent")),
+    param_type = ifelse(params %in% c("sigma", "pQ", "pL", "pP", "pG"),
+                        "probability",
+                        "rate"),
+    lbs = ifelse(param_type == "probability",
+                 max(0, min(lbs, 1)),
+                 lbs),
+    ubs = ifelse(param_type == "probability",
+                 max(0, min(ubs, 1)),
+                 ubs)
+  ) |> 
+  group_by(params, paramset, param_type) |> 
+  mutate(
+    row_num = cur_group_id(),
+    param_name = ifelse(row_num %% 3 == 2, unfactor(params), " ")
+  ) |> 
+  ungroup() |> 
+  arrange(params, paramset)
+
+paramset_prob_plot <- paramset_ranges |> 
+  filter(param_type == "probability") |> 
+  ggplot(aes(y = factor(row_num), color = paramset)) +
+  geom_linerange(
+    aes(xmin = lbs, xmax = ubs),
+    lwd = 8
+  ) +  
+  # Add light grey lines to divide up categories
+  geom_hline(yintercept = seq(3.5, 14.5, by = 3), 
+             color = "grey60", linetype = "dashed", linewidth = 0.5) +
+  scale_x_continuous(
+    "Probability",
+    labels = scales::label_percent(),
+    limits = c(0,NA),
+    expand = c(0,0)
+  ) +
+  scale_y_discrete(
+    "",
+    labels = paramset_ranges$param_name[1:15]
+  ) +
+  guides(
+    color = guide_none()
+  ) +
+  ggtitle("Probabilities") +
+  theme_minimal_vgrid()
+
+paramset_rate_plot <- paramset_ranges |> 
+  filter(param_type == "rate") |> 
+  ggplot(aes(y = (factor(row_num)), color = paramset)) +
+  geom_linerange(
+    aes(xmin = 1/ubs, xmax = 1/lbs),
+    lwd = 8
+  ) +  
+  # Add light grey lines to divide up categories
+  geom_hline(yintercept = seq(3.5, 14.5, by = 3), 
+             color = "grey60", linetype = "dashed", linewidth = 0.5) +
+  scale_x_log10(
+    "Minutes",
+    expand = c(0,0)
+    ) +
+  scale_y_discrete(
+    "",
+    labels = (paramset_ranges$param_name[16:27])
+  ) +
+  ggtitle("Inverted rates") +
+  theme_minimal_vgrid()
+
+paramset_plot = egg::ggarrange(paramset_prob_plot, paramset_rate_plot, nrow = 1)
+
 
 Sobol_data = read_csv("data/julia_sobol.csv") #%>%
 # filter(type == "max")
