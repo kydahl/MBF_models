@@ -10,16 +10,16 @@ using CodecZlib
 # Rates at baseline
 # (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG)
 # In terms of rates (for first four parameters)
-const base_params_flighty = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.9f0, 1.0f0, 0.5f0, 0.5f0, 0.5f0, 50.0f0]
-const base_params_persistent = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.66f0, 1.0f0, 0.7f0, 0.8f0, 0.9f0, 50.0f0]
+const base_params_flighty = [1/480.0, 1/10.0, 1/5.0, 1/1.0, 1.0 - 0.9, 1.0, 0.5, 0.5, 0.5, 50.0]
+const base_params_persistent = [1/480.0, 1/10.0, 1/5.0, 1/1.0, 1.0 - 0.66, 1.0, 0.7, 0.8, 0.9, 50.0]
 # In terms of durations (for first four parameters)
-const base_invparams_flighty = [480f0, 10f0, 5f0, 1f0, 1f0 - 0.9f0, 1.0f0, 0.5f0, 0.5f0, 0.5f0, 50.0f0]
-const base_invparams_persistent = [480f0, 10f0, 5f0, 1f0, 1f0 - 0.66f0, 1.0f0, 0.7f0, 0.8f0, 0.9f0, 50.0f0]
+const base_invparams_flighty = [480.0, 10.0, 5.0, 1.0, 1.0 - 0.9, 1.0, 0.5, 0.5, 0.5, 50.0]
+const base_invparams_persistent = [480.0, 10.0, 5.0, 1.0, 1.0 - 0.66, 1.0, 0.7, 0.8, 0.9, 50.0]
 
 # Function to set up parameter bounds around the baseline values
 function parameter_setup(baseline_vals, stretch_val) 
-    ubs = (1f0 + stretch_val) .* baseline_vals
-    lbs = max(0,(1f0 - stretch_val)) .* baseline_vals
+    ubs = (1 + stretch_val) .* baseline_vals
+    lbs = max(0,(1 - stretch_val)) .* baseline_vals
     ubs[5:end] = [min(v,1) for v in ubs[5:end]]
 
     return lbs, ubs
@@ -34,11 +34,11 @@ flighty_inv_lbs, flighty_inv_ubs = parameter_setup(base_invparams_flighty, 0.2)
 # Define the absolute lower and upper bounds for the parameters
 
 # In terms of rates (for first four parameters)
-min_lbs = [1/((1/2)*1440.0f0), 1/(30f0), 1/(30f0), 1/(30f0), 0.0f0, 0.0f0, 0.0f0, 0.0f0, 0.0f0, 0.0f0]
-max_ubs = [160/1440f0, 2.0f0, 2.0f0, 2.0f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0, 100.0f0]
+min_lbs = [1/((1/2)*1440.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 100.0]
 # In terms of durations (for first four parameters)
-invmin_lbs = [1440/160f0, 0.5f0, 0.5f0, 0.5f0, 0.1f0, 0.1f0, 0.1f0, 0.1f0, 0.1f0, 0.0f0]
-invmax_ubs = [(1/2)*1440.0f0, 30f0, 30f0, 30f0, 0.9f0, 0.9f0, 0.9f0, 0.9f0, 0.9f0, 100.0f0]
+invmin_lbs = [1440/160.0, 0.5, 0.5, 0.5, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0]
+invmax_ubs = [(1/2)*1440.0, 30.0, 30.0, 30.0, 0.9, 0.9, 0.9, 0.9, 0.9, 100.0]
 
 # Create function to calculate basic offspring number and basic reproduction number at the same time
 function output_func(B_vals_in)
@@ -103,17 +103,17 @@ end
 
 # Create dataframe to add results across sample sizes
 samples_results = DataFrame(
-        input = String[],
-        output = String[],
-        index_type = String[],
-        value = Float64[],
-        type = String[],
-        sample_size = Int[]
-    )
+    input = String[],
+    output = String[],
+    index_type = String[],
+    value = Float64[],
+    type = String[],
+    sample_size = Int[]
+)
 
 using Base.Threads
 
-sample_sizes = broadcast(^, 2, 7:17) #10^4::Int : 5*10^3::Int : 10^5::Int
+sample_sizes = broadcast(^, 2, 7:10) #10^4::Int : 5*10^3::Int : 10^5::Int
 results_list = Vector{DataFrame}(undef, length(sample_sizes))
 
 @threads for idx in ProgressBar(eachindex(sample_sizes))
