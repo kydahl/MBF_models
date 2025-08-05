@@ -674,22 +674,24 @@ plot_ribbon <- plot_data %>%
   group_modify( ~ bind_rows(
     tibble(
       input_num = min(.x$input_num) - 0.5,
-      dummy_min = .x$dummy_min[1],
-      dummy_max = .x$dummy_max[1],
+      # dummy_min = .x$dummy_min[1],
+      # dummy_max = .x$dummy_max[1],
       type = .x$type[1],
       output_label = .x$output_label[1],
     ),
     .x,
     tibble(
       input_num = max(.x$input_num) + 0.5,
-      dummy_min = .x$dummy_min[nrow(.x)],
-      dummy_max = .x$dummy_max[nrow(.x)],
+      # dummy_min = .x$dummy_min[nrow(.x)],
+      # dummy_max = .x$dummy_max[nrow(.x)],
       type = .x$type[nrow(.x)],
       output_label = .x$output_label[nrow(.x)],
     )
   )
   ) %>% ungroup() %>% 
-  select(input_num, dummy_min, dummy_max, type, output_label) %>% distinct()
+  select(input_num, 
+         # dummy_min, dummy_max, 
+         type, output_label) %>% distinct()
 
 PRCC_plots <- plot_data %>% 
   arrange(input) %>% 
@@ -707,12 +709,15 @@ PRCC_plots <- plot_data %>%
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
   # Add grey ribbon to show dummy variable values
-  geom_ribbon(
-    data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-    aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-    color = NA, fill = "grey60",
-    alpha = 0.5
-  ) +
+  # geom_ribbon(
+  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   aes(
+  #     x = input_num, 
+  #     # ymin = dummy_min, ymax = dummy_max, 
+  #     group = output_label),
+  #   color = NA, fill = "grey60",
+  #   alpha = 0.5
+  # ) +
   facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
   scale_fill_manual(
     name = "Parameter set:",
@@ -751,17 +756,19 @@ PRCC_plots_row <- plot_data %>%
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
   # Add grey ribbon to show dummy variable values
-  geom_ribbon(
-    data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-    aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-    color = NA, fill = "grey60",
-    alpha = 0.5
-  ) +
-  facet_wrap(~output_label, nrow = 1, scales = "free_x") +
-  scale_fill_manual(
-    name = "Parameter set:",
-    values = c(c4a("met.juarez",3))#, "black")
-  ) +
+  # geom_ribbon(
+  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   aes(x = input_num, 
+  #       # ymin = dummy_min, ymax = dummy_max, 
+  #       group = output_label),
+  #   color = NA, fill = "grey60",
+  #   alpha = 0.5
+  # ) +
+  # facet_wrap(~output_label, nrow = 1, scales = "free_x") +
+  # scale_fill_manual(
+  #   name = "Parameter set:",
+  #   values = c(c4a("met.juarez",3))#, "black")
+  # ) +
   scale_x_discrete(
     name = "",
     labels = function(x) parse(text = x)
@@ -790,8 +797,8 @@ PRCC_plots_max_only <- plot_data %>%
   arrange(input) %>% 
   filter(output %in% c("N_offspring","R0")) %>%
   group_by(type, output) %>% 
-  mutate(star_flag = abs(PRCC) < abs(dummy_min),
-         star_xpos = PRCC + sign(PRCC) * 0.025) %>% 
+  # mutate(star_flag = abs(PRCC) < abs(dummy_min),
+  #        star_xpos = PRCC + sign(PRCC) * 0.025) %>% 
   # Plot
   ggplot() +
   geom_col(aes(y = nice_labels, x = PRCC, fill = output_label), position = "dodge", width = 0.75) +
