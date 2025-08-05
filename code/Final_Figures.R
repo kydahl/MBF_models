@@ -834,14 +834,15 @@ PRCC_plots_max_only
 
 ggsave("figures/Figure4_max_only.pdf", PRCC_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
 
-# 5. sobol indices of N0 and R0 wrt parameters ----
+# 5. eFAST indices of N0 and R0 wrt parameters ----
 # Load in data
 
-sobol_data = read_csv("data/sobol_test.csv") |> 
+eFAST_data = read_csv("data/eFAST_test.csv") |> 
   mutate(type = factor(type, levels = c("max", "flighty", "persistent")),
-         param_type = ifelse(input %in% c("sigma", "pQ", "pL", "pP", "pG"), "probability", "rate")
-         )
-sobol_stability_plot = sobol_data |> 
+         param_type = ifelse(input %in% c("sigma", "pQ", "pL", "pP", "pG"), "probability", "rate"))
+
+eFAST_stability_plot = eFAST_data |> 
+  filter(sample_size > 10000) |> 
   group_by(input, output) |> 
   arrange(sample_size) |> 
   ggplot(aes(x = sample_size, y = value, color = input)) +
@@ -850,16 +851,16 @@ sobol_stability_plot = sobol_data |>
   scale_x_continuous(
     "Sample size for sensitivity analysis",
     labels = scales::label_scientific(),
-    # n.breaks = 4,
+    n.breaks = 3,
     trans = 'log2'
   ) +
   scale_y_continuous("") + 
   scale_color_discrete("Parameter") +
   theme_minimal()
-sobol_stability_plot
+eFAST_stability_plot
 
-# sobol sensitivity plots
-plot_data <- sobol_data %>%
+# eFAST sensitivity plots
+plot_data <- eFAST_data %>%
   filter(sample_size == max(sample_size)) |> 
   group_by(type, output, index_type) %>% 
   # Add in nice labels
@@ -931,7 +932,7 @@ plot_ribbon <- plot_data %>%
   ) %>% ungroup() %>% 
   select(input_num, type, output_label) %>% distinct()
 
-Firstsobol_plots <- plot_data %>% 
+FirsteFAST_plots <- plot_data %>% 
   filter(index_type == "S1") |>
   arrange(input) %>% 
   # filter((input %in% c("lP"))) %>%
@@ -964,7 +965,7 @@ Firstsobol_plots <- plot_data %>%
     labels = function(x) parse(text = x),
   ) +
   scale_y_continuous(
-    TeX("First Order sobol Sensitivity Index"),
+    TeX("First Order eFAST Sensitivity Index"),
     expand = c(0.0,0)
   ) +
   theme_half_open(11) +
@@ -977,11 +978,11 @@ Firstsobol_plots <- plot_data %>%
   ) +
   coord_cartesian(xlim = c(1.1, 8.9))
 
-Firstsobol_plots
+FirsteFAST_plots
 
-ggsave("figures/FirstsobolFigure4.pdf", Firstsobol_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
+ggsave("figures/FirsteFASTFigure4.pdf", FirsteFAST_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
 
-Totalsobol_plots <- plot_data %>% 
+TotaleFAST_plots <- plot_data %>% 
   filter(index_type == "ST") |>
   arrange(input) %>% 
   # filter((input %in% c("lP"))) %>%
@@ -1014,7 +1015,7 @@ Totalsobol_plots <- plot_data %>%
     labels = function(x) parse(text = x),
   ) +
   scale_y_continuous(
-    TeX("Total sobol Sensitivity Index"),
+    TeX("Total eFAST Sensitivity Index"),
     expand = c(0.0,0)
   ) +
   theme_half_open(11) +
@@ -1027,11 +1028,11 @@ Totalsobol_plots <- plot_data %>%
   ) +
   coord_cartesian(xlim = c(1.1, 8.9))
 
-Totalsobol_plots
+TotaleFAST_plots
 
-ggsave("figures/TotalsobolFigure4.pdf", Totalsobol_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
+ggsave("figures/TotaleFASTFigure4.pdf", TotaleFAST_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
 
-Firstsobol_plots_row <- plot_data %>% 
+FirsteFAST_plots_row <- plot_data %>% 
   filter(index_type == "S1") |>
   arrange(input) %>% 
   filter(output %in% c("N_offspring","R0")) %>%
@@ -1059,7 +1060,7 @@ Firstsobol_plots_row <- plot_data %>%
     labels = function(x) parse(text = x)
   ) +
   scale_y_continuous(
-    TeX("First Order sobol Sensitivity Index"),
+    TeX("First Order eFAST Sensitivity Index"),
     expand = c(0.0,0)
   ) +
   theme_half_open(11) +
@@ -1072,11 +1073,11 @@ Firstsobol_plots_row <- plot_data %>%
     # legend.justification = "center"
   )
 
-Firstsobol_plots_row
+FirsteFAST_plots_row
 
-ggsave("figures/FirstsobolFigure4_row.pdf", Firstsobol_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
+ggsave("figures/FirsteFASTFigure4_row.pdf", FirsteFAST_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
 
-Totalsobol_plots_row <- plot_data %>% 
+TotaleFAST_plots_row <- plot_data %>% 
   filter(index_type == "ST") |>
   arrange(input) %>% 
   filter(output %in% c("N_offspring","R0")) %>%
@@ -1104,7 +1105,7 @@ Totalsobol_plots_row <- plot_data %>%
     labels = function(x) parse(text = x)
   ) +
   scale_y_continuous(
-    TeX("Total sobol Sensitivity Index"),
+    TeX("Total eFAST Sensitivity Index"),
     expand = c(0.0,0)
   ) +
   theme_half_open(11) +
@@ -1117,11 +1118,11 @@ Totalsobol_plots_row <- plot_data %>%
     # legend.justification = "center"
   )
 
-Totalsobol_plots_row
+TotaleFAST_plots_row
 
-ggsave("figures/TotalsobolFigure4_row.pdf", Totalsobol_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
+ggsave("figures/TotaleFASTFigure4_row.pdf", TotaleFAST_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
 
-Firstsobol_plots_max_only <- plot_data %>% 
+FirsteFAST_plots_max_only <- plot_data %>% 
   filter(index_type == "S1") |>
   # Just keep maximum variation for now
   filter(type == "max") %>%
@@ -1156,7 +1157,7 @@ Firstsobol_plots_max_only <- plot_data %>%
     labels = function(x) parse(text = x)
   ) +
   scale_x_continuous(
-    TeX("First Order sobol Sensitivity Index"),
+    TeX("First Order eFAST Sensitivity Index"),
     expand = c(0.0,0)
   ) +
   theme_half_open(11) +
@@ -1168,11 +1169,11 @@ Firstsobol_plots_max_only <- plot_data %>%
     legend.direction = "horizontal"
   )
 
-Firstsobol_plots_max_only
+FirsteFAST_plots_max_only
 
-ggsave("figures/FirstsobolFigure4_max_only.pdf", Firstsobol_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
+ggsave("figures/FirsteFASTFigure4_max_only.pdf", FirsteFAST_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
 
-Totalsobol_plots_max_only <- plot_data %>% 
+TotaleFAST_plots_max_only <- plot_data %>% 
   filter(index_type == "ST") |>
   # Just keep maximum variation for now
   filter(type == "max") %>%
@@ -1207,7 +1208,7 @@ Totalsobol_plots_max_only <- plot_data %>%
     labels = function(x) parse(text = x)
   ) +
   scale_x_continuous(
-    TeX("Total sobol Sensitivity Index"),
+    TeX("Total eFAST Sensitivity Index"),
     expand = c(0.0,0)
   ) +
   theme_half_open(11) +
@@ -1219,9 +1220,9 @@ Totalsobol_plots_max_only <- plot_data %>%
     legend.direction = "horizontal"
   )
 
-Totalsobol_plots_max_only
+TotaleFAST_plots_max_only
 
-ggsave("figures/TotalsobolFigure4_max_only.pdf", Totalsobol_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
+ggsave("figures/TotaleFASTFigure4_max_only.pdf", TotaleFAST_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
 
 # Supplementary: theta vs. mechanistic parameters ----
 SuppFigure1 <- Figure3_df %>%
@@ -1270,7 +1271,7 @@ persistent_lbs = (1 - stretch_val) * persistent_baseline
 persistent_ubs = (1 + stretch_val) * persistent_baseline
 paramset_ranges <- expand_grid(
   paramset = c("max", "flighty", "persistent"),
-  params = factor(unique(sobol_data$input), levels = rev(unique(sobol_data$input)))
+  params = factor(unique(eFAST_data$input), levels = rev(unique(eFAST_data$input)))
 )
 paramset_ranges$lbs = c(max_lbs, flighty_lbs, persistent_lbs)
 paramset_ranges$ubs = c(max_ubs, flighty_ubs, persistent_ubs)
