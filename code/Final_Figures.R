@@ -448,7 +448,8 @@ nice_mech_labels = data.frame(
   lQ = "Seeking~rate*','~lambda[Q]",
   lL = "Landing~rate*','~lambda[L]",
   lP = "Probing~rate*','~lambda[P]",
-  lG = "Ingesting~rate*','~lambda[G]"
+  lG = "Ingesting~rate*','~lambda[G]",
+  dummy = "Dummy~variable"
 ) %>% pivot_longer(everything(), values_to = "nice_labels")
 
 Figure3_df <- Mech_df %>% 
@@ -886,10 +887,10 @@ plot_data <- eFAST_data %>%
       type == "persistent" ~ "Persistent",
       type == "max" ~ "Maximum variation",
     ),
-    # dummy_min = -abs(value[input == "dummy"]),
-    # dummy_max = abs(value[input == "dummy"])
+    dummy_min = -abs(value[input == "dummy"]),
+    dummy_max = abs(value[input == "dummy"])
   ) %>% 
-  filter(!is.na(output), input != "dummy") %>% 
+  # filter(!is.na(output), input != "dummy") %>% 
   mutate(input_num = as.numeric(factor(input)))
 
 
@@ -915,29 +916,30 @@ plot_data$Label = factor(plot_data$Label, levels = rev(c(
 
 plot_data$nice_labels <- factor(
   plot_data$nice_labels,
-  levels = c(rev(nice_mech_labels$nice_labels), "Dummy~variable"))
+  levels = c((nice_mech_labels$nice_labels)))
 
 plot_ribbon <- plot_data %>%
   group_by(type, output_label) %>% 
   group_modify( ~ bind_rows(
     tibble(
       input_num = min(.x$input_num) - 0.5,
-      # dummy_min = .x$dummy_min[1],
-      # dummy_max = .x$dummy_max[1],
+      dummy_min = .x$dummy_min[1],
+      dummy_max = .x$dummy_max[1],
       type = .x$type[1],
       output_label = .x$output_label[1],
     ),
     .x,
     tibble(
       input_num = max(.x$input_num) + 0.5,
-      # dummy_min = .x$dummy_min[nrow(.x)],
-      # dummy_max = .x$dummy_max[nrow(.x)],
+      dummy_min = .x$dummy_min[nrow(.x)],
+      dummy_max = .x$dummy_max[nrow(.x)],
       type = .x$type[nrow(.x)],
       output_label = .x$output_label[nrow(.x)],
     )
   )
   ) %>% ungroup() %>% 
-  select(input_num, type, output_label) %>% distinct()
+  # select(input_num, type, output_label) %>% 
+  distinct()
 
 FirsteFAST_plots <- plot_data %>% 
   filter(index_type == "S1") |>
@@ -955,13 +957,13 @@ FirsteFAST_plots <- plot_data %>%
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
-  # # Add grey ribbon to show dummy variable values
-  # geom_ribbon(
-  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-  #   color = NA, fill = "grey60",
-  #   alpha = 0.5
-  # ) +
+  # Add grey ribbon to show dummy variable values
+  geom_ribbon(
+    data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+    aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
+    color = NA, fill = "grey60",
+    alpha = 0.5
+  ) +
   facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
   scale_fill_manual(
     name = "Parameter set:",
@@ -1137,8 +1139,8 @@ FirsteFAST_plots_max_only <- plot_data %>%
   filter(output %in% c("N_offspring","R0")) %>%
   group_by(type, output) %>% 
   mutate(
-    # star_flag = abs(value) < abs(dummy_min),
-    # star_xpos = value + sign(value) * 0.025
+    star_flag = abs(value) < abs(dummy_min),
+    star_xpos = value + sign(value) * 0.025
   ) %>% 
   # Plot
   ggplot() +
@@ -1152,13 +1154,13 @@ FirsteFAST_plots_max_only <- plot_data %>%
     name = "",
     values = c(c4a("met.juarez",3))
   ) +
-  # # Add stars to flagged bars
-  # geom_text(
-  #   data = . %>% filter(star_flag),
-  #   aes(y = nice_labels, x = star_xpos, label = "n.s."),
-  #   position = position_dodge(width = 0.75),
-  #   size = 2, vjust = -0.55
-  # ) +
+  # Add stars to flagged bars
+  geom_text(
+    data = . %>% filter(star_flag),
+    aes(y = nice_labels, x = star_xpos, label = "n.s."),
+    position = position_dodge(width = 0.75),
+    size = 2, vjust = -0.55
+  ) +
   scale_y_discrete(
     name = "",
     labels = function(x) parse(text = x)
@@ -1188,8 +1190,8 @@ TotaleFAST_plots_max_only <- plot_data %>%
   filter(output %in% c("N_offspring","R0")) %>%
   group_by(type, output) %>% 
   mutate(
-    # star_flag = abs(value) < abs(dummy_min),
-    # star_xpos = value + sign(value) * 0.025
+    star_flag = abs(value) < abs(dummy_min),
+    star_xpos = value + sign(value) * 0.025
     ) %>% 
   # Plot
   ggplot() +
@@ -1203,13 +1205,13 @@ TotaleFAST_plots_max_only <- plot_data %>%
     name = "",
     values = c(c4a("met.juarez",3))
   ) +
-  # # Add stars to flagged bars
-  # geom_text(
-  #   data = . %>% filter(star_flag),
-  #   aes(y = nice_labels, x = star_xpos, label = "n.s."),
-  #   position = position_dodge(width = 0.75),
-  #   size = 2, vjust = -0.55
-  # ) +
+  # Add stars to flagged bars
+  geom_text(
+    data = . %>% filter(star_flag),
+    aes(y = nice_labels, x = star_xpos, label = "n.s."),
+    position = position_dodge(width = 0.75),
+    size = 2, vjust = -0.55
+  ) +
   scale_y_discrete(
     name = "",
     labels = function(x) parse(text = x)
