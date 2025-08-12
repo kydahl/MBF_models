@@ -10,13 +10,14 @@ library(matlib)
 library(scales)
 library(ggh4x)
 library(varhandle) # to deal with factor problems in plotting
+library(egg) # for arranging plots
 
 # Load data ----
-Full_df = read_rds("data/GCD_R0_data.rds") %>% 
+Full_df = read_rds("data/GCD_R0_data.rds") |> 
   mutate(varied_parameter = if_else(
     is.na(varied_parameter),
     "none",
-    varied_parameter)) %>% 
+    varied_parameter)) |> 
   # Set up labels
   mutate(Type = if_else(
     `Model type` == "Mechanistic",
@@ -89,9 +90,9 @@ PH_mean <- function(A_matrix, v_alpha) {
 # Helper function: place legends in empty facets of plot grids
 # Code by: Artem Sokolov, found here: https://stackoverflow.com/questions/54438495/shift-legend-into-empty-facets-of-a-faceted-plot-in-ggplot2
 shift_legend <- function(p) {
-  pnls <- cowplot::plot_to_gtable(p) %>%
-    gtable::gtable_filter("panel") %>%
-    with(setNames(grobs, layout$name)) %>%
+  pnls <- cowplot::plot_to_gtable(p) |>
+    gtable::gtable_filter("panel") |>
+    with(setNames(grobs, layout$name)) |>
     purrr::keep(~ identical(.x, zeroGrob()))
   
   if (length(pnls) == 0) stop("No empty facets in the plot")
@@ -117,50 +118,50 @@ resolution = 10000
 Fig1_labeller <- function(value) TeX(paste0("Mean = ", as.double(value)/1440, " days"))
 
 # For mechanistic model, we can't guarantee these values so choose the closest ones
-Mech_df_filtered <- Full_df %>% 
-  filter(`Model type` %in% c("Mechanistic")) %>% 
-  filter(varied_parameter == "lQ") %>% # the curves look almost identical, so just look at one
-  # mutate(Type = "Mechanistic (lQ, pP, pG)") %>% 
-  group_by(`Model type`, varied_parameter) %>% 
-  filter(theta %in% sapply(theta_vals, function(x) theta[which.min(abs(theta - x))])) %>%
+Mech_df_filtered <- Full_df |> 
+  filter(`Model type` %in% c("Mechanistic")) |> 
+  filter(varied_parameter == "lQ") |> # the curves look almost identical, so just look at one
+  # mutate(Type = "Mechanistic (lQ, pP, pG)") |> 
+  group_by(`Model type`, varied_parameter) |> 
+  filter(theta %in% sapply(theta_vals, function(x) theta[which.min(abs(theta - x))])) |>
   ungroup()
 
 # Arrange in a grid or row
-Figure1_df <- Full_df %>% 
+Figure1_df <- Full_df |> 
   # Remove the Mechanistic rows, which are handled separately
-  filter(!(`Model type` %in% c("Mechanistic"))) %>% 
+  filter(!(`Model type` %in% c("Mechanistic"))) |> 
   # Combine Standard and Exponential since they are equivalent in this case
   mutate(Type = if_else(
     Type %in% c("Standard", "Exponential"),
     "Standard / Exponential",
     Type)
-  ) %>% 
+  ) |> 
   # Just keep chosen theta values
-  filter(theta %in% theta_vals) %>% 
+  filter(theta %in% theta_vals) |> 
   # Add the filtered Mechanistic rows
-  bind_rows(Mech_df_filtered) %>% 
+  bind_rows(Mech_df_filtered) |> 
   # Assign the closest theta to each row (to relate Mechanistic with the rest)
-  group_by(Type) %>% 
-  mutate(closest_theta = theta_vals[sapply(theta, function(x) which.min(abs(x - theta_vals)))]) %>% 
-  ungroup() %>% 
+  group_by(Type) |> 
+  mutate(closest_theta = theta_vals[sapply(theta, function(x) which.min(abs(x - theta_vals)))]) |> 
+  ungroup() |> 
   # Select only relevant rows
-  dplyr::select(Type, theta, closest_theta, v_alpha, A_matrix) %>% 
+  dplyr::select(Type, theta, closest_theta, v_alpha, A_matrix) |> 
   mutate(theta_label = case_when(
     closest_theta == 360 ~ "A",
     closest_theta == 720 ~ "B",
     closest_theta == 1440 ~ "C",
     closest_theta == 2880 ~ "D"
-  )) %>%
+  )) |>
   # Add in values to plug into the pdf
-  cross_join(tibble(x = seq(0, pdf_max, length.out = resolution)))  %>% 
+  cross_join(tibble(x = seq(0, pdf_max, length.out = resolution)))  |> 
   filter(case_when(
     closest_theta == 360 ~ x < 0.75 * 1440,
     closest_theta == 720 ~ x < 1.5 * 1440,
     closest_theta == 1440 ~ x < 3 * 1440,
     closest_theta == 2880 ~ x < 6 * 1440
-  )) %>%
+  )) |>
   # Calculate values of the pdf
-  rowwise() %>% 
+  rowwise() |> 
   mutate(pdf_val = PH_pdf(x, A_matrix, v_alpha))
 
 Figure1_df$Type = factor(
@@ -177,17 +178,17 @@ Fig1_color_vals = c("Standard / Exponential" = "black",
                     "Mechanistic (lQ)" = c4a("brewer.dark2", 3)[3]#
 )
 
-facet_labels <- Figure1_df %>%
-  group_by(closest_theta) %>% 
-  filter(x > 0) %>% 
+facet_labels <- Figure1_df |>
+  group_by(closest_theta) |> 
+  filter(x > 0) |> 
   mutate(label = LETTERS[1:n()],  # Assign "A", "B", "C", ...
          x_pos = 360*min(x, na.rm = TRUE)/1440,  # Align left
-         y_pos = max(pdf_val, na.rm = TRUE) * .95) %>%  # Slightly above max y
+         y_pos = max(pdf_val, na.rm = TRUE) * .95) |>  # Slightly above max y
   distinct(closest_theta, x_pos, y_pos, theta_label)
 
 # pdf figure
-Figure1 = Figure1_df %>%
-  filter(closest_theta < 2 * 1440) %>% 
+Figure1 = Figure1_df |>
+  filter(closest_theta < 2 * 1440) |> 
   ggplot(aes(x = 24 * x / (1440), y = pdf_val, color = Type)) +
   # Plot grey dotted line showing the mean
   geom_vline(
@@ -200,7 +201,7 @@ Figure1 = Figure1_df %>%
     alpha = 0.75
   ) + 
   # Label subplots A, B, C, ...
-  geom_text(data = facet_labels %>% filter(closest_theta < 2 * 1440),
+  geom_text(data = facet_labels |> filter(closest_theta < 2 * 1440),
             aes(x = 0.01, y = y_pos, label = theta_label, group = theta_label),
             color = "black", size = 4,
             # vjust = "inward",
@@ -273,7 +274,7 @@ Fig2_lty_vals = c("Standard" = 1,
                   "Mechanistic~(p[P])" = 3,
                   "Mechanistic~(p[G])" = 4)
 
-Figure2_df = Full_df %>%
+Figure2_df = Full_df |>
   mutate(
     Type = case_when(
       Type == "Mechanistic (lQ)" ~ "Mechanistic~(lambda[Q])",
@@ -284,46 +285,46 @@ Figure2_df = Full_df %>%
     sbr = 1440/theta  # standard biting rate
   )
 
-Figure2_ticks <- Figure2_df %>% 
-  filter(sbr < 2.01) %>% # only keep values up to 2 bites per day
+Figure2_ticks <- Figure2_df |> 
+  filter(sbr < 2.01) |> # only keep values up to 2 bites per day
   # Get x-coordinate where R0 first exceeds/is less than one
-  group_by(Type) %>% 
-  arrange(sbr) %>% 
+  group_by(Type) |> 
+  arrange(sbr) |> 
   summarise(
     first_R0_greater_1 = sbr[R0 > 1][1],
     first_R0_less_1 = max(sbr[R0 > 1])
-  ) %>% 
-  # select(-sbr) %>% 
+  ) |> 
+  # select(-sbr) |> 
   unique()
 
 Figure2_labels = c(expression("Standard"), expression("Exponential"), expression("Empirical"), expression("Phenomenological"), 
                    expression("Mechanistic " (lambda[Q])), expression("Mechanistic " (p[P])),expression("Mechanistic " (p[G]))
 )
 
-Figure2_arrows = Figure2_df %>%
-  filter(`Model type` == "Mechanistic") %>% 
-  pivot_longer(cols = lQ:sigma) %>% 
-  filter(varied_parameter == name) %>% 
-  group_by(varied_parameter) %>%
-  arrange(value) %>% 
-  mutate(sbr = 1440 / theta) %>% 
-  filter(between(sbr, 1.36, 1.42)) %>% 
-  group_by(varied_parameter) %>% 
+Figure2_arrows = Figure2_df |>
+  filter(`Model type` == "Mechanistic") |> 
+  pivot_longer(cols = lQ:sigma) |> 
+  filter(varied_parameter == name) |> 
+  group_by(varied_parameter) |>
+  arrange(value) |> 
+  mutate(sbr = 1440 / theta) |> 
+  filter(between(sbr, 0.9, 1)) |> 
+  group_by(varied_parameter) |> 
   mutate(
     x_first = min(sbr),
     x_last = max(sbr)
-  ) %>% 
-  group_by(varied_parameter) %>% 
-  filter(sbr %in% c(x_first, x_last)) %>% 
+  ) |> 
+  group_by(varied_parameter) |> 
+  filter(sbr %in% c(x_first, x_last)) |> 
   mutate(
     R0_first = R0[sbr == min(sbr)],
     R0_last = R0[sbr == max(sbr)]
-  ) %>% ungroup() %>% 
-  select(Type, x_first, x_last, R0_first, R0_last) %>% distinct()
+  ) |> ungroup() |> 
+  select(Type, x_first, x_last, R0_first, R0_last) |> distinct()
 
 
-Figure2 <- Figure2_df %>% 
-  filter(sbr < 2.01) %>% # only keep values up to 2 bites per day
+Figure2 <- Figure2_df |> 
+  filter(sbr < 2.01) |> # only keep values up to 2 bites per day
   ggplot(aes(color = Type, lty = Type)) +
   # Grey line for R0 = 1
   geom_hline(aes(yintercept = 1), color = "grey", lwd = 1) +
@@ -406,11 +407,159 @@ Figure2_alt
 
 ggsave("figures/Figure2_alt.pdf", Figure2_alt, width = 7.5, height = 3.25 * 9/6.5, units = "in")
 
+# Alternate figure with non-mechanistic and mechanistic model curves separated for easier viewing
+
+Figure2_separated_nonmech <- Figure2_df |> 
+  filter(`Model type` != "Mechanistic") |> 
+  filter(sbr < 1.6) |> # only keep values up to 2 bites per day
+  ggplot(aes(color = Type, lty = Type)) +
+  # Grey line for R0 = 1
+  geom_hline(aes(yintercept = 1), color = "grey", lwd = 1) +
+  # R0-GCD curves
+  geom_line(aes(x = 1440 / theta, y = R0),
+            lwd = 0.75) +
+  # Add ticks for R0 = 1 crossing below the x-axis
+  geom_rug(
+    data = filter(Figure2_ticks, !(Type %in% c("Mechanistic~(lambda[Q])", "Mechanistic~(p[G])", "Mechanistic~(p[P])"))),
+    aes(x = first_R0_greater_1),
+    sides = "b", size = 0.75, outside = TRUE,
+    length = unit(0.3, "in"),
+    show.legend = F
+  ) +
+  scale_x_continuous(
+    name = "",
+    # limits = c(0,1.9),
+    expand = c(0, 0, 0, 0.01),
+    # breaks = seq(0, 2, by = 0.25)
+  ) +
+  scale_y_continuous(
+    name = TeX("Basic reproduction number \\, [$R_0$]"),
+    breaks = seq(0, 1.75, by = 0.25),
+    limits = c(0, NA),
+    expand = c(0,0)
+  ) +
+  scale_linetype_manual(
+    name = "Model type:",
+    values = Fig2_lty_vals,
+    breaks = unique(Figure2_df$Type),
+    labels = Figure2_labels
+  ) +
+  scale_color_manual(
+    name = "Model type:",
+    values = Fig2_color_vals,
+    breaks = unique(Figure2_df$Type),
+    labels = Figure2_labels
+  ) +
+  coord_cartesian(
+    xlim = c(0, 1.51),
+    clip = "off" # needed to let ticks get plotted out of the axes
+  ) + 
+  theme_half_open(8) + 
+  theme(
+    axis.title.x = element_text(margin = margin(t = 10)),
+    legend.key.width = unit(0.35, "in")
+    ) +
+  guides(
+    color = guide_legend(
+      position = "top",
+      direction = "horizontal",
+      nrow = 1,
+      byrow = T
+    ),
+    linetype = guide_legend(
+      position = "top",
+      direction = "horizontal",
+      nrow = 1,
+      byrow = T
+    )
+  )
+
+Figure2_separated_mech <- Figure2_df |> 
+  filter(`Model type` == "Mechanistic") |> 
+  filter(sbr < 1.6) |> # only keep values up to 2 bites per day
+  ggplot(aes(color = Type, lty = Type)) +
+  # Grey line for R0 = 1
+  geom_hline(aes(yintercept = 1), color = "grey", lwd = 1) +
+  # R0-GCD curves
+  geom_line(aes(x = 1440 / theta, y = R0),
+            lwd = 0.75) +
+  # Add ticks for R0 = 1 crossing below the x-axis
+  geom_rug(
+    data = filter(Figure2_ticks, Type %in% c("Mechanistic~(lambda[Q])", "Mechanistic~(p[G])", "Mechanistic~(p[P])")),
+    aes(x = first_R0_greater_1),
+    sides = "b", size = 0.75, outside = TRUE,
+    length = unit(0.3, "in"),
+    show.legend = F
+  ) +
+  # Arrows showing direction of increasing parameter values
+  geom_segment(
+    data = Figure2_arrows,
+    aes(x = x_first, y = R0_first, xend = x_last, yend = R0_last, color = Type, lty = Type),
+    lwd = 0, 
+    # alpha = 0,
+    arrow = arrow(length = unit(0.15, "inches"), ends = "last", type = "closed"),
+    show.legend = F,
+    inherit.aes = F
+  ) +
+  scale_x_continuous(
+    name = TeX("Standard biting rate [Days$^{-1}$]"),
+    # limits = c(0,1.9),
+    expand = c(0, 0, 0, 0.01),
+    # breaks = seq(0, 2, by = 0.25)
+  ) +
+  scale_y_continuous(
+    name = TeX("Basic reproduction number \\, [$R_0$]"),
+    breaks = seq(0, 1.75, by = 0.25),
+    limits = c(0, NA),
+    expand = c(0,0)
+  ) +
+  scale_linetype_manual(
+    name = "Model type:",
+    values = Fig2_lty_vals,
+    breaks = unique(Figure2_df$Type),
+    labels = Figure2_labels
+  ) +
+  scale_color_manual(
+    name = "Model type:",
+    values = Fig2_color_vals,
+    breaks = unique(Figure2_df$Type),
+    labels = Figure2_labels
+  ) +
+  coord_cartesian(
+    xlim = c(0, 1.51),
+    clip = "off" # needed to let ticks get plotted out of the axes
+  ) + 
+  theme_half_open(8) + 
+  theme(
+    axis.title.x = element_text(margin = margin(t = 10)),
+    legend.key.width = unit(0.35, "in")
+  ) +
+  guides(
+    color = guide_legend(
+      position = "top",
+      direction = "horizontal",
+      nrow = 1,
+      byrow = T
+    ),
+    linetype = guide_legend(
+      position = "top",
+      direction = "horizontal",
+      nrow = 1,
+      byrow = T
+    )
+  )
+
+Figure2_separated_mech
+
+Figure2_separated = egg::ggarrange(Figure2_separated_nonmech, Figure2_separated_mech, ncol = 1)
+
+ggsave("figures/Figure2_separated.pdf", Figure2_separated, width = 7.5, height = 3.25 * 9/6.5, units = "in")
+
 # Table: Characteristics of R0 curves ----
-R0_characteristics_table <- Full_df %>%
-  filter(between(theta, 1, 20*1440)) %>% # remove unrealistically short GCD (less than 1 second)
-  mutate(sbr = 1440/theta) %>%  # standard biting rate
-  arrange(sbr) %>% 
+R0_characteristics_table <- Full_df |>
+  filter(between(theta, 1, 20*1440)) |> # remove unrealistically short GCD (less than 1 second)
+  mutate(sbr = 1440/theta) |>  # standard biting rate
+  arrange(sbr) |> 
   mutate(
     Type = case_when(
       Type == "Mechanistic (lQ)" ~ "Mechanistic~(lambda[Q])",
@@ -418,9 +567,9 @@ R0_characteristics_table <- Full_df %>%
       Type == "Mechanistic (pG)" ~ "Mechanistic~(p[G])",
       TRUE ~ Type
     )
-  ) %>% 
+  ) |> 
   # Get x-coordinate where R0 first exceeds/is less than one
-  group_by(Type) %>% 
+  group_by(Type) |> 
   summarise(
     max_sbr = max(sbr),
     crit_min_sbr = sbr[R0 > 1][1],
@@ -428,8 +577,8 @@ R0_characteristics_table <- Full_df %>%
     temp_max = max(sbr[R0 > 1], na.rm = T),
     crit_max_sbr = ifelse(temp_max > 0.99*max_sbr | max_test == 0, NA, temp_max),
     max_R0 = max(R0)
-  ) %>% 
-  select(-c(max_sbr, max_test, temp_max)) %>% 
+  ) |> 
+  select(-c(max_sbr, max_test, temp_max)) |> 
   unique()
 
 # 3. R0 vs. mechanistic parameters ----
@@ -449,19 +598,19 @@ nice_mech_labels = data.frame(
   lL = "Landing~rate*','~lambda[L]",
   lP = "Probing~rate*','~lambda[P]",
   lG = "Ingesting~rate*','~lambda[G]"
-) %>% pivot_longer(everything(), values_to = "nice_labels")
+) |> pivot_longer(everything(), values_to = "nice_labels")
 
-Figure3_df <- Mech_df %>% 
-  filter(parameter_type == "varied") %>% 
-  select(-parameter_type) %>% 
-  pivot_longer(lQ:sigma) %>% 
-  filter(name == varied_parameter) %>% 
+Figure3_df <- Mech_df |> 
+  filter(parameter_type == "varied") |> 
+  select(-parameter_type) |> 
+  pivot_longer(lQ:sigma) |> 
+  filter(name == varied_parameter) |> 
   mutate(parameter_type = case_when(
     name %in% c("lQ", "lL", "lP", "lG") ~ "rate",
     name %in% c("pQ", "pL", "pP", "pG", "sigma") ~ "probability"
-  )) %>% 
+  )) |> 
   # Reduce the range for rates
-  filter(!(parameter_type == "rate" & value >= (1/60))) %>% 
+  filter(!(parameter_type == "rate" & value >= (1/60))) |> 
   right_join(nice_mech_labels)
 
 Figure3_df$name <- factor(
@@ -472,7 +621,7 @@ Figure3_df$nice_labels <- factor(
   Figure3_df$nice_labels,
   levels = nice_mech_labels$nice_labels)
 
-Figure3 <- Figure3_df %>% 
+Figure3 <- Figure3_df |> 
   ggplot(aes(x = value, y = R0, linetype = mosquito_type, color = parameter_type)) +
   geom_hline(aes(yintercept = 1), color = "grey") +
   geom_line(lwd = 0.5) +
@@ -527,7 +676,7 @@ Figure3_df$nice_labels = factor(Figure3_df$nice_labels,
                                   "Ingesting~rate~lambda[G]",
                                   "Persistence~probability~sigma"
                                 ))
-Figure3_df <- Figure3_df %>%
+Figure3_df <- Figure3_df |>
   mutate(stage = case_when(
     name %in% c("lQ", "pQ") ~ "Host-seeking",
     name %in% c("lL", "pL") ~ "Landing",
@@ -536,17 +685,17 @@ Figure3_df <- Figure3_df %>%
     name %in% c("sigma") ~ "Persistence",
   ))
 
-facet_labels <- Figure3_df %>%
-  group_by(parameter_type) %>% 
+facet_labels <- Figure3_df |>
+  group_by(parameter_type) |> 
   mutate(x_pos = mean(range(value, na.rm = TRUE)),  # Center x-position
-         y_pos = max(R0, na.rm = TRUE) * 1.05) %>%  # Slightly above max y
+         y_pos = max(R0, na.rm = TRUE) * 1.05) |>  # Slightly above max y
   distinct(parameter_type, stage, nice_labels, x_pos, y_pos)
 
 
 Figure3_df$stage = factor(Figure3_df$stage, levels = c("Host-seeking", "Landing", "Probing", "Ingesting", "Persistence"))
 Figure3_df$parameter_type = factor(Figure3_df$parameter_type, levels = c("probability", "rate"))
 
-Figure3_alt <- Figure3_df %>% 
+Figure3_alt <- Figure3_df |> 
   ggplot(aes(x = value, y = R0, linetype = mosquito_type, color = parameter_type)) +
   geom_hline(aes(yintercept = 1), color = "grey") +
   geom_line(lwd = 1) +  
@@ -595,38 +744,20 @@ shift_legend(Figure3_alt)
 ggsave("figures/Figure3_alt.pdf", shift_legend(Figure3_alt), width = 6.5, height = 3.25, units = "in")
 
 # 4. PRCCs of R0 against mechanistic parameters ----
-# Load in data
-# LHS_data = read_csv("data/julia_outputs.csv.gz") %>%
-#   filter(type == "max")
-# 
-# rank_data = LHS_data %>%
-#   group_by(type) %>%
-#   mutate(across(lQ:R0, ~ rank(.x)))
-# 
-# PRCC_data <- rank_data %>%
-#   pivot_longer(cols = lQ:dummy, names_to = "input", values_to = "input_value") %>%
-#   pivot_longer(cols = GCD:R0, names_to = "output", values_to = "output_value") %>%
-#   ungroup() %>%
-#   # group_by(type, input, output) %>%
-#   summarise(
-#     PRCC = cor(input_value, output_value),
-#     .by = c(type, input, output)
-#   )
-# 
-# # Save the final PRCC results
-# write_csv(PRCC_data, "data/PRCC_data.csv")
 
 # Load in final PRCC results
-PRCC_data <- read_csv("data/PRCC_data.csv")
+PRCC_data = read_csv("data/julia_PRCC.csv") |>
+  pivot_longer(cols = lQ:dummy, names_to = "input", values_to = "PRCC")
 
-plot_data <- PRCC_data %>% 
-  group_by(type, output) %>% 
+
+plot_data <- PRCC_data |> 
+  group_by(type, output) |> 
   # Add in nice labels
   left_join(
-    param_table %>% 
+    param_table |> 
       rename(input = short_label)
-  ) %>%
-  left_join(rename(nice_mech_labels, input = name), by = "input")  %>% 
+  ) |>
+  left_join(rename(nice_mech_labels, input = name), by = "input")  |> 
   mutate(
     output_label = case_when(
       output == "R0" ~ "Basic reproduction number",
@@ -637,15 +768,18 @@ plot_data <- PRCC_data %>%
       type == "flighty" ~ "Flighty",
       type == "persistent" ~ "Persistent",
       type == "max" ~ "Maximum variation",
+      type == "inv_flighty" ~ "Flighty (inverse)",
+      type == "inv_persistent" ~ "Persistent (inverse)",
+      type == "inv_max" ~ "Maximum variation (inverse)",
     ),
-    # dummy_min = -abs(PRCC[input == "dummy"]),
-    # dummy_max = abs(PRCC[input == "dummy"])
-  ) %>% 
-  filter(!is.na(output), input != "dummy") %>% 
+    dummy_min = -abs(PRCC[input == "dummy"]),
+    dummy_max = abs(PRCC[input == "dummy"])
+  ) |> 
+  filter(!is.na(output), input != "dummy") |> 
   mutate(input_num = as.numeric(factor(input)))
 
 
-plot_data$type = factor(plot_data$type, levels = c("flighty", "persistent", "max"))
+plot_data$type = factor(plot_data$type, levels = c("flighty", "inv_flighty", "persistent", "inv_persistent", "max", "inv_max"))
 plot_data$input = factor(plot_data$input, levels = c(
   "pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG", "dummy"
 ))
@@ -654,7 +788,7 @@ plot_data$output_label = factor(plot_data$output_label, levels = c(
 ))
 
 plot_data$type_label = factor(plot_data$type_label, levels = c(
-  "Flighty","Persistent","Maximum variation"
+  "Flighty", "Flighty (inverse)","Persistent (inverse)", "Persistent","Maximum variation", "Maximum variation (inverse)"
 ))
 
 
@@ -669,35 +803,36 @@ plot_data$nice_labels <- factor(
   plot_data$nice_labels,
   levels = c(rev(nice_mech_labels$nice_labels), "Dummy~variable"))
 
-plot_ribbon <- plot_data %>%
-  group_by(type, output_label) %>% 
+plot_ribbon <- plot_data |>
+  group_by(type, output_label) |> 
   group_modify( ~ bind_rows(
     tibble(
       input_num = min(.x$input_num) - 0.5,
-      # dummy_min = .x$dummy_min[1],
-      # dummy_max = .x$dummy_max[1],
+      dummy_min = .x$dummy_min[1],
+      dummy_max = .x$dummy_max[1],
       type = .x$type[1],
       output_label = .x$output_label[1],
     ),
     .x,
     tibble(
       input_num = max(.x$input_num) + 0.5,
-      # dummy_min = .x$dummy_min[nrow(.x)],
-      # dummy_max = .x$dummy_max[nrow(.x)],
+      dummy_min = .x$dummy_min[nrow(.x)],
+      dummy_max = .x$dummy_max[nrow(.x)],
       type = .x$type[nrow(.x)],
       output_label = .x$output_label[nrow(.x)],
     )
   )
-  ) %>% ungroup() %>% 
+  ) |> ungroup() |> 
   select(input_num, 
-         # dummy_min, dummy_max, 
-         type, output_label) %>% distinct()
+         dummy_min, dummy_max,
+         type, output_label) |> distinct()
 
-PRCC_plots <- plot_data %>% 
-  arrange(input) %>% 
-  # filter((input %in% c("lP"))) %>%
-  filter(output %in% c("N_offspring","R0")) %>%
-  # filter(type %in% c("flighty", "persistent")) %>% 
+PRCC_plots <- plot_data |> 
+  # filter(type_label %in% c("Maximum variation", "Maximum variation (inverse)")) |> 
+  arrange(input) |> 
+  # filter((input %in% c("lP"))) |>
+  filter(output %in% c("N_offspring","R0")) |>
+  # filter(type %in% c("flighty", "persistent")) |> 
   ggplot() +
   geom_col(
     aes(x = nice_labels, y = PRCC, fill = type_label),
@@ -709,19 +844,19 @@ PRCC_plots <- plot_data %>%
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
   # Add grey ribbon to show dummy variable values
-  # geom_ribbon(
-  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-  #   aes(
-  #     x = input_num, 
-  #     # ymin = dummy_min, ymax = dummy_max, 
-  #     group = output_label),
-  #   color = NA, fill = "grey60",
-  #   alpha = 0.5
-  # ) +
+  geom_ribbon(
+    data = plot_ribbon |> filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+    aes(
+      x = input_num,
+      ymin = dummy_min, ymax = dummy_max,
+      group = output_label),
+    color = NA, fill = "grey60",
+    alpha = 0.5
+  ) +
   facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
   scale_fill_manual(
     name = "Parameter set:",
-    values = c(c4a("met.juarez",3))#, "black")
+    values = c(c4a("met.juarez", 6))#, "black")
   ) +
   scale_x_discrete(
     name = "",
@@ -745,9 +880,9 @@ PRCC_plots
 
 ggsave("figures/Figure4.pdf", PRCC_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
 
-PRCC_plots_row <- plot_data %>% 
-  arrange(input) %>% 
-  filter(output %in% c("N_offspring","R0")) %>%
+PRCC_plots_row <- plot_data |> 
+  arrange(input) |> 
+  filter(output %in% c("N_offspring","R0")) |>
   ggplot() +
   geom_col(aes(x = nice_labels, y = PRCC, fill = type_label), position = "dodge") +
   # Add light grey lines to divide up categories
@@ -756,15 +891,15 @@ PRCC_plots_row <- plot_data %>%
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
   # Add grey ribbon to show dummy variable values
-  # geom_ribbon(
-  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-  #   aes(x = input_num, 
-  #       # ymin = dummy_min, ymax = dummy_max, 
-  #       group = output_label),
-  #   color = NA, fill = "grey60",
-  #   alpha = 0.5
-  # ) +
-  # facet_wrap(~output_label, nrow = 1, scales = "free_x") +
+  geom_ribbon(
+    data = plot_ribbon |> filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+    aes(x = input_num,
+        ymin = dummy_min, ymax = dummy_max,
+        group = output_label),
+    color = NA, fill = "grey60",
+    alpha = 0.5
+  ) +
+  facet_wrap(~output_label, nrow = 1, scales = "free_x") +
   # scale_fill_manual(
   #   name = "Parameter set:",
   #   values = c(c4a("met.juarez",3))#, "black")
@@ -791,14 +926,14 @@ PRCC_plots_row
 
 ggsave("figures/Figure4_row.pdf", PRCC_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
 
-PRCC_plots_max_only <- plot_data %>% 
+PRCC_plots_max_only <- plot_data |> 
   # Just keep maximum variation for now
-  filter(type == "max") %>%
-  arrange(input) %>% 
-  filter(output %in% c("N_offspring","R0")) %>%
-  group_by(type, output) %>% 
-  # mutate(star_flag = abs(PRCC) < abs(dummy_min),
-  #        star_xpos = PRCC + sign(PRCC) * 0.025) %>% 
+  filter(type == "inv_max") |>
+  arrange(input) |> 
+  filter(output %in% c("N_offspring","R0")) |>
+  group_by(type, output) |> 
+  mutate(star_flag = abs(PRCC) < abs(dummy_min),
+         star_xpos = PRCC + sign(PRCC) * 0.025) |>
   # Plot
   ggplot() +
   geom_col(aes(y = nice_labels, x = PRCC, fill = output_label), position = "dodge", width = 0.75) +
@@ -867,15 +1002,15 @@ eFAST_stability_plot = eFAST_data |>
 eFAST_stability_plot
 
 # eFAST sensitivity plots
-plot_data <- eFAST_data %>%
+plot_data <- eFAST_data |>
   filter(sample_size == max(sample_size)) |> 
-  group_by(type, output, index_type) %>% 
+  group_by(type, output, index_type) |> 
   # Add in nice labels
   left_join(
-    param_table %>% 
+    param_table |> 
       rename(input = short_label)
-  ) %>%
-  left_join(rename(nice_mech_labels, input = name), by = "input")  %>% 
+  ) |>
+  left_join(rename(nice_mech_labels, input = name), by = "input")  |> 
   mutate(
     output_label = case_when(
       output == "R0" ~ "Basic reproduction number",
@@ -888,8 +1023,8 @@ plot_data <- eFAST_data %>%
     ),
     # dummy_min = -abs(value[input == "dummy"]),
     # dummy_max = abs(value[input == "dummy"])
-  ) %>% 
-  filter(!is.na(output), input != "dummy") %>% 
+  ) |> 
+  filter(!is.na(output), input != "dummy") |> 
   mutate(input_num = as.numeric(factor(input)))
 
 
@@ -917,8 +1052,8 @@ plot_data$nice_labels <- factor(
   plot_data$nice_labels,
   levels = c(rev(nice_mech_labels$nice_labels), "Dummy~variable"))
 
-plot_ribbon <- plot_data %>%
-  group_by(type, output_label) %>% 
+plot_ribbon <- plot_data |>
+  group_by(type, output_label) |> 
   group_modify( ~ bind_rows(
     tibble(
       input_num = min(.x$input_num) - 0.5,
@@ -936,15 +1071,15 @@ plot_ribbon <- plot_data %>%
       output_label = .x$output_label[nrow(.x)],
     )
   )
-  ) %>% ungroup() %>% 
-  select(input_num, type, output_label) %>% distinct()
+  ) |> ungroup() |> 
+  select(input_num, type, output_label) |> distinct()
 
-FirsteFAST_plots <- plot_data %>% 
+FirsteFAST_plots <- plot_data |> 
   filter(index_type == "S1") |>
-  arrange(input) %>% 
-  # filter((input %in% c("lP"))) %>%
-  filter(output %in% c("N_offspring","R0")) %>%
-  # filter(type %in% c("flighty", "persistent")) %>% 
+  arrange(input) |> 
+  # filter((input %in% c("lP"))) |>
+  filter(output %in% c("N_offspring","R0")) |>
+  # filter(type %in% c("flighty", "persistent")) |> 
   ggplot() +
   geom_col(
     aes(x = nice_labels, y = value, fill = type_label),
@@ -957,7 +1092,7 @@ FirsteFAST_plots <- plot_data %>%
   geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
   # # Add grey ribbon to show dummy variable values
   # geom_ribbon(
-  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   data = plot_ribbon |> filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
   #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
   #   color = NA, fill = "grey60",
   #   alpha = 0.5
@@ -989,12 +1124,12 @@ FirsteFAST_plots
 
 ggsave("figures/FirsteFASTFigure4.pdf", FirsteFAST_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
 
-TotaleFAST_plots <- plot_data %>% 
+TotaleFAST_plots <- plot_data |> 
   filter(index_type == "ST") |>
-  arrange(input) %>% 
-  # filter((input %in% c("lP"))) %>%
-  filter(output %in% c("N_offspring","R0")) %>%
-  # filter(type %in% c("flighty", "persistent")) %>% 
+  arrange(input) |> 
+  # filter((input %in% c("lP"))) |>
+  filter(output %in% c("N_offspring","R0")) |>
+  # filter(type %in% c("flighty", "persistent")) |> 
   ggplot() +
   geom_col(
     aes(x = nice_labels, y = value, fill = type_label),
@@ -1007,7 +1142,7 @@ TotaleFAST_plots <- plot_data %>%
   geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
   # # Add grey ribbon to show dummy variable values
   # geom_ribbon(
-  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   data = plot_ribbon |> filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
   #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
   #   color = NA, fill = "grey60",
   #   alpha = 0.5
@@ -1039,10 +1174,10 @@ TotaleFAST_plots
 
 ggsave("figures/TotaleFASTFigure4.pdf", TotaleFAST_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
 
-FirsteFAST_plots_row <- plot_data %>% 
+FirsteFAST_plots_row <- plot_data |> 
   filter(index_type == "S1") |>
-  arrange(input) %>% 
-  filter(output %in% c("N_offspring","R0")) %>%
+  arrange(input) |> 
+  filter(output %in% c("N_offspring","R0")) |>
   ggplot() +
   geom_col(aes(x = nice_labels, y = value, fill = type_label), position = "dodge") +
   # Add light grey lines to divide up categories
@@ -1052,7 +1187,7 @@ FirsteFAST_plots_row <- plot_data %>%
   geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
   # # Add grey ribbon to show dummy variable values
   # geom_ribbon(
-  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   data = plot_ribbon |> filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
   #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
   #   color = NA, fill = "grey60",
   #   alpha = 0.5
@@ -1084,10 +1219,10 @@ FirsteFAST_plots_row
 
 ggsave("figures/FirsteFASTFigure4_row.pdf", FirsteFAST_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
 
-TotaleFAST_plots_row <- plot_data %>% 
+TotaleFAST_plots_row <- plot_data |> 
   filter(index_type == "ST") |>
-  arrange(input) %>% 
-  filter(output %in% c("N_offspring","R0")) %>%
+  arrange(input) |> 
+  filter(output %in% c("N_offspring","R0")) |>
   ggplot() +
   geom_col(aes(x = nice_labels, y = value, fill = type_label), position = "dodge") +
   # Add light grey lines to divide up categories
@@ -1097,7 +1232,7 @@ TotaleFAST_plots_row <- plot_data %>%
   geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
   # # Add grey ribbon to show dummy variable values
   # geom_ribbon(
-  #   data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   data = plot_ribbon |> filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
   #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
   #   color = NA, fill = "grey60",
   #   alpha = 0.5
@@ -1129,17 +1264,17 @@ TotaleFAST_plots_row
 
 ggsave("figures/TotaleFASTFigure4_row.pdf", TotaleFAST_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
 
-FirsteFAST_plots_max_only <- plot_data %>% 
+FirsteFAST_plots_max_only <- plot_data |> 
   filter(index_type == "S1") |>
   # Just keep maximum variation for now
-  filter(type == "max") %>%
-  arrange(input) %>% 
-  filter(output %in% c("N_offspring","R0")) %>%
-  group_by(type, output) %>% 
+  filter(type == "max") |>
+  arrange(input) |> 
+  filter(output %in% c("N_offspring","R0")) |>
+  group_by(type, output) |> 
   mutate(
     # star_flag = abs(value) < abs(dummy_min),
     # star_xpos = value + sign(value) * 0.025
-  ) %>% 
+  ) |> 
   # Plot
   ggplot() +
   geom_col(aes(y = nice_labels, x = value, fill = output_label), position = "dodge", width = 0.75) +
@@ -1154,7 +1289,7 @@ FirsteFAST_plots_max_only <- plot_data %>%
   ) +
   # # Add stars to flagged bars
   # geom_text(
-  #   data = . %>% filter(star_flag),
+  #   data = . |> filter(star_flag),
   #   aes(y = nice_labels, x = star_xpos, label = "n.s."),
   #   position = position_dodge(width = 0.75),
   #   size = 2, vjust = -0.55
@@ -1180,17 +1315,17 @@ FirsteFAST_plots_max_only
 
 ggsave("figures/FirsteFASTFigure4_max_only.pdf", FirsteFAST_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
 
-TotaleFAST_plots_max_only <- plot_data %>% 
+TotaleFAST_plots_max_only <- plot_data |> 
   filter(index_type == "ST") |>
   # Just keep maximum variation for now
-  filter(type == "max") %>%
-  arrange(input) %>% 
-  filter(output %in% c("N_offspring","R0")) %>%
-  group_by(type, output) %>% 
+  filter(type == "max") |>
+  arrange(input) |> 
+  filter(output %in% c("N_offspring","R0")) |>
+  group_by(type, output) |> 
   mutate(
     # star_flag = abs(value) < abs(dummy_min),
     # star_xpos = value + sign(value) * 0.025
-    ) %>% 
+    ) |> 
   # Plot
   ggplot() +
   geom_col(aes(y = nice_labels, x = value, fill = output_label), position = "dodge", width = 0.75) +
@@ -1205,7 +1340,7 @@ TotaleFAST_plots_max_only <- plot_data %>%
   ) +
   # # Add stars to flagged bars
   # geom_text(
-  #   data = . %>% filter(star_flag),
+  #   data = . |> filter(star_flag),
   #   aes(y = nice_labels, x = star_xpos, label = "n.s."),
   #   position = position_dodge(width = 0.75),
   #   size = 2, vjust = -0.55
@@ -1232,8 +1367,8 @@ TotaleFAST_plots_max_only
 ggsave("figures/TotaleFASTFigure4_max_only.pdf", TotaleFAST_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
 
 # Supplementary: theta vs. mechanistic parameters ----
-SuppFigure1 <- Figure3_df %>%
-  filter(theta < 21 * 1440) %>% 
+SuppFigure1 <- Figure3_df |>
+  filter(theta < 21 * 1440) |> 
   ggplot(aes(x = value, y = theta / 1440, linetype = mosquito_type, color = parameter_type)) +
   geom_line(lwd = 1) +
   facet_wrap(

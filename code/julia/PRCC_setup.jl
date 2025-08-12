@@ -3,37 +3,50 @@ include("GCD_R0_num_calc.jl")
 
 # Rates
 # (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG)
-const base_params_flighty = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.9f0, 1.0f0, 0.5f0, 0.5f0, 0.5f0, 0.5f0]
+const base_params_flighty = [1/480.0, 1/10.0, 1/5.0, 1/1.0, 1.0 - 0.9, 1.0, 0.5, 0.5, 0.5, 50.0]
+const base_params_persistent = [1/480.0, 1/10.0, 1/5.0, 1/1.0, 1.0 - 0.66, 1.0, 0.7, 0.8, 0.9, 50.0]
+const base_invparams_flighty = [480.0, 10.0, 5.0, 1.0, 1.0 - 0.9, 1.0, 0.5, 0.5, 0.5, 50.0]
+const base_invparams_persistent = [480.0, 10.0, 5.0, 1.0, 1.0 - 0.66, 1.0, 0.7, 0.8, 0.9, 50.0]
 
-const base_params_persistent = [1/480f0, 1/10f0, 1/5f0, 1/1f0, 1f0 - 0.66f0, 1.0f0, 0.7f0, 0.8f0, 0.9f0, 0.5f0]
-    
 
 function parameter_setup(baseline_vals, stretch_val) 
     ubs = (1f0 + stretch_val) .* baseline_vals
     lbs = max(0,(1f0 - stretch_val)) .* baseline_vals
-    ubs[5:end] = [min(v,1) for v in ubs[5:end]]
+    ubs[5:(end-1)] = [min(v,1) for v in ubs[5:(end-1)]]
 
     return lbs, ubs
 end
 
-persistent_lbs, persistent_ubs = parameter_setup(base_params_persistent, 0.1)
-flighty_lbs, flighty_ubs = parameter_setup(base_params_flighty, 0.1)
+persistent_lbs, persistent_ubs = parameter_setup(base_params_persistent, 0.2)
+persistent_invlbs, persistent_invubs = parameter_setup(base_invparams_persistent, 0.2)
+flighty_lbs, flighty_ubs = parameter_setup(base_params_flighty, 0.2)
+flighty_invlbs, flighty_invubs = parameter_setup(base_invparams_flighty, 0.2)
+
 
 # Set up LHC sampling
 using LatinHypercubeSampling
 
 # (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG) = B_vals_in
-min_lbs = [1/(3*1440.0f0), 1/(3*1440.0f0), 1/(3*1440.0f0), 1/(3*1440.0f0), 0.2f0, 0.2f0, 0.2f0, 0.2f0, 0.2f0, 0.0f0]
-max_ubs = [60.0f0, 60.0f0, 60.0f0, 60.0f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0, 100.0f0]
+min_lbs = [1/((1/2)*1440.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 100.0]
+invmin_lbs = [1440/160.0, 0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+invmax_ubs = [(1/2)*1440.0, 30.0, 30.0, 30.0, 1.0, 1.0, 1.0, 1.0, 1.0, 100.0]
 
 # Set number of LHC samples
-n_samples = 10_000::Int
+n_samples = 100_000_000::Int
 
 # Set up initial grid
 using QuasiMonteCarlo
 max_scaled_plan = QuasiMonteCarlo.sample(n_samples, min_lbs, max_ubs, LatinHypercubeSample())
 flighty_scaled_plan = QuasiMonteCarlo.sample(n_samples, flighty_lbs, flighty_ubs, LatinHypercubeSample())
 persistent_scaled_plan = QuasiMonteCarlo.sample(n_samples, persistent_lbs, persistent_ubs, LatinHypercubeSample())
+
+inv_max_scaled_plan = QuasiMonteCarlo.sample(n_samples, invmin_lbs, invmax_ubs, LatinHypercubeSample())
+inv_flighty_scaled_plan = QuasiMonteCarlo.sample(n_samples, flighty_invlbs, flighty_invubs, LatinHypercubeSample())
+inv_persistent_scaled_plan = QuasiMonteCarlo.sample(n_samples, persistent_invlbs, persistent_invubs, LatinHypercubeSample())
+inv_max_scaled_plan[:, 1:4] .= 1.0 ./ inv_max_scaled_plan[:, 1:4] # change from durations back to rates
+inv_flighty_scaled_plan[:, 1:4] .= 1.0 ./ inv_flighty_scaled_plan[:, 1:4] # change from durations back to rates
+inv_persistent_scaled_plan[:, 1:4] .= 1.0 ./ inv_persistent_scaled_plan[:, 1:4] # change from durations back to rates
 
 # Set up grid of parameter combinations
 using Base.Threads
@@ -53,7 +66,7 @@ function output_calc(LHS_samples)
         # (lQ, lL, lP, lG, sigma, pL, pP, pG) = grid_point
         B_vals = LHS_samples[1:9,idx]
         # GCD values
-        GCD_results[idx] = GCD_func(B_vals)
+        # GCD_results[idx] = GCD_func(B_vals)
         # Basic offspring number values
         curr_N_offspring = N_offspring_func(B_vals)
         N_offspring_results[idx] = curr_N_offspring
@@ -65,7 +78,7 @@ function output_calc(LHS_samples)
     end
     scaled_plan_df = DataFrame(transpose(LHS_samples), [:lQ, :lL, :lP, :lG, :sigma, :pQ, :pL, :pP, :pG, :dummy])
     output_df = scaled_plan_df
-    output_df[!,:GCD] = GCD_results
+    # output_df[!,:GCD] = GCD_results
     output_df[!,:N_offspring] = N_offspring_results
     output_df[!,:R0] = R0_results
 
@@ -77,21 +90,43 @@ output_calc(QuasiMonteCarlo.sample(100, min_lbs, max_ubs, LatinHypercubeSample()
 
 # Get outputs for each type then join them
 max_results = output_calc(max_scaled_plan)
-# flighty_results = output_calc(flighty_scaled_plan)
-# persistent_results = output_calc(persistent_scaled_plan)
+flighty_results = output_calc(flighty_scaled_plan)
+persistent_results = output_calc(persistent_scaled_plan)
+inv_max_results = output_calc(inv_max_scaled_plan)
+inv_flighty_results = output_calc(inv_flighty_scaled_plan)
+inv_persistent_results = output_calc(inv_persistent_scaled_plan)
 
-max_results[!, :type] .= "max"
-# flighty_results[!, :type] .= "flighty"
-# persistent_results[!, :type] .= "persistent"
+# Calculate PRCC indices
+using DataFrames
+using Statistics
+function PRCC_calc(input_results, output_names::Vector{String}, type::String)
+    input_cols = names(input_results)[1:end-length(output_names)]
+    results = DataFrame()
+    for output_name in output_names
+        rank_inputs = [sortperm(sortperm(input_results[!, col])) for col in input_cols]
+        rank_output = sortperm(sortperm(input_results[!, output_name]))
+        prccs = [cor(rank_inputs[i], rank_output) for i in 1:length(input_cols)]
+        row = (; (Symbol(col) => prccs[i] for (i, col) in enumerate(input_cols))..., output = output_name, type = type)
+        push!(results, row)
+    end
+    return results
+end
 
-all_results = vcat(max_results) #, flighty_results, persistent_results)
+max_PRCCs = PRCC_calc(max_results, ["N_offspring", "R0"], "max")
+flighty_PRCCs = PRCC_calc(flighty_results, ["N_offspring", "R0"], "flighty")
+persistent_PRCCs = PRCC_calc(persistent_results, ["N_offspring", "R0"], "persistent")
+inv_max_PRCCs = PRCC_calc(inv_max_results, ["N_offspring", "R0"], "inv_max")
+inv_flighty_PRCCs = PRCC_calc(inv_flighty_results, ["N_offspring", "R0"], "inv_flighty")
+inv_persistent_PRCCs = PRCC_calc(inv_persistent_results, ["N_offspring", "R0"], "inv_persistent")
+
+all_PRCCs = vcat(max_PRCCs, flighty_PRCCs, persistent_PRCCs, inv_max_PRCCs, inv_flighty_PRCCs, inv_persistent_PRCCs)
 
 # Save outputs ----
 # Parameter grid and outputs
 using CodecZlib
-open(joinpath(dirname(dirname(pwd())), "data", "julia_outputs.csv.gz"), "w") do io
+open(joinpath(pwd(), "data", "julia_PRCC.csv"), "w") do io
     gzip_io = GzipCompressorStream(io)
-    CSV.write(gzip_io, all_results)
+    CSV.write(gzip_io, all_PRCCs)
     close(gzip_io)
 end
 
