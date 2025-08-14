@@ -612,7 +612,7 @@ Figure3_df <- Mech_df |>
   )) |> 
   # Reduce the range for rates
   filter(!(parameter_type == "rate" & value >= (1/60))) |> 
-  right_join(nice_mech_labels)
+  right_join(filter(nice_mech_labels, name != "dummy"))
 
 Figure3_df$name <- factor(
   Figure3_df$name,
@@ -620,7 +620,7 @@ Figure3_df$name <- factor(
 
 Figure3_df$nice_labels <- factor(
   Figure3_df$nice_labels,
-  levels = nice_mech_labels$nice_labels)
+  levels = filter(nice_mech_labels, name != "dummy")$nice_labels)
 
 Figure3 <- Figure3_df |> 
   ggplot(aes(x = value, y = R0, linetype = mosquito_type, color = parameter_type)) +
@@ -664,85 +664,6 @@ Figure3 <- Figure3_df |>
 
 shift_legend(Figure3)
 ggsave("figures/Figure3.pdf", shift_legend(Figure3), width = 6.5, height = 2.25 * 9/6.5, units = "in")
-
-Figure3_df$nice_labels = factor(Figure3_df$nice_labels,
-                                levels = c(
-                                  "Seeking~success~p[Q]",
-                                  "Seeking~rate~lambda[Q]",
-                                  "Landing~success~p[L]",
-                                  "Landing~rate~lambda[L]",
-                                  "Probing~success~p[P]",
-                                  "Probing~rate~lambda[P]",
-                                  "Ingesting~success~p[G]",
-                                  "Ingesting~rate~lambda[G]",
-                                  "Persistence~probability~sigma"
-                                ))
-Figure3_df <- Figure3_df |>
-  mutate(stage = case_when(
-    name %in% c("lQ", "pQ") ~ "Host-seeking",
-    name %in% c("lL", "pL") ~ "Landing",
-    name %in% c("lP", "pP") ~ "Probing",
-    name %in% c("lG", "pG") ~ "Ingesting",
-    name %in% c("sigma") ~ "Persistence",
-  ))
-
-facet_labels <- Figure3_df |>
-  group_by(parameter_type) |> 
-  mutate(x_pos = mean(range(value, na.rm = TRUE)),  # Center x-position
-         y_pos = max(R0, na.rm = TRUE) * 1.05) |>  # Slightly above max y
-  distinct(parameter_type, stage, nice_labels, x_pos, y_pos)
-
-
-Figure3_df$stage = factor(Figure3_df$stage, levels = c("Host-seeking", "Landing", "Probing", "Ingesting", "Persistence"))
-Figure3_df$parameter_type = factor(Figure3_df$parameter_type, levels = c("probability", "rate"))
-
-Figure3_alt <- Figure3_df |> 
-  ggplot(aes(x = value, y = R0, linetype = mosquito_type, color = parameter_type)) +
-  geom_hline(aes(yintercept = 1), color = "grey") +
-  geom_line(lwd = 1) +  
-  geom_text(data = facet_labels,
-            aes(x = x_pos, y = y_pos, label = nice_labels),
-            # size = 6, fontface = "bold", 
-            inherit.aes = FALSE,
-            parse = TRUE) +
-  facet_grid2(
-    cols = vars(parameter_type), 
-    rows = vars(stage),
-    scales = "free_x",
-    render_empty = F
-  ) +
-  scale_x_continuous(
-    name = "",
-    breaks = waiver(),
-    n.breaks = 5,
-    expand = c(0,0)
-  ) +
-  scale_y_continuous(
-    name = TeX("Basic reproduction number \\, [$R_0$]"),
-    expand = c(0,0.1)
-  ) +
-  scale_color_manual(
-    name = "Parameter type:",
-    values = c4a("met.egypt",4)[1:2]
-  ) +
-  scale_linetype_discrete(
-    name = "Mosquito type:",
-    labels = c("Flighty", "Persistent")
-  ) +
-  theme_half_open(font_size = 11) +
-  guides(
-    color = guide_none()
-  ) +
-  theme(
-    # strip.background = element_rect(color = "white", fill = "white"),
-    strip.text.x = element_blank(),
-    strip.text.y = element_blank(),
-    legend.key.width = unit(0.4, "in")
-  )
-
-shift_legend(Figure3_alt)
-
-ggsave("figures/Figure3_alt.pdf", shift_legend(Figure3_alt), width = 6.5, height = 3.25, units = "in")
 
 # 4. PRCCs of R0 against mechanistic parameters ----
 
@@ -802,7 +723,7 @@ plot_data$Label = factor(plot_data$Label, levels = rev(c(
 
 plot_data$nice_labels <- factor(
   plot_data$nice_labels,
-  levels = c(rev(nice_mech_labels$nice_labels), "Dummy~variable"))
+  levels = c(rev(nice_mech_labels$nice_labels)))
 
 plot_ribbon <- plot_data |>
   group_by(type, output_label) |> 
@@ -823,10 +744,10 @@ plot_ribbon <- plot_data |>
       output_label = .x$output_label[nrow(.x)],
     )
   )
-  ) |> ungroup() |> 
-  select(input_num, 
-         dummy_min, dummy_max,
-         type, output_label) |> distinct()
+  ) |> ungroup() #|> 
+  # select(input_num, 
+  #        dummy_min, dummy_max,
+  #        type, output_label) |> distinct()
 
 PRCC_plots <- plot_data |> 
   # filter(type_label %in% c("Maximum variation", "Maximum variation (inverse)")) |> 
@@ -929,7 +850,7 @@ ggsave("figures/Figure4_row.pdf", PRCC_plots_row, width = 7, height = 3.25 * 9/6
 
 PRCC_plots_max_only <- plot_data |> 
   # Just keep maximum variation for now
-  filter(type == "inv_max") |>
+  filter(type == "max", input != "dummy") |>
   arrange(input) |> 
   filter(output %in% c("N_offspring","R0")) |>
   group_by(type, output) |> 
@@ -940,7 +861,16 @@ PRCC_plots_max_only <- plot_data |>
   geom_col(aes(y = nice_labels, x = PRCC, fill = output_label), position = "dodge", width = 0.75) +
   # Add light grey lines to divide up categories
   geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
-             color = "grey60", linetype = "dashed", linewidth = 0.125) +
+             color = "grey60", linetype = "dashed", linewidth = 0.125) +  # Add grey ribbon to show dummy variable values
+  geom_ribbon(
+    data = plot_ribbon |> 
+      filter(output_label %in% c("Basic offspring number","Basic reproduction number"), type == "max", input !="dummy"),
+    aes(y = nice_labels,
+        xmin = dummy_min, xmax = dummy_max,
+        group = output_label),
+    color = NA, fill = "grey60",
+    alpha = 0.5
+  ) +
   # Add zero line
   geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
   scale_fill_manual(
@@ -980,31 +910,31 @@ ggsave("figures/Figure4_max_only.pdf", PRCC_plots_max_only, width = 6.5, height 
 # 5. eFAST indices of N0 and R0 wrt parameters ----
 # Load in data
 
-eFAST_data = read_csv("data/eFAST_test.csv") |> 
-  mutate(type = factor(type, levels = c("max", "flighty", "persistent")),
+eFAST_data = read_csv("data/new_eFAST_test.csv") |> 
+  mutate(type = factor(type, levels = c("max", "flighty", "persistent", "inv_persistent", "inv_flighty")),
          param_type = ifelse(input %in% c("sigma", "pQ", "pL", "pP", "pG"), "probability", "rate"))
 
-eFAST_stability_plot = eFAST_data |> 
-  filter(sample_size > 10000) |> 
-  group_by(input, output) |> 
-  arrange(sample_size) |> 
-  ggplot(aes(x = sample_size, y = value, color = input)) +
-  geom_path(lwd = 1, alpha = 0.75) +
-  facet_wrap(output~type+index_type, scales = "free", ncol = 6) +
-  scale_x_continuous(
-    "Sample size for sensitivity analysis",
-    labels = scales::label_scientific(),
-    n.breaks = 3,
-    trans = 'log2'
-  ) +
-  scale_y_continuous("") + 
-  scale_color_discrete("Parameter") +
-  theme_minimal()
-eFAST_stability_plot
+# eFAST_stability_plot = eFAST_data |> 
+#   filter(sample_size > 10000) |> 
+#   group_by(input, output) |> 
+#   arrange(sample_size) |> 
+#   ggplot(aes(x = sample_size, y = value, color = input)) +
+#   geom_path(lwd = 1, alpha = 0.75) +
+#   facet_wrap(output~type+index_type, scales = "free", ncol = 6) +
+#   scale_x_continuous(
+#     "Sample size for sensitivity analysis",
+#     labels = scales::label_scientific(),
+#     n.breaks = 3,
+#     trans = 'log2'
+#   ) +
+#   scale_y_continuous("") + 
+#   scale_color_discrete("Parameter") +
+#   theme_minimal()
+# eFAST_stability_plot
 
 # eFAST sensitivity plots
 plot_data <- eFAST_data |>
-  filter(sample_size == max(sample_size)) |> 
+  # filter(sample_size == max(sample_size)) |> 
   group_by(type, output, index_type) |> 
   # Add in nice labels
   left_join(
@@ -1021,15 +951,17 @@ plot_data <- eFAST_data |>
       type == "flighty" ~ "Flighty",
       type == "persistent" ~ "Persistent",
       type == "max" ~ "Maximum variation",
+      type == "inv_persistent" ~ "Persistent (durations)",
+      type == "inv_flighty" ~ "Flighty (durations)",
     ),
-    dummy_min = -abs(value[input == "dummy"]),
-    dummy_max = abs(value[input == "dummy"])
+    dummy_min = -abs(mean_value[input == "dummy"]),
+    dummy_max = abs(mean_value[input == "dummy"])
   ) %>% 
   # filter(!is.na(output), input != "dummy") %>% 
   mutate(input_num = as.numeric(factor(input)))
 
 
-plot_data$type = factor(plot_data$type, levels = c("flighty", "persistent", "max"))
+plot_data$type = factor(plot_data$type, levels = c("max", "flighty", "persistent", "inv_persistent", "inv_flighty"))
 plot_data$input = factor(plot_data$input, levels = c(
   "pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG", "dummy"
 ))
@@ -1038,11 +970,11 @@ plot_data$output_label = factor(plot_data$output_label, levels = c(
 ))
 
 plot_data$type_label = factor(plot_data$type_label, levels = c(
-  "Flighty","Persistent","Maximum variation"
+  "Maximum variation", "Flighty", "Flighty (durations)", "Persistent", "Persistent (durations)"
 ))
 
 
-plot_data$Label = factor(plot_data$Label, levels = rev(c(
+plot_data$Label = factor(plot_data$Label, levels = (c(
   c("Seeking success",
     "Landing success",  "Probing success", "Ingesting success"),
   "Persistence probability", 
@@ -1051,30 +983,30 @@ plot_data$Label = factor(plot_data$Label, levels = rev(c(
 
 plot_data$nice_labels <- factor(
   plot_data$nice_labels,
-  levels = c((nice_mech_labels$nice_labels)))
+  levels = c(rev(nice_mech_labels$nice_labels)))
 
-plot_ribbon <- plot_data |>
-  group_by(type, output_label) |> 
-  group_modify( ~ bind_rows(
-    tibble(
-      input_num = min(.x$input_num) - 0.5,
-      dummy_min = .x$dummy_min[1],
-      dummy_max = .x$dummy_max[1],
-      type = .x$type[1],
-      output_label = .x$output_label[1],
-    ),
-    .x,
-    tibble(
-      input_num = max(.x$input_num) + 0.5,
-      dummy_min = .x$dummy_min[nrow(.x)],
-      dummy_max = .x$dummy_max[nrow(.x)],
-      type = .x$type[nrow(.x)],
-      output_label = .x$output_label[nrow(.x)],
-    )
-  )
-  ) %>% ungroup() %>% 
-  # select(input_num, type, output_label) %>% 
-  distinct()
+# plot_ribbon <- plot_data |>
+#   group_by(type, output_label) |> 
+#   group_modify( ~ bind_rows(
+#     tibble(
+#       input_num = min(.x$input_num) - 0.5,
+#       dummy_min = .x$dummy_min[1],
+#       dummy_max = .x$dummy_max[1],
+#       type = .x$type[1],
+#       output_label = .x$output_label[1],
+#     ),
+#     .x,
+#     tibble(
+#       input_num = max(.x$input_num) + 0.5,
+#       dummy_min = .x$dummy_min[nrow(.x)],
+#       dummy_max = .x$dummy_max[nrow(.x)],
+#       type = .x$type[nrow(.x)],
+#       output_label = .x$output_label[nrow(.x)],
+#     )
+#   )
+#   ) %>% ungroup() %>% 
+#   # select(input_num, type, output_label) %>% 
+#   distinct()
 
 FirsteFAST_plots <- plot_data |> 
   filter(index_type == "S1") |>
@@ -1084,7 +1016,7 @@ FirsteFAST_plots <- plot_data |>
   # filter(type %in% c("flighty", "persistent")) |> 
   ggplot() +
   geom_col(
-    aes(x = nice_labels, y = value, fill = type_label),
+    aes(x = nice_labels, y = mean_value, fill = type_label),
     position = "dodge", alpha = 0.75
   ) +
   # Add light grey lines to divide up categories
@@ -1092,17 +1024,10 @@ FirsteFAST_plots <- plot_data |>
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
-  # Add grey ribbon to show dummy variable values
-  geom_ribbon(
-    data = plot_ribbon %>% filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-    aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-    color = NA, fill = "grey60",
-    alpha = 0.5
-  ) +
   facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
   scale_fill_manual(
     name = "Parameter set:",
-    values = c(c4a("met.juarez",3))#, "black")
+    values = c(c4a("met.juarez"))#, "black")
   ) +
   scale_x_discrete(
     name = "",
@@ -1134,7 +1059,7 @@ TotaleFAST_plots <- plot_data |>
   # filter(type %in% c("flighty", "persistent")) |> 
   ggplot() +
   geom_col(
-    aes(x = nice_labels, y = value, fill = type_label),
+    aes(x = nice_labels, y = mean_value, fill = type_label),
     position = "dodge", alpha = 0.75
   ) +
   # Add light grey lines to divide up categories
@@ -1142,17 +1067,10 @@ TotaleFAST_plots <- plot_data |>
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
-  # # Add grey ribbon to show dummy variable values
-  # geom_ribbon(
-  #   data = plot_ribbon |> filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
-  #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
-  #   color = NA, fill = "grey60",
-  #   alpha = 0.5
-  # ) +
   facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
   scale_fill_manual(
     name = "Parameter set:",
-    values = c(c4a("met.juarez",3))#, "black")
+    values = c(c4a("met.juarez"))#, "black")
   ) +
   scale_x_discrete(
     name = "",
@@ -1181,7 +1099,7 @@ FirsteFAST_plots_row <- plot_data |>
   arrange(input) |> 
   filter(output %in% c("N_offspring","R0")) |>
   ggplot() +
-  geom_col(aes(x = nice_labels, y = value, fill = type_label), position = "dodge") +
+  geom_col(aes(x = nice_labels, y = mean_value, fill = type_label), position = "dodge") +
   # Add light grey lines to divide up categories
   geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
@@ -1197,7 +1115,7 @@ FirsteFAST_plots_row <- plot_data |>
   facet_wrap(~output_label, nrow = 1, scales = "free_x") +
   scale_fill_manual(
     name = "Parameter set:",
-    values = c(c4a("met.juarez",3))#, "black")
+    values = c(c4a("met.juarez"))#, "black")
   ) +
   scale_x_discrete(
     name = "",
@@ -1226,7 +1144,7 @@ TotaleFAST_plots_row <- plot_data |>
   arrange(input) |> 
   filter(output %in% c("N_offspring","R0")) |>
   ggplot() +
-  geom_col(aes(x = nice_labels, y = value, fill = type_label), position = "dodge") +
+  geom_col(aes(x = nice_labels, y = mean_value, fill = type_label), position = "dodge") +
   # Add light grey lines to divide up categories
   geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
@@ -1242,7 +1160,7 @@ TotaleFAST_plots_row <- plot_data |>
   facet_wrap(~output_label, nrow = 1, scales = "free_x") +
   scale_fill_manual(
     name = "Parameter set:",
-    values = c(c4a("met.juarez",3))#, "black")
+    values = c(c4a("met.juarez"))#, "black")
   ) +
   scale_x_discrete(
     name = "",
@@ -1274,12 +1192,17 @@ FirsteFAST_plots_max_only <- plot_data |>
   filter(output %in% c("N_offspring","R0")) |>
   group_by(type, output) |> 
   mutate(
-    star_flag = abs(value) < abs(dummy_min),
-    star_xpos = value + sign(value) * 0.025
+    star_flag = p_value < 0.01,
+    star_label = ifelse(star_flag, "*", ""),
+    star_xpos = mean_value + 2 * std_value + 0.005
   ) %>% 
   # Plot
   ggplot() +
-  geom_col(aes(y = nice_labels, x = value, fill = output_label), position = "dodge", width = 0.75) +
+  geom_col(aes(y = nice_labels, x = mean_value, fill = output_label), position = position_dodge(width = 1), width = 0.75) +
+  geom_errorbar(
+    aes(y = nice_labels, xmin = mean_value - 2 * std_value, xmax = mean_value + 2 * std_value, group = output_label),
+    width = 0.5, color = "black", position = position_dodge(width = 1), linewidth = 0.25
+  ) +
   # Add light grey lines to divide up categories
   geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
              color = "grey60", linetype = "dashed", linewidth = 0.125) +
@@ -1287,14 +1210,13 @@ FirsteFAST_plots_max_only <- plot_data |>
   geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
   scale_fill_manual(
     name = "",
-    values = c(c4a("met.juarez",3))
+    values = c(c4a("met.juarez"))
   ) +
   # Add stars to flagged bars
   geom_text(
-    data = . %>% filter(star_flag),
-    aes(y = nice_labels, x = star_xpos, label = "n.s."),
-    position = position_dodge(width = 0.75),
-    size = 2, vjust = -0.55
+    aes(y = nice_labels, x = star_xpos, label = star_label, group = output_label),
+    position = position_dodge(width = 1),
+    size = 2, vjust = 0.75
   ) +
   scale_y_discrete(
     name = "",
@@ -1302,9 +1224,10 @@ FirsteFAST_plots_max_only <- plot_data |>
   ) +
   scale_x_continuous(
     TeX("First Order eFAST Sensitivity Index"),
-    expand = c(0.0,0)
+    expand = expansion(mult = c(0, 0.01))
   ) +
   theme_half_open(11) +
+  # facet_wrap(~ output_label, ncol = 2) +
   theme(
     strip.background = element_rect(color = "white", fill = "white"),
     legend.key.width = unit(0.25, "in"),
@@ -1325,12 +1248,13 @@ TotaleFAST_plots_max_only <- plot_data |>
   filter(output %in% c("N_offspring","R0")) |>
   group_by(type, output) |> 
   mutate(
-    star_flag = abs(value) < abs(dummy_min),
-    star_xpos = value + sign(value) * 0.025
-    ) %>% 
+    star_flag = p_value < 0.01,
+    star_label = ifelse(star_flag, "*", ""),
+    star_xpos = mean_value + 2 * std_value + 0.005
+  ) %>% 
   # Plot
   ggplot() +
-  geom_col(aes(y = nice_labels, x = value, fill = output_label), position = "dodge", width = 0.75) +
+  geom_col(aes(y = nice_labels, x = mean_value, fill = output_label), position = "dodge", width = 0.75) +
   # Add light grey lines to divide up categories
   geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
              color = "grey60", linetype = "dashed", linewidth = 0.125) +
@@ -1342,10 +1266,9 @@ TotaleFAST_plots_max_only <- plot_data |>
   ) +
   # Add stars to flagged bars
   geom_text(
-    data = . %>% filter(star_flag),
-    aes(y = nice_labels, x = star_xpos, label = "n.s."),
-    position = position_dodge(width = 0.75),
-    size = 2, vjust = -0.55
+    aes(y = nice_labels, x = star_xpos, label = star_label, group = output_label),
+    position = position_dodge(width = 1),
+    size = 2, vjust = 0.75
   ) +
   scale_y_discrete(
     name = "",
