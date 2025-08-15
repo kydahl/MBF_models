@@ -45,13 +45,12 @@ flighty_invubs[1:4] = 1.0 ./ flighty_invlbs_temp[1:4] # change from durations ba
 # Define the absolute lower and upper bounds for the parameters
 
 # In terms of rates (for first four parameters)
-correction_term = 1E-6
+correction_term = 0.0
 min_lbs = [1/((1/2)*1440.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0]
 max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 100.0]
 
 # Create function to calculate basic offspring number and basic reproduction number at the same time
 function output_func(B_vals_in)
-    # B_vals_in[1:4] = 1.0./B_vals_in[1:4] # change from durations back to rates
     [N_offspring_func(B_vals_in), R0_func(B_vals_in)]
 end
 
@@ -165,7 +164,7 @@ function new_GSA_func(lbs, ubs, sample_size, NR)
         # Calculate eFAST indices for the current resample
         # A,B = QuasiMonteCarlo.generate_design_matrices(sample_size,lbs,ubs,SobolSample())
         # Sobol_res = gsa(output_func, Sobol(nboot = 100, conf_level = 0.95), A, B)
-        eFAST_res = gsa(output_func, eFAST(), [[lbs[i], ubs[i]] for i in 1:length(lbs)]; samples = sample_size)
+        eFAST_res = gsa(output_func, eFAST(num_harmonics = 11), [[lbs[i], ubs[i]] for i in 1:length(lbs)]; samples = sample_size)
         # Append results to the DataFrame
         for (i_out, outname) in enumerate(output_names)
             for (idx_type, arr) in zip(index_types, (eFAST_res.ST, eFAST_res.S1))
@@ -203,12 +202,14 @@ function new_GSA_func(lbs, ubs, sample_size, NR)
             for idx_type in index_types
                 vals_param = eFAST_results[(eFAST_results.input .== pname) .&& (eFAST_results.output .== outname) .&& (eFAST_results.index_type .== idx_type), :value]
                 vals_dummy = eFAST_results[(eFAST_results.input .== "dummy") .&& (eFAST_results.output .== outname) .&& (eFAST_results.index_type .== idx_type), :value]
-                ttest = UnequalVarianceTTest(vals_param, vals_dummy)
+                # Test whether the parameter's values are significantly greater than the dummy parameter's values
+                greater_sig_test = mannwhitney_onesided(vals_param, vals_dummy, alternative = :greater)
+
                 push!(sig_results, (
                     input = pname,
                     output = outname,
                     index_type = idx_type,
-                    p_value = pvalue(ttest)
+                    p_value = greater_sig_test[2]
                 ))
             end
         end
@@ -219,8 +220,33 @@ function new_GSA_func(lbs, ubs, sample_size, NR)
     return mean_results
 end
 
+using Distributions
 
-test = new_GSA_func(min_lbs, max_ubs, 100, 10)
+function mannwhitney_onesided(x::AbstractVector, y::AbstractVector; alternative::Symbol = :greater)
+    test = MannWhitneyUTest(x, y)
+    U = test.U
+    nx, ny = length(x), length(y)
+
+    # Exact null distribution if small, normal approx if large
+    μ_U = nx * ny / 2
+    σ_U = sqrt(nx * ny * (nx + ny + 1) / 12)
+
+    if alternative == :greater
+        # P(X > Y) means large U
+        z = (U - μ_U - 0.5) / σ_U   # continuity correction
+        p = 1 - cdf(Normal(), z)
+    elseif alternative == :less
+        # P(X < Y) means small U
+        z = (U - μ_U + 0.5) / σ_U
+        p = cdf(Normal(), z)
+    else
+        error("alternative must be :greater or :less")
+    end
+
+    return (U = U, pvalue = p, zscore = z)
+end
+
+test = new_GSA_func(min_lbs, max_ubs, 1100, 10)
 
 
 function new_get_gsa_results(sample_size, NR)
@@ -252,7 +278,7 @@ end
 
 test = new_get_gsa_results(1000, 10)
 
-new_eFAST_results = new_get_gsa_results(10_000, 1_000)
+new_eFAST_results = new_get_gsa_results(11*10_000, 110)
 
 # Return all the unique entries in the type column of new_eFAST_results
 unique_types = unique(new_eFAST_results.type)

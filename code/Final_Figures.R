@@ -958,7 +958,17 @@ plot_data <- eFAST_data |>
     dummy_max = abs(mean_value[input == "dummy"])
   ) %>% 
   # filter(!is.na(output), input != "dummy") %>% 
-  mutate(input_num = as.numeric(factor(input)))
+  mutate(input_num = as.numeric(factor(input))) |> 
+  mutate(
+    index_type_label = case_when(
+      index_type == "S1" ~ "First order eFAST sensitivity index",
+      index_type == "ST" ~ "Total order eFAST sensitivity index"
+    ),
+    index_type_shortlabel = case_when(
+      index_type == "S1" ~ "First order",
+      index_type == "ST" ~ "Total order"
+    )
+  )
 
 
 plot_data$type = factor(plot_data$type, levels = c("max", "flighty", "persistent", "inv_persistent", "inv_flighty"))
@@ -973,6 +983,9 @@ plot_data$type_label = factor(plot_data$type_label, levels = c(
   "Maximum variation", "Flighty", "Flighty (durations)", "Persistent", "Persistent (durations)"
 ))
 
+plot_data$index_type_label = factor(plot_data$index_type_label, levels = c("First order eFAST sensitivity index", "Total order eFAST sensitivity index"))
+
+plot_data$index_type_shortlabel = factor(plot_data$index_type_shortlabel, levels = c("First order", "Total order"))
 
 plot_data$Label = factor(plot_data$Label, levels = (c(
   c("Seeking success",
@@ -1185,7 +1198,78 @@ TotaleFAST_plots_row
 ggsave("figures/TotaleFASTFigure4_row.pdf", TotaleFAST_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
 
 FirsteFAST_plots_max_only <- plot_data |> 
-  filter(index_type == "S1") |>
+  # filter(index_type == "S1") |>
+  # Just keep maximum variation for now
+  filter(type == "max") |>
+  # filter(input != "dummy") |> 
+  arrange(input) |> 
+  filter(output %in% c("N_offspring","R0")) |>
+  group_by(type, output) |> 
+  mutate(
+    star_flag = p_value < 0.01,
+    star_label = ifelse(star_flag, "*", ""),
+    star_xpos = mean_value + 2 * std_value + 0.01
+  ) %>% 
+  # Plot
+  ggplot() +
+  geom_col(aes(y = nice_labels, x = mean_value, linetype = index_type_shortlabel, alpha = index_type_shortlabel, fill = output_label), color = "black", position = "identity", width = 0.75, linewidth = 0.25) +
+  geom_errorbar(
+    aes(y = nice_labels, xmin = mean_value - 2 * std_value, xmax = mean_value + 2 * std_value, group = output_label),
+    width = 0.25, color = "black", position = position_dodge(width = 0.9), linewidth = 0.25
+  ) +
+  # Add light grey lines to divide up categories
+  geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
+             color = "grey60", linetype = "dashed", linewidth = 0.125) +
+  # Add zero line
+  geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
+  scale_fill_manual(
+    name = "",
+    values = c(c4a("met.juarez"))
+  ) +
+  # Add stars to flagged bars
+  geom_text(
+    aes(y = nice_labels, x = star_xpos, label = star_label, group = output_label),
+    position = position_dodge(width = 0.9),
+    size = 2, vjust = 0.75
+  ) +
+  scale_y_discrete(
+    name = "",
+    labels = function(x) parse(text = x)
+  ) +
+  scale_x_continuous(
+    "",
+    # TeX("First Order eFAST Sensitivity Index"),
+    expand = expansion(mult = c(0, 0.01))
+  ) +
+  scale_alpha_manual(
+    "",
+    values = c(1, 0.5)
+  ) +
+  scale_linetype_manual(
+    "",
+    values = c(1, 2)
+  ) +
+  theme_half_open(8) +
+  facet_wrap(~ output_label, ncol = 2) +
+  guides(
+    # alpha = guide_none(),
+    # linetype = guide_none(),
+    fill = guide_none()
+  ) + 
+  theme(
+    strip.background = element_rect(color = "white", fill = "white"),
+    legend.key.width = unit(0.25, "in"),
+    legend.key.height = unit(0.03125, "in"),
+    legend.position = "top",
+    legend.direction = "horizontal"
+  )
+
+FirsteFAST_plots_max_only
+
+ggsave("figures/eFASTFigure4_max_only.pdf", FirsteFAST_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
+
+TotaleFAST_plots_max_only <- plot_data |> 
+  filter(index_type == "ST") |>
   # Just keep maximum variation for now
   filter(type == "max") |>
   arrange(input) |> 
@@ -1194,7 +1278,7 @@ FirsteFAST_plots_max_only <- plot_data |>
   mutate(
     star_flag = p_value < 0.01,
     star_label = ifelse(star_flag, "*", ""),
-    star_xpos = mean_value + 2 * std_value + 0.005
+    star_xpos = mean_value + 2 * std_value + 0.01
   ) %>% 
   # Plot
   ggplot() +
@@ -1210,65 +1294,13 @@ FirsteFAST_plots_max_only <- plot_data |>
   geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
   scale_fill_manual(
     name = "",
-    values = c(c4a("met.juarez"))
-  ) +
-  # Add stars to flagged bars
-  geom_text(
-    aes(y = nice_labels, x = star_xpos, label = star_label, group = output_label),
-    position = position_dodge(width = 1),
-    size = 2, vjust = 0.75
-  ) +
-  scale_y_discrete(
-    name = "",
-    labels = function(x) parse(text = x)
-  ) +
-  scale_x_continuous(
-    TeX("First Order eFAST Sensitivity Index"),
-    expand = expansion(mult = c(0, 0.01))
-  ) +
-  theme_half_open(11) +
-  # facet_wrap(~ output_label, ncol = 2) +
-  theme(
-    strip.background = element_rect(color = "white", fill = "white"),
-    legend.key.width = unit(0.25, "in"),
-    legend.key.height = unit(0.03125, "in"),
-    legend.position = "top",
-    legend.direction = "horizontal"
-  )
-
-FirsteFAST_plots_max_only
-
-ggsave("figures/FirsteFASTFigure4_max_only.pdf", FirsteFAST_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
-
-TotaleFAST_plots_max_only <- plot_data |> 
-  filter(index_type == "ST") |>
-  # Just keep maximum variation for now
-  filter(type == "max") |>
-  arrange(input) |> 
-  filter(output %in% c("N_offspring","R0")) |>
-  group_by(type, output) |> 
-  mutate(
-    star_flag = p_value < 0.01,
-    star_label = ifelse(star_flag, "*", ""),
-    star_xpos = mean_value + 2 * std_value + 0.005
-  ) %>% 
-  # Plot
-  ggplot() +
-  geom_col(aes(y = nice_labels, x = mean_value, fill = output_label), position = "dodge", width = 0.75) +
-  # Add light grey lines to divide up categories
-  geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
-             color = "grey60", linetype = "dashed", linewidth = 0.125) +
-  # Add zero line
-  geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
-  scale_fill_manual(
-    name = "",
     values = c(c4a("met.juarez",3))
   ) +
   # Add stars to flagged bars
   geom_text(
     aes(y = nice_labels, x = star_xpos, label = star_label, group = output_label),
     position = position_dodge(width = 1),
-    size = 2, vjust = 0.75
+    size = 4, vjust = 0.75
   ) +
   scale_y_discrete(
     name = "",
@@ -1276,7 +1308,7 @@ TotaleFAST_plots_max_only <- plot_data |>
   ) +
   scale_x_continuous(
     TeX("Total eFAST Sensitivity Index"),
-    expand = c(0.0,0)
+    expand = expansion(mult = c(0, 0.01))
   ) +
   theme_half_open(11) +
   theme(
@@ -1327,10 +1359,10 @@ ggsave("figures/SuppFigure.pdf", shift_legend(SuppFigure1), width = 20, height =
 
 # Create plots illustrating the ranges for the three parameter sets
 
-max_lbs = c(1/((1/2)*1440.0), 1/(30), 1/(30), 1/(30), 0.0, 0.0, 0.0, 0.0, 0.0)
-max_ubs = c(1/160, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0)
-flighty_baseline = c(1/480, 1/10, 1/5, 1/1, 1 - 0.9, 1.0, 0.5, 0.5, 0.5)
-persistent_baseline = c(1/480, 1/10, 1/5, 1/1, 1 - 0.66, 1.0, 0.7, 0.8, 0.9)
+max_lbs = c(1/((1/2)*1440.0), 1/(30), 1/(30), 1/(30), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+max_ubs = c(1/160, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 100.0)
+flighty_baseline = c(1/480, 1/10, 1/5, 1/1, 1 - 0.9, 1.0, 0.5, 0.5, 0.5, 100.0)
+persistent_baseline = c(1/480, 1/10, 1/5, 1/1, 1 - 0.66, 1.0, 0.7, 0.8, 0.9, 100.0)
 stretch_val = 0.2
 flighty_lbs = (1 - stretch_val) * flighty_baseline
 flighty_ubs = (1 + stretch_val) * flighty_baseline

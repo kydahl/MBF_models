@@ -23,8 +23,6 @@ const (bH, bB, eta, gH) = [0.5f0, 0.5f0, 1 / (7 * 1440), 1 / (5 * 1440)]
 function GCD_func(B_vals_in)
     (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG) = B_vals_in
 
-    # one_vec_five = [1.0f0 1.0f0 1.0f0 1.0f0 1.0f0]
-    # alpha_vec_five = [1.0f0; 0.0f0; 0.0f0; 0.0f0; 0.0f0]
     one_vec_four = [1.0f0; 1.0f0; 1.0f0; 1.0f0]
     alpha_vec_four = [1.0f0; 0.0f0; 0.0f0; 0.0f0]
 
@@ -69,8 +67,6 @@ end
 function R0_func(B_vals_in)
     (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG) = B_vals_in
 
-    # one_vec_five = [1.0f0 1.0f0 1.0f0 1.0f0 1.0f0]
-    # alpha_vec_five = [1.0f0; 0.0f0; 0.0f0; 0.0f0; 0.0f0]
     one_vec_four = [1.0f0; 1.0f0; 1.0f0; 1.0f0]
     alpha_vec_four = [1.0f0; 0.0f0; 0.0f0; 0.0f0]
 
