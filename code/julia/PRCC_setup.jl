@@ -3,8 +3,10 @@ include("GCD_R0_num_calc.jl")
 
 # Rates
 # (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG)
+# In terms of rates (for first four parameters)
 const base_params_flighty = [1/480.0, 1/10.0, 1/5.0, 1/1.0, 1.0 - 0.9, 1.0, 0.5, 0.5, 0.5, 50.0]
 const base_params_persistent = [1/480.0, 1/10.0, 1/5.0, 1/1.0, 1.0 - 0.66, 1.0, 0.7, 0.8, 0.9, 50.0]
+# In terms of durations (for first four parameters)
 const base_invparams_flighty = [480.0, 10.0, 5.0, 1.0, 1.0 - 0.9, 1.0, 0.5, 0.5, 0.5, 50.0]
 const base_invparams_persistent = [480.0, 10.0, 5.0, 1.0, 1.0 - 0.66, 1.0, 0.7, 0.8, 0.9, 50.0]
 
@@ -17,20 +19,28 @@ function parameter_setup(baseline_vals, stretch_val)
     return lbs, ubs
 end
 
+# Create lower and upper bounds for the parameters
 persistent_lbs, persistent_ubs = parameter_setup(base_params_persistent, 0.2)
-persistent_invlbs, persistent_invubs = parameter_setup(base_invparams_persistent, 0.2)
+persistent_invlbs_temp, persistent_invubs_temp = parameter_setup(base_invparams_persistent, 0.2)
+persistent_invlbs = copy(persistent_invlbs_temp)
+persistent_invlbs[1:4] = 1.0 ./ persistent_invubs_temp[1:4] # change from durations back to rates
+persistent_invubs = copy(persistent_invubs_temp)
+persistent_invubs[1:4] = 1.0 ./ persistent_invlbs_temp[1:4] # change from durations back to rates
 flighty_lbs, flighty_ubs = parameter_setup(base_params_flighty, 0.2)
-flighty_invlbs, flighty_invubs = parameter_setup(base_invparams_flighty, 0.2)
+flighty_invlbs_temp, flighty_invubs_temp = parameter_setup(base_invparams_flighty, 0.2)
+flighty_invlbs = copy(flighty_invlbs_temp)
+flighty_invlbs[1:4] = 1.0 ./ flighty_invubs_temp[1:4] # change from durations back to rates
+flighty_invubs = copy(flighty_invubs_temp)
+flighty_invubs[1:4] = 1.0 ./ flighty_invlbs_temp[1:4] # change from durations back to rates
 
 
 # Set up LHC sampling
 using LatinHypercubeSampling
 
-# (lQ, lL, lP, lG, sigma, pQ, pL, pP, pG) = B_vals_in
-min_lbs = [1/((1/2)*1440.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 100.0]
-invmin_lbs = [1440/160.0, 0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-invmax_ubs = [(1/2)*1440.0, 30.0, 30.0, 30.0, 1.0, 1.0, 1.0, 1.0, 1.0, 100.0]
+# Maximum variation parameter ranges
+correction_term = 0.0
+min_lbs = [1/((1/2)*1440.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0]
+max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 100.0]
 
 # Set number of LHC samples
 n_samples = 100_000_000::Int

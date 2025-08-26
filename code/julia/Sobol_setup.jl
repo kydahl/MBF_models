@@ -51,7 +51,7 @@ max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0-correction_term, 1.0-correction_term, 
 
 # Create function to calculate basic offspring number and basic reproduction number at the same time
 function output_func(B_vals_in)
-    [N_offspring_func(B_vals_in), R0_func(B_vals_in)]
+    [repnums_func(B_vals_in)]
 end
 
 # function gsa_func(sample_size)
