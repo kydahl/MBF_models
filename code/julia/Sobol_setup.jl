@@ -47,7 +47,7 @@ flighty_invubs[1:4] = 1.0 ./ flighty_invlbs_temp[1:4] # change from durations ba
 # In terms of rates (for first four parameters)
 correction_term = 0.0
 min_lbs = [1/((1/2)*1440.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0]
-max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 100.0]
+max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0]
 
 # Create function to calculate basic offspring number and basic reproduction number at the same time
 function output_func(B_vals_in)
@@ -278,7 +278,7 @@ end
 
 test = new_get_gsa_results(1000, 10)
 
-new_eFAST_results = new_get_gsa_results(11*10_000, 110)
+new_eFAST_results = new_get_gsa_results(11*10_000, 10)
 
 # Return all the unique entries in the type column of new_eFAST_results
 unique_types = unique(new_eFAST_results.type)
