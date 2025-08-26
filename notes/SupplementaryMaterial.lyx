@@ -3141,6 +3141,9 @@ Letting
 \end{bmatrix}\\
 \boldsymbol{F}_{VH}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\boldsymbol{F}_{HV} & =\begin{bmatrix}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\frac{\vec{B}}{K_{B}}^{*} & 0\\
 0 & 0
+\end{bmatrix}\\
+\boldsymbol{F}_{VH}\left(\boldsymbol{V}_{BB}-\boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV}\right)^{-1}\boldsymbol{F}_{HV}\boldsymbol{V}_{H}^{-1} & =\begin{bmatrix}\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\frac{\vec{B}}{K_{B}}^{*}\left(\frac{1}{\mu_{H}+\gamma_{H}}\right) & 0\\
+0 & 0
 \end{bmatrix}
 \end{align*}
 

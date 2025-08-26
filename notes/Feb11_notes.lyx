@@ -454,7 +454,7 @@ Let's try this way.
 \boldsymbol{V}_{H} & =\begin{bmatrix}\left(\mu_{H}+\gamma_{H}\right) & 0\\
 -\gamma_{H} & \mu_{H}
 \end{bmatrix}\\
-\boldsymbol{V}_{B} & =\begin{bmatrix}\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right) & \boldsymbol{0}_{n\times n}\\
+\boldsymbol{V}_{BB} & =\begin{bmatrix}\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right) & \boldsymbol{0}_{n\times n}\\
 -\eta\boldsymbol{I} & \left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)
 \end{bmatrix}\\
 \boldsymbol{V}_{VR} & =\begin{bmatrix}\left(\mu+\gamma_{V}+\eta\right) & 0 & 0 & 0\\
