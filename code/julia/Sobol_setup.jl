@@ -51,7 +51,7 @@ max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0-correction_term, 1.0-correction_term, 
 
 # Create function to calculate basic offspring number and basic reproduction number at the same time
 function output_func(B_vals_in)
-    [repnums_func(B_vals_in)]
+    repnums_func(B_vals_in)
 end
 
 # function gsa_func(sample_size)
@@ -147,8 +147,8 @@ using HypothesisTests
 function new_GSA_func(lbs, ubs, sample_size, NR)
     # Give names for parameters, outputs, and index types
     param_names = ["lQ", "lL", "lP", "lG", "sigma", "pQ", "pL", "pP", "pG", "dummy"]
-    output_names = ["N_offspring", "R0"]
-    index_types = ["ST", "S1"]
+    output_names = ["N_offspring", "RVH", "RHV", "R0"] # N_offspring, RVH_scalar, RHV_scalar, R0
+    index_types = ["ST", "S1"] 
 
     # Initialize DataFrame to hold results
     # Dataframe has columns for each parameter, each output, total and first order indices,
