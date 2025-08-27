@@ -143,9 +143,9 @@ function repnums_func(B_vals_in)
     N_offspring = tau * (varPhi / (mu + gV)) * (rhoJ / (rhoJ + muJ)) * nG
 
     if N_offspring < 1
-            RHV_scalar = 0.0f0
-            RVH_scalar = 0.0f0
-            R0 = 0.0f0
+            RHV_scalar = NaN
+            RVH_scalar = NaN
+            R0 = NaN
     else
         # Distribution of mosquitoes across states at equilibrium
         B_prefactor = rhoJ * KJ *(N_offspring - 1) * nG / N_offspring

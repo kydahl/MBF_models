@@ -945,6 +945,8 @@ plot_data <- eFAST_data |>
   mutate(
     output_label = case_when(
       output == "R0" ~ "Basic reproduction number",
+      output == "RVH" ~ "Vector-to-host reproduction number",
+      output == "RHV" ~ "Host-to-vector reproduction number",
       output == "N_offspring" ~ "Basic offspring number",
     ),
     type_label = case_when(
@@ -976,7 +978,7 @@ plot_data$input = factor(plot_data$input, levels = c(
   "pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG", "dummy"
 ))
 plot_data$output_label = factor(plot_data$output_label, levels = c(
-  "Gonotrophic cycle duration", "Basic offspring number","Basic reproduction number"
+  "Gonotrophic cycle duration", "Basic offspring number","Basic reproduction number", "Host-to-vector reproduction number", "Vector-to-host reproduction number"
 ))
 
 plot_data$type_label = factor(plot_data$type_label, levels = c(
@@ -1025,7 +1027,7 @@ FirsteFAST_plots <- plot_data |>
   filter(index_type == "S1") |>
   arrange(input) |> 
   # filter((input %in% c("lP"))) |>
-  filter(output %in% c("N_offspring","R0")) |>
+  # filter(output %in% c("N_offspring","R0")) |>
   # filter(type %in% c("flighty", "persistent")) |> 
   ggplot() +
   geom_col(
@@ -1068,7 +1070,7 @@ TotaleFAST_plots <- plot_data |>
   filter(index_type == "ST") |>
   arrange(input) |> 
   # filter((input %in% c("lP"))) |>
-  filter(output %in% c("N_offspring","R0")) |>
+  # filter(output %in% c("N_offspring","R0")) |>
   # filter(type %in% c("flighty", "persistent")) |> 
   ggplot() +
   geom_col(
@@ -1110,7 +1112,7 @@ ggsave("figures/TotaleFASTFigure4.pdf", TotaleFAST_plots, width = 7, height = 3.
 FirsteFAST_plots_row <- plot_data |> 
   filter(index_type == "S1") |>
   arrange(input) |> 
-  filter(output %in% c("N_offspring","R0")) |>
+  # filter(output %in% c("N_offspring","R0")) |>
   ggplot() +
   geom_col(aes(x = nice_labels, y = mean_value, fill = type_label), position = "dodge") +
   # Add light grey lines to divide up categories
@@ -1155,7 +1157,7 @@ ggsave("figures/FirsteFASTFigure4_row.pdf", FirsteFAST_plots_row, width = 7, hei
 TotaleFAST_plots_row <- plot_data |> 
   filter(index_type == "ST") |>
   arrange(input) |> 
-  filter(output %in% c("N_offspring","R0")) |>
+  # filter(output %in% c("N_offspring","R0")) |>
   ggplot() +
   geom_col(aes(x = nice_labels, y = mean_value, fill = type_label), position = "dodge") +
   # Add light grey lines to divide up categories
@@ -1200,10 +1202,10 @@ ggsave("figures/TotaleFASTFigure4_row.pdf", TotaleFAST_plots_row, width = 7, hei
 FirsteFAST_plots_max_only <- plot_data |> 
   # filter(index_type == "S1") |>
   # Just keep maximum variation for now
-  filter(type == "max") |>
+  filter(type == "flighty") |>
   # filter(input != "dummy") |> 
   arrange(input) |> 
-  filter(output %in% c("N_offspring","R0")) |>
+  # filter(output %in% c("N_offspring","R0")) |>
   group_by(type, output) |> 
   mutate(
     star_flag = p_value < 0.01,
