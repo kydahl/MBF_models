@@ -62,7 +62,7 @@ using HypothesisTests
 function new_GSA_func(lbs, ubs, sample_size, NR)
     # Give names for parameters, outputs, and index types
     param_names = ["lQ", "lL", "lP", "lG", "sigma", "pQ", "pL", "pP", "pG", "dummy"]
-    output_names = ["N_offspring", "RVH", "RHV", "R0", "R0_alt"]
+    output_names = ["N_offspring", "RVH", "RHV", "R0", "R0_alt", "R0_alt"]
     index_types = ["ST", "S1"]
 
     # Initialize DataFrame to hold results
@@ -193,7 +193,7 @@ end
 
 test = new_get_gsa_results(1000, 10)
 
-new_eFAST_results = new_get_gsa_results(11*100, 110)
+new_eFAST_results = new_get_gsa_results(11*1_000, 10)
 
 # Return all the unique entries in the type column of new_eFAST_results
 unique_types = unique(new_eFAST_results.type)
