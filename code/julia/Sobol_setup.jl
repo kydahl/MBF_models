@@ -45,99 +45,14 @@ flighty_invubs[1:4] = 1.0 ./ flighty_invlbs_temp[1:4] # change from durations ba
 # Define the absolute lower and upper bounds for the parameters
 
 # In terms of rates (for first four parameters)
-correction_term = 0.0
-min_lbs = [1/((1/2)*1440.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0]
-max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0]
+# adjusted lbs: lQ = 1/(480.0), all rates = 1/(30.0), all_probs = 0.2
+min_lbs = [1/(480.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]
+max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 100.0]
 
 # Create function to calculate basic offspring number and basic reproduction number at the same time
 function output_func(B_vals_in)
     repnums_func(B_vals_in)
 end
-
-# function gsa_func(sample_size)
-#     # Set number of samples
-#     n_samples = sample_size #2^17::Int #10_000::Int
-
-#     eFAST_persistent = gsa(output_func, eFAST(), [[persistent_lbs[i], persistent_ubs[i]] for i in 1:length(persistent_lbs)]; samples = n_samples)
-#     eFAST_flighty = gsa(output_func, eFAST(), [[flighty_lbs[i], flighty_ubs[i]] for i in 1:length(flighty_lbs)]; samples = n_samples)
-#     eFAST_max = gsa(output_func, eFAST(), [[min_lbs[i], max_ubs[i]] for i in 1:length(min_lbs)]; samples = n_samples)
-
-#     eFAST_persistent_inv = gsa(output_func, eFAST(), [[persistent_invlbs[i], persistent_invubs[i]] for i in 1:length(persistent_invlbs)]; samples = n_samples)
-#     eFAST_flighty_inv = gsa(output_func, eFAST(), [[flighty_invlbs[i], flighty_invubs[i]] for i in 1:length(flighty_invlbs)]; samples = n_samples)
-#     eFAST_max_inv = gsa(output_func, eFAST(), [[invmin_lbs[i], invmax_ubs[i]] for i in 1:length(invmin_lbs)]; samples = n_samples)
-
-#     # Create dataframe to hold all all_results
-
-#     # Dataframe has columns for each parameter, each output, total and first order indices, and parameter set
-#     param_names = ["lQ", "lL", "lP", "lG", "sigma", "pQ", "pL", "pP", "pG", "dummy"]
-#     output_names = ["N_offspring", "R0"]
-#     index_types = ["ST", "S1"]
-#     paramset_types = ["persistent", "flighty", "max", "inv_persistent", "inv_flighty", "inv_max"]
-
-#     all_results = DataFrame(
-#         input = String[],
-#         output = String[],
-#         index_type = String[],
-#         value = Float64[],
-#         type = String[]
-#     )
-
-#     for (eFAST, paramset) in zip((eFAST_persistent, eFAST_flighty, eFAST_max, eFAST_persistent_inv, eFAST_flighty_inv, eFAST_max_inv), paramset_types)
-#         for (i_out, outname) in enumerate(output_names)
-#             for (idx_type, arr) in zip(index_types, (eFAST.ST, eFAST.S1))
-#                 for (i_param, pname) in enumerate(param_names)
-#                     push!(all_results, (
-#                         input = pname,
-#                         output = outname,
-#                         index_type = idx_type,
-#                         value = arr[i_out, i_param],
-#                         type = paramset
-#                     ))
-#                 end
-#             end
-#         end
-#     end
-#     return(all_results)
-# end
-
-# # Create dataframe to add results across sample sizes
-# samples_results = DataFrame(
-#     input = String[],
-#     output = String[],
-#     index_type = String[],
-#     value = Float64[],
-#     type = String[],
-#     sample_size = Int[]
-# )
-
-# using Base.Threads
-
-# function get_gsa_results(sample_sizes)
-
-#     # sample_sizes = broadcast(^, 2, power_range) #10^4::Int : 5*10^3::Int : 10^5::Int
-#     results_list = Vector{DataFrame}(undef, length(sample_sizes))
-
-#     for idx in ProgressBar(eachindex(sample_sizes))
-#         i = sample_sizes[idx]
-#         results = gsa_func(i)
-#         results[!, :sample_size] .= i
-#         results_list[idx] = results
-#     end
-
-#     for results in results_list
-#         append!(samples_results, results)
-#     end
-#     # Save outputs to CSV
-#     open(joinpath((pwd()), "data", "eFAST_test.csv"), "w") do io
-#         gzip_io = GzipCompressorStream(io)
-#         CSV.write(gzip_io, samples_results)
-#         close(gzip_io)
-#     end
-# end
-
-# sample_sizes = 10^5::Int : 5*10^4::Int : 10^6::Int
-# get_gsa_results(10^2)
-# get_gsa_results(sample_sizes) 
 
 # Significance test for parameters using eFAST indices
 using Statistics
@@ -147,8 +62,8 @@ using HypothesisTests
 function new_GSA_func(lbs, ubs, sample_size, NR)
     # Give names for parameters, outputs, and index types
     param_names = ["lQ", "lL", "lP", "lG", "sigma", "pQ", "pL", "pP", "pG", "dummy"]
-    output_names = ["N_offspring", "RVH", "RHV", "R0"] # N_offspring, RVH_scalar, RHV_scalar, R0
-    index_types = ["ST", "S1"] 
+    output_names = ["N_offspring", "RVH", "RHV", "R0", "R0_alt"]
+    index_types = ["ST", "S1"]
 
     # Initialize DataFrame to hold results
     # Dataframe has columns for each parameter, each output, total and first order indices,
@@ -278,7 +193,7 @@ end
 
 test = new_get_gsa_results(1000, 10)
 
-new_eFAST_results = new_get_gsa_results(11*10_000, 10)
+new_eFAST_results = new_get_gsa_results(11*100, 110)
 
 # Return all the unique entries in the type column of new_eFAST_results
 unique_types = unique(new_eFAST_results.type)

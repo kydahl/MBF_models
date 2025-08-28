@@ -146,6 +146,7 @@ function repnums_func(B_vals_in)
             RHV_scalar = NaN
             RVH_scalar = NaN
             R0 = NaN
+            R0_alt = NaN
     else
         # Distribution of mosquitoes across states at equilibrium
         B_prefactor = rhoJ * KJ *(N_offspring - 1) * nG / N_offspring
@@ -163,13 +164,13 @@ function repnums_func(B_vals_in)
         betaH_mat[3,3] = bH
         betaV_mat[4,4] = bB
 
-        # spec_mat = alpha_vec_four * transpose(-A_mat * one_vec_four)
+        spec_mat = alpha_vec_four * transpose(-A_mat * one_vec_four)
 
-        # GammaI = inv(mu * I - transpose(A_mat) + (gV / (mu + gV)) * (gR / (mu + gR)) * spec_mat)
-        # GammaE = inv((eta + mu) * I - transpose(A_mat) + (gR / (mu + gR + eta)) * (gV / (mu + gV + eta)) * spec_mat)
+        GammaI = inv(mu * I - transpose(A_mat) + (gV / (mu + gV)) * (gR / (mu + gR)) * spec_mat)
+        GammaE = inv((eta + mu) * I - transpose(A_mat) + (gR / (mu + gR + eta)) * (gV / (mu + gV + eta)) * spec_mat)
 
-        # complicated_probability = (gV/(mu+gV)) * ((eta / (mu+gV+eta)) * (gR/(mu+gR+eta)) + (eta/(mu+gR+eta) * (gR/(mu+gR))))
-        # tauE = (eta * I + complicated_probability * spec_mat) * GammaE
+        complicated_probability = (gV/(mu+gV)) * ((eta / (mu+gV+eta)) * (gR/(mu+gR+eta)) + (eta/(mu+gR+eta) * (gR/(mu+gR))))
+        tauE = (eta * I + complicated_probability * spec_mat) * GammaE
 
         sum_B_star = sum(B_star)
 
@@ -203,9 +204,12 @@ function repnums_func(B_vals_in)
 
         R02 = RVH_scalar * RHV_scalar
         R0 =  sqrt(R02)
+
+        R02_alt = (KH / sum_B_star) * transpose(one_vec_four) * betaH_mat * LambdaH * GammaI * tauE * (1/KH) * (betaV_mat * LambdaV * B_star) * (1 / (gH + muH))
+        R0_alt = sqrt(R02_alt[1])
     end
 
-    return([N_offspring, RVH_scalar, RHV_scalar, R0])
+    return([N_offspring, RVH_scalar, RHV_scalar, R0, R0_alt])
 end
 
 # Define parameter ranges

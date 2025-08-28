@@ -9,7 +9,8 @@ bounds_data = read_csv("data/lower_bounds_test.csv") |>
   mutate(R = 1/r, G = 1/g)
 
 # Coarse tests
-bounds_test = filter(bounds_data, N_offspring >= 1)
+bounds_test = filter(bounds_data, N_offspring >= 1) |> 
+  filter(g == 489)
 
 min(bounds_test$p)
 min(bounds_test$R)
@@ -30,32 +31,55 @@ temp_plot
 library(plotly)
 library(akima)
 
-df = bounds_data |> 
+library(dplyr)
+library(plotly)
+library(mgcv)   # smoother, avoids akima scale errors
+
+df <- bounds_data %>%
   mutate(x1 = p, x2 = r, x3 = g, y = N_offspring) |> 
-  filter(x1 > 0, x2 > 0, x3 > 0, y > 0) |> 
-  na.omit()
+  filter(p < 0.3)
 
-# create function that extracts contour data for given x3
-make_contour <- function(x3_val, tol = 0.05) {
-  df_sub <- df[abs(df$x3 - x3_val) < tol, ]
-  interp_res <- with(df_sub, akima::interp(x1, x2, y, duplicate = "mean"))
-  
-  contour_df <- data.frame(
-    x = rep(interp_res$x, each = length(interp_res$y)),
-    y = rep(interp_res$y, times = length(interp_res$x)),
-    z = as.vector(interp_res$z)
-  )
-  contour_df
-}
-
-# build plotly widget with slider
+# choose values of x3 to show
 x3_vals <- pretty(range(df$x3), 20)
-plots <- lapply(x3_vals, function(val) {
-  dat <- make_contour(val)
-  plot_ly(dat, x = ~x, y = ~y, z = ~z, type="contour", contours=list(showlabels=TRUE, start=1, end=1, size=1)) %>%
-    layout(title = paste("x3 =", round(val,2)))
-})
 
-# combine into one slider-controlled widget
-subplot(plots, nrows = 1, margin=0.05) # could use animation instead
+# build a combined dataframe of all slices
+all_grids <- do.call(rbind, lapply(x3_vals, function(val) {
+  df_sub <- df %>% filter(abs(x3 - val) < 51)
+  if(nrow(df_sub) < 10) return(NULL)
+  
+  # fit smoother on subset
+  gam_fit <- gam(y ~ s(x1, x2), data = df_sub)
+  
+  grid <- expand.grid(
+    x1 = seq(min(df_sub$x1), max(df_sub$x1), length=80),
+    x2 = seq(min(df_sub$x2), max(df_sub$x2), length=80)
+  )
+  grid$yhat <- predict(gam_fit, newdata=grid)
+  grid$x3_val <- val   # tag the slice
+  grid
+}))
 
+# build interactive plotly contour plot with slider
+p <- plot_ly(
+  data = all_grids,
+  x = ~x1, y = ~x2, z = ~yhat,
+  frame = ~x3_val,    # <-- key: makes slider
+  type = "contour",
+  contours = list(
+    showlabels = TRUE,
+    start = 1, end = 1, size = 1   # plot contour where y=1
+  )
+) %>%
+  layout(
+    title = "Contour where y = 1",
+    xaxis = list(title = "x1"),
+    yaxis = list(title = "x2")
+  )
+
+p  # last line so it renders
+library(htmlwidgets)
+
+# save to standalone HTML file
+htmlwidgets::saveWidget(p, "contour_slider.html", selfcontained = TRUE)
+
+  

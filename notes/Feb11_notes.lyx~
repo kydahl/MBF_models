@@ -454,7 +454,7 @@ Let's try this way.
 \boldsymbol{V}_{H} & =\begin{bmatrix}\left(\mu_{H}+\gamma_{H}\right) & 0\\
 -\gamma_{H} & \mu_{H}
 \end{bmatrix}\\
-\boldsymbol{V}_{B} & =\begin{bmatrix}\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right) & \boldsymbol{0}_{n\times n}\\
+\boldsymbol{V}_{BB} & =\begin{bmatrix}\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}^{T}\right) & \boldsymbol{0}_{n\times n}\\
 -\eta\boldsymbol{I} & \left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)
 \end{bmatrix}\\
 \boldsymbol{V}_{VR} & =\begin{bmatrix}\left(\mu+\gamma_{V}+\eta\right) & 0 & 0 & 0\\
@@ -477,17 +477,6 @@ Let's try this way.
 
 \begin_inset Formula 
 \begin{align*}
-\frac{\eta\gamma_{V}\left(\mu+\gamma_{R}+\eta\right)+\eta\gamma_{V}\left(\mu+\gamma_{V}\right)}{\left(\mu+\gamma_{V}+\eta\right)\left(\mu+\gamma_{V}\right)\left(\mu+\gamma_{R}+\eta\right)\left(\mu+\gamma_{R}\right)} & =\eta\gamma_{V}\left[\left(\mu+\gamma_{R}+\eta\right)+\left(\mu+\gamma_{V}\right)\right]\left(\frac{}{\mu+\gamma_{V}+\eta}\right)\left(\frac{}{\mu+\gamma_{R}+\eta}\right)\left(\frac{}{\mu+\gamma_{V}}\right)\left(\frac{}{\mu+\gamma_{R}}\right)\\
- & =\eta\gamma_{V}\left[\left(\frac{}{\mu+\gamma_{V}}\right)+\left(\frac{}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{}{\mu+\gamma_{V}+\eta}\right)\left(\frac{}{\mu+\gamma_{R}}\right)\\
- & =\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{1}{\mu+\gamma_{R}}\right)\\
-\\\\
-\end{align*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
 \boldsymbol{V}_{VR} & =\begin{bmatrix}\left(\mu+\gamma_{V}+\eta\right) & 0 & 0 & 0\\
 -\eta & \left(\mu+\gamma_{V}\right) & 0 & 0\\
 -\gamma_{V} & 0 & \left(\mu+\gamma_{R}+\eta\right) & 0\\
@@ -496,22 +485,17 @@ Let's try this way.
 \boldsymbol{V}_{VR}^{-1} & =\begin{bmatrix}\frac{1}{\mu+\gamma_{V}+\eta} & 0 & 0 & 0\\
 \left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\frac{1}{\mu+\gamma_{V}} & \frac{1}{\mu+\gamma_{V}} & 0 & 0\\
 \left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\frac{1}{\mu+\gamma_{R}+\eta} & 0 & \frac{1}{\mu+\gamma_{R}+\eta} & 0\\
-\frac{\eta\gamma_{V}\left[\left(\mu+\gamma_{R}+\eta\right)+\left(\mu+\gamma_{V}\right)\right]}{\left(\mu+\gamma_{V}+\eta\right)\left(\mu+\gamma_{V}\right)\left(\mu+\gamma_{R}+\eta\right)\left(\mu+\gamma_{R}\right)} & \left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}} & \left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left[\left(1-\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\frac{1}{\mu+\gamma_{R}} & \left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}} & \left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
 \end{bmatrix}\\
 \boldsymbol{V}_{VR}^{-1} & =\begin{bmatrix}\frac{1}{\mu+\gamma_{V}+\eta} & 0 & 0 & 0\\
 \left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\frac{1}{\mu+\gamma_{V}} & \frac{1}{\mu+\gamma_{V}} & 0 & 0\\
 \left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\frac{1}{\mu+\gamma_{R}+\eta} & 0 & \frac{1}{\mu+\gamma_{R}+\eta} & 0\\
-\frac{\eta}{\mu+\gamma_{V}+\eta}\frac{\gamma_{V}}{\mu+\gamma_{V}}\frac{\left[\left(\mu+\gamma_{R}+\eta\right)+\left(\mu+\gamma_{V}\right)\right]}{\mu+\gamma_{R}+\eta}\frac{1}{\mu+\gamma_{R}} & \left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}} & \left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
-\end{bmatrix}\\
-\boldsymbol{V}_{VR}^{-1} & =\begin{bmatrix}\frac{1}{\mu+\gamma_{V}+\eta} & 0 & 0 & 0\\
-\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\frac{1}{\mu+\gamma_{V}} & \frac{1}{\mu+\gamma_{V}} & 0 & 0\\
-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\frac{1}{\mu+\gamma_{R}+\eta} & 0 & \frac{1}{\mu+\gamma_{R}+\eta} & 0\\
-\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{1}{\mu+\gamma_{R}}\right) & \left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}} & \left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left[\left(1-\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\frac{1}{\mu+\gamma_{R}} & \left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}} & \left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
 \end{bmatrix}\\
 \boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV} & =\begin{bmatrix}\frac{1}{\mu+\gamma_{V}+\eta} & 0 & 0 & 0\\
 \left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\frac{1}{\mu+\gamma_{V}} & \frac{1}{\mu+\gamma_{V}} & 0 & 0\\
 \left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\frac{1}{\mu+\gamma_{R}+\eta} & 0 & \frac{1}{\mu+\gamma_{R}+\eta} & 0\\
-\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{1}{\mu+\gamma_{R}}\right) & \left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}} & \left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left[\left(1-\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\frac{1}{\mu+\gamma_{R}} & \left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}} & \left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\frac{1}{\mu+\gamma_{R}} & \frac{1}{\mu+\gamma_{R}}
 \end{bmatrix}\begin{bmatrix}-\left(-\boldsymbol{A}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n}\\
 \boldsymbol{0}_{1\times n} & -\left(-\boldsymbol{A}\vec{1}\right)^{T}\\
 \boldsymbol{0}_{1\times n} & \boldsymbol{0}_{1\times n}\\
@@ -520,14 +504,14 @@ Let's try this way.
 \boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV} & =\begin{bmatrix}-\frac{1}{\mu+\gamma_{V}+\eta}\left(-\boldsymbol{A}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n}\\
 -\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\frac{1}{\mu+\gamma_{V}}\left(-\boldsymbol{A}\vec{1}\right)^{T} & -\frac{1}{\mu+\gamma_{V}}\left(-\boldsymbol{A}\vec{1}\right)^{T}\\
 -\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\frac{1}{\mu+\gamma_{R}+\eta}\left(-\boldsymbol{A}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n}\\
--\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{1}{\mu+\gamma_{R}}\right)\left(-\boldsymbol{A}\vec{1}\right)^{T} & -\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}}\left(-\boldsymbol{A}\vec{1}\right)^{T}
+-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left[\left(1-\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\frac{1}{\mu+\gamma_{R}}\left(-\boldsymbol{A}\vec{1}\right)^{T} & -\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}}\left(-\boldsymbol{A}\vec{1}\right)^{T}
 \end{bmatrix}\\
 \boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV} & =\begin{bmatrix}\boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1} & -\gamma_{R}\vec{\alpha} & \boldsymbol{0}_{n\times1}\\
 \boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1} & \boldsymbol{0}_{n\times1} & -\gamma_{R}\vec{\alpha}
 \end{bmatrix}\begin{bmatrix}-\frac{1}{\mu+\gamma_{V}+\eta}\left(-\boldsymbol{A}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n}\\
 -\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\frac{1}{\mu+\gamma_{V}}\left(-\boldsymbol{A}\vec{1}\right)^{T} & -\frac{1}{\mu+\gamma_{V}}\left(-\boldsymbol{A}\vec{1}\right)^{T}\\
 -\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\frac{1}{\mu+\gamma_{R}+\eta}\left(-\boldsymbol{A}\vec{1}\right)^{T} & \boldsymbol{0}_{1\times n}\\
--\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{1}{\mu+\gamma_{R}}\right)\left(-\boldsymbol{A}\vec{1}\right)^{T} & -\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}}\left(-\boldsymbol{A}\vec{1}\right)^{T}
+-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left[\left(1-\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\frac{1}{\mu+\gamma_{R}}\left(-\boldsymbol{A}\vec{1}\right)^{T} & -\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\frac{1}{\mu+\gamma_{R}}\left(-\boldsymbol{A}\vec{1}\right)^{T}
 \end{bmatrix}\\
 \boldsymbol{V}_{RB}\boldsymbol{V}_{VR}^{-1}\boldsymbol{V}_{BV} & =\begin{bmatrix}\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T} & \boldsymbol{0}_{n\times n}\\
 \left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T} & \left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}
@@ -606,7 +590,7 @@ Let
 
 ,
  
-\begin_inset Formula $\boldsymbol{\tau}_{E}=\left[\eta\boldsymbol{I}+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)+\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right]\boldsymbol{\Gamma}_{E}$
+\begin_inset Formula $\boldsymbol{\tau}_{E}=\left[\eta\boldsymbol{I}+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right]\boldsymbol{\Gamma}_{E}$
 \end_inset
 
 
