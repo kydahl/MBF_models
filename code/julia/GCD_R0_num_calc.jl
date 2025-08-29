@@ -57,10 +57,10 @@ function N_offspring_func(B_vals_in)
 
     tau = transpose(-A_mat * one_vec_four) * inv(mu * I - transpose(A_mat)) * alpha_vec_four
     tau = tau[1]
-    rho = (gV / (mu + gV)) * (gR / (mu + gR)) * tau
+    rho = tau * (gV / (mu + gV)) * (gR / (mu + gR))
     nG = 1.0f0 / (1.0f0 - rho)
     # Basic offspring number
-    N_offspring = tau * (varPhi / (mu + gV)) * (rhoJ / (rhoJ + muJ)) * nG
+    N_offspring = tau * nG * (rhoJ / (rhoJ + muJ)) * (varPhi / (mu + gV))
     return(N_offspring)
 end
 
@@ -97,7 +97,10 @@ function R0_func(B_vals_in)
         # V_star = r / (mu + gV)
         KB = sum(B_star)
 
-        betaH_mat = zeros(Float64, 4,4); betaV_mat = zeros(Float64, 4,4); LambdaH = zeros(Float64, 4,4); LambdaV = zeros(Float64, 4,4)
+        betaH_mat = zeros(Float64, 4,4)
+        betaV_mat = zeros(Float64, 4,4)
+        LambdaH = zeros(Float64, 4,4)
+        LambdaV = zeros(Float64, 4,4)
         # Rate of contact is rate of entrance into transmission compartments
         LambdaH[3,3] = lP * KB / KH
         LambdaV[4,4] = lG
@@ -157,7 +160,10 @@ function repnums_func(B_vals_in)
         # V_star = r / (mu + gV)
         KB = sum(B_star)
 
-        betaH_mat = zeros(Float64, 4,4); betaV_mat = zeros(Float64, 4,4); LambdaH = zeros(Float64, 4,4); LambdaV = zeros(Float64, 4,4)
+        betaH_mat = zeros(Float64, 4,4)
+        betaV_mat = zeros(Float64, 4,4)
+        LambdaH = zeros(Float64, 4,4)
+        LambdaV = zeros(Float64, 4,4)
         # Rate of contact is rate of entrance into transmission compartments
         LambdaH[3,3] = lP * KB / KH
         LambdaV[4,4] = lG
@@ -169,31 +175,31 @@ function repnums_func(B_vals_in)
         GammaI = inv(mu * I - transpose(A_mat) + (gV / (mu + gV)) * (gR / (mu + gR)) * spec_mat)
         GammaE = inv((eta + mu) * I - transpose(A_mat) + (gR / (mu + gR + eta)) * (gV / (mu + gV + eta)) * spec_mat)
 
-        complicated_probability = (gV/(mu+gV)) * ((eta / (mu+gV+eta)) * (gR/(mu+gR+eta)) + (eta/(mu+gR+eta) * (gR/(mu+gR))))
+        complicated_probability = (gV/(mu+gV)) * ((eta / (mu+gV+eta)) * (gR/(mu+gR+eta)) + (eta/(mu+gR+eta))) * (gR/(mu+gR))
         tauE = (eta * I + complicated_probability * spec_mat) * GammaE
 
-        sum_B_star = sum(B_star)
 
-        FVH = [zeros(1,4) ((KH / (sum_B_star)) * transpose(one_vec_four) * betaH_mat * LambdaH);
-            zeros(1,4) zeros(1,4)]
+        FVH = [zeros(1,4) ((KH / (KB)) * transpose(one_vec_four) * betaH_mat * LambdaH);
+               zeros(1,4) zeros(1,4)]
         FHV = [(1/KH) * (betaV_mat * LambdaV * B_star) zeros(4,1);
-                zeros(4,1)       zeros(4,1)]
+                zeros(4,1)                             zeros(4,1)]
 
         VH = [(muH+gH) 0;
-            -gH      muH]
+              -gH      muH]
         VBB = [(mu+eta)*I-transpose(A_mat) zeros(4,4);
-            (-eta * I)                  (mu*I-transpose(A_mat))]
+               (-eta*I)                    (mu*I-transpose(A_mat))]
         VVR = [(mu+gV+eta) 0       0           0;
-            -eta        (mu+gV) 0           0;
-            -gV         0       (mu+gR+eta) 0;
-            0          -gV      -eta        (mu+gR)]
+               -eta        (mu+gV) 0           0;
+               -gV         0       (mu+gR+eta) 0;
+               0          -gV      -eta        (mu+gR)]
         VRB = [zeros(4,1) zeros(4,1) -gR*alpha_vec_four zeros(4,1);
-            zeros(4,1) zeros(4,1) zeros(4,1)         -gR*alpha_vec_four]
+               zeros(4,1) zeros(4,1) zeros(4,1)         -gR*alpha_vec_four]
         VBV = [-transpose(-A_mat * one_vec_four) zeros(1,4);
-            zeros(1,4)                        -transpose(-A_mat * one_vec_four);
-            zeros(1,4)                        zeros(1,4) ;
-            zeros(1,4)                        zeros(1,4)]
+               zeros(1,4)                        -transpose(-A_mat * one_vec_four);
+               zeros(1,4)                        zeros(1,4) ;
+               zeros(1,4)                        zeros(1,4)]
         big_inv = inv(VBB - VRB * inv(VVR) * VBV)
+
 
         # Reproduction number matrices
         RVH = FVH * big_inv
@@ -202,10 +208,24 @@ function repnums_func(B_vals_in)
         RVH_scalar = RVH[1,4]
         RHV_scalar = RHV[4,1]
 
+        R02 = FVH * big_inv * FHV * inv(VH)
+        
+        special_matrix = alpha_vec_four*transpose(-A_mat*one_vec_four)
+
+
+        big_inv_1 = inv((mu+eta)*I - transpose(A_mat)-((gV/(mu+gV+eta)*(gR/(mu+gR+eta)*special_matrix))))
+        big_inv_4 = inv((mu)*I - transpose(A_mat)-((gV/(mu+gV)*(gR/(mu+gR)*special_matrix))))
+        comp_prob = ((1-(eta/ (mu+gR+eta)))*(eta/(mu+gV+eta)) + (eta/(mu+gR+eta))) * (gV / (mu + gV)) / (mu + gR)
+        big_inv_3 = big_inv_4 * (eta*I + comp_prob*special_matrix) * big_inv_1
+
+
         R02 = RVH_scalar * RHV_scalar
         R0 =  sqrt(R02)
 
-        R02_alt = (KH / sum_B_star) * transpose(one_vec_four) * betaH_mat * LambdaH * GammaI * tauE * (1/KH) * (betaV_mat * LambdaV * B_star) * (1 / (gH + muH))
+        RVH_alt = (KH / KB) * transpose(one_vec_four) * betaH_mat * LambdaH * GammaI * tauE
+        RHV_alt = (1/KH) * (betaV_mat * LambdaV * B_star) * (1 / (gH + muH))
+        R02_alt = (KH / KB) * transpose(one_vec_four) * betaH_mat * LambdaH * GammaI * tauE * (1/KH) * (betaV_mat * LambdaV * B_star) * (1 / (gH + muH))
+        
         R0_alt = sqrt(R02_alt[1])
     end
 
