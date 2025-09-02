@@ -109,12 +109,10 @@ function R0_func(B_vals_in)
         GammaI = inv(mu * I - transpose(A_mat) + (gV / (mu + gV)) * (gR / (mu + gR)) * spec_mat)
         GammaE = inv((eta + mu) * I - transpose(A_mat) + (gR / (mu + gR + eta)) * (gV / (mu + gV + eta)) * spec_mat)
 
-        complicated_probability = (gV/(mu+gV)) * ((eta / (mu+gV+eta)) * (gR/(mu+gR+eta)) + (eta/(mu+gR+eta) * (gR/(mu+gR))))
+        complicated_probability = (gV/(mu+gV)) * ((1 - eta / (mu+gR+eta)) * (eta/(mu+gV+eta)) + (eta/(mu+gR+eta) * (gR/(mu+gR))))
         tauE = (eta * I + complicated_probability * spec_mat) * GammaE
 
-        sum_B_star = sum(B_star)
-
-        R02 = (KH / sum_B_star) * transpose(one_vec_four) * betaH_mat * LambdaH * GammaI * tauE * (1/KH) * (betaV_mat * LambdaV * B_star) * (1 / (gH + muH))
+        R02 = (KH / KB) * transpose(one_vec_four) * betaH_mat * LambdaH * GammaI * tauE * (1/KH) * (betaV_mat * LambdaV * B_star) * (1 / (gH + muH))
         R0 = sqrt(R02[1])
         return(R0)
     end
@@ -166,50 +164,52 @@ function repnums_func(B_vals_in)
 
         spec_mat = alpha_vec_four * transpose(-A_mat * one_vec_four)
 
-        GammaI = inv(mu * I - transpose(A_mat) + (gV / (mu + gV)) * (gR / (mu + gR)) * spec_mat)
-        GammaE = inv((eta + mu) * I - transpose(A_mat) + (gR / (mu + gR + eta)) * (gV / (mu + gV + eta)) * spec_mat)
+        GammaI = inv(mu * I - transpose(A_mat) - (gV / (mu + gV)) * (gR / (mu + gR)) * spec_mat)
+        GammaE = inv((mu+eta)*I-transpose(A_mat) - (gR / (mu + gR + eta)) * (gV / (mu + gV + eta)) * spec_mat)
+        # other_part = eta * I + complicated_probability * spec_mat
 
-        complicated_probability = (gV/(mu+gV)) * ((eta / (mu+gV+eta)) * (gR/(mu+gR+eta)) + (eta/(mu+gR+eta) * (gR/(mu+gR))))
+        complicated_probability = (gV/(mu+gV)) * ((1-(eta / (mu+gR+eta))) * (eta/(mu+gV+eta)) + (eta/(mu+gR+eta))) * (gR/(mu+gR))
         tauE = (eta * I + complicated_probability * spec_mat) * GammaE
 
-        sum_B_star = sum(B_star)
+        # FVH = [zeros(1,4) ((KH / KB) * transpose(one_vec_four) * betaH_mat * LambdaH);
+        #     zeros(1,4) zeros(1,4)]
+        # FHV = [(1/KH) * (betaV_mat * LambdaV * B_star) zeros(4,1);
+        #         zeros(4,1)       zeros(4,1)]
 
-        FVH = [zeros(1,4) ((KH / (sum_B_star)) * transpose(one_vec_four) * betaH_mat * LambdaH);
-            zeros(1,4) zeros(1,4)]
-        FHV = [(1/KH) * (betaV_mat * LambdaV * B_star) zeros(4,1);
-                zeros(4,1)       zeros(4,1)]
-
-        VH = [(muH+gH) 0;
-            -gH      muH]
-        VBB = [(mu+eta)*I-transpose(A_mat) zeros(4,4);
-            (-eta * I)                  (mu*I-transpose(A_mat))]
-        VVR = [(mu+gV+eta) 0       0           0;
-            -eta        (mu+gV) 0           0;
-            -gV         0       (mu+gR+eta) 0;
-            0          -gV      -eta        (mu+gR)]
-        VRB = [zeros(4,1) zeros(4,1) -gR*alpha_vec_four zeros(4,1);
-            zeros(4,1) zeros(4,1) zeros(4,1)         -gR*alpha_vec_four]
-        VBV = [-transpose(-A_mat * one_vec_four) zeros(1,4);
-            zeros(1,4)                        -transpose(-A_mat * one_vec_four);
-            zeros(1,4)                        zeros(1,4) ;
-            zeros(1,4)                        zeros(1,4)]
-        big_inv = inv(VBB - VRB * inv(VVR) * VBV)
+        # VH = [(muH+gH) 0;
+        #     -gH      muH]
+        # VBB = [(mu+eta)*I-transpose(A_mat) zeros(4,4);
+        #     (-eta*I)                  (mu*I-transpose(A_mat))]
+        # VVR = [(mu+gV+eta) 0       0           0;
+        #     -eta        (mu+gV) 0           0;
+        #     -gV         0       (mu+gR+eta) 0;
+        #     0          -gV      -eta        (mu+gR)]
+        # VRB = [zeros(4,1) zeros(4,1) -gR*alpha_vec_four zeros(4,1);
+        #     zeros(4,1) zeros(4,1) zeros(4,1)         -gR*alpha_vec_four]
+        # VBV = [-transpose(-A_mat*one_vec_four) zeros(1,4);
+        #     zeros(1,4)                        -transpose(-A_mat*one_vec_four);
+        #     zeros(1,4)                        zeros(1,4) ;
+        #     zeros(1,4)                        zeros(1,4)]
+        # temp_mat = VBB - VRB * inv(VVR) * VBV
+        # big_inv = inv(VBB - VRB * inv(VVR) * VBV)
 
         # Reproduction number matrices
-        RVH = FVH * big_inv
-        RHV = FHV * inv(VH)
+        # RVH = FVH * big_inv
+        # RHV = FHV * inv(VH)
+        # # R02 = RVH * RHV
 
-        RVH_scalar = RVH[1,4]
-        RHV_scalar = RHV[4,1]
+        # RVH_scalar = RVH[1,4]
+        # RHV_scalar = RHV[4,1]
+        # R0 =  sqrt(RVH_scalar * RHV_scalar)
 
-        R02 = RVH_scalar * RHV_scalar
-        R0 =  sqrt(R02)
-
-        R02_alt = (KH / sum_B_star) * transpose(one_vec_four) * betaH_mat * LambdaH * GammaI * tauE * (1/KH) * (betaV_mat * LambdaV * B_star) * (1 / (gH + muH))
-        R0_alt = sqrt(R02_alt[1])
+        # RVH_scalar = (KH / KB) * transpose(one_vec_four) * betaH_mat * LambdaH * GammaI * tauE
+        RHV_scalar = (1/KH) * (betaV_mat * LambdaV * B_star) * (1 / (gH + muH))
+        R02_scalar = (KH / KB) * transpose(one_vec_four) * betaH_mat * LambdaH * GammaI * tauE * (1/KH) * (betaV_mat * LambdaV * B_star) * (1 / (gH + muH))
+        R0 = sqrt(R02_scalar[1])
+        RVH_scalar = R02_scalar[1] / RHV_scalar[4]
     end
 
-    return([N_offspring, RVH_scalar, RHV_scalar, R0, R0_alt])
+    return([N_offspring, RVH_scalar, RHV_scalar, R0])
 end
 
 # Define parameter ranges
@@ -231,4 +231,5 @@ end
 
 GCD_func([1.0f0, 1.0f0, 1.0f0, 1.0f0, 0.5f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0])
 N_offspring_func([1.0f0, 1.0f0, 1.0f0, 1.0f0, 0.5f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0])
-temp = R0_func([1.0f0, 1.0f0, 1.0f0, 1.0f0, 0.5f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0])
+R0_func([1.0f0, 1.0f0, 1.0f0, 1.0f0, 0.5f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0])
+repnums_func([1.0f0, 1.0f0, 1.0f0, 1.0f0, 0.5f0, 1.0f0, 1.0f0, 1.0f0, 1.0f0])
