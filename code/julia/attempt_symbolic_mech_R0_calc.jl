@@ -24,4 +24,4 @@ temp_inv = inv(Z)*(-Y)*inv(W)
 
 temp_RVH = temp_inv[3,4]
 
-temp_RVH2 = simplify(temp_RVH;expand = true, threaded = true)
+temp_RVH2 = simplify(temp_RVH;expand = false, threaded = true)

@@ -15,7 +15,7 @@ g_min = ((1/2)*1440.0)
 g_max = ((1/24)*1440.0)
 
 # define number of steps to vary each parameter
-num_steps = 1001
+num_steps = 1_001
 
 # set up data frame for all parameter combinations
 using DataFrames
