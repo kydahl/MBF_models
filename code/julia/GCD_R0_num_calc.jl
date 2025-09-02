@@ -57,10 +57,10 @@ function N_offspring_func(B_vals_in)
 
     tau = transpose(-A_mat * one_vec_four) * inv(mu * I - transpose(A_mat)) * alpha_vec_four
     tau = tau[1]
-    rho = (gV / (mu + gV)) * (gR / (mu + gR)) * tau
+    rho = tau * (gV / (mu + gV)) * (gR / (mu + gR))
     nG = 1.0f0 / (1.0f0 - rho)
     # Basic offspring number
-    N_offspring = tau * (varPhi / (mu + gV)) * (rhoJ / (rhoJ + muJ)) * nG
+    N_offspring = tau * nG * (rhoJ / (rhoJ + muJ)) * (varPhi / (mu + gV))
     return(N_offspring)
 end
 
@@ -97,7 +97,10 @@ function R0_func(B_vals_in)
         # V_star = r / (mu + gV)
         KB = sum(B_star)
 
-        betaH_mat = zeros(Float64, 4,4); betaV_mat = zeros(Float64, 4,4); LambdaH = zeros(Float64, 4,4); LambdaV = zeros(Float64, 4,4)
+        betaH_mat = zeros(Float64, 4,4)
+        betaV_mat = zeros(Float64, 4,4)
+        LambdaH = zeros(Float64, 4,4)
+        LambdaV = zeros(Float64, 4,4)
         # Rate of contact is rate of entrance into transmission compartments
         LambdaH[3,3] = lP * KB / KH
         LambdaV[4,4] = lG
@@ -155,7 +158,10 @@ function repnums_func(B_vals_in)
         # V_star = r / (mu + gV)
         KB = sum(B_star)
 
-        betaH_mat = zeros(Float64, 4,4); betaV_mat = zeros(Float64, 4,4); LambdaH = zeros(Float64, 4,4); LambdaV = zeros(Float64, 4,4)
+        betaH_mat = zeros(Float64, 4,4)
+        betaV_mat = zeros(Float64, 4,4)
+        LambdaH = zeros(Float64, 4,4)
+        LambdaV = zeros(Float64, 4,4)
         # Rate of contact is rate of entrance into transmission compartments
         LambdaH[3,3] = lP * KB / KH
         LambdaV[4,4] = lG
