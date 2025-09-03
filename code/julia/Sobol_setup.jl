@@ -46,8 +46,8 @@ flighty_invubs[1:4] = 1.0 ./ flighty_invlbs_temp[1:4] # change from durations ba
 
 # In terms of rates (for first four parameters)
 # adjusted lbs: lQ = 1/(480.0), all rates = 1/(30.0), all_probs = 0.2
-min_lbs = [1/(480.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]
-max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 100.0]
+min_lbs = [1/(480.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.01, 0.2, 0.2, 0.2, 0.2, 0.01]
+max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 0.99, 0.8, 0.8, 0.8, 0.8, 0.99]
 
 # Create function to calculate basic offspring number and basic reproduction number at the same time
 function output_func(B_vals_in)
@@ -191,12 +191,20 @@ end
 
 test = new_get_gsa_results(1000, 10)
 
-new_eFAST_results = new_get_gsa_results(11*10_000, 100)
+new_eFAST_results_small = new_get_gsa_results(11*1_000, 11)
+# new_eFAST_results = new_get_gsa_results(11*10_000, 11*10)
 
 # Return all the unique entries in the type column of new_eFAST_results
-unique_types = unique(new_eFAST_results.type)
+# unique_types = unique(new_eFAST_results.type)
 
 # Save outputs to CSV
+open(joinpath((pwd()), "data", "new_eFAST_test_small.csv"), "w") do io
+    gzip_io = GzipCompressorStream(io)
+    CSV.write(gzip_io, new_eFAST_results_small)
+    close(gzip_io)
+end
+
+
 open(joinpath((pwd()), "data", "new_eFAST_test.csv"), "w") do io
     gzip_io = GzipCompressorStream(io)
     CSV.write(gzip_io, new_eFAST_results)

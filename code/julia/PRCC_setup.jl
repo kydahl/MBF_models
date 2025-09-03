@@ -25,11 +25,11 @@ using LatinHypercubeSampling
 
 # Maximum variation parameter ranges
 correction_term = 0.0
-min_lbs = [1/(480.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]
-max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 100.0]
+min_lbs = [1/(480.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.01, 0.2, 0.2, 0.2, 0.2, 0.01]
+max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 0.99, 0.8, 0.8, 0.8, 0.8, 0.99]
 
 # Set number of LHC samples
-n_samples = 100_000_000::Int
+n_samples = 10_000_000::Int
 
 # Set up initial grid
 using QuasiMonteCarlo

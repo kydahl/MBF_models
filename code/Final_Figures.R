@@ -672,7 +672,7 @@ PRCC_data = read_csv("data/julia_PRCC.csv") |>
   pivot_longer(cols = lQ:dummy, names_to = "input", values_to = "PRCC")
 
 
-plot_data <- PRCC_data |> 
+PRCC_plot_data <- PRCC_data |> 
   group_by(type, output) |> 
   # Add in nice labels
   left_join(
@@ -683,7 +683,8 @@ plot_data <- PRCC_data |>
   mutate(
     output_label = case_when(
       output == "R0" ~ "Basic reproduction number",
-      output == "GCD" ~ "Gonotrophic cycle duration",
+      output == "RVH" ~ "Vector-to-host reproduction number",
+      output == "RHV" ~ "Host-to-vector reproduction number",
       output == "N_offspring" ~ "Basic offspring number",
     ),
     type_label = case_when(
@@ -701,31 +702,32 @@ plot_data <- PRCC_data |>
   mutate(input_num = as.numeric(factor(input)))
 
 
-plot_data$type = factor(plot_data$type, levels = c("flighty", "inv_flighty", "persistent", "inv_persistent", "max", "inv_max"))
-plot_data$input = factor(plot_data$input, levels = c(
+PRCC_plot_data$type = factor(PRCC_plot_data$type, levels = c("flighty", "inv_flighty", "persistent", "inv_persistent", "max", "inv_max"))
+PRCC_plot_data$input = factor(PRCC_plot_data$input, levels = c(
   "pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG", "dummy"
 ))
-plot_data$output_label = factor(plot_data$output_label, levels = c(
-  "Gonotrophic cycle duration", "Basic offspring number","Basic reproduction number"
-))
 
-plot_data$type_label = factor(plot_data$type_label, levels = c(
+
+PRCC_plot_data$type_label = factor(PRCC_plot_data$type_label, levels = c(
   "Flighty", "Flighty (inverse)","Persistent (inverse)", "Persistent","Maximum variation", "Maximum variation (inverse)"
 ))
 
+PRCC_plot_data$output_label = factor(PRCC_plot_data$output_label, levels = c(
+  "Gonotrophic cycle duration", "Basic offspring number","Basic reproduction number", "Host-to-vector reproduction number", "Vector-to-host reproduction number"
+))
 
-plot_data$Label = factor(plot_data$Label, levels = rev(c(
+PRCC_plot_data$Label = factor(PRCC_plot_data$Label, levels = rev(c(
   c("Seeking success",
     "Landing success",  "Probing success", "Ingesting success"),
   "Persistence probability", 
   "Seeking rate", "Landing rate", "Probing rate", "Ingesting rate", "Dummy variable"
 )))
 
-plot_data$nice_labels <- factor(
-  plot_data$nice_labels,
+PRCC_plot_data$nice_labels <- factor(
+  PRCC_plot_data$nice_labels,
   levels = c(rev(nice_mech_labels$nice_labels)))
 
-plot_ribbon <- plot_data |>
+plot_ribbon <- PRCC_plot_data |>
   group_by(type, output_label) |> 
   group_modify( ~ bind_rows(
     tibble(
@@ -749,7 +751,7 @@ plot_ribbon <- plot_data |>
   #        dummy_min, dummy_max,
   #        type, output_label) |> distinct()
 
-PRCC_plots <- plot_data |> 
+PRCC_plots <- PRCC_plot_data |> 
   # filter(type_label %in% c("Maximum variation", "Maximum variation (inverse)")) |> 
   arrange(input) |> 
   # filter((input %in% c("lP"))) |>
@@ -761,7 +763,7 @@ PRCC_plots <- plot_data |>
     position = "dodge", alpha = 0.75
   ) +
   # Add light grey lines to divide up categories
-  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1),
+  geom_vline(xintercept = seq(1.5, length(levels(PRCC_plot_data$input)) - 0.5, by = 1),
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
@@ -802,13 +804,13 @@ PRCC_plots
 
 ggsave("figures/Figure4.pdf", PRCC_plots, width = 7, height = 3.25 * 9/6.5, units = "in")
 
-PRCC_plots_row <- plot_data |> 
+PRCC_plots_row <- PRCC_plot_data |> 
   arrange(input) |> 
   filter(output %in% c("N_offspring","R0")) |>
   ggplot() +
   geom_col(aes(x = nice_labels, y = PRCC, fill = type_label), position = "dodge") +
   # Add light grey lines to divide up categories
-  geom_vline(xintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
+  geom_vline(xintercept = seq(1.5, length(levels(PRCC_plot_data$input)) - 0.5, by = 1), 
              color = "grey60", linetype = "dashed", linewidth = 0.25) +
   # Add zero line
   geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
@@ -848,7 +850,7 @@ PRCC_plots_row
 
 ggsave("figures/Figure4_row.pdf", PRCC_plots_row, width = 7, height = 3.25 * 9/6.5, units = "in")
 
-PRCC_plots_max_only <- plot_data |> 
+PRCC_plots_max_only <- PRCC_plot_data |> 
   # Just keep maximum variation for now
   filter(type == "max", input != "dummy") |>
   arrange(input) |> 
@@ -860,7 +862,7 @@ PRCC_plots_max_only <- plot_data |>
   ggplot() +
   geom_col(aes(y = nice_labels, x = PRCC, fill = output_label), position = "dodge", width = 0.75) +
   # Add light grey lines to divide up categories
-  geom_hline(yintercept = seq(1.5, length(levels(plot_data$input)) - 0.5, by = 1), 
+  geom_hline(yintercept = seq(1.5, length(levels(PRCC_plot_data$input)) - 0.5, by = 1), 
              color = "grey60", linetype = "dashed", linewidth = 0.125) +  # Add grey ribbon to show dummy variable values
   geom_ribbon(
     data = plot_ribbon |> 
@@ -906,6 +908,59 @@ PRCC_plots_max_only <- plot_data |>
 PRCC_plots_max_only
 
 ggsave("figures/Figure4_max_only.pdf", PRCC_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
+
+PRCC_plots_max_only <- PRCC_plot_data |> 
+  # filter(index_type == "S1") |>
+  # Just keep maximum variation for now
+  filter(type == "max") |>
+  # filter(input != "dummy") |> 
+  arrange(input) |> 
+  # filter(output %in% c("N_offspring","R0")) |>
+  group_by(type, output) |> 
+  mutate(
+    star_flag = abs(PRCC) < min(abs(dummy_min), abs(dummy_max)),
+    star_label = ifelse(star_flag, "*", ""),
+    star_xpos = PRCC + 2 * dummy_min + 0.01
+  ) %>% 
+  # Plot
+  ggplot() +
+  geom_col(aes(y = nice_labels, x = PRCC, fill = output_label), color = "black", position = "identity", width = 0.75, linewidth = 0.25) +
+  # Add light grey lines to divide up categories
+  geom_hline(yintercept = seq(1.5, length(levels(PRCC_plot_data$input)) - 0.5, by = 1), 
+             color = "grey60", linetype = "dashed", linewidth = 0.125) +
+  # Add zero line
+  geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
+  scale_fill_manual(
+    name = "",
+    values = c(c4a("met.juarez"))
+  ) +
+  scale_y_discrete(
+    name = "",
+    labels = function(x) parse(text = x)
+  ) +
+  scale_x_continuous(
+    "",
+    expand = expansion(mult = c(0.01, 0))
+  ) +
+  theme_half_open(8) +
+  facet_wrap(~ output_label, ncol = 2) +
+  guides(
+    # alpha = guide_none(),
+    # linetype = guide_none(),
+    fill = guide_none()
+  ) + 
+  theme(
+    strip.background = element_rect(color = "white", fill = "white"),
+    legend.key.width = unit(0.25, "in"),
+    legend.key.height = unit(0.03125, "in"),
+    legend.position = "top",
+    legend.direction = "horizontal"
+  ) +
+  ggtitle("Partial Rank Correlation Coefficients")
+
+PRCC_plots_max_only
+
+ggsave("figures/PRCCFigure4_max_only.pdf", PRCC_plots_max_only, width = 6.5, height = 2.25 * 9/6.5, units = "in")
 
 # 5. eFAST indices of N0 and R0 wrt parameters ----
 # Load in data
@@ -1202,8 +1257,8 @@ ggsave("figures/TotaleFASTFigure4_row.pdf", TotaleFAST_plots_row, width = 7, hei
 FirsteFAST_plots_max_only <- plot_data |> 
   # filter(index_type == "S1") |>
   # Just keep maximum variation for now
-  filter(type == "flighty") |>
-  # filter(input != "dummy") |> 
+  filter(type == "max") |>
+  filter(input != "dummy") |>
   arrange(input) |> 
   # filter(output %in% c("N_offspring","R0")) |>
   group_by(type, output) |> 
@@ -1264,7 +1319,8 @@ FirsteFAST_plots_max_only <- plot_data |>
     legend.key.height = unit(0.03125, "in"),
     legend.position = "top",
     legend.direction = "horizontal"
-  )
+  ) +
+  ggtitle("eFAST Sensitivity Indices")
 
 FirsteFAST_plots_max_only
 
