@@ -212,7 +212,8 @@ function repnums_func(B_vals_in)
         RHV_scalar = (1/KH) * (betaV_mat * LambdaV * B_star) * (1 / (gH + muH))
         R02_scalar = (KH / KB) * transpose(one_vec_four) * betaH_mat * LambdaH * GammaI * tauE * (1/KH) * (betaV_mat * LambdaV * B_star) * (1 / (gH + muH))
         R0 = sqrt(R02_scalar[1])
-        RVH_scalar = R02_scalar[1] / RHV_scalar[4]
+        RHV_scalar = RHV_scalar[4]
+        RVH_scalar = R02_scalar[1] / RHV_scalar
     end
 
     return([N_offspring, RVH_scalar, RHV_scalar, R0])

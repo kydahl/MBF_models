@@ -34,8 +34,8 @@ W = matrix_simplify((mu+eta)*I - transpose(A) - GV_E * GR_E * spec_mat)
 GammaE = matrix_simplify(inv(W))
 Z = matrix_simplify(mu*I - transpose(A) - GV * GR * spec_mat)
 GammaI = matrix_simplify(inv(Z))
-tau_pre = eta*I + GV*((1-(eta/(mu+gR+eta)))*(eta/(mu+gV+eta)) + (eta/(mu+gR+eta)))*GR*spec_mat
-tauE = matrix_simplify(tau_pre * GammaE)
+tau_pre = matrix_simplify(eta*I + GV*((1-(eta/(mu+gR+eta)))*(eta/(mu+gV+eta)) + (eta/(mu+gR+eta)))*GR*spec_mat)
+tauE = tau_pre * GammaE
 
 temp_inv = matrix_simplify(GammaI*tauE)
 

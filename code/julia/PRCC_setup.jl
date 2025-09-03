@@ -6,9 +6,6 @@ include("GCD_R0_num_calc.jl")
 # In terms of rates (for first four parameters)
 const base_params_flighty = [1/480.0, 1/10.0, 1/5.0, 1/1.0, 1.0 - 0.9, 1.0, 0.5, 0.5, 0.5, 50.0]
 const base_params_persistent = [1/480.0, 1/10.0, 1/5.0, 1/1.0, 1.0 - 0.66, 1.0, 0.7, 0.8, 0.9, 50.0]
-# In terms of durations (for first four parameters)
-const base_invparams_flighty = [480.0, 10.0, 5.0, 1.0, 1.0 - 0.9, 1.0, 0.5, 0.5, 0.5, 50.0]
-const base_invparams_persistent = [480.0, 10.0, 5.0, 1.0, 1.0 - 0.66, 1.0, 0.7, 0.8, 0.9, 50.0]
 
 
 function parameter_setup(baseline_vals, stretch_val) 
@@ -21,26 +18,15 @@ end
 
 # Create lower and upper bounds for the parameters
 persistent_lbs, persistent_ubs = parameter_setup(base_params_persistent, 0.2)
-persistent_invlbs_temp, persistent_invubs_temp = parameter_setup(base_invparams_persistent, 0.2)
-persistent_invlbs = copy(persistent_invlbs_temp)
-persistent_invlbs[1:4] = 1.0 ./ persistent_invubs_temp[1:4] # change from durations back to rates
-persistent_invubs = copy(persistent_invubs_temp)
-persistent_invubs[1:4] = 1.0 ./ persistent_invlbs_temp[1:4] # change from durations back to rates
 flighty_lbs, flighty_ubs = parameter_setup(base_params_flighty, 0.2)
-flighty_invlbs_temp, flighty_invubs_temp = parameter_setup(base_invparams_flighty, 0.2)
-flighty_invlbs = copy(flighty_invlbs_temp)
-flighty_invlbs[1:4] = 1.0 ./ flighty_invubs_temp[1:4] # change from durations back to rates
-flighty_invubs = copy(flighty_invubs_temp)
-flighty_invubs[1:4] = 1.0 ./ flighty_invlbs_temp[1:4] # change from durations back to rates
-
 
 # Set up LHC sampling
 using LatinHypercubeSampling
 
 # Maximum variation parameter ranges
 correction_term = 0.0
-min_lbs = [1/((1/2)*1440.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0+correction_term, 0.0]
-max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 1.0-correction_term, 100.0]
+min_lbs = [1/(480.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]
+max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 100.0]
 
 # Set number of LHC samples
 n_samples = 100_000_000::Int
@@ -51,48 +37,24 @@ max_scaled_plan = QuasiMonteCarlo.sample(n_samples, min_lbs, max_ubs, LatinHyper
 flighty_scaled_plan = QuasiMonteCarlo.sample(n_samples, flighty_lbs, flighty_ubs, LatinHypercubeSample())
 persistent_scaled_plan = QuasiMonteCarlo.sample(n_samples, persistent_lbs, persistent_ubs, LatinHypercubeSample())
 
-inv_max_scaled_plan = QuasiMonteCarlo.sample(n_samples, invmin_lbs, invmax_ubs, LatinHypercubeSample())
-inv_flighty_scaled_plan = QuasiMonteCarlo.sample(n_samples, flighty_invlbs, flighty_invubs, LatinHypercubeSample())
-inv_persistent_scaled_plan = QuasiMonteCarlo.sample(n_samples, persistent_invlbs, persistent_invubs, LatinHypercubeSample())
-inv_max_scaled_plan[:, 1:4] .= 1.0 ./ inv_max_scaled_plan[:, 1:4] # change from durations back to rates
-inv_flighty_scaled_plan[:, 1:4] .= 1.0 ./ inv_flighty_scaled_plan[:, 1:4] # change from durations back to rates
-inv_persistent_scaled_plan[:, 1:4] .= 1.0 ./ inv_persistent_scaled_plan[:, 1:4] # change from durations back to rates
-
 # Set up grid of parameter combinations
 using Base.Threads
 using IterTools
 
 function output_calc(LHS_samples)
     # Prepare to store results
-    n_samples = size(LHS_samples)[2]
-    GCD_results = Vector{Float64}(undef, n_samples::Int)
-    N_offspring_results = Vector{Float64}(undef, n_samples::Int)
-    R0_results = Vector{Float64}(undef, n_samples::Int)
+    rows = Vector{NamedTuple}(undef, size(LHS_samples, 2))
 
-    # Evaluate the function across all input combinations in parallel
-
-    @threads for idx in ProgressBar(1:n_samples)#(i, (sigma, lQ, lL, lP, lG, pQ, pL, pP, pG)) in ProgressBar(enumerate(parameter_grid))
-        # grid_point = LHS_samples[:,idx]
-        # (lQ, lL, lP, lG, sigma, pL, pP, pG) = grid_point
-        B_vals = LHS_samples[1:9,idx]
-        # GCD values
-        # GCD_results[idx] = GCD_func(B_vals)
-        # Basic offspring number values
-        curr_N_offspring = N_offspring_func(B_vals)
-        N_offspring_results[idx] = curr_N_offspring
-
-        # R0 values
-        # LVBEpiHost_vals = [LVB_vals; Epi_vals; Host_vals]
-        R0_results[idx] = R0_func(B_vals)
-
+    Threads.@threads for i in ProgressBar(1:size(LHS_samples, 2))
+        params = LHS_samples[:,i]
+        out = repnums_func(params[1:9])
+        rows[i] = (
+            lQ = params[1], lL = params[2], lP = params[3], lG = params[4],
+            sigma = params[5], pQ = params[6], pL = params[7], pP = params[8], pG = params[9], dummy = params[10],
+            N_offspring = out[1], RVH = out[2], RHV = out[3], R0 = out[4]
+        )
     end
-    scaled_plan_df = DataFrame(transpose(LHS_samples), [:lQ, :lL, :lP, :lG, :sigma, :pQ, :pL, :pP, :pG, :dummy])
-    output_df = scaled_plan_df
-    # output_df[!,:GCD] = GCD_results
-    output_df[!,:N_offspring] = N_offspring_results
-    output_df[!,:R0] = R0_results
-
-    return output_df
+    return DataFrame(rows)
 end
 
 # Load output function
@@ -102,9 +64,6 @@ output_calc(QuasiMonteCarlo.sample(100, min_lbs, max_ubs, LatinHypercubeSample()
 max_results = output_calc(max_scaled_plan)
 flighty_results = output_calc(flighty_scaled_plan)
 persistent_results = output_calc(persistent_scaled_plan)
-inv_max_results = output_calc(inv_max_scaled_plan)
-inv_flighty_results = output_calc(inv_flighty_scaled_plan)
-inv_persistent_results = output_calc(inv_persistent_scaled_plan)
 
 # Calculate PRCC indices
 using DataFrames
@@ -122,14 +81,12 @@ function PRCC_calc(input_results, output_names::Vector{String}, type::String)
     return results
 end
 
-max_PRCCs = PRCC_calc(max_results, ["N_offspring", "R0"], "max")
-flighty_PRCCs = PRCC_calc(flighty_results, ["N_offspring", "R0"], "flighty")
-persistent_PRCCs = PRCC_calc(persistent_results, ["N_offspring", "R0"], "persistent")
-inv_max_PRCCs = PRCC_calc(inv_max_results, ["N_offspring", "R0"], "inv_max")
-inv_flighty_PRCCs = PRCC_calc(inv_flighty_results, ["N_offspring", "R0"], "inv_flighty")
-inv_persistent_PRCCs = PRCC_calc(inv_persistent_results, ["N_offspring", "R0"], "inv_persistent")
+output_names = ["N_offspring", "RVH", "RHV", "R0"]
+max_PRCCs = PRCC_calc(max_results, output_names, "max")
+flighty_PRCCs = PRCC_calc(flighty_results, output_names, "flighty")
+persistent_PRCCs = PRCC_calc(persistent_results, output_names, "persistent")
 
-all_PRCCs = vcat(max_PRCCs, flighty_PRCCs, persistent_PRCCs, inv_max_PRCCs, inv_flighty_PRCCs, inv_persistent_PRCCs)
+all_PRCCs = vcat(max_PRCCs, flighty_PRCCs, persistent_PRCCs)
 
 # Save outputs ----
 # Parameter grid and outputs

@@ -1275,7 +1275,7 @@ TotaleFAST_plots_max_only <- plot_data |>
   # Just keep maximum variation for now
   filter(type == "max") |>
   arrange(input) |> 
-  filter(output %in% c("N_offspring","R0")) |>
+  # filter(output %in% c("N_offspring","R0")) |>
   group_by(type, output) |> 
   mutate(
     star_flag = p_value < 0.01,
@@ -1296,7 +1296,7 @@ TotaleFAST_plots_max_only <- plot_data |>
   geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
   scale_fill_manual(
     name = "",
-    values = c(c4a("met.juarez",3))
+    values = c(c4a("met.juarez",4))
   ) +
   # Add stars to flagged bars
   geom_text(
