@@ -163,7 +163,17 @@ L^{*}\\
 P^{*}\\
 G^{*}
 \end{bmatrix}\\
-\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\left(\frac{\vec{B}^{*}}{K_{B}}\right) & =\beta_{H}\frac{1}{K_{H}}\lambda_{P}\beta_{B}\lambda_{G}\left[\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\right]_{3,4}G^{*}
+\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\left(\frac{\vec{B}^{*}}{K_{B}}\right) & =\left(\beta_{H}\frac{1}{K_{H}}\lambda_{P}\left[\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\right]_{3,4}\right)\left(\beta_{B}\lambda_{G}G^{*}\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\mathcal{R}_{BH} & =\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\\
+\mathcal{R}_{BH} & =\beta_{H}\frac{1}{K_{H}}\lambda_{P}\left[\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\right]_{3,4}\\
+\mathcal{R}_{HB} & =\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\beta_{B}\lambda_{G}\frac{G^{*}}{K_{B}}
 \end{align*}
 
 \end_inset
