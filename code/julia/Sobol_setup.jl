@@ -47,7 +47,7 @@ flighty_invubs[1:4] = 1.0 ./ flighty_invlbs_temp[1:4] # change from durations ba
 # In terms of rates (for first four parameters)
 # adjusted lbs: lQ = 1/(480.0), all rates = 1/(30.0), all_probs = 0.2
 min_lbs = [1/(480.0), 1/(30.0), 1/(30.0), 1/(30.0), 0.01, 0.2, 0.2, 0.2, 0.2, 0.01]
-max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 0.99, 0.8, 0.8, 0.8, 0.8, 0.99]
+max_ubs = [160/1440.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
 
 # Create function to calculate basic offspring number and basic reproduction number at the same time
 function output_func(B_vals_in)
