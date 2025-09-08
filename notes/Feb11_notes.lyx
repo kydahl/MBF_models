@@ -602,9 +602,23 @@ Let
 
  as 
 \begin_inset Formula 
-\[
-\mathcal{R}_{0}=\sqrt{\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\left(\frac{\vec{B}^{*}}{K_{B}}\right)}
-\]
+\begin{align*}
+\mathcal{R}_{0} & =\sqrt{\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\left(\frac{\vec{B}^{*}}{K_{B}}\right)}\\
+\mathcal{R}_{0} & =\sqrt{\left[\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\right]\left[\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\left(\frac{\vec{B}^{*}}{K_{B}}\right)\right]}\\
+\mathcal{R}_{0} & =\sqrt{\left[\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\left(\frac{\vec{B}^{*}}{K_{B}}\right)\right]^{T}\left[\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\right]^{T}}\\
+\mathcal{R}_{0} & =\sqrt{\left[\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\left(\frac{\vec{B}^{*T}}{K_{B}}\right)\boldsymbol{\Lambda}_{B}^{T}\boldsymbol{\beta}_{B}^{T}\right]\left[\boldsymbol{\tau}_{E}^{T}\boldsymbol{\Gamma}_{I}^{T}\boldsymbol{\Lambda}_{H}^{T}\boldsymbol{\beta}_{H}^{T}\vec{1}\right]}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\mathcal{R}_{HB} & =\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\left(\frac{\vec{B}^{*T}}{K_{B}}\right)\boldsymbol{\Lambda}_{B}^{T}\boldsymbol{\beta}_{B}^{T}\\
+\mathcal{R}_{BH} & =\boldsymbol{\tau}_{E}^{T}\boldsymbol{\Gamma}_{I}^{T}\boldsymbol{\Lambda}_{H}^{T}\boldsymbol{\beta}_{H}^{T}\vec{1}\\
+\mathcal{R}_{BH} & =\boldsymbol{\Gamma}_{E}^{T}\left[\eta\boldsymbol{I}+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right]^{T}\left\{ \left[\left(\mu\boldsymbol{I}-\boldsymbol{A}^{T}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\vec{\alpha}\left(-\boldsymbol{A}\vec{1}\right)^{T}\right]^{-1}\right\} ^{T}\boldsymbol{\Lambda}_{H}^{T}\boldsymbol{\beta}_{H}^{T}\vec{1}\\
+\mathcal{R}_{BH} & =\left[\left(\left(\mu+\eta\right)\boldsymbol{I}-\boldsymbol{A}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}+\eta}\right)\left(-\boldsymbol{A}\vec{1}\right)\vec{\alpha}^{T}\right]^{-1}\left[\eta\boldsymbol{I}+\left[\left(\frac{\eta}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)+\left(\frac{\gamma_{V}}{\mu+\gamma_{V}+\eta}\right)\left(\frac{\eta}{\mu+\gamma_{R}+\eta}\right)\right]\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(-\boldsymbol{A}\vec{1}\right)\vec{\alpha}^{T}\right]\left\{ \left[\left(\mu\boldsymbol{I}-\boldsymbol{A}\right)-\left(\frac{\gamma_{V}}{\mu+\gamma_{V}}\right)\left(\frac{\gamma_{R}}{\mu+\gamma_{R}}\right)\left(-\boldsymbol{A}\vec{1}\right)\vec{\alpha}^{T}\right]^{-1}\right\} ^{T}\boldsymbol{\Lambda}_{H}^{T}\boldsymbol{\beta}_{H}^{T}\vec{1}
+\end{align*}
 
 \end_inset
 

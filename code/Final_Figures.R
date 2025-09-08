@@ -601,6 +601,7 @@ nice_mech_labels = data.frame(
   dummy = "Dummy~variable"
 ) %>% pivot_longer(everything(), values_to = "nice_labels")
 
+
 Figure3_df <- Mech_df |> 
   filter(parameter_type == "varied") |> 
   select(-parameter_type) |> 
@@ -682,10 +683,10 @@ PRCC_plot_data <- PRCC_data |>
   left_join(rename(nice_mech_labels, input = name), by = "input")  |> 
   mutate(
     output_label = case_when(
-      output == "R0" ~ "Basic reproduction number",
-      output == "RVH" ~ "Vector-to-host reproduction number",
-      output == "RHV" ~ "Host-to-vector reproduction number",
-      output == "N_offspring" ~ "Basic offspring number",
+      output == "R0" ~ "Basic~reproduction~number~'['*R[0]*']'",
+      output == "RVH" ~ "Probing~'mosquito-to-host'*~reproduction~number~'['*R[PH]*']'",
+      output == "RHV" ~ "'Host-to-ingesting'*~mosquito~reproduction~number~'['*R[HG]*']'",
+      output == "N_offspring" ~ "Basic~offspring~number~'['*N[0]*']'",
     ),
     type_label = case_when(
       type == "flighty" ~ "Flighty",
@@ -713,7 +714,10 @@ PRCC_plot_data$type_label = factor(PRCC_plot_data$type_label, levels = c(
 ))
 
 PRCC_plot_data$output_label = factor(PRCC_plot_data$output_label, levels = c(
-  "Gonotrophic cycle duration", "Basic offspring number","Basic reproduction number", "Host-to-vector reproduction number", "Vector-to-host reproduction number"
+  "Basic~offspring~number~'['*N[0]*']'",
+  "Basic~reproduction~number~'['*R[0]*']'",
+  "'Host-to-ingesting'*~mosquito~reproduction~number~'['*R[HG]*']'",
+  "Probing~'mosquito-to-host'*~reproduction~number~'['*R[PH]*']'"
 ))
 
 PRCC_plot_data$Label = factor(PRCC_plot_data$Label, levels = rev(c(
@@ -769,7 +773,7 @@ PRCC_plots <- PRCC_plot_data |>
   geom_hline(yintercept = 0, color = "black", linewidth =0.5 ) +
   # Add grey ribbon to show dummy variable values
   geom_ribbon(
-    data = plot_ribbon |> filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+    data = plot_ribbon |> filter(output_label %in% c(TeX("Basic offspring number [$N_{0}$]"),TeX("Basic reproduction number [$R_{0}$]"))),
     aes(
       x = input_num,
       ymin = dummy_min, ymax = dummy_max,
@@ -777,7 +781,7 @@ PRCC_plots <- PRCC_plot_data |>
     color = NA, fill = "grey60",
     alpha = 0.5
   ) +
-  facet_wrap( ~ output_label, ncol = 1, scales = "free_y") +
+  facet_wrap( ~ output_label, ncol = 1, scales = "free_y", labeller = label_parsed) +
   scale_fill_manual(
     name = "Parameter set:",
     values = c(c4a("met.juarez", 6))#, "black")
@@ -816,7 +820,7 @@ PRCC_plots_row <- PRCC_plot_data |>
   geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
   # Add grey ribbon to show dummy variable values
   geom_ribbon(
-    data = plot_ribbon |> filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+    data = plot_ribbon |> filter(output_label %in% c(TeX("Basic offspring number [$N_{0}$]"),TeX("Basic reproduction number [$R_{0}$]"))),
     aes(x = input_num,
         ymin = dummy_min, ymax = dummy_max,
         group = output_label),
@@ -866,7 +870,7 @@ PRCC_plots_max_only <- PRCC_plot_data |>
              color = "grey60", linetype = "dashed", linewidth = 0.125) +  # Add grey ribbon to show dummy variable values
   geom_ribbon(
     data = plot_ribbon |> 
-      filter(output_label %in% c("Basic offspring number","Basic reproduction number"), type == "max", input !="dummy"),
+      filter(output_label %in% c(TeX("Basic offspring number [$N_{0}$]"),TeX("Basic reproduction number [$R_{0}$]")), type == "max", input !="dummy"),
     aes(y = nice_labels,
         xmin = dummy_min, xmax = dummy_max,
         group = output_label),
@@ -920,7 +924,7 @@ PRCC_plots_max_only <- PRCC_plot_data |>
   mutate(
     star_flag = abs(PRCC) < min(abs(dummy_min), abs(dummy_max)),
     star_label = ifelse(star_flag, "*", ""),
-    star_xpos = PRCC + 2 * dummy_min + 0.01
+    star_xpos = PRCC + 2 * dummy_min + 0.1
   ) %>% 
   # Plot
   ggplot() +
@@ -929,7 +933,15 @@ PRCC_plots_max_only <- PRCC_plot_data |>
   geom_hline(yintercept = seq(1.5, length(levels(PRCC_plot_data$input)) - 0.5, by = 1), 
              color = "grey60", linetype = "dashed", linewidth = 0.125) +
   # Add zero line
-  geom_vline(xintercept = 0, color = "black", lwd = 0.25) +
+  geom_vline(xintercept = 0, color = "black", lwd = 0.25) +  
+  # Add n.s. to flagged bars
+  geom_text(
+    data = . %>% filter(star_flag),
+    aes(y = nice_labels, x = star_xpos, label = "n.s."),
+    position = position_dodge(width = 0.75),
+    size = 2, 
+    # vjust = -0.55
+  ) +
   scale_fill_manual(
     name = "",
     values = c(c4a("met.juarez"))
@@ -940,10 +952,11 @@ PRCC_plots_max_only <- PRCC_plot_data |>
   ) +
   scale_x_continuous(
     "",
+    labels = label_number(accuracy = 0.01, trim = TRUE, drop0trailing = TRUE),
     expand = expansion(mult = c(0.01, 0))
   ) +
   theme_half_open(8) +
-  facet_wrap(~ output_label, ncol = 2) +
+  facet_wrap(~ output_label, ncol = 2, labeller = label_parsed) +
   guides(
     # alpha = guide_none(),
     # linetype = guide_none(),
@@ -955,8 +968,8 @@ PRCC_plots_max_only <- PRCC_plot_data |>
     legend.key.height = unit(0.03125, "in"),
     legend.position = "top",
     legend.direction = "horizontal"
-  ) +
-  ggtitle("Partial Rank Correlation Coefficients")
+  ) #+
+  # ggtitle("Partial Rank Correlation Coefficients")
 
 PRCC_plots_max_only
 
@@ -999,10 +1012,10 @@ plot_data <- eFAST_data |>
   left_join(rename(nice_mech_labels, input = name), by = "input")  |> 
   mutate(
     output_label = case_when(
-      output == "R0" ~ "Basic reproduction number",
-      output == "RVH" ~ "Vector-to-host reproduction number",
-      output == "RHV" ~ "Host-to-vector reproduction number",
-      output == "N_offspring" ~ "Basic offspring number",
+      output == "R0" ~ "Basic~reproduction~number~'['*R[0]*']'",
+      output == "RVH" ~ "Probing~'mosquito-to-host'*~reproduction~number~'['*R[PH]*']'",
+      output == "RHV" ~ "'Host-to-ingesting'*~mosquito~reproduction~number~'['*R[HG]*']'",
+      output == "N_offspring" ~ "Basic~offspring~number~'['*N[0]*']'",
     ),
     type_label = case_when(
       type == "flighty" ~ "Flighty",
@@ -1033,7 +1046,10 @@ plot_data$input = factor(plot_data$input, levels = c(
   "pQ", "pL", "pP", "pG", "sigma", "lQ", "lL", "lP", "lG", "dummy"
 ))
 plot_data$output_label = factor(plot_data$output_label, levels = c(
-  "Gonotrophic cycle duration", "Basic offspring number","Basic reproduction number", "Host-to-vector reproduction number", "Vector-to-host reproduction number"
+  "Basic~offspring~number~'['*N[0]*']'",
+  "Basic~reproduction~number~'['*R[0]*']'",
+  "'Host-to-ingesting'*~mosquito~reproduction~number~'['*R[HG]*']'",
+  "Probing~'mosquito-to-host'*~reproduction~number~'['*R[PH]*']'"
 ))
 
 plot_data$type_label = factor(plot_data$type_label, levels = c(
@@ -1177,7 +1193,7 @@ FirsteFAST_plots_row <- plot_data |>
   geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
   # # Add grey ribbon to show dummy variable values
   # geom_ribbon(
-  #   data = plot_ribbon |> filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   data = plot_ribbon |> filter(output_label %in% c(TeX("Basic offspring number [$N_{0}$]"),TeX("Basic reproduction number [$R_{0}$]")),
   #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
   #   color = NA, fill = "grey60",
   #   alpha = 0.5
@@ -1222,7 +1238,7 @@ TotaleFAST_plots_row <- plot_data |>
   geom_hline(yintercept = 0, color = "black", linewidth =1 ) +
   # # Add grey ribbon to show dummy variable values
   # geom_ribbon(
-  #   data = plot_ribbon |> filter(output_label %in% c("Basic offspring number","Basic reproduction number")),
+  #   data = plot_ribbon |> filter(output_label %in% c(TeX("Basic offspring number [$N_{0}$]"),TeX("Basic reproduction number [$R_{0}$]")),
   #   aes(x = input_num, ymin = dummy_min, ymax = dummy_max, group = output_label),
   #   color = NA, fill = "grey60",
   #   alpha = 0.5
@@ -1263,9 +1279,9 @@ FirsteFAST_plots_max_only <- plot_data |>
   # filter(output %in% c("N_offspring","R0")) |>
   group_by(type, output) |> 
   mutate(
-    star_flag = p_value < 0.01,
-    star_label = ifelse(star_flag, "*", ""),
-    star_xpos = mean_value + 2 * std_value + 0.01
+    star_flag = p_value > 0.01,
+    star_label = ifelse(star_flag, "n.s.", ""),
+    star_xpos = mean_value + 2 * std_value + 0.05
   ) %>% 
   # Plot
   ggplot() +
@@ -1296,6 +1312,7 @@ FirsteFAST_plots_max_only <- plot_data |>
   scale_x_continuous(
     "",
     # TeX("First Order eFAST Sensitivity Index"),
+    labels = label_number(accuracy = 0.01, trim = TRUE, drop0trailing = TRUE),
     expand = expansion(mult = c(0, 0.01))
   ) +
   scale_alpha_manual(
@@ -1307,10 +1324,10 @@ FirsteFAST_plots_max_only <- plot_data |>
     values = c(1, 2)
   ) +
   theme_half_open(8) +
-  facet_wrap(~ output_label, ncol = 2) +
+  facet_wrap(~ output_label, label = label_parsed) +
   guides(
-    # alpha = guide_none(),
-    # linetype = guide_none(),
+    alpha = guide_legend(position = "bottom"),
+    linetype = guide_legend(position = "bottom"),
     fill = guide_none()
   ) + 
   theme(
@@ -1319,8 +1336,8 @@ FirsteFAST_plots_max_only <- plot_data |>
     legend.key.height = unit(0.03125, "in"),
     legend.position = "top",
     legend.direction = "horizontal"
-  ) +
-  ggtitle("eFAST Sensitivity Indices")
+  ) #+
+  # ggtitle("eFAST Sensitivity Indices")
 
 FirsteFAST_plots_max_only
 
@@ -1366,6 +1383,7 @@ TotaleFAST_plots_max_only <- plot_data |>
   ) +
   scale_x_continuous(
     TeX("Total eFAST Sensitivity Index"),
+    labels = label_number(accuracy = 0.01, trim = TRUE),
     expand = expansion(mult = c(0, 0.01))
   ) +
   theme_half_open(11) +

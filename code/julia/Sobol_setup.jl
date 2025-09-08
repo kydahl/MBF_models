@@ -2,7 +2,7 @@
 include("GCD_R0_num_calc.jl")
 
 using GlobalSensitivity
-using QuasiMonteCarlo
+# using QuasiMonteCarlo
 using DataFrames, CSV
 using CodecZlib
 # Define parameter ranges
@@ -192,7 +192,7 @@ end
 test = new_get_gsa_results(1000, 10)
 
 new_eFAST_results_small = new_get_gsa_results(11*1_000, 11)
-# new_eFAST_results = new_get_gsa_results(11*10_000, 11*10)
+new_eFAST_results = new_get_gsa_results(11*10_000, 11*10)
 
 # Return all the unique entries in the type column of new_eFAST_results
 # unique_types = unique(new_eFAST_results.type)
