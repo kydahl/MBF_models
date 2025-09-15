@@ -430,6 +430,7 @@ Figure2_separated_nonmech <- Figure2_df |>
     name = "",
     # limits = c(0,1.9),
     expand = c(0, 0, 0, 0.01),
+    labels = label_number(accuracy = 0.01, trim = TRUE, drop0trailing = TRUE),
     # breaks = seq(0, 2, by = 0.25)
   ) +
   scale_y_continuous(
@@ -454,9 +455,10 @@ Figure2_separated_nonmech <- Figure2_df |>
     xlim = c(0, 1.51),
     clip = "off" # needed to let ticks get plotted out of the axes
   ) + 
-  theme_half_open(8) + 
+  theme_half_open(12) + 
   theme(
     axis.title.x = element_text(margin = margin(t = 10)),
+    axis.title.y = element_text(hjust = 1.5),
     legend.key.width = unit(0.35, "in")
     ) +
   guides(
@@ -503,12 +505,14 @@ Figure2_separated_mech <- Figure2_df |>
   ) +
   scale_x_continuous(
     name = TeX("Standard biting rate [Days$^{-1}$]"),
+    labels = label_number(accuracy = 0.01, trim = TRUE, drop0trailing = TRUE),
     # limits = c(0,1.9),
     expand = c(0, 0, 0, 0.01),
     # breaks = seq(0, 2, by = 0.25)
   ) +
   scale_y_continuous(
-    name = TeX("Basic reproduction number \\, [$R_0$]"),
+    # name = TeX("Basic reproduction number \\, [$R_0$]"),
+    name = "",
     breaks = seq(0, 1.75, by = 0.25),
     limits = c(0, NA),
     expand = c(0,0)
@@ -529,7 +533,7 @@ Figure2_separated_mech <- Figure2_df |>
     xlim = c(0, 1.51),
     clip = "off" # needed to let ticks get plotted out of the axes
   ) + 
-  theme_half_open(8) + 
+  theme_half_open(12) + 
   theme(
     axis.title.x = element_text(margin = margin(t = 10)),
     legend.key.width = unit(0.35, "in")
@@ -631,7 +635,8 @@ Figure3 <- Figure3_df |>
     ~ nice_labels,
     ncol = 5,
     labeller = labeller(nice_labels = label_parsed),
-    scales = "free_x"
+    scales = "free_x",
+    switch = "x"
   ) +
   scale_x_continuous(
     name = "",
@@ -660,6 +665,7 @@ Figure3 <- Figure3_df |>
   ) +
   theme(
     strip.background = element_rect(color = "white", fill = "white"),
+    strip.placement = "outside",
     legend.key.width = unit(0.4, "in")
   )
 
