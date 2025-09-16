@@ -1,8 +1,4 @@
 # MBF_models
-Multiple and interrupted blood feeding in mosquito-borne disease transmission models
+Code for "Once bitten, twice shy: A modeling framework for incorporating heterogeneous mosquito biting into transmission models"
 
-Advancing Mosquito-borne Disease Models with Distributed Delay Equations
-
-Exploring how incorporating more ecologically and biologically realistic dwell time distributions of biting rates impacts predictions of mosquito-borne disease transmission
-
-Link to manuscript draft on Overleaf:
+The script Figures.R generates the figures in the manuscript, using analysis data from Analysis.R and SensitivityAnalysis.jl. Functions.jl contains the functions needed for the PRCC and eFAST sensitivity analyses.
