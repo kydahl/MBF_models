@@ -2768,7 +2768,7 @@ I_{R}
 \left(\mu+\eta\right)\vec{E}-\boldsymbol{D}_{\textrm{diag}\boldsymbol{A}}^{T}\vec{E}\\
 \mu\vec{I}-\boldsymbol{D}_{\textrm{diag}\boldsymbol{A}}^{T}\vec{I}\\
 \left(\mu+\gamma_{V}+\eta\right)E_{V}\\
-\left(\mu+\gamma_{V}\right)I_{V}\\
+\left(\mu+\gamma_{V}\right)I_{V]}\\
 \left(\mu+\gamma_{R}+\eta\right)E_{R}\\
 \left(\mu+\gamma_{R}\right)I_{R}
 \end{bmatrix}-\begin{bmatrix}0\\
@@ -3174,6 +3174,9 @@ Thus the eigenvalues of
 \begin_inset Formula 
 \begin{align*}
 \mathcal{R}_{0} & =\sqrt{\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\frac{\vec{B}}{K_{B}}^{*}}\\
+\mathcal{R}_{0} & =\sqrt{\left(\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\right)\left(\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\frac{\vec{B}}{K_{B}}^{*}\right)}\\
+\mathcal{R}_{0} & =\sqrt{\left(\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\right)^{T}\cdot\left(\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\frac{\vec{B}}{K_{B}}^{*}\right)}\\
+\mathcal{R}_{0} & =\sqrt{\left(\vec{1}^{T}\boldsymbol{\beta}_{H}\boldsymbol{\Lambda}_{H}\boldsymbol{\Gamma}_{I}\boldsymbol{\tau}_{E}\right)\left(\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)\boldsymbol{\beta}_{B}\boldsymbol{\Lambda}_{B}\frac{\vec{B}^{*}}{K_{B}}\right)}\\
 \mathcal{R}_{0} & =\sqrt{\frac{\vec{B^{*}}^{T}}{K_{B}}\boldsymbol{\Lambda}_{B}^{T}\boldsymbol{\beta}_{B}^{T}\boldsymbol{\tau}_{E}^{T}\boldsymbol{\Gamma}_{I}^{T}\boldsymbol{\Lambda}_{H}^{T}\boldsymbol{\beta}_{H}^{T}\vec{1}\left(\frac{1}{\gamma_{H}+\mu_{H}}\right)}
 \end{align*}
 

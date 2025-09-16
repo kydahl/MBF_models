@@ -958,8 +958,6 @@ PRCC_plots_max_only <- PRCC_plot_data |>
   theme_half_open(8) +
   facet_wrap(~ output_label, ncol = 2, labeller = label_parsed) +
   guides(
-    # alpha = guide_none(),
-    # linetype = guide_none(),
     fill = guide_none()
   ) + 
   theme(
@@ -1332,6 +1330,7 @@ FirsteFAST_plots_max_only <- plot_data |>
   ) + 
   theme(
     strip.background = element_rect(color = "white", fill = "white"),
+    panel.spacing = unit(1, "lines"),
     legend.key.width = unit(0.25, "in"),
     legend.key.height = unit(0.03125, "in"),
     legend.position = "top",
